@@ -29,9 +29,7 @@
         "mehradsadeghi/laravel-filter-querystring": "^1.1",
         "milon/barcode": "^9.0",
         "msztorc/laravel-env": "^1.2",
-        "rap2hpoutre/fast-excel": "^5.0",
         "rennokki/laravel-eloquent-query-cache": "^3.3",
-        "spatie/simple-excel": "^3.0",
         "touhidurabir/laravel-model-sanitize": "^1.1",
         "wildside/userstamps": "^2.2"
     },
