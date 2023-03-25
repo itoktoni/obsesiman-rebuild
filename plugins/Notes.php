@@ -86,12 +86,22 @@ class Notes
         return $log;
     }
 
-    public static function validation($data = null, $message = null)
+    public static function validation($message = null, $data = null)
     {
         $log['status'] = false;
         $log['code'] = 422;
         $log['name'] = self::error;
-        $log['message'] = $message ?? 'Data '.self::validation();
+        $log['message'] = $message;
+        $log['data'] = 'Validation Error';
+        return $log;
+    }
+
+    public static function notFound($data = null, $url = null)
+    {
+        $log['status'] = false;
+        $log['code'] = 404;
+        $log['name'] = self::error;
+        $log['message'] = 'Url tidak ditemukan';
         $log['data'] = $data;
         return $log;
     }

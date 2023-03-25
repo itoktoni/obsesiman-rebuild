@@ -3,16 +3,12 @@
 use App\Dao\Enums\MenuType;
 use App\Dao\Facades\EnvFacades;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\UserController;
 use Buki\AutoRoute\AutoRouteFacade as AutoRoute;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
-use Plugins\Core;
-use Plugins\Helper;
 use Plugins\Query;
-use Plugins\Template;
-
 
 Route::get('console', [HomeController::class, 'console'])->name('console');
 
@@ -96,3 +92,8 @@ Route::post('upload_config', function (Request $request) {
     return $name;
 
 })->name('upload_config');
+
+Route::get('download', function(){
+   $table = DB::connection('server')->table('item_linen')->get();
+   return $table;
+});

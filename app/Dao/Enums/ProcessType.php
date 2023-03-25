@@ -6,13 +6,13 @@ use App\Dao\Traits\StatusTrait;
 use BenSampo\Enum\Enum as Enum;
 use BenSampo\Enum\Contracts\LocalizedEnum;
 
-class StatusType extends Enum implements LocalizedEnum
+class ProcessType extends Enum implements LocalizedEnum
 {
     use StatusTrait;
 
-    const UnAssign                  =  0;
+    const Unassign                  =  0;
     const Register                  =  1;
-    const GantiRfid                 =  2;
+    const GantiChip                 =  2;
     const UpdateRfid                =  3;
     const Kotor                     =  4;
 }

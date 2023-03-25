@@ -5,6 +5,10 @@ namespace App\Exceptions;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Support\Facades\Log;
 use Exception;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Validation\ValidationException;
+use Plugins\Notes;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -56,6 +60,23 @@ class Handler extends ExceptionHandler
 
     public function render($request, Throwable $e)
     {
+        if(request()->hasHeader('authorization')){
+
+            if($e instanceof ValidationException){
+                return response()->json(Notes::validation($e->getMessage()), 422);
+            }
+
+            if($e instanceof ModelNotFoundException){
+                return response()->json(Notes::error($e->getMessage()), 400);
+            }
+
+            if($e instanceof NotFoundHttpException){
+                return response()->json(Notes::notFound($e->getMessage()), 404);
+            }
+
+            return response()->json(Notes::error($e->getMessage()), $e->getCode() != 0 ? $e->getMessage() : 500);
+        }
+
         if ($this->isHttpException($e)) {
             return response()->view('errors.custom', ['exception' => $e]);
             return $this->renderHttpException($e);

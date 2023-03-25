@@ -11,6 +11,13 @@ define('ACTION_TABLE', 'getTable');
 define('ACTION_PRINT', 'getPrint');
 define('ERROR_PERMISION', 'Maaf anda tidak punya otorisasi untuk melakukan hal ini');
 
+define('VIEW_DETAIL_LINEN', 'view_detail_linen');
+
+define('HAS_RS', 'has_rs');
+define('HAS_RUANGAN', 'has_ruangan');
+define('HAS_RFID', 'has_rfid');
+define('HAS_JENIS', 'has_jenis');
+
 function module($module = null){
     return SharedData::get($module);
 }
@@ -116,4 +123,17 @@ function showValue($value){
     }
 
     return $value;
+}
+
+function role($role){
+    return auth()->check() && auth()->user()->role == $role;
+}
+
+function level($value){
+    return auth()->check() && auth()->user()->level >= $value;
+}
+
+function image_url($value, $folder = null){
+    $path = $folder ? $folder : moduleCode();
+    return asset('public/storage/'.$path.'/'.$value);
 }

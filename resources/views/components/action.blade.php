@@ -19,7 +19,6 @@
 
     @section('action')
     <div {{ $attributes }}>
-
         @if($form == 'table')
             <input class="btn-check-m d-lg-none" type="checkbox">
             @can(ACTION_EMPTY)
