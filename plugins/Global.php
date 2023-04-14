@@ -152,7 +152,11 @@ function level($value){
     return auth()->check() && auth()->user()->level >= $value;
 }
 
-function image_url($value, $folder = null){
+function imageUrl($value, $folder = null){
     $path = $folder ? $folder : moduleCode();
     return asset('public/storage/'.$path.'/'.$value);
+}
+
+function formatDate($value){
+    return $value ? $value->format('d M Y') : null;
 }

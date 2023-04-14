@@ -71,10 +71,10 @@
 				<td>{{ $table->field_retur ?? 0 }}</td>
 				<td>{{ $table->field_rewash ?? 0 }}</td>
 				<td>{{ $table->field_status_process_name }}</td>
-				<td>{{ $table->field_tanggal_update->format('Y-m-d') }}</td>
+				<td>{{ formatDate($table->field_tanggal_update) }}</td>
 				<td>{{ $table->field_updated_name }}</td>
 				<td>{{ $table->field_status_register_name }}</td>
-				<td>{{ $table->field_tanggal_create->format('Y-m-d') }}</td>
+				<td>{{ formatDate($table->field_tanggal_create) }}</td>
 				<td>{{ $table->field_created_name }}</td>
 			</tr>
 			@empty

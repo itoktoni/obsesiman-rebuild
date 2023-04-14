@@ -110,7 +110,7 @@ trait JenisEntity
 
     public function getFieldImageUrlAttribute()
     {
-        return image_url($this->{$this->field_image()});
+        return imageUrl($this->{$this->field_image()});
     }
 
     public function getFieldTotalAttribute()
