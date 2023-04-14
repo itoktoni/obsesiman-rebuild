@@ -18,8 +18,8 @@ class RsResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'id' => $this->field_primary,
-            'nama' => $this->field_name,
+            'rs_id' => $this->field_primary,
+            'rs_nama' => $this->field_name,
             'deskripsi' => $this->field_description,
             'ruangan' => RuanganResource::collection($this->has_ruangan),
             'linen' => JenisResource::collection($this->has_jenis),

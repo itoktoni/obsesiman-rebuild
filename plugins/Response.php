@@ -71,6 +71,6 @@ class Response
         if ($params) {
             return redirect()->to($action, $params);
         }
-        return redirect()->route($action);
+        return redirect()->route(moduleRoute($action));
     }
 }

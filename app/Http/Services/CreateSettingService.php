@@ -14,6 +14,10 @@ class CreateSettingService
 
             EnvFacades::setValue('APP_NAME', $data->name);
             EnvFacades::setValue('APP_TITLE', $data->title);
+            EnvFacades::setValue('APP_LOCATION', $data->location);
+            EnvFacades::setValue('TRANSACTION_DAY_ALLOWED', $data->transaction_day);
+            EnvFacades::setValue('TRANSACTION_ACTIVE_RS_ONLY', $data->transaction_active);
+            EnvFacades::setValue('TRANSACTION_CHUNK', $data->transaction_chunk);
 
             if ($data->has('logo')) {
                 $file_logo = $data->file('logo');

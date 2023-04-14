@@ -17,6 +17,7 @@ class SettingController extends Controller
     {
         $view = [
             'model' => false,
+            'active' => BooleanType::getOptions()
         ];
         return array_merge($view, $data);
     }

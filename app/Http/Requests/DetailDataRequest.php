@@ -15,7 +15,7 @@ class DetailDataRequest extends FormRequest
     public function validation() : array
     {
         return [
-            RegisterRequest::rfid => 'required',
+            RFID => 'required',
         ];
     }
 }

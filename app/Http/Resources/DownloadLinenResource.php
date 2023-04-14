@@ -28,6 +28,7 @@ class DownloadLinenResource extends JsonResource
             'ruangan_nama' => $this->field_ruangan_name ?? '',
             'status_transaksi' => $this->field_status_transaction_name,
             'status_proses' => $this->field_status_process_name,
+            'tanggal_update' => $this->field_tanggal_update->format('Y-m-d'),
         ];
         // return parent::toArray($request);
     }

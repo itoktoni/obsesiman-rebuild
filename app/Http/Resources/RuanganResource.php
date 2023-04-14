@@ -19,8 +19,8 @@ class RuanganResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'id' => $this->field_primary,
-            'nama' => $this->field_name,
+            'ruangan_id' => $this->field_primary,
+            'ruangan_nama' => $this->field_name,
         ];
         // return parent::toArray($request);
     }

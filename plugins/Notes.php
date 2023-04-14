@@ -2,6 +2,8 @@
 
 namespace Plugins;
 
+use Illuminate\Support\Facades\Log;
+
 class Notes
 {
     const create = 'Create';
@@ -20,6 +22,7 @@ class Notes
         $log['name'] = self::data;
         $log['message'] = 'Data berhasil diambil';
         $log['data'] = $data;
+        Log::info($log);
         return $log;
     }
 
@@ -30,6 +33,7 @@ class Notes
         $log['name'] = self::single;
         $log['message'] = 'Data di dapat';
         $log['data'] = $data;
+        Log::info($log);
         return $log;
     }
 
@@ -40,6 +44,7 @@ class Notes
         $log['name'] = self::create;
         $log['message'] = 'Data berhasil di buat';
         $log['data'] = $data;
+        Log::info($log);
         return $log;
     }
 
@@ -50,6 +55,7 @@ class Notes
         $log['name'] = self::token;
         $log['message'] = 'Data token '.self::token;
         $log['data'] = $data;
+        Log::info($log);
         return $log;
     }
 
@@ -63,6 +69,7 @@ class Notes
         // if(request()->wantsJson()){
         //     $log['data'] = is_array($data) ? $data : $data->toArray();
         // }
+        Log::info($log);
         return $log;
     }
 
@@ -73,6 +80,7 @@ class Notes
         $log['name'] = self::delete;
         $log['message'] = 'Data berhasil di hapus';
         $log['data'] = $data;
+        Log::warning($log);
         return $log;
     }
 
@@ -83,6 +91,7 @@ class Notes
         $log['name'] = self::error;
         $log['message'] = $message ?? 'Data '.self::error;
         $log['data'] = $data;
+        Log::error($log);
         return $log;
     }
 
@@ -93,6 +102,7 @@ class Notes
         $log['name'] = self::error;
         $log['message'] = $message;
         $log['data'] = 'Validation Error';
+        Log::warning($log);
         return $log;
     }
 
@@ -103,6 +113,7 @@ class Notes
         $log['name'] = self::error;
         $log['message'] = 'Url tidak ditemukan';
         $log['data'] = $data;
+        Log::warning($log);
         return $log;
     }
 }

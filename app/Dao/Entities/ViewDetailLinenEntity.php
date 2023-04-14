@@ -6,6 +6,7 @@ use App\Dao\Enums\CuciType;
 use App\Dao\Enums\ProcessType;
 use App\Dao\Enums\RegisterType;
 use App\Dao\Enums\TransactionType;
+use App\Dao\Models\Kategori;
 
 trait ViewDetailLinenEntity
 {
@@ -139,6 +140,26 @@ trait ViewDetailLinenEntity
         return $this->{$this->field_tanggal_update()};
     }
 
+    public static function field_tanggal_create()
+    {
+        return 'view_tanggal_create';
+    }
+
+    public function getFieldTanggalCreateAttribute()
+    {
+        return $this->{$this->field_tanggal_create()};
+    }
+
+    public static function field_tanggal_delete()
+    {
+        return 'view_tanggal_delete';
+    }
+
+    public function getFieldTanggalDeleteAttribute()
+    {
+        return $this->{$this->field_tanggal_delete()};
+    }
+
     public static function field_pemakaian()
     {
         return 'view_pemakaian';
@@ -149,4 +170,78 @@ trait ViewDetailLinenEntity
         return $this->{$this->field_pemakaian()};
     }
 
+    public static function field_created_name()
+    {
+        return 'view_created_name';
+    }
+
+    public function getFieldCreatedNameAttribute()
+    {
+        return $this->{$this->field_created_name()};
+    }
+
+    public static function field_updated_name()
+    {
+        return 'view_updated_name';
+    }
+
+    public function getFieldUpdatedNameAttribute()
+    {
+        return $this->{$this->field_updated_name()};
+    }
+
+    public static function field_weight()
+    {
+        return 'view_linen_berat';
+    }
+
+    public function getFieldWeightAttribute()
+    {
+        return $this->{$this->field_weight()};
+    }
+
+    public static function field_category_id()
+    {
+        return 'view_kategori_id';
+    }
+
+    public function getFieldCategoryIdAttribute()
+    {
+        return $this->{$this->field_category_id()};
+    }
+
+    public function getFieldCategoryNameAttribute()
+    {
+        return $this->{Kategori::field_name()};
+    }
+
+    public static function field_bersih()
+    {
+        return 'view_transaksi_bersih_total';
+    }
+
+    public function getFieldBersihAttribute()
+    {
+        return $this->{$this->field_bersih()};
+    }
+
+    public static function field_retur()
+    {
+        return 'view_transaksi_retur_total';
+    }
+
+    public function getFieldReturAttribute()
+    {
+        return $this->{$this->field_retur()};
+    }
+
+    public static function field_rewash()
+    {
+        return 'view_transaksi_rewash_total';
+    }
+
+    public function getFieldRewashAttribute()
+    {
+        return $this->{$this->field_rewash()};
+    }
 }

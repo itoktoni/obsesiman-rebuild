@@ -3,16 +3,20 @@
 namespace App\Dao\Traits;
 
 use App\Dao\Enums\BooleanType;
+use App\Dao\Enums\ProcessType;
+use App\Dao\Enums\RegisterType;
 use App\Dao\Scopes\FilterScope;
 use Facades\App\Models\User;
 use Illuminate\Support\Facades\Cache;
 use Facades\Modules\System\Dao\Models\Filter;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Str;
 
 trait DataTableTrait
 {
     abstract public function fieldDatatable(): array;
+    public function fieldStatus() : array { return [];}
 
     public function getSelectedField(): array
     {
@@ -38,7 +42,20 @@ trait DataTableTrait
         $search = request()->get('search');
         $value = request()->get('filter') ? request()->get('filter') : $this->fieldSearching();
         if($search){
-            $query = $query->where($value, 'like', "%{$search}%");
+
+            if($this->fieldStatus() && isset($this->fieldStatus()[$value])) {
+                $type = new \ReflectionClass($this->fieldStatus()[$value]);
+                $instance =  $type->newInstanceWithoutConstructor();
+                $convert = Str::of($search)->camel()->ucfirst();
+                $id = $instance->fromKey($convert) ?? false;
+                if($id){
+                    $query = $query->where($value, $id->value);
+                }
+            }
+            else{
+                $query = $query->where($value, 'like', "%{$search}%");
+            }
+
         }
 
         return $query;

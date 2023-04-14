@@ -41,6 +41,7 @@ class History extends Model
 
     protected $filters = [
         'filter',
+        'history_status',
     ];
 
     public $timestamps = false;
@@ -54,11 +55,10 @@ class History extends Model
     {
         return [
             DataBuilder::build($this->field_primary())->name('ID')->show(false)->sort(),
-            DataBuilder::build($this->field_name())->name('Name')->show()->sort(),
+            DataBuilder::build($this->field_name())->name('Nomer Tag RFID')->show()->sort(),
             DataBuilder::build($this->field_status())->name('Status')->show()->sort(),
             DataBuilder::build($this->field_created_at())->name('Waktu')->show()->sort(),
             DataBuilder::build($this->field_created_by())->name('User')->show()->sort(),
-            DataBuilder::build($this->field_description())->name('Deskripsi')->show()->sort(),
         ];
     }
 

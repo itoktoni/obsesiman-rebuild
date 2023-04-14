@@ -1,5 +1,6 @@
 <?php
 
+use App\Dao\Enums\TransactionType;
 use Coderello\SharedData\Facades\SharedData;
 use Illuminate\Support\Str;
 
@@ -17,6 +18,24 @@ define('HAS_RS', 'has_rs');
 define('HAS_RUANGAN', 'has_ruangan');
 define('HAS_RFID', 'has_rfid');
 define('HAS_JENIS', 'has_jenis');
+define('HAS_DETAIL', 'has_detail');
+define('HAS_CUCI', 'has_cuci');
+define('HAS_USER', 'has_user');
+define('HAS_VIEW', 'has_view');
+
+define('KEY', 'key');
+define('RFID', 'rfid');
+define('RS_ID', 'rs_id');
+define('RUANGAN_ID', 'ruangan_id');
+define('JENIS_ID', 'jenis_id');
+define('STATUS_CUCI', 'status_cuci');
+define('STATUS_REGISTER', 'status_register');
+define('STATUS_TRANSAKSI', 'status_transaksi');
+define('STATUS_PROCESS', 'status_process');
+define('STATUS_SYNC', 'status_sync');
+define('TANGGAL_UPDATE', 'tanggal_update');
+
+define('BERSIH', [TransactionType::BersihKotor, TransactionType::BersihRetur, TransactionType::BersihRewash]);
 
 function module($module = null){
     return SharedData::get($module);

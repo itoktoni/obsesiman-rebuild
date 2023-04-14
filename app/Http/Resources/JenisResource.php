@@ -19,8 +19,8 @@ class JenisResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'id' => $this->field_primary,
-            'nama' => $this->field_name,
+            'jenis_id' => $this->field_primary,
+            'jenis_nama' => $this->field_name,
         ];
         // return parent::toArray($request);
     }

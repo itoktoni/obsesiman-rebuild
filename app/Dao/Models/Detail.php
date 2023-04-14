@@ -4,8 +4,8 @@ namespace App\Dao\Models;
 
 use App\Dao\Builder\DataBuilder;
 use App\Dao\Entities\DetailEntity;
-use App\Dao\Enums\StatusType;
-use App\Dao\Enums\StockType;
+use App\Dao\Enums\ProcessType;
+use App\Dao\Enums\RegisterType;
 use App\Dao\Traits\ActiveTrait;
 use App\Dao\Traits\ApiTrait;
 use App\Dao\Traits\DataTableTrait;
@@ -63,6 +63,14 @@ class Detail extends Model
 
     protected $filters = [
         'filter',
+        'detail_status_register',
+        'ruangan_nama',
+    ];
+
+    protected $dates = [
+        SELF::CREATED_AT,
+        SELF::UPDATED_AT,
+        SELF::DELETED_AT,
     ];
 
     const CREATED_AT = 'detail_created_at';
@@ -73,11 +81,19 @@ class Detail extends Model
     const UPDATED_BY = 'detail_updated_by';
     const DELETED_BY = 'detail_deleted_by';
 
-    public $timestamps = true;
+    public $timestamps = false;
     public $incrementing = false;
+    protected $keyType = 'string';
 
     public function fieldSearching(){
         return $this->field_name();
+    }
+
+    public function fieldStatus(): array {
+        return [
+            $this->field_status_process() => ProcessType::class,
+            $this->field_status_register() => RegisterType::class
+        ];
     }
 
     public function fieldDatatable(): array

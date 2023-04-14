@@ -12,5 +12,5 @@ class StockType extends Enum implements LocalizedEnum
 
     const Rs               =  1;
     const Laundry          =  2;
-    const Unassign         =  0;
+    const Unknown         =  0;
 }

@@ -30,6 +30,8 @@ class DetailResource extends JsonResource
             'status_cuci' => $this->field_status_cuci_name,
             'status_transaksi' => $this->field_status_transaction_name,
             'status_proses' => $this->field_status_process_name,
+            'tanggal_update' => $this->field_tanggal_update ? $this->field_tanggal_update->format('Y-m-d') : null,
+            'tanggal_delete' => $this->field_tanggal_delete ? $this->field_tanggal_delete->format('Y-m-d') : null,
             'pemakaian' => $this->field_pemakaian ?? 0,
         ];
         // return parent::toArray($request);

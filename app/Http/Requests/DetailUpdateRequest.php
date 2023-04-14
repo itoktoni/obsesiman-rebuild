@@ -15,11 +15,11 @@ class DetailUpdateRequest extends FormRequest
     public function validation() : array
     {
         return [
-            RegisterRequest::rs_id => 'required',
-            RegisterRequest::ruangan_id => 'required',
-            RegisterRequest::jenis_id => 'required',
-            RegisterRequest::status_cuci => 'in:0,1,2',
-            RegisterRequest::status_register => 'in:0,1',
+            RS_ID => 'required',
+            RUANGAN_ID => 'required',
+            JENIS_ID => 'required',
+            STATUS_CUCI => 'in:0,1,2',
+            STATUS_REGISTER => 'in:0,1',
         ];
     }
 

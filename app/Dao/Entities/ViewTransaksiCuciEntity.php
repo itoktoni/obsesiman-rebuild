@@ -6,7 +6,7 @@ trait ViewTransaksiCuciEntity
 {
     public static function field_primary()
     {
-        return 'transaksi_cuci_id';
+        return 'view_transaksi_cuci_id';
     }
 
     public function getFieldPrimaryAttribute()
@@ -16,7 +16,7 @@ trait ViewTransaksiCuciEntity
 
     public static function field_total()
     {
-        return 'transaksi_cuci_total';
+        return 'view_transaksi_cuci_total';
     }
 
     public function getFieldNameAttribute()

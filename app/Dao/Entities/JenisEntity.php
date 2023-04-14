@@ -48,14 +48,14 @@ trait JenisEntity
         return $this->{$this->field_rs()};
     }
 
-    public static function field_id_rs()
+    public static function field_rs_id()
     {
         return 'jenis_id_rs';
     }
 
     public function getFieldRsIdAttribute()
     {
-        return $this->{$this->field_id_rs()};
+        return $this->{$this->field_rs_id()};
     }
 
     public function getFieldRsNameAttribute()

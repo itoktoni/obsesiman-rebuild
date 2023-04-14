@@ -16,4 +16,26 @@ class History
             ModelsHistory::field_description() => json_encode($message),
         ]);
     }
+
+    public static function bulk($rfid, $status, $message = null)
+    {
+        $log = [];
+        foreach($rfid as $item){
+            $log[] = [
+                ModelsHistory::field_name() => $item,
+                ModelsHistory::field_status() => $status,
+                ModelsHistory::field_created_by() => auth()->user()->name,
+                ModelsHistory::field_created_at() => date('Y-m-d H:i:s'),
+                ModelsHistory::field_description() => json_encode($message),
+            ];
+        }
+
+        if(!empty($log)){
+
+            foreach(array_chunk($log, env('TRANSACTION_CHUNK')) as $save_log){
+                ModelsHistory::insert($save_log);
+            }
+
+        }
+    }
 }

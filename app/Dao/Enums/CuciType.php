@@ -10,7 +10,7 @@ class CuciType extends Enum implements LocalizedEnum
 {
     use StatusTrait;
 
-    const Unassign          =  0;
+    const Unknown          =  0;
     const Cuci              =  1;
     const Sewa              =  2;
 }

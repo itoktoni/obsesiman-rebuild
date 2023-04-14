@@ -3,19 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Dao\Enums\CuciType;
-use App\Dao\Enums\LinenType;
 use App\Dao\Enums\ProcessType;
 use App\Dao\Enums\TransactionType;
 use App\Dao\Models\History;
 use App\Dao\Models\Jenis;
-use App\Dao\Models\NamaLinen;
 use App\Dao\Models\Rs;
 use App\Dao\Models\Ruangan;
 use App\Dao\Repositories\DetailRepository;
 use App\Http\Requests\GeneralRequest;
-use App\Http\Requests\DetailLinenRequest;
-use App\Http\Requests\DetailRequest;
-use App\Http\Services\CreateService;
 use App\Http\Services\SingleService;
 use App\Http\Services\UpdateService;
 use Plugins\Response;
@@ -26,6 +21,12 @@ class DetailController extends MasterController
     {
         self::$repository = self::$repository ?? $repository;
         self::$service = self::$service ?? $service;
+    }
+
+    public function postUpdate($code, GeneralRequest $request, UpdateService $service)
+    {
+        $data = $service->update(self::$repository, $request, $code);
+        return Response::redirectBack($data);
     }
 
     protected function beforeForm()
@@ -45,18 +46,6 @@ class DetailController extends MasterController
             'ruangan' => $ruangan,
             'rs' => $rs,
         ];
-    }
-
-    public function postCreate(DetailRequest $request, CreateService $service)
-    {
-        $data = $service->save(self::$repository, $request);
-        return Response::redirectBack($data);
-    }
-
-    public function postUpdate($code, DetailRequest $request, UpdateService $service)
-    {
-        $data = $service->update(self::$repository, $request, $code);
-        return Response::redirectTo(moduleRoute('getTable'));
     }
 
     public function getHistory($code)

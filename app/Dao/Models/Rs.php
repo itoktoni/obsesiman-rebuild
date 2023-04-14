@@ -33,6 +33,7 @@ class Rs extends Model
         'rs_deskripsi',
         'rs_harga_cuci',
         'rs_harga_sewa',
+        'rs_aktif',
     ];
 
     public $sortable = [
@@ -86,11 +87,11 @@ class Rs extends Model
 
     public function has_rfid()
     {
-        return $this->hasMany(Detail::class, Detail::field_id_rs(), $this->field_primary());
+        return $this->hasMany(Detail::class, Detail::field_rs_id(), $this->field_primary());
     }
 
     public function has_jenis()
     {
-        return $this->hasMany(Jenis::class, Jenis::field_id_rs(), $this->field_primary());
+        return $this->hasMany(Jenis::class, Jenis::field_rs_id(), $this->field_primary());
     }
 }

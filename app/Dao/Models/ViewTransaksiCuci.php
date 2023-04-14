@@ -10,10 +10,10 @@ class ViewTransaksiCuci extends Model
     use ViewTransaksiCuciEntity;
 
     protected $table = 'view_transaksi_cuci';
-    protected $primaryKey = 'transaksi_cuci_id';
+    protected $primaryKey = 'view_transaksi_cuci_id';
 
     protected $casts = [
-        'transaksi_cuci_id' => 'integer',
-        'transaksi_cuci_total' => 'integer',
+        'view_transaksi_cuci_id' => 'integer',
+        'view_transaksi_cuci_total' => 'integer',
     ];
 }

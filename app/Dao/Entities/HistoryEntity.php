@@ -2,6 +2,7 @@
 
 namespace App\Dao\Entities;
 
+use App\Dao\Enums\ProcessType;
 use App\Dao\Enums\StatusType;
 use App\Dao\Enums\TransactionType;
 
@@ -44,7 +45,7 @@ trait HistoryEntity
 
     public function getFieldStatusAttribute()
     {
-        return TransactionType::getDescription($this->{$this->field_status()});
+        return ProcessType::getDescription($this->{$this->field_status()});
     }
 
     public static function field_created_at()

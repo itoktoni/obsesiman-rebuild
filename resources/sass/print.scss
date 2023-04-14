@@ -37,6 +37,7 @@ a:link, a:visited, a {
 /* purgecss start ignore */
 .table-responsive{
     margin-bottom: 20px;
+    margin-right: 10px;
     table{
         border-spacing: 0 !important;
         width : max-content;
@@ -144,7 +145,7 @@ table.footer{
         }
     }
 
-    .print-only {
+    .print-only, .csv {
         display: none !important
     }
 

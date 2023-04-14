@@ -1,6 +1,7 @@
 @props([
     'fields' => [],
     'toggle' => '',
+    'hide' => false,
     ])
 
     @php
@@ -10,8 +11,8 @@
         $col = 'col';
         if($total > 5){
         $col = (12 / $total);
+        $hide = boolval($attributes->get('hide', $hide));
         }
-
         $show = isset($_GET['search']) ? true : false;
         $show_toggle = $show ? 'collapse show' : 'collapse';
 
@@ -23,6 +24,7 @@
     @endphp
 
     <div {{ $attributes }}>
+        @if(!$hide)
         <div class="{{ $show_toggle }}" id="{{ $toggle }}">
 
         @if($total > 4)
@@ -44,6 +46,7 @@
         @endif
 
         </div>
+        @endif
 
         <div class="row">
             <x-form-select col="6" name="filter" :label=false prepend="Pencarian"

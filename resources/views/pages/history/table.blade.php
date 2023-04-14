@@ -8,17 +8,11 @@
 
         <x-form method="POST" action="{{ moduleRoute('getTable') }}">
 
-            <x-action/>
-
             <div class="container">
                 <div class="table-responsive" id="table_data">
-                    <table class="table table-bordered table-striped">
+                    <table class="table table-bordered table-striped overflow">
                         <thead>
                             <tr>
-                                <th width="9" class="center">
-                                    <input class="btn-check-d" type="checkbox">
-                                </th>
-                                <th class="text-center column-action">{{ __('Action') }}</th>
                                 @foreach($fields as $value)
                                     <th {{ Template::extractColumn($value) }}>
                                         @if($value->sort)
@@ -33,18 +27,10 @@
                         <tbody>
                             @forelse($data as $table)
                                 <tr>
-                                    <td>
-                                        <input type="checkbox" class="checkbox" name="code[]"
-                                            value="{{ $table->field_primary }}">
-                                    </td>
-                                    <td class="col-md-2 text-center column-action">
-                                        <x-crud :model="$table" />
-                                    </td>
                                     <td>{{ $table->field_name }}</td>
                                     <td>{{ $table->field_status }}</td>
                                     <td>{{ $table->field_created_at }}</td>
                                     <td>{{ $table->field_created_by }}</td>
-                                    <td>{{ $table->field_description }}</td>
                                 </tr>
                             @empty
                             @endforelse

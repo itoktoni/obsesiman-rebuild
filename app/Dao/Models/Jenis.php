@@ -49,6 +49,8 @@ class Jenis extends Model
         'filter',
         'jenis_parstok',
         'jenis_nama',
+        'jenis_id_rs',
+        'jenis_id_kategori',
     ];
 
     protected $with = ['has_category'];
@@ -84,7 +86,7 @@ class Jenis extends Model
 
     public function has_rs()
     {
-        return $this->hasOne(Rs::class, Rs::field_primary(), self::field_id_rs());
+        return $this->hasOne(Rs::class, Rs::field_primary(), self::field_rs_id());
     }
 
     public function has_total()

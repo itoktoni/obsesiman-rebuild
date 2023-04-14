@@ -10,11 +10,12 @@ class TransactionType extends Enum implements LocalizedEnum
 {
     use StatusTrait;
 
-    const Unassign = 0;
+    const Unknown = 0;
     const Kotor = 1;
     const Retur = 2;
     const Rewash = 3;
     const BersihKotor = 4;
     const BersihRetur = 5;
     const BersihRewash = 6;
+    const Exist = 10;
 }

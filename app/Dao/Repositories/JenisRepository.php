@@ -40,4 +40,12 @@ class JenisRepository extends MasterRepository implements CrudInterface
 
         return $query;
     }
+
+    public function getParstok(){
+        return $this->model::query()
+        ->addSelect(['*'])
+        ->leftJoinRelationship('has_rs')
+        ->leftJoinRelationship('has_total')
+        ->filter();
+    }
 }

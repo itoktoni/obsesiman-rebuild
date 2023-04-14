@@ -3,12 +3,10 @@
 namespace App\Dao\Entities;
 
 use App\Dao\Enums\BedaRsType;
-use App\Dao\Enums\StatusType;
-use App\Dao\Enums\StockType;
-use App\Dao\Models\Kategori;
-use App\Dao\Models\Jenis;
+use App\Dao\Enums\BooleanType;
+use App\Dao\Enums\TransactionType;
 use App\Dao\Models\Rs;
-use App\Dao\Models\Ruangan;
+use App\Dao\Models\User;
 
 trait TransaksiEntity
 {
@@ -44,7 +42,12 @@ trait TransaksiEntity
 
     public static function field_name()
     {
-        return Jenis::field_name();
+        return self::field_key();
+    }
+
+    public function getFieldNameAttribute()
+    {
+        return $this->{$this->field_name()};
     }
 
     public static function field_description()
@@ -57,14 +60,14 @@ trait TransaksiEntity
         return BedaRsType::getDescription($this->{$this->field_description()});
     }
 
-    public static function field_id_rs()
+    public static function field_rs_id()
     {
         return 'transaksi_id_rs';
     }
 
     public function getFieldRsIdAttribute()
     {
-        return $this->{$this->field_id_rs()};
+        return $this->{$this->field_rs_id()};
     }
 
     public function getFieldRsNameAttribute()
@@ -72,14 +75,19 @@ trait TransaksiEntity
         return $this->{Rs::field_name()};
     }
 
-    public static function field_status()
+    public static function field_status_transaction()
     {
         return 'transaksi_status';
     }
 
-    public function getFieldStatusAttribute()
+    public function getFieldStatusTransactionAttribute()
     {
-        return StatusType::getDescription($this->{$this->field_status()});
+        return $this->{$this->field_status_transaction()};
+    }
+
+    public function getFieldStatusTransactionNameAttribute()
+    {
+        return TransactionType::getDescription($this->getFieldStatusTransactionAttribute());
     }
 
     public static function field_barcode()
@@ -102,6 +110,11 @@ trait TransaksiEntity
         return $this->{$this->field_beda_rs()};
     }
 
+    public function getFieldBedaRsNameAttribute()
+    {
+        return BooleanType::getDescription($this->getFieldBedaRsAttribute());
+    }
+
     public static function field_delivery()
     {
         return 'transaksi_delivery';
@@ -122,5 +135,29 @@ trait TransaksiEntity
         return $this->{self::UPDATED_AT};
     }
 
+    public static function field_report()
+    {
+        return 'transaksi_report';
+    }
+
+    public function getFieldReportAttribute()
+    {
+        return $this->{$this->field_report()};
+    }
+
+    public static function field_created_by()
+    {
+        return 'transaksi_created_by';
+    }
+
+    public function getFieldCreatedByAttribute()
+    {
+        return $this->{$this->field_created_by()};
+    }
+
+    public function getFieldCreatedNameAttribute()
+    {
+        return $this->{User::field_username()};
+    }
 
 }

@@ -9,7 +9,7 @@
 
     function doExport(selector, params) {
       const options = {
-        tableName: 'Table name'
+        tableName: 'Table name',
       };
 
       jQuery.extend(true, options, params);
@@ -37,7 +37,7 @@
         doExport('#table_data', {
             headings: true, // (Boolean), display table headings (th/td elements) in the <thead>
             footers: true, // (Boolean), display table footers (th/td elements) in the <tfoot>
-            formats: ["csv"], // (String[]), filetypes for the export
+            formats: ["xls"], // (String[]), filetypes for the export
             fileName: "id", // (id, String), filename for the downloaded file
             exportButtons: true,
             position: "top", // (top, bottom), position of the caption element relative to table

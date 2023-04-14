@@ -12,21 +12,14 @@ class RegisterRequest extends FormRequest
 {
     use ValidationTrait;
 
-    public const rfid = 'rfid';
-    public const rs_id = 'rs_id';
-    public const ruangan_id = 'ruangan_id';
-    public const jenis_id = 'jenis_id';
-    public const status_cuci = 'status_cuci';
-    public const status_register = 'status_register';
-
     public function validation() : array
     {
         return [
-            self::rfid => 'required',
-            self::rs_id => 'required',
-            self::ruangan_id => 'required',
-            self::jenis_id => 'required',
-            self::status_cuci => 'required|in:0,1,2',
+            RFID => 'required',
+            RS_ID => 'required',
+            RUANGAN_ID => 'required',
+            JENIS_ID => 'required',
+            STATUS_CUCI => 'required|in:0,1,2',
         ];
     }
 

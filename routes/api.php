@@ -10,6 +10,7 @@ use App\Dao\Models\History as ModelsHistory;
 use App\Dao\Models\Kotor;
 use App\Dao\Models\Rs;
 use App\Dao\Models\ViewDetailLinen;
+use App\Http\Controllers\TransaksiController;
 use App\Http\Controllers\UserController;
 use App\Http\Requests\DetailDataRequest;
 use App\Http\Requests\DetailRequest;
@@ -17,6 +18,7 @@ use App\Http\Requests\DetailUpdateRequest;
 use App\Http\Requests\GantiRfidRequest;
 use App\Http\Requests\KotorRequest;
 use App\Http\Requests\RegisterRequest;
+use App\Http\Requests\TransactionRequest;
 use App\Http\Resources\DetailResource;
 use App\Http\Resources\DownloadLinenResource;
 use App\Http\Resources\LinenDetailResource;
@@ -50,7 +52,7 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
         }, $rsid . '_linen.json');
     });
 
-    Route::get('/rs', function (Request $request) {
+    Route::get('rs', function (Request $request) {
 
         try {
 
@@ -65,7 +67,7 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
 
     });
 
-    Route::get('/rs/{rsid}', function ($rsid) {
+    Route::get('rs/{rsid}', function ($rsid) {
 
         try {
 
@@ -80,7 +82,7 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
 
     });
 
-    Route::post('/register', function (RegisterRequest $request) {
+    Route::post('register', function (RegisterRequest $request) {
         try {
             if(is_array($request->rfid)){
 
@@ -135,11 +137,13 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
                     Detail::field_status_process() => ProcessType::Register,
                 ]);
 
+                History::log($request->rfid, ProcessType::Register, $request->rfid);
+
                 $collection = new DetailResource($detail->has_view);
+                DB::commit();
 
                 return Notes::data($collection);
 
-                DB::commit();
             }
 
         }
@@ -159,7 +163,7 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
 
     });
 
-    Route::get('/detail/{rfid}', function ($rfid) {
+    Route::get('detail/{rfid}', function ($rfid) {
         try {
             $data = ViewDetailLinen::findOrFail($rfid);
             $collection = new DetailResource($data);
@@ -174,7 +178,7 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
         }
     });
 
-    Route::post('/detail/rfid', function (DetailDataRequest $request) {
+    Route::post('detail/rfid', function (DetailDataRequest $request) {
         try {
             $data = ViewDetailLinen::whereIn(ViewDetailLinen::field_primary() , $request->rfid)->get();
             $collection = DetailResource::collection($data);
@@ -188,10 +192,10 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
         }
     });
 
-    Route::post('/detail/{rfid}', function ($rfid, DetailUpdateRequest $request) {
+    Route::post('detail/{rfid}', function ($rfid, DetailUpdateRequest $request) {
         try {
 
-            $data = Detail::with('has_view')->findOrFail($rfid);
+            $data = Detail::with(HAS_VIEW)->findOrFail($rfid);
 
             if($data){
 
@@ -209,7 +213,7 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
 
                 $data->save();
 
-                History::log($rfid, ProcessType::UpdateRfid, [
+                History::log($rfid, ProcessType::UpdateChip, [
                     'lama' => $lama->toArray(),
                     'baru' => $data->toArray(),
                 ]);
@@ -222,67 +226,9 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
         }
     });
 
-    // Route::post('/kotor', function (KotorRequest $request) {
-
-    //     try {
-
-    //         if(is_array($request->linen_rfid)){
-
-    //             DB::beginTransaction();
-
-    //             $linen = collect($request->linen_rfid)->map(function($item) use($request){
-
-    //                 return [
-    //                     Kotor::field_name() => $request->key,
-    //                     Kotor::field_rfid() => $item,
-    //                     Kotor::field_id_rs() => $request->rs_id,
-    //                     Kotor::field_id_ruangan() => $request->ruangan_id,
-    //                     Kotor::CREATED_AT => date('Y-m-d H:i:s'),
-    //                     Kotor::UPDATED_AT => date('Y-m-d H:i:s'),
-    //                     Kotor::CREATED_BY => auth()->user()->id,
-    //                     Kotor::UPDATED_BY => auth()->user()->id,
-    //                 ];
-    //             });
-
-    //             Kotor::insert($linen->toArray());
-
-    //             $history = collect($request->linen_rfid)->map(function($item) use($request){
-
-    //                 return [
-    //                     ModelsHistory::field_name() => $item,
-    //                     ModelsHistory::field_status() => StatusType::Kotor,
-    //                     ModelsHistory::field_created_by() => auth()->user()->name,
-    //                     ModelsHistory::field_created_at() => date('Y-m-d H:i:s'),
-    //                     ModelsHistory::field_description() => json_encode([ Kotor::field_rfid() => $item ]),
-    //                 ];
-    //             });
-
-    //             ModelsHistory::insert($history->toArray());
-    //             DB::commit();
-
-    //             $return = DetailLinen::whereIn(DetailLinen::field_primary(), $linen->pluck(DetailLinen::field_primary()))->get();
-
-    //             return Notes::data(LinenDetailResource::collection($return));
-    //         }
-    //         else{
-
-    //             $linen = DetailLinen::create([
-    //                 DetailLinen::field_id_rs() => $request->rs_id,
-    //                 DetailLinen::field_id_ruangan() => $request->ruangan_id,
-    //                 DetailLinen::field_name_id() => $request->nama_id,
-    //                 DetailLinen::field_primary() => $request->linen_rfid,
-    //             ]);
-
-    //             return Notes::data(new LinenDetailResource($linen));
-
-    //         }
-
-    //     } catch (\Throwable $th) {
-    //         DB::rollBack();
-    //         return Notes::error($request->all() ,$th->getMessage());
-    //     }
-
-    // });
+    Route::post('kotor', [TransaksiController::class, 'kotor']);
+    Route::post('retur', [TransaksiController::class, 'retur']);
+    Route::post('rewash', [TransaksiController::class, 'rewash']);
 
     Route::get('/opname', function (Request $request) {
 

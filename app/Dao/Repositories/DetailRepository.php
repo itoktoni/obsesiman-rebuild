@@ -4,8 +4,10 @@ namespace App\Dao\Repositories;
 
 use App\Dao\Interfaces\CrudInterface;
 use App\Dao\Models\Detail;
-use App\Dao\Models\Jenis;
+use App\Dao\Models\Kategori;
+use App\Dao\Models\ViewDetailLinen;
 use App\Dao\Models\ViewTransaksiCuci;
+use Illuminate\Support\Facades\DB;
 use Plugins\Notes;
 
 class DetailRepository extends MasterRepository implements CrudInterface
@@ -41,5 +43,24 @@ class DetailRepository extends MasterRepository implements CrudInterface
         $query = env('PAGINATION_SIMPLE') ? $query->simplePaginate(env('PAGINATION_NUMBER')) : $query->paginate(env('PAGINATION_NUMBER'));
 
         return $query;
+    }
+
+    public function getPrint(){
+        return ViewDetailLinen::query()->filter();
+    }
+
+    public function getPrintDataMaster(){
+        return ViewDetailLinen::query()
+        ->addSelect([DB::raw('view_detail_linen.*'),
+            Kategori::field_name(),
+            ViewDetailLinen::field_bersih(),
+            ViewDetailLinen::field_retur(),
+            ViewDetailLinen::field_rewash(),
+        ])
+        ->leftJoinRelationship('has_bersih')
+        ->leftJoinRelationship('has_retur')
+        ->leftJoinRelationship('has_rewash')
+        ->leftJoinRelationship('has_category')
+        ->filter();
     }
 }
