@@ -8,7 +8,7 @@
                 <x-form-input col="6" value="{{ env('APP_TITLE') }}" label="Nama Title" name="title" />
                 <x-form-upload col="3" name="logo" />
                 <div class="col-md-3">
-                    <img class="img-thumbnail img-fluid" src="{{ env('APP_LOGO') ? url('storage/'.env('APP_LOGO')) : url('assets/media/image/logo.png') }}" alt="">
+                    <img class="img-thumbnail img-fluid" src="{{ env('APP_LOGO') ? url('public/storage/'.env('APP_LOGO')) : url('assets/media/image/logo.png') }}" alt="">
                 </div>
                 <x-form-input col="6" value="{{ env('APP_LOCATION') }}" label="Lokasi Report" name="location" />
                 <x-form-input col="6" value="{{ env('TRANSACTION_DAY_ALLOWED') }}" label="Toleransi hari untuk Tembak kotor" name="transaction_day" />
