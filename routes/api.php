@@ -1,15 +1,19 @@
 <?php
 
+use App\Dao\Enums\BooleanType;
 use App\Dao\Enums\ProcessType;
 use App\Dao\Enums\RegisterType;
 use App\Dao\Enums\StatusType;
 use App\Dao\Enums\StockType;
+use App\Dao\Enums\TransactionType;
 use App\Dao\Models\Detail;
 use App\Dao\Models\DetailLinen;
 use App\Dao\Models\History as ModelsHistory;
 use App\Dao\Models\Kotor;
 use App\Dao\Models\Rs;
+use App\Dao\Models\Transaksi;
 use App\Dao\Models\ViewDetailLinen;
+use App\Http\Controllers\BarcodeController;
 use App\Http\Controllers\TransaksiController;
 use App\Http\Controllers\UserController;
 use App\Http\Requests\DetailDataRequest;
@@ -23,11 +27,13 @@ use App\Http\Resources\DetailResource;
 use App\Http\Resources\DownloadLinenResource;
 use App\Http\Resources\LinenDetailResource;
 use App\Http\Resources\RsResource;
+use App\Http\Services\SaveTransaksiService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use Plugins\History;
 use Plugins\Notes;
+use Plugins\Query;
 
 /*
 |--------------------------------------------------------------------------
@@ -229,6 +235,66 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
     Route::post('kotor', [TransaksiController::class, 'kotor']);
     Route::post('retur', [TransaksiController::class, 'retur']);
     Route::post('rewash', [TransaksiController::class, 'rewash']);
+
+    Route::get('grouping/{rfid}', function ($rfid, SaveTransaksiService $service) {
+        try {
+            $data = ViewDetailLinen::findOrFail($rfid);
+
+            $data_transaksi = [];
+            $linen[$rfid] = ProcessType::Grouping;
+
+            $date = date('Y-m-d H:i:s');
+            $user = auth()->user()->id;
+
+            if(!in_array($data->field_status_transaction, [TransactionType::Kotor, TransactionType::Retur, TransactionType::Rewash])){
+
+                $data_transaksi[] = [
+                    Transaksi::field_key() => Query::autoNumber((new Transaksi())->getTable(), Transaksi::field_key(), 'GROUP'.date('Ymd', 15)),
+                    Transaksi::field_rfid() => $rfid,
+                    Transaksi::field_status_transaction() => TransactionType::Kotor,
+                    Transaksi::field_rs_id() => $data->field_rs_id,
+                    Transaksi::field_beda_rs() => BooleanType::No,
+                    Transaksi::field_report() => date('Y-m-d'),
+                    Transaksi::CREATED_AT => $date,
+                    Transaksi::CREATED_BY => $user,
+                    Transaksi::UPDATED_AT => $date,
+                    Transaksi::UPDATED_BY => $user,
+                ];
+
+                $log[] = [
+                    ModelsHistory::field_name() => $rfid,
+                    ModelsHistory::field_status() => ProcessType::Kotor,
+                    ModelsHistory::field_created_by() => auth()->user()->name,
+                    ModelsHistory::field_created_at() => $date,
+                    ModelsHistory::field_description() => json_encode($data_transaksi),
+                ];
+            }
+
+            $log[] = [
+                ModelsHistory::field_name() => $rfid,
+                ModelsHistory::field_status() => ProcessType::Grouping,
+                ModelsHistory::field_created_by() => auth()->user()->name,
+                ModelsHistory::field_created_at() => $date,
+                ModelsHistory::field_description() => json_encode($linen),
+            ];
+
+            $check = $service->save(TransactionType::Kotor, $data_transaksi, $linen, $log);
+            if(!$check['status']){
+                return $check;
+            }
+
+            $collection = new DetailResource($data);
+            return Notes::data($collection);
+        }
+        catch (\Illuminate\Database\Eloquent\ModelNotFoundException $th) {
+            return Notes::error($rfid , 'RFID '.$rfid.' tidak ditemukan');
+        }
+        catch (\Throwable $th) {
+            return Notes::error($rfid ,$th->getMessage());
+        }
+    });
+
+    Route::post('barcode', [BarcodeController::class, 'barcode']);
 
     Route::get('/opname', function (Request $request) {
 

@@ -49,6 +49,7 @@ class Jenis extends Model
         'filter',
         'jenis_parstok',
         'jenis_nama',
+        'jenis_id',
         'jenis_id_rs',
         'jenis_id_kategori',
     ];
@@ -67,8 +68,8 @@ class Jenis extends Model
         return [
             DataBuilder::build($this->field_primary())->name('ID')->show(false)->width(20)->sort(),
             DataBuilder::build(Rs::field_name())->name('Rumah Sakit')->show()->sort(),
-            DataBuilder::build(Kategori::field_name())->name('Kategori')->show()->sort(),
-            DataBuilder::build($this->field_name())->name('Name')->show()->sort(),
+            DataBuilder::build(Kategori::field_name())->name('Kategori')->width('100px')->show()->sort(),
+            DataBuilder::build($this->field_name())->name('Nama Linen')->width('200px')->show()->sort(),
             DataBuilder::build($this->field_weight())->name('Berat')->show()->sort(),
             DataBuilder::build($this->field_parstock())->name('Parstok')->show()->sort(),
         ];

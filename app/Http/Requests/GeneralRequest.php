@@ -9,6 +9,8 @@ class GeneralRequest extends FormRequest
 {
     use ValidationTrait;
 
+    public $model;
+
     public function __construct()
     {
         $this->model = request()->route()->getController()::$repository->model ?? false;

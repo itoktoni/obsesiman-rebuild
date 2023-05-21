@@ -4,15 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Dao\Models\SystemMenu;
 use App\Dao\Repositories\GroupsRepository;
-use App\Http\Requests\GeneralRequest;
 use App\Http\Requests\GroupsRequest;
 use App\Http\Services\CreateService;
 use App\Http\Services\SingleService;
 use App\Http\Services\UpdateGroupService;
-use App\Http\Services\UpdateService;
-use Coderello\SharedData\Facades\SharedData;
 use Plugins\Response;
-use Plugins\Template;
 
 class GroupsController extends MasterController
 {

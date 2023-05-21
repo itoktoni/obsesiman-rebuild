@@ -40,6 +40,10 @@ class Transaksi extends Model
         'transaksi_updated_by',
         'transaksi_deleted_at',
         'transaksi_deleted_by',
+        'transaksi_barcode_at',
+        'transaksi_barcode_by',
+        'transaksi_delivery_at',
+        'transaksi_delivery_by',
     ];
 
     public $sortable = [

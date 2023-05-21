@@ -7,12 +7,12 @@
 			</h3>
 		</td>
 		<td rowspan="3">
-			<img width="200" style="position: absolute;left:40%;top:20px" src="{{ env('APP_LOGO') ? url('storage/'.env('APP_LOGO')) : url('assets/media/image/logo.png') }}" alt="logo">
+			<x-logo/>
 		</td>
 	</tr>
 	<tr>
 		<td></td>
-		<td colspan="10">
+		<td colspan="6">
 			<h3>
 				RUMAH SAKIT : {{ $rs->field_name ?? 'Semua Rumah Sakit' }}
 			</h3>
@@ -22,7 +22,7 @@
 		<td></td>
 		<td colspan="10">
 			<h3>
-				Periode : {{ request()->get('start_date') }} - {{ request()->get('end_date') }}
+				Periode : {{ formatDate(request()->get('start_date')) }} - {{ formatDate(request()->get('end_date')) }}
 			</h3>
 		</td>
 	</tr>
@@ -34,7 +34,7 @@
 		<thead>
 			<tr>
 				<th width="1">No. </th>
-				<th>LINEN</th>
+				<th>NAMA LINEN</th>
 				<th>RUMAH SAKIT</th>
 				<th>JUMLAH REGISTER</th>
 				<th>BERAT (KG)</th>

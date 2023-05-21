@@ -5,12 +5,10 @@ namespace App\Http\Controllers;
 use App\Dao\Models\Rs;
 use App\Dao\Models\Ruangan;
 use App\Dao\Repositories\RsRepository;
-use App\Http\Requests\GeneralRequest;
 use App\Http\Requests\RsRequest;
-use App\Http\Services\CreateService;
+use App\Http\Services\CreateRsService;
 use App\Http\Services\SingleService;
 use App\Http\Services\UpdateRsService;
-use App\Http\Services\UpdateService;
 use Plugins\Response;
 
 class RsController extends MasterController
@@ -30,15 +28,15 @@ class RsController extends MasterController
         ];
     }
 
-    public function postCreate(GeneralRequest $request, CreateService $service)
+    public function postCreate(RsRequest $request, CreateRsService $service)
     {
-        $data = $service->save(self::$repository, $request);
+        $data = $service->save(self::$repository, $request->all());
         return Response::redirectBack($data);
     }
 
-    public function postUpdate($code, GeneralRequest $request, UpdateRsService $service)
+    public function postUpdate($code, RsRequest $request, UpdateRsService $service)
     {
-        $data = $service->update(self::$repository, $request, $code);
+        $data = $service->update(self::$repository, $request->all(), $code);
         return Response::redirectBack($data);
     }
 

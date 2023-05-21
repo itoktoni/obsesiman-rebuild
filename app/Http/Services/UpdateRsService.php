@@ -3,16 +3,15 @@
 namespace App\Http\Services;
 
 use App\Dao\Interfaces\CrudInterface;
-use Illuminate\Support\Facades\Session;
 use Plugins\Alert;
 
 class UpdateRsService
 {
     public function update(CrudInterface $repository, $data, $code)
     {
-        $check = $repository->updateRepository($data->all(), $code);
+        $check = $repository->updateRepository($data, $code);
         if ($check['status']) {
-            $check['data']->has_ruangan()->sync($data->ruangan);
+            $check['data']->has_ruangan()->sync($data['ruangan']);
             if(request()->wantsJson()){
                 return response()->json($check)->getData();
             }

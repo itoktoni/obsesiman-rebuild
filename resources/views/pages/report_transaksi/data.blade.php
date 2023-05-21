@@ -1,13 +1,13 @@
 <table border="0" class="header">
 	<tr>
 		<td></td>
-		<td colspan="10">
+		<td colspan="6">
 			<h3>
 				<b>DETAIL TRANSAKSI {{ strtoupper(TransactionType::getDescription(intval(request()->get('transaksi_status')))) }} </b>
 			</h3>
 		</td>
 		<td rowspan="3">
-			<img width="200" style="position: absolute;left:40%;top:20px" src="{{ env('APP_LOGO') ? url('storage/'.env('APP_LOGO')) : url('assets/media/image/logo.png') }}" alt="logo">
+			<x-logo/>
 		</td>
 	</tr>
 	<tr>
@@ -22,7 +22,7 @@
 		<td></td>
 		<td colspan="10">
 			<h3>
-				Periode : {{ request()->get('start_date') }} - {{ request()->get('end_date') }}
+				Periode : {{ formatDate(request()->get('start_date')) }} - {{ formatDate(request()->get('end_date')) }}
 			</h3>
 		</td>
 	</tr>
@@ -63,8 +63,8 @@
 				<td>{{ ProcessType::getDescription($table->view_status_proses) }}</td>
 				<td>{{ CuciType::getDescription($table->view_status_cuci) }}</td>
 				<td>{{ $table->view_transaksi_cuci_total ?? 0 }}</td>
-				<td>{{ $table->transaksi_created_at->format('Y-m-d') }}</td>
-				<td>{{ $table->view_tanggal_create }}</td>
+				<td>{{ formatDate($table->transaksi_created_at) }}</td>
+				<td>{{ formatDate($table->view_tanggal_create) }}</td>
 				<td>{{ $table->name }}</td>
 			</tr>
 			@empty

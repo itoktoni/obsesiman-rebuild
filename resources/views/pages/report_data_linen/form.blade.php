@@ -2,9 +2,7 @@
     <x-card>
         <x-form :model="$model" :spa="false" target="_blank"  method="GET" action="{{ moduleRoute('getPrint') }}" :upload="true">
             <x-action form="print" />
-                <input type="hidden" name="report_name" value="Laporan Invoice">
-                <x-form-input col="3" type="date" label="Tanggal Awal" name="start_date" />
-                <x-form-input col="3" type="date" label="Tanggal Akhir" name="end_date" />
+                <input type="hidden" name="report_name" value="Laporan Data Linen">
                 <x-form-select col="6" class="search" name="view_rs_id" label="Rumah Sakit" :options="$rs" />
             @endbind
 

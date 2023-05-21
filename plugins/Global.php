@@ -1,8 +1,12 @@
 <?php
 
 use App\Dao\Enums\TransactionType;
+use App\Dao\Models\Rs;
+use Carbon\Carbon;
 use Coderello\SharedData\Facades\SharedData;
+use Illuminate\Support\Carbon as SupportCarbon;
 use Illuminate\Support\Str;
+use Plugins\Notes;
 
 define('ACTION_CREATE', 'getCreate');
 define('ACTION_UPDATE', 'getUpdate');
@@ -23,6 +27,7 @@ define('HAS_CUCI', 'has_cuci');
 define('HAS_USER', 'has_user');
 define('HAS_VIEW', 'has_view');
 
+define('UPLOAD', 'upload');
 define('KEY', 'key');
 define('RFID', 'rfid');
 define('RS_ID', 'rs_id');
@@ -158,5 +163,24 @@ function imageUrl($value, $folder = null){
 }
 
 function formatDate($value){
-    return $value ? $value->format('d M Y') : null;
+
+    $format = 'd/m/Y';
+
+    if($value instanceof Carbon){
+        $value = $value->format($format);
+    } else if(is_string($value)){
+        $value = SupportCarbon::parse($value)->format($format);
+    }
+
+    return $value ?  : null;
+}
+
+function iteration($model, $key){
+    return $model->firstItem() + $key;
+}
+
+function checkActive($rsid){
+    if (env('TRANSACTION_ACTIVE_RS_ONLY', 1) && !(Rs::find($rsid)->field_active)) {
+        return Notes::error($rsid, 'Rs belum di registrasi');
+    }
 }

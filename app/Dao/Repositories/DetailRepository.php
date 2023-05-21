@@ -46,11 +46,12 @@ class DetailRepository extends MasterRepository implements CrudInterface
     }
 
     public function getPrint(){
-        return ViewDetailLinen::query()->filter();
+        $sql = ViewDetailLinen::query()->filter();
+        return $sql;
     }
 
     public function getPrintDataMaster(){
-        return ViewDetailLinen::query()
+        $sql = ViewDetailLinen::query()
         ->addSelect([DB::raw('view_detail_linen.*'),
             Kategori::field_name(),
             ViewDetailLinen::field_bersih(),
@@ -62,5 +63,9 @@ class DetailRepository extends MasterRepository implements CrudInterface
         ->leftJoinRelationship('has_rewash')
         ->leftJoinRelationship('has_category')
         ->filter();
+
+        dd($sql);
+
+        return $sql;
     }
 }

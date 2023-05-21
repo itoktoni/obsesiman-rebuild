@@ -99,7 +99,7 @@ class Detail extends Model
     public function fieldDatatable(): array
     {
         return [
-            DataBuilder::build($this->field_primary())->name('RFID')->sort(),
+            DataBuilder::build($this->field_primary())->name('No. RFID')->sort(),
             DataBuilder::build(Rs::field_name())->name('Rumah Sakit')->show()->sort(),
             DataBuilder::build(Ruangan::field_name())->name('Ruangan')->show()->sort(),
             DataBuilder::build($this->field_name())->name('Name')->show()->width('200px')->sort(),

@@ -19,6 +19,7 @@
                                     <input class="btn-check-d" type="checkbox">
                                 </th>
                                 <th style="width: 100px" class="text-center column-action">{{ __('Action') }}</th>
+                                <th class="text-center column-checkbox">{{ __('No.') }}</th>
                                 @foreach($fields as $value)
                                     <th {{ Template::extractColumn($value) }}>
                                         @if($value->sort)
@@ -33,7 +34,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @forelse($data as $table)
+                            @forelse($data as $key => $table)
                                 <tr>
                                     <td>
                                         <input type="checkbox" class="checkbox" name="code[]"
@@ -45,6 +46,7 @@
                                                 icon="book" />
                                         </x-crud>
                                     </td>
+                                    <td>{{ iteration($data, $key) }}</td>
                                     <td>{{ $table->field_primary }}</td>
                                     <td>{{ $table->field_rs_name }}</td>
                                     <td>{{ $table->field_ruangan_name }}</td>

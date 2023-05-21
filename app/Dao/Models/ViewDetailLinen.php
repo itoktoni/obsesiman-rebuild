@@ -17,11 +17,20 @@ class ViewDetailLinen extends Model
     protected $casts = [
         'view_linen_id' => 'string',
         'view_pemakaian' => 'integer',
+        'view_status_cuci' => 'integer',
+        'view_status_register' => 'integer',
     ];
 
     protected $filters = [
         'filter',
+        'start_date',
+        'end_date',
         'view_rs_id',
+        'view_ruangan_id',
+        'view_linen_id',
+        'view_created_id',
+        'view_status_cuci',
+        'view_status_register',
     ];
 
     protected $dates = [
@@ -29,6 +38,25 @@ class ViewDetailLinen extends Model
         'view_tanggal_update',
         'view_tanggal_delete',
     ];
+
+    public function start_date($query){
+        $date = request()->get('start_date');
+        if($date){
+            $query = $query->whereDate($this->field_reported_at(), '>=', $date);
+        }
+
+        return $query;
+    }
+
+    public function end_date($query){
+        $date = request()->get('end_date');
+
+        if($date){
+            $query = $query->whereDate($this->field_reported_at(), '<=', $date);
+        }
+
+        return $query;
+    }
 
     public function has_category()
     {

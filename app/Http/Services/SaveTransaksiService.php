@@ -14,7 +14,7 @@ use Plugins\Notes;
 
 class SaveTransaksiService
 {
-    public function save($status, $transaksi, $detail, $log, $return)
+    public function save($status, $transaksi, $detail, $log, $return = null)
     {
         $check = false;
         try {
@@ -28,10 +28,10 @@ class SaveTransaksiService
 
             if(!empty($detail)){
                 foreach(array_chunk($detail, env('TRANSACTION_CHUNK')) as $save_detail){
-                    Detail::whereIn(Detail::field_primary(), $save_detail)
+                    Detail::whereIn(Detail::field_primary(), array_keys($save_detail))
                     ->update([
                         Detail::field_status_transaction() => $status,
-                        Detail::field_status_process() => ProcessType::Kotor,
+                        Detail::field_status_process() => $save_detail[0],
                     ]);
                 }
             }

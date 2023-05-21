@@ -20,4 +20,9 @@ trait ApiTrait
         return Notes::data($this->apiTransform()::collection($query));
     }
 
+    public static function getTableName()
+    {
+        return with(new static)->getTable();
+    }
+
 }

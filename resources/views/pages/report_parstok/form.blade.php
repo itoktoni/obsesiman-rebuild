@@ -2,9 +2,9 @@
     <x-card>
         <x-form :model="$model" :spa="false" target="_blank"  method="GET" action="{{ moduleRoute('getPrint') }}" :upload="true">
             <x-action form="print" />
-                <input type="hidden" name="report_name" value="Laporan Invoice">
+                <input type="hidden" name="report_name" value="Laporan Parstok">
                 <x-form-select col="6" class="search" name="jenis_id_rs" label="Rumah Sakit" :options="$rs" />
-                <x-form-select col="6" class="search" name="jenis_id" label="Nama Jenis" :options="$jenis" />
+                <x-form-select col="6" class="search" name="jenis_id" label="Nama Linen" :options="$jenis" />
             @endbind
 
         </x-form>

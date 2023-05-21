@@ -3,7 +3,7 @@
 namespace App\Http\Services;
 
 use App\Dao\Interfaces\CrudInterface;
-use App\Plugins\Alert;
+use Plugins\Alert;
 
 class UpdateGroupUserService extends UpdateService
 {

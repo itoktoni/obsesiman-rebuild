@@ -6,6 +6,7 @@ use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Support\Facades\Log;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Database\QueryException;
 use Illuminate\Validation\ValidationException;
 use Plugins\Notes;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -60,6 +61,7 @@ class Handler extends ExceptionHandler
 
     public function render($request, Throwable $e)
     {
+        Log::error($e->getMessage());
         if(request()->hasHeader('authorization')){
 
             if($e instanceof ValidationException){
@@ -72,6 +74,10 @@ class Handler extends ExceptionHandler
 
             if($e instanceof NotFoundHttpException){
                 return response()->json(Notes::notFound($e->getMessage()), 404);
+            }
+
+            if($e instanceof QueryException){
+                return response()->json(Notes::notFound($e->getMessage()), 500);
             }
 
             return response()->json(Notes::error($e->getMessage()), $e->getCode() != 0 ? $e->getMessage() : 500);

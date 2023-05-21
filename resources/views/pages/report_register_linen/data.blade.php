@@ -1,13 +1,13 @@
 <table border="0" class="header">
 	<tr>
 		<td></td>
-		<td colspan="10">
+		<td colspan="6">
 			<h3>
 				<b>DETAIL REGISTER LINEN</b>
 			</h3>
 		</td>
 		<td rowspan="3">
-			<img width="200" style="position: absolute;left:40%;top:20px" src="{{ env('APP_LOGO') ? url('storage/'.env('APP_LOGO')) : url('assets/media/image/logo.png') }}" alt="logo">
+			<x-logo/>
 		</td>
 	</tr>
 	<tr>
@@ -22,7 +22,7 @@
 		<td></td>
 		<td colspan="10">
 			<h3>
-				Periode : {{ request()->get('start_date') }} - {{ request()->get('end_date') }}
+				Periode : {{ formatDate(request()->get('start_date')) }} - {{ formatDate(request()->get('end_date')) }}
 			</h3>
 		</td>
 	</tr>
@@ -58,8 +58,8 @@
 				<td>{{ $table->field_ruangan_name }}</td>
 				<td>{{ $table->field_status_cuci_name }}</td>
 				<td>{{ $table->field_status_register_name }}</td>
-				<td>{{ $table->field_tanggal_create }}</td>
-				<td>{{ $table->field_user_name }}</td>
+				<td>{{ formatDate($table->field_tanggal_create) }}</td>
+				<td>{{ $table->field_created_name }}</td>
 			</tr>
 			@empty
 			@endforelse

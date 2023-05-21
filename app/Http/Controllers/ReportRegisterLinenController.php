@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Dao\Enums\CuciType;
+use App\Dao\Enums\RegisterType;
+use App\Dao\Models\Jenis;
 use App\Dao\Models\Rs;
+use App\Dao\Models\Ruangan;
 use App\Dao\Models\ViewDetailLinen;
 use App\Dao\Repositories\DetailRepository;
 use Illuminate\Http\Request;
@@ -19,9 +23,17 @@ class ReportRegisterLinenController extends MinimalController
     protected function beforeForm(){
 
         $rs = Rs::getOptions();
+        $jenis = Jenis::getOptions();
+        $ruangan = Ruangan::getOptions();
+        $cuci = CuciType::getOptions();
+        $register = RegisterType::getOptions();
 
         self::$share = [
             'rs' => $rs,
+            'ruangan' => $ruangan,
+            'jenis' => $jenis,
+            'register' => $register,
+            'cuci' => $cuci,
         ];
     }
 

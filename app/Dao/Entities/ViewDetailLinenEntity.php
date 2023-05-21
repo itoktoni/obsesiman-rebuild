@@ -240,6 +240,11 @@ trait ViewDetailLinenEntity
         return 'view_transaksi_rewash_total';
     }
 
+    public static function field_reported_at()
+    {
+        return 'view_tanggal_create';
+    }
+
     public function getFieldRewashAttribute()
     {
         return $this->{$this->field_rewash()};

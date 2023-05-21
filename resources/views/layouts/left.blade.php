@@ -65,7 +65,8 @@
 
 		@if($groups = SharedData::get('groups'))
 		@foreach($groups as $group_data)
-		<div class="{{ request()->segment(2) == $group_data->field_primary || request()->segment(1) == 'home' ? 'open' : '' }}" id="{{ $group_data->field_primary }}">
+		<!-- should be open home || in request()->segment(1) == 'home' ? 'open' -->
+		<div class="{{ request()->segment(2) == $group_data->field_primary ? 'open' : '' }}" id="{{ $group_data->field_primary }}">
 			<ul>
 				@if($menus = $group_data->has_menu)
 				@foreach($menus as $menu)

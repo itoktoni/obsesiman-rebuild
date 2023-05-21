@@ -160,4 +160,29 @@ trait TransaksiEntity
         return $this->{User::field_username()};
     }
 
+    public static function field_barcode_by()
+    {
+        return 'transaksi_barcode_by';
+    }
+
+    public function getFieldBarcodeByAttribute()
+    {
+        return $this->{$this->field_barcode_by()};
+    }
+
+    public static function field_barcode_at()
+    {
+        return 'transaksi_barcode_at';
+    }
+
+    public function getFieldBarcodeAtAttribute()
+    {
+        return $this->{$this->field_barcode_at()};
+    }
+
+    public function getFieldBarcodeNameAttribute()
+    {
+        return $this->{User::field_username()};
+    }
+
 }

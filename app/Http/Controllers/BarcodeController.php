@@ -11,15 +11,18 @@ use App\Dao\Models\Rs;
 use App\Dao\Models\Transaksi;
 use App\Dao\Models\ViewTransaksi;
 use App\Dao\Repositories\TransaksiRepository;
+use App\Http\Requests\BarcodeRequest;
 use App\Http\Requests\GeneralRequest;
 use App\Http\Requests\TransactionRequest;
 use App\Http\Services\CreateService;
 use App\Http\Services\SaveTransaksiService;
 use App\Http\Services\SingleService;
+use App\Http\Services\UpdateBarcodeService;
 use App\Http\Services\UpdateService;
 use Plugins\Alert;
 use Plugins\History as PluginsHistory;
 use Plugins\Notes;
+use Plugins\Query;
 use Plugins\Response;
 
 class BarcodeController extends MasterController
@@ -42,14 +45,32 @@ class BarcodeController extends MasterController
         return Response::redirectBack($data);
     }
 
+    public function get($code = null, $relation = null)
+    {
+        return Transaksi::where(Transaksi::field_barcode(), $code)->first();
+    }
+
+    public function getTable()
+    {
+        $data = $this->getData();
+        return moduleView(modulePathTable(), [
+            'data' => $data,
+            'fields' => self::$repository->barcode->getShowField(),
+        ]);
+    }
+
+    public function getData()
+    {
+        $query = self::$repository->dataBarcode();
+        return $query;
+    }
+
     private function getTransaksi($code){
-        $view = ViewTransaksi::find($code);
+        $view = ViewTransaksi::where(Transaksi::field_barcode(), $code);
 
         if($view){
             $transaksi = Transaksi::with([HAS_DETAIL, HAS_RS])
-            ->where(Transaksi::field_key(), $view->field_key)
-            ->where(Transaksi::field_status_transaction(), $view->field_status_transaction)
-            ->where(Transaksi::field_report(), $view->field_report);
+            ->where(Transaksi::field_barcode(), $code);
 
             return $transaksi;
         }
@@ -59,10 +80,14 @@ class BarcodeController extends MasterController
 
     public function getUpdate($code)
     {
+        dd($code);
         $transaksi = $this->getTransaksi($code);
+        dd($transaksi->get());
         if(!$transaksi){
             return Response::redirectTo(moduleRoute('getTable'));
         }
+
+        dd($this->get($code));
 
         return moduleView(modulePathForm(), $this->share([
             'model' => $this->get($code),
@@ -112,115 +137,9 @@ class BarcodeController extends MasterController
         return Response::redirectBack($transaksi);
     }
 
-    public function kotor(TransactionRequest $request, SaveTransaksiService $service){
-        $request[STATUS_TRANSAKSI] = TransactionType::Kotor;
-        $request[STATUS_PROCESS] = ProcessType::Kotor;
-        return $this->transaction($request, $service);
-    }
-
-    public function retur(TransactionRequest $request, SaveTransaksiService $service){
-        $request[STATUS_TRANSAKSI] = TransactionType::Retur;
-        $request[STATUS_PROCESS] = ProcessType::Kotor;
-        return $this->transaction($request, $service);
-    }
-
-    public function rewash(TransactionRequest $request, SaveTransaksiService $service){
-        $request[STATUS_TRANSAKSI] = TransactionType::Rewash;
-        $request[STATUS_PROCESS] = ProcessType::Kotor;
-        return $this->transaction($request, $service);
-    }
-
-    private function transaction($request, $service){
-        if(env('TRANSACTION_ACTIVE_RS_ONLY', 1) && !(Rs::find($request->rs_id)->field_active)){
-            return Notes::error($request->rs_id, 'Rs belum di registrasi');
-        }
-
-        $rfid = $request->rfid;
-        $data = Detail::whereIn(Detail::field_primary() ,$rfid)
-        ->get()->mapWithKeys(function($item) {
-            return [$item[Detail::field_primary()] => $item];
-        });
-
-        $form_transaksi = $request->{STATUS_TRANSAKSI};
-        $status_sync = BooleanType::No;
-
-        $return = $transaksi = $linen = $log = [];
-
-        foreach($rfid as $item){
-            $date = date('Y-m-d H:i:s');
-            $user = auth()->user()->id;
-
-            if(isset($data[$item])){
-                $detail = $data[$item];
-
-                if(in_array($detail->field_status_transaction, BERSIH)){
-
-                    if(now()->diffInDays($detail->field_updated_at) > env('TRANSACTION_DAY_ALLOWED', 1)){
-
-                        $status_transaksi = TransactionType::Kotor;
-                        $status_process = ProcessType::Kotor;
-                        $status_sync = BooleanType::Yes;
-
-                        $beda_rs = $request->rs_id == $detail->field_rs_id ? BooleanType::No : BooleanType::Yes;
-
-                        $data_transaksi = [
-                            Transaksi::field_key() => $request->key,
-                            Transaksi::field_rfid() => $item,
-                            Transaksi::field_status_transaction() => $form_transaksi,
-                            Transaksi::field_rs_id() => $request->rs_id,
-                            Transaksi::field_beda_rs() => $beda_rs,
-                            Transaksi::field_report() => date('Y-m-d'),
-                            Transaksi::CREATED_AT => $date,
-                            Transaksi::CREATED_BY => $user,
-                            Transaksi::UPDATED_AT => $date,
-                            Transaksi::UPDATED_BY => $user,
-                        ];
-
-                        $transaksi[] = $data_transaksi;
-
-                        $linen[] = (string)$item;
-
-                        $log[] = [
-                            History::field_name() => $item,
-                            History::field_status() => ProcessType::Kotor,
-                            History::field_created_by() => auth()->user()->name,
-                            History::field_created_at() => $date,
-                            History::field_description() => json_encode($data_transaksi),
-                        ];
-
-                    } else {
-                        $status_transaksi = $detail->field_status_transaction;
-                        $date = $detail->field_updated_at->format('Y-m-d H:i:s');
-                        $status_process = $detail->field_status_process;
-                    }
-
-                } else {
-                    $status_transaksi = $detail->field_status_transaction;
-                    $date = $detail->field_updated_at->format('Y-m-d H:i:s');
-                    $status_process = $detail->field_status_process;
-                }
-
-                $return[] = [
-                    KEY => $request->key,
-                    STATUS_SYNC => $status_sync,
-                    STATUS_TRANSAKSI => $status_transaksi,
-                    STATUS_PROCESS => $status_process,
-                    RFID => $item,
-                    TANGGAL_UPDATE => $date,
-                ];
-            }
-            else{
-                $return[] = [
-                    KEY => $request->key,
-                    STATUS_SYNC => $status_sync,
-                    STATUS_TRANSAKSI => TransactionType::Unknown,
-                    STATUS_PROCESS => ProcessType::Unknown,
-                    RFID => $item,
-                    TANGGAL_UPDATE => $date,
-                ];
-            }
-        }
-        $check = $service->save($form_transaksi, $transaksi, $linen, $log, $return);
+    public function barcode(BarcodeRequest $request, UpdateBarcodeService $service){
+        $autoNumber = Query::autoNumber(Transaksi::getTableName(), Transaksi::field_barcode(), 'BRC'.date('Ymd'), env('AUTO_NUMBER', 15));
+        $check = $service->update($request->rfid, $autoNumber);
         return $check;
     }
 }
