@@ -2,19 +2,15 @@
 
 namespace App\Http\Services;
 
-use App\Dao\Enums\ProcessType;
-use App\Dao\Enums\TransactionType;
-use App\Dao\Facades\EnvFacades;
 use App\Dao\Models\Detail;
 use App\Dao\Models\History;
 use App\Dao\Models\Transaksi;
 use Illuminate\Support\Facades\DB;
-use Plugins\Alert;
 use Plugins\Notes;
 
 class SaveTransaksiService
 {
-    public function save($status, $transaksi, $detail, $log, $return = null)
+    public function save($status, $process, $transaksi, $linen, $log, $return = null)
     {
         $check = false;
         try {
@@ -26,12 +22,12 @@ class SaveTransaksiService
                 }
             }
 
-            if(!empty($detail)){
-                foreach(array_chunk($detail, env('TRANSACTION_CHUNK')) as $save_detail){
-                    Detail::whereIn(Detail::field_primary(), array_keys($save_detail))
+            if(!empty($linen)){
+                foreach(array_chunk($linen, env('TRANSACTION_CHUNK')) as $save_detail){
+                    Detail::whereIn(Detail::field_primary(), $save_detail)
                     ->update([
                         Detail::field_status_transaction() => $status,
-                        Detail::field_status_process() => $save_detail[0],
+                        Detail::field_status_process() => $process,
                     ]);
                 }
             }

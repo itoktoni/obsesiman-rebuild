@@ -210,9 +210,14 @@ trait ViewDetailLinenEntity
         return $this->{$this->field_category_id()};
     }
 
+    public static function field_category_name()
+    {
+        return 'view_kategori_name';
+    }
+
     public function getFieldCategoryNameAttribute()
     {
-        return $this->{Kategori::field_name()};
+        return $this->{$this->field_category_name()};
     }
 
     public static function field_bersih()

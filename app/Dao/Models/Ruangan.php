@@ -55,7 +55,7 @@ class Ruangan extends Model
     {
         return [
             DataBuilder::build($this->field_primary())->name('ID')->width(20)->sort(),
-            DataBuilder::build($this->field_name())->name('Name')->show()->sort(),
+            DataBuilder::build($this->field_name())->name('Nama Ruangan')->show()->sort(),
             DataBuilder::build($this->field_description())->name('Deskripsi')->show()->sort(),
         ];
     }

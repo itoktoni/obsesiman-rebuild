@@ -20,17 +20,22 @@
                                 </th>
                                 <th style="width: 100px" class="text-center column-action">{{ __('Action') }}</th>
                                 <th class="text-center column-checkbox">{{ __('No.') }}</th>
-                                @foreach($fields as $value)
-                                    <th {{ Template::extractColumn($value) }}>
-                                        @if($value->sort)
-                                            @sortablelink($value->code, __($value->name))
-                                            @else
-                                                {{ __($value->name) }}
-                                            @endif
-                                    </th>
-                                @endforeach
-                                <th class="text-center">{{ __('Pemakaian') }}</th>
-
+                                <th class="text-left">NO. RFID</th>
+                                <th class="text-left">KATEGORI LINEN</th>
+                                <th class="text-left">LINEN</th>
+                                <th class="text-left">BERAT</th>
+                                <th class="text-left">RUMAH SAKIT</th>
+                                <th class="text-left">RUANGAN</th>
+                                <th class="text-left">CUCI/RENTAL</th>
+                                <th class="text-left">JUMLAH PEMAKAIAN LINEN</th>
+                                <th class="text-left">JUMLAH RETUR</th>
+                                <th class="text-left">JUMLAH REWASH</th>
+                                <th class="text-left">POSISI TERAKHIR</th>
+                                <th class="text-left">TANGGAL POSISI TERAKHIR</th>
+                                <th class="text-left">OPERATOR UPDATE TERAKHIR</th>
+                                <th class="text-left">STATUS REGISTER</th>
+                                <th class="text-left">TANGGAL REGISTRASI</th>
+                                <th class="text-left">OPERATOR REGISTRASI</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -48,16 +53,21 @@
                                     </td>
                                     <td>{{ iteration($data, $key) }}</td>
                                     <td>{{ $table->field_primary }}</td>
-                                    <td>{{ $table->field_rs_name }}</td>
-                                    <td>{{ $table->field_ruangan_name }}</td>
-                                    <td>{{ $table->field_name }}</td>
-                                    <td>{{ $table->field_weight }} Kg</td>
-                                    <td>{{ $table->field_status_register_name }}</td>
-                                    <td>{{ $table->field_status_cuci_name }}</td>
-                                    <td>{{ $table->field_status_transaction_name }}</td>
+                                    <td>{{ $table->view_kategori_nama }}</td>
+                                    <td>{{ $table->view_linen_nama }}</td>
+                                    <td>{{ $table->view_linen_berat }}</td>
+                                    <td>{{ $table->view_rs_nama }}</td>
+                                    <td>{{ $table->view_ruangan_nama }}</td>
+                                    <td>{{ CuciType::getDescription($table->view_status_cuci) }}</td>
+                                    <td>{{ $table->view_transaksi_cuci_total ?? 0 }}</td>
+                                    <td>{{ $table->view_transaksi_retur_total ?? 0 }}</td>
+                                    <td>{{ $table->view_transaksi_rewash_total ?? 0 }}</td>
                                     <td>{{ $table->field_status_process_name }}</td>
-                                    <td>{{ $table->field_updated_at }}</td>
-                                    <td>{{ $table->field_total_cuci }}</td>
+                                    <td>{{ formatDate($table->field_updated_at) }}</td>
+                                    <td>{{ $table->view_updated_name }}</td>
+                                    <td>{{ $table->field_status_register_name }}</td>
+                                    <td>{{ formatDate($table->view_tanggal_create) }}</td>
+                                    <td>{{ $table->view_created_name }}</td>
                                 </tr>
                             @empty
                             @endforelse

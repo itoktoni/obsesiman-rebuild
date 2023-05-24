@@ -77,4 +77,9 @@ class ViewDetailLinen extends Model
     {
         return $this->hasOne(ViewTransaksiRewash::class, ViewTransaksiRewash::field_primary(), self::field_primary());
     }
+
+    public function has_cuci()
+    {
+        return $this->hasOne(ViewTransaksiCuci::class, ViewTransaksiCuci::field_primary(), self::field_primary());
+    }
 }

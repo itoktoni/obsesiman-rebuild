@@ -22,7 +22,9 @@ class JenisRepository extends MasterRepository implements CrudInterface
             ->leftJoinRelationship('has_category')
             ->leftJoinRelationship('has_rs')
             ->leftJoinRelationship('has_total')
-            ->sortable()->filter();
+            ->sortable()->filter()
+            ->orderBy('rs_nama', 'ASC')
+            ->orderBy('jenis_nama', 'ASC');
 
             if(request()->hasHeader('authorization')){
                 if($paging = request()->get('paginate')){

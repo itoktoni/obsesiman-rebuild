@@ -16,10 +16,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Kirschbaum\PowerJoins\PowerJoins;
 use Kyslik\ColumnSortable\Sortable;
 use Mehradsadeghi\FilterQueryString\FilterQueryString as FilterQueryString;
-use PHPUnit\Framework\MockObject\Api;
-use Plugins\History;
 use App\Dao\Models\History as HistoryModel;
-use Plugins\Query;
 use Touhidurabir\ModelSanitize\Sanitizable as Sanitizable;
 use Wildside\Userstamps\Userstamps;
 
@@ -100,15 +97,14 @@ class Detail extends Model
     {
         return [
             DataBuilder::build($this->field_primary())->name('No. RFID')->sort(),
-            DataBuilder::build(Rs::field_name())->name('Rumah Sakit')->show()->sort(),
-            DataBuilder::build(Ruangan::field_name())->name('Ruangan')->show()->sort(),
-            DataBuilder::build($this->field_name())->name('Name')->show()->width('200px')->sort(),
-            DataBuilder::build(Jenis::field_weight())->name('Berat')->show()->sort(),
+            DataBuilder::build(ViewDetailLinen::field_rs_name())->name('Rumah Sakit')->show()->sort(),
+            DataBuilder::build(ViewDetailLinen::field_ruangan_name())->name('Ruangan')->show()->sort(),
+            DataBuilder::build(ViewDetailLinen::field_category_name())->name('Kategori')->show()->sort(),
+            DataBuilder::build(ViewDetailLinen::field_name())->name('Nama Linen')->show()->sort(),
             DataBuilder::build($this->field_status_register())->name('Register')->show()->sort(),
             DataBuilder::build($this->field_status_cuci())->name('Cuci')->show()->sort(),
             DataBuilder::build($this->field_status_transaction())->name('Transaksi')->show()->sort(),
             DataBuilder::build($this->field_status_process())->name('Posisi Terakhir')->show()->sort(),
-            DataBuilder::build(self::UPDATED_AT)->name('Update Terakhir')->show()->sort(),
         ];
     }
 
@@ -135,6 +131,16 @@ class Detail extends Model
     public function has_cuci()
     {
         return $this->hasOne(ViewTransaksiCuci::class, ViewTransaksiCuci::field_primary(), self::field_primary());
+    }
+
+    public function has_return()
+    {
+        return $this->hasOne(ViewTransaksiRetur::class, ViewTransaksiRetur::field_primary(), self::field_primary());
+    }
+
+    public function has_rewash()
+    {
+        return $this->hasOne(ViewTransaksiRewash::class, ViewTransaksiRewash::field_primary(), self::field_primary());
     }
 
     public function has_view()

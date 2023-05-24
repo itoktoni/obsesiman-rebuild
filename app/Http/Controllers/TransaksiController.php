@@ -130,6 +130,19 @@ class TransaksiController extends MasterController
         return $this->transaction($request, $service);
     }
 
+    private function checkValidation($form_transaksi, $status_transaksi, $date){
+
+        if(!in_array($status_transaksi, BERSIH)){
+            return false;
+        }
+
+        if($form_transaksi == TransactionType::Kotor && now()->diffInDays($date) <= env('TRANSACTION_DAY_ALLOWED', 1)){
+            return false;
+        }
+
+        return true;
+    }
+
     private function transaction($request, $service){
         if(env('TRANSACTION_ACTIVE_RS_ONLY', 1) && !(Rs::find($request->rs_id)->field_active)){
             return Notes::error($request->rs_id, 'Rs belum di registrasi');
@@ -141,7 +154,8 @@ class TransaksiController extends MasterController
             return [$item[Detail::field_primary()] => $item];
         });
 
-        $form_transaksi = $request->{STATUS_TRANSAKSI};
+        $status_transaksi = $request->{STATUS_TRANSAKSI};
+        $status_process = $request->{STATUS_PROCESS};
         $status_sync = BooleanType::No;
 
         $return = $transaksi = $linen = $log = [];
@@ -153,46 +167,36 @@ class TransaksiController extends MasterController
             if(isset($data[$item])){
                 $detail = $data[$item];
 
-                if(in_array($detail->field_status_transaction, BERSIH)){
+                if($this->checkValidation($status_transaksi, $detail->field_status_transaction, $detail->field_updated_at)){
 
-                    if(now()->diffInDays($detail->field_updated_at) > env('TRANSACTION_DAY_ALLOWED', 1)){
+                    $status_sync = BooleanType::Yes;
 
-                        $status_transaksi = TransactionType::Kotor;
-                        $status_process = ProcessType::Kotor;
-                        $status_sync = BooleanType::Yes;
+                    $beda_rs = $request->rs_id == $detail->field_rs_id ? BooleanType::No : BooleanType::Yes;
 
-                        $beda_rs = $request->rs_id == $detail->field_rs_id ? BooleanType::No : BooleanType::Yes;
+                    $data_transaksi = [
+                        Transaksi::field_key() => $request->key,
+                        Transaksi::field_rfid() => $item,
+                        Transaksi::field_status_transaction() => $status_transaksi,
+                        Transaksi::field_rs_id() => $request->rs_id,
+                        Transaksi::field_beda_rs() => $beda_rs,
+                        Transaksi::field_report() => date('Y-m-d'),
+                        Transaksi::CREATED_AT => $date,
+                        Transaksi::CREATED_BY => $user,
+                        Transaksi::UPDATED_AT => $date,
+                        Transaksi::UPDATED_BY => $user,
+                    ];
 
-                        $data_transaksi = [
-                            Transaksi::field_key() => $request->key,
-                            Transaksi::field_rfid() => $item,
-                            Transaksi::field_status_transaction() => $form_transaksi,
-                            Transaksi::field_rs_id() => $request->rs_id,
-                            Transaksi::field_beda_rs() => $beda_rs,
-                            Transaksi::field_report() => date('Y-m-d'),
-                            Transaksi::CREATED_AT => $date,
-                            Transaksi::CREATED_BY => $user,
-                            Transaksi::UPDATED_AT => $date,
-                            Transaksi::UPDATED_BY => $user,
-                        ];
+                    $transaksi[] = $data_transaksi;
 
-                        $transaksi[] = $data_transaksi;
+                    $linen[] = (string)$item;
 
-                        $linen[] = (string)$item;
-
-                        $log[] = [
-                            History::field_name() => $item,
-                            History::field_status() => ProcessType::Kotor,
-                            History::field_created_by() => auth()->user()->name,
-                            History::field_created_at() => $date,
-                            History::field_description() => json_encode($data_transaksi),
-                        ];
-
-                    } else {
-                        $status_transaksi = $detail->field_status_transaction;
-                        $date = $detail->field_updated_at->format('Y-m-d H:i:s');
-                        $status_process = $detail->field_status_process;
-                    }
+                    $log[] = [
+                        History::field_name() => $item,
+                        History::field_status() => ProcessType::Kotor,
+                        History::field_created_by() => auth()->user()->name,
+                        History::field_created_at() => $date,
+                        History::field_description() => json_encode($data_transaksi),
+                    ];
 
                 } else {
                     $status_transaksi = $detail->field_status_transaction;
@@ -220,7 +224,8 @@ class TransaksiController extends MasterController
                 ];
             }
         }
-        $check = $service->save($form_transaksi, $transaksi, $linen, $log, $return);
+
+        $check = $service->save($status_transaksi, $status_process, $transaksi, $linen, $log, $return);
         return $check;
     }
 }

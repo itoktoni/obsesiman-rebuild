@@ -4,9 +4,7 @@ namespace App\Dao\Repositories;
 
 use App\Dao\Interfaces\CrudInterface;
 use App\Dao\Models\Detail;
-use App\Dao\Models\Kategori;
 use App\Dao\Models\ViewDetailLinen;
-use App\Dao\Models\ViewTransaksiCuci;
 use Illuminate\Support\Facades\DB;
 use Plugins\Notes;
 
@@ -20,12 +18,11 @@ class DetailRepository extends MasterRepository implements CrudInterface
     public function dataRepository()
     {
         $query = $this->model
-            ->select($this->model->getSelectedField())
-            ->addSelect(ViewTransaksiCuci::field_total())
+            ->select('*')
             ->leftJoinRelationship('has_cuci')
-            ->leftJoinRelationship('has_jenis')
-            ->leftJoinRelationship('has_ruangan')
-            ->leftJoinRelationship('has_rs')
+            ->leftJoinRelationship('has_return')
+            ->leftJoinRelationship('has_rewash')
+            ->leftJoinRelationship('has_view')
             ->sortable()->filter();
 
             if(request()->hasHeader('authorization')){
@@ -53,7 +50,6 @@ class DetailRepository extends MasterRepository implements CrudInterface
     public function getPrintDataMaster(){
         $sql = ViewDetailLinen::query()
         ->addSelect([DB::raw('view_detail_linen.*'),
-            Kategori::field_name(),
             ViewDetailLinen::field_bersih(),
             ViewDetailLinen::field_retur(),
             ViewDetailLinen::field_rewash(),
@@ -64,7 +60,6 @@ class DetailRepository extends MasterRepository implements CrudInterface
         ->leftJoinRelationship('has_category')
         ->filter();
 
-        dd($sql);
 
         return $sql;
     }
