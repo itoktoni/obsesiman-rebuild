@@ -4,12 +4,15 @@ namespace App\Dao\Models;
 
 use App\Dao\Builder\DataBuilder;
 use App\Dao\Entities\SystemLinkEntity;
+use App\Dao\Enums\MenuType;
 use App\Dao\Traits\ActiveTrait;
 use App\Dao\Traits\DataTableTrait;
 use App\Dao\Traits\OptionTrait;
 use Illuminate\Database\Eloquent\Model;
 use Kyslik\ColumnSortable\Sortable;
 use Mehradsadeghi\FilterQueryString\FilterQueryString as FilterQueryString;
+use Plugins\Core;
+use Illuminate\Support\Str;
 use Touhidurabir\ModelSanitize\Sanitizable as Sanitizable;
 
 class SystemLink extends Model
@@ -64,5 +67,32 @@ class SystemLink extends Model
             DataBuilder::build($this->field_url())->name('Url')->sort(),
             DataBuilder::build($this->field_sort())->name('Sort')->sort()->class('column-active'),
         ];
+    }
+
+    public static function boot()
+    {
+        parent::creating(function ($model) {
+            if(empty($model->{SystemLink::field_action()}) && ($model->{SystemLink::field_type()} == MenuType::Menu)){
+                $act = '.getTable';
+                if(str_contains($model->{SystemLink::field_name()}, 'Report')){
+                    $act = '.getCreate';
+                }
+                $model->{SystemLink::field_action()} = Core::getControllerName($model->{SystemLink::field_controller()}).$act;
+            }
+        });
+
+        parent::saving(function($model){
+            if($model->{SystemLink::field_type()} == MenuType::Menu){
+
+                $model->{SystemLink::field_primary()} = Core::getControllerName($model->{SystemLink::field_controller()});
+                if(empty($model->{SystemLink::field_url()})){
+                    $model->{SystemLink::field_url()} = Core::getControllerName($model->{SystemLink::field_controller()});
+                }
+            }
+            else{
+                $model->{SystemLink::field_primary()} = Str::snake($model->{SystemLink::field_name()});
+            }
+        });
+        parent::boot();
     }
 }

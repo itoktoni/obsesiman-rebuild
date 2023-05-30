@@ -24,7 +24,8 @@ class LinkRequest extends FormRequest
     public function prepareForValidation()
     {
         $this->merge([
-            SystemLink::field_primary() =>  $this->{SystemLink::field_primary()} ?? Str::snake($this->{SystemLink::field_name()})
+            SystemLink::field_primary() =>  $this->{SystemLink::field_primary()} ?? Str::snake($this->{SystemLink::field_name()}),
+            SystemLink::field_url() =>  $this->{SystemLink::field_url()} ?? Str::snake($this->{SystemLink::field_name()})
         ]);
     }
 

@@ -2,27 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Dao\Entities\SystemMenuEntity;
 use App\Dao\Enums\BooleanType;
 use App\Dao\Enums\MenuType;
-use App\Dao\Models\Groups;
-use App\Dao\Models\Menus;
 use App\Dao\Models\SystemLink;
 use App\Dao\Repositories\MenuRepository;
 use App\Http\Requests\MenuRequest;
-use App\Http\Requests\RoutesRequest;
 use App\Http\Requests\SortRequest;
-use App\Http\Services\CreateRoutesService;
 use App\Http\Services\CreateService;
 use App\Http\Services\SingleService;
 use App\Http\Services\UpdateMenuService;
-use App\Http\Services\UpdateRoutesService;
-use Coderello\SharedData\Facades\SharedData;
-use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Storage;
 use Plugins\Helper;
 use Plugins\Response;
-use Plugins\Template;
 
 class MenuController extends MasterController
 {
@@ -46,7 +36,9 @@ class MenuController extends MasterController
             'model' => false,
             'link' => $link,
             'file' => $files,
-            'action' => [],
+            'action' => [
+
+            ],
         ];
     }
 

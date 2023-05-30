@@ -2,15 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Dao\Enums\TransactionType;
 use App\Dao\Models\Rs;
-use App\Dao\Models\ViewDetailLinen;
+use App\Dao\Models\User;
 use App\Dao\Repositories\TransaksiRepository;
-use App\Http\Requests\ReportRequest;
 use App\Http\Requests\TransactionReportRequest;
-use Illuminate\Http\Request;
 
-class ReportTransaksiController extends MinimalController
+class ReportDetailReturController extends MinimalController
 {
     public $data;
 
@@ -22,23 +19,16 @@ class ReportTransaksiController extends MinimalController
     protected function beforeForm(){
 
         $rs = Rs::getOptions();
-        $status = TransactionType::getOptions([
-            TransactionType::Kotor,
-            TransactionType::Retur,
-            TransactionType::Rewash,
-            TransactionType::BersihKotor,
-            TransactionType::BersihRetur,
-            TransactionType::BersihRewash,
-        ]);
+        $user = User::getOptions();
 
         self::$share = [
-            'status' => $status,
+            'user' => $user,
             'rs' => $rs,
         ];
     }
 
     private function getQuery($request){
-        return self::$repository->getTransaksiDetail()->get();
+        return self::$repository->getDetailRetur()->get();
     }
 
     public function getPrint(TransactionReportRequest $request){

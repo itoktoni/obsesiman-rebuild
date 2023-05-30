@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Dao\Models\Jenis;
+use App\Dao\Models\Kategori;
 use App\Dao\Models\Rs;
+use App\Dao\Models\Ruangan;
 use App\Dao\Models\ViewDetailLinen;
 use App\Dao\Repositories\DetailRepository;
 use Illuminate\Http\Request;
@@ -19,8 +22,14 @@ class ReportDataLinenController extends MinimalController
     protected function beforeForm(){
 
         $rs = Rs::getOptions();
+        $ruangan = Ruangan::getOptions();
+        $kategori = Kategori::getOptions();
+        $jenis = Jenis::getOptions();
 
         self::$share = [
+            'jenis' => $jenis,
+            'kategori' => $kategori,
+            'ruangan' => $ruangan,
             'rs' => $rs,
         ];
     }

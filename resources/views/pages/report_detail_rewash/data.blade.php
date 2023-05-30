@@ -3,7 +3,7 @@
 		<td></td>
 		<td colspan="6">
 			<h3>
-				<b>MASTER DATA LINEN</b>
+				<b>DETAIL TRANSAKSI REWASH </b>
 			</h3>
 		</td>
 		<td rowspan="3">
@@ -18,6 +18,14 @@
 			</h3>
 		</td>
 	</tr>
+	<tr>
+		<td></td>
+		<td colspan="10">
+			<h3>
+				Periode : {{ formatDate(request()->get('start_date')) }} - {{ formatDate(request()->get('end_date')) }}
+			</h3>
+		</td>
+	</tr>
 </table>
 
 <div class="table-responsive" id="table_data">
@@ -26,48 +34,38 @@
 		<thead>
 			<tr>
 				<th width="1">No. </th>
+				<th>NO. TRANSAKSI</th>
 				<th>NO. RFID</th>
-				<th>KATEGORI LINEN</th>
-				<th>LINEN</th>
-				<th>BERAT</th>
+				<th>LINEN </th>
 				<th>RUMAH SAKIT</th>
 				<th>RUANGAN</th>
+				<th>LOKASI SCAN RUMAH SAKIT</th>
+				<th>STATUS TRANSAKSI</th>
+				<th>STATUS LINEN</th>
 				<th>CUCI/RENTAL</th>
-				<th>JUMLAH BERSIH</th>
-				<th>JUMLAH RETUR</th>
 				<th>JUMLAH REWASH</th>
-				<th>POSISI TERAKHIR</th>
-				<th>TGL POSISI TERAKHIR</th>
-				<th>OPERATOR UPDATE TERAKHIR</th>
-				<th>STATUS REGISTER</th>
-				<th>TGL REGISTRASI</th>
-				<th>OPERATOR REGISTRASI</th>
+				<th>TANGGAL PENERIMAAN</th>
+				<th>TANGGAL REGISTER</th>
+				<th>OPERATOR</th>
 			</tr>
 		</thead>
 		<tbody>
-			@php
-			$total_berat = 0;
-			@endphp
-
 			@forelse($data as $table)
 			<tr>
 				<td>{{ $loop->iteration }}</td>
-				<td>{{ $table->field_primary }}</td>
-				<td>{{ $table->view_kategori_nama }}</td>
-				<td>{{ $table->field_name }}</td>
-				<td>{{ $table->field_weight }}</td>
+				<td>{{ $table->field_key }}</td>
+				<td>{{ $table->field_rfid }}</td>
+				<td>{{ $table->view_linen_nama }}</td>
+				<td>{{ $table->view_rs_nama }}</td>
+				<td>{{ $table->view_ruangan_nama }}</td>
 				<td>{{ $table->field_rs_name }}</td>
-				<td>{{ $table->field_ruangan_name }}</td>
-				<td>{{ $table->field_status_cuci_name }}</td>
-				<td>{{ $table->field_bersih ?? 0 }}</td>
-				<td>{{ $table->field_retur ?? 0 }}</td>
-				<td>{{ $table->field_rewash ?? 0 }}</td>
-				<td>{{ $table->field_status_process_name }}</td>
-				<td>{{ formatDate($table->field_tanggal_update) }}</td>
-				<td>{{ $table->field_updated_name }}</td>
-				<td>{{ $table->field_status_register_name }}</td>
-				<td>{{ formatDate($table->field_tanggal_create) }}</td>
-				<td>{{ $table->field_created_name }}</td>
+				<td>{{ $table->field_status_transaction_name }}</td>
+				<td>{{ ProcessType::getDescription($table->view_status_proses) }}</td>
+				<td>{{ CuciType::getDescription($table->view_status_cuci) }}</td>
+				<td>{{ $table->view_transaksi_rewash_total ?? 0 }}</td>
+				<td>{{ formatDate($table->transaksi_created_at) }}</td>
+				<td>{{ formatDate($table->view_tanggal_create) }}</td>
+				<td>{{ $table->name }}</td>
 			</tr>
 			@empty
 			@endforelse

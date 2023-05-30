@@ -4,6 +4,9 @@
             <x-action form="print" />
                 <input type="hidden" name="report_name" value="Laporan Data Linen">
                 <x-form-select col="6" class="search" name="view_rs_id" label="Rumah Sakit" :options="$rs" />
+                <x-form-select col="6" class="search" name="view_ruangan_id" label="Ruangan" :options="$ruangan" />
+                <x-form-select col="6" class="search" name="view_kategori_id" label="Kategori" :options="$kategori" />
+                <x-form-select col="6" class="search" name="view_linen_id" label="Jenis Linen" :options="$jenis" />
             @endbind
 
         </x-form>

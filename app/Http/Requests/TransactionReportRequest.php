@@ -16,7 +16,6 @@ class TransactionReportRequest extends FormRequest
             'start_date' => 'required',
             'end_date' => 'required',
             'rs_id' => 'required',
-            'transaksi_status' => 'required',
         ];
     }
 

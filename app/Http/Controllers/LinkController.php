@@ -10,7 +10,6 @@ use App\Http\Requests\LinkRequest;
 use App\Http\Services\CreateService;
 use App\Http\Services\SingleService;
 use App\Http\Services\UpdateService;
-use Illuminate\Http\Request;
 use Plugins\Helper;
 use Plugins\Response;
 

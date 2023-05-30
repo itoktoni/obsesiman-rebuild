@@ -59,6 +59,7 @@ class Transaksi extends Model
         'filter',
         'transaksi_id_rs',
         'transaksi_status',
+        'transaksi_created_by',
         'rs_id'
     ];
 
@@ -98,6 +99,16 @@ class Transaksi extends Model
     public function has_cuci()
     {
         return $this->hasOne(ViewTransaksiCuci::class, ViewTransaksiCuci::field_primary(), self::field_rfid());
+    }
+
+    public function has_retur()
+    {
+        return $this->hasOne(ViewTransaksiRetur::class, ViewTransaksiRetur::field_primary(), self::field_rfid());
+    }
+
+    public function has_rewash()
+    {
+        return $this->hasOne(ViewTransaksiRewash::class, ViewTransaksiRewash::field_primary(), self::field_rfid());
     }
 
     public function has_rs()

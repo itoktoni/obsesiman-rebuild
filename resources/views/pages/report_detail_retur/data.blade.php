@@ -3,7 +3,7 @@
 		<td></td>
 		<td colspan="6">
 			<h3>
-				<b>DETAIL TRANSAKSI {{ strtoupper(TransactionType::getDescription(intval(request()->get('transaksi_status')))) }} </b>
+				<b>DETAIL TRANSAKSI RETUR </b>
 			</h3>
 		</td>
 		<td rowspan="3">
@@ -43,8 +43,8 @@
 				<th>STATUS TRANSAKSI</th>
 				<th>STATUS LINEN</th>
 				<th>CUCI/RENTAL</th>
-				<th>JUMLAH PEMAKAIAN LINEN</th>
-				<th>TANGGAL PENERIMAAN KOTOR</th>
+				<th>JUMLAH RETUR</th>
+				<th>TANGGAL PENERIMAAN</th>
 				<th>TANGGAL REGISTER</th>
 				<th>OPERATOR</th>
 			</tr>
@@ -62,7 +62,7 @@
 				<td>{{ $table->field_status_transaction_name }}</td>
 				<td>{{ ProcessType::getDescription($table->view_status_proses) }}</td>
 				<td>{{ CuciType::getDescription($table->view_status_cuci) }}</td>
-				<td>{{ $table->view_transaksi_cuci_total ?? 0 }}</td>
+				<td>{{ $table->view_transaksi_retur_total ?? 0 }}</td>
 				<td>{{ formatDate($table->transaksi_created_at) }}</td>
 				<td>{{ formatDate($table->view_tanggal_create) }}</td>
 				<td>{{ $table->name }}</td>

@@ -84,7 +84,11 @@ class SystemMenu extends Model
     {
         parent::creating(function ($model) {
             if(empty($model->{SystemMenu::field_action()}) && ($model->{SystemMenu::field_type()} == MenuType::Menu)){
-                $model->{SystemMenu::field_action()} = Core::getControllerName($model->{SystemMenu::field_controller()}).'.getTable';
+                $act = '.getTable';
+                if(str_contains($model->{SystemMenu::field_name()}, 'report')){
+                    $act = '.getCreate';
+                }
+                $model->{SystemMenu::field_action()} = Core::getControllerName($model->{SystemMenu::field_controller()}).$act;
             }
         });
 

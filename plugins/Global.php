@@ -24,6 +24,8 @@ define('HAS_RFID', 'has_rfid');
 define('HAS_JENIS', 'has_jenis');
 define('HAS_DETAIL', 'has_detail');
 define('HAS_CUCI', 'has_cuci');
+define('HAS_RETUR', 'has_retur');
+define('HAS_REWASH', 'has_rewash');
 define('HAS_USER', 'has_user');
 define('HAS_VIEW', 'has_view');
 

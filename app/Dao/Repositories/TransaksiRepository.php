@@ -2,6 +2,7 @@
 
 namespace App\Dao\Repositories;
 
+use App\Dao\Enums\TransactionType;
 use App\Dao\Interfaces\CrudInterface;
 use App\Dao\Models\Transaksi;
 use App\Dao\Models\ViewBarcode;
@@ -55,11 +56,28 @@ class TransaksiRepository extends MasterRepository implements CrudInterface
         return $query;
     }
 
-    public function getTransaksiDetail(){
+    public function getDetailKotor($type = TransactionType::Kotor){
+        return $this->getQueryReportTransaksi()
+        ->leftJoinRelationship(HAS_CUCI)
+        ->where(Transaksi::field_status_transaction(), $type);
+    }
+
+    public function getDetailRetur($type = TransactionType::Retur){
+        return $this->getQueryReportTransaksi()
+        ->leftJoinRelationship(HAS_RETUR)
+        ->where(Transaksi::field_status_transaction(), $type);
+    }
+
+    public function getDetailRewash($type = TransactionType::Rewash){
+        return $this->getQueryReportTransaksi()
+        ->leftJoinRelationship(HAS_REWASH)
+        ->where(Transaksi::field_status_transaction(), $type);
+    }
+
+    public function getQueryReportTransaksi(){
         return Transaksi::query()
         ->addSelect(['*'])
         ->leftJoinRelationship(HAS_RS)
-        ->leftJoinRelationship(HAS_CUCI)
         ->leftJoinRelationship(HAS_DETAIL)
         ->leftJoinRelationship(HAS_USER)
         ->filter();
