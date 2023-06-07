@@ -5,13 +5,13 @@ namespace App\Http\Controllers;
 use App\Dao\Enums\ProcessType;
 use App\Dao\Models\Detail;
 use App\Dao\Models\Transaksi;
-use App\Dao\Models\ViewBarcode;
+use App\Dao\Models\ViewDelivery;
 use App\Dao\Repositories\TransaksiRepository;
-use App\Http\Requests\BarcodeRequest;
+use App\Http\Requests\DeliveryRequest;
 use App\Http\Requests\GeneralRequest;
 use App\Http\Services\CreateService;
 use App\Http\Services\SingleService;
-use App\Http\Services\UpdateBarcodeService;
+use App\Http\Services\UpdateDeliveryService;
 use App\Http\Services\UpdateService;
 use Plugins\Alert;
 use Plugins\History as PluginsHistory;
@@ -19,7 +19,7 @@ use Plugins\Notes;
 use Plugins\Query;
 use Plugins\Response;
 
-class BarcodeController extends MasterController
+class DeliveryController extends MasterController
 {
     public function __construct(TransaksiRepository $repository, SingleService $service)
     {
@@ -41,7 +41,7 @@ class BarcodeController extends MasterController
 
     public function getData()
     {
-        $query = self::$repository->dataBarcode();
+        $query = self::$repository->dataDelivery();
         return $query;
     }
 
@@ -50,17 +50,17 @@ class BarcodeController extends MasterController
         $data = $this->getData();
         return moduleView(modulePathTable(), [
             'data' => $data,
-            'fields' => self::$repository->barcode->getShowField(),
+            'fields' => self::$repository->delivery->getShowField(),
         ]);
     }
 
     private function getTransaksi($code)
     {
-        $view = ViewBarcode::find($code);
+        $view = ViewDelivery::find($code);
 
         if ($view) {
-            $transaksi = Transaksi::with([HAS_DETAIL, HAS_RS, 'has_created_barcode'])
-                ->where(Transaksi::field_barcode(), $view->field_primary);
+            $transaksi = Transaksi::with([HAS_DETAIL, HAS_RS, 'has_created_delivery'])
+                ->where(Transaksi::field_delivery(), $view->field_primary);
 
             return $transaksi;
         }
@@ -76,7 +76,7 @@ class BarcodeController extends MasterController
         }
 
         return moduleView(modulePathForm(), $this->share([
-            'model' => ViewBarcode::find($code),
+            'model' => ViewDelivery::find($code),
             'data' => $transaksi->get(),
         ]));
     }
@@ -87,10 +87,10 @@ class BarcodeController extends MasterController
         if ($transaksi) {
 
             Detail::find($transaksi->field_rfid)->update([
-                Detail::field_status_process() => ProcessType::Grouping,
+                Detail::field_status_process() => ProcessType::Barcode,
             ]);
 
-            PluginsHistory::log($transaksi->field_rfid, ProcessType::DeleteBarcode, 'Data di delete dari barcode ' . $transaksi->field_primary);
+            PluginsHistory::log($transaksi->field_rfid, ProcessType::DeleteDelivery, 'Data di delete dari barcode ' . $transaksi->field_primary);
             Notes::delete($transaksi->get()->toArray());
             Alert::delete();
 
@@ -105,26 +105,26 @@ class BarcodeController extends MasterController
     public function getDelete()
     {
         $code = request()->get('code');
-        $transaksi = Transaksi::where(Transaksi::field_barcode(), $code);
+        $transaksi = Transaksi::where(Transaksi::field_delivery(), $code);
 
         if ($transaksi->count() > 0) {
 
             $clone_rfid = clone $transaksi;
             $transaksi->update([
-                Transaksi::field_barcode_at() => null,
-                Transaksi::field_barcode_by() => null,
-                Transaksi::field_barcode() => null,
+                Transaksi::field_delivery_at() => null,
+                Transaksi::field_delivery_by() => null,
+                Transaksi::field_delivery() => null,
             ]);
 
             $data_rfid = $clone_rfid->get();
             $rfid = $data_rfid->pluck(Transaksi::field_rfid());
 
             Detail::whereIn(Detail::field_primary(), $rfid)->update([
-                Detail::field_status_process() => ProcessType::Grouping,
+                Detail::field_status_process() => ProcessType::Barcode,
             ]);
 
             $bulk = $data_rfid->toArray();
-            PluginsHistory::bulk($rfid, ProcessType::DeleteBarcode, $bulk);
+            PluginsHistory::bulk($rfid, ProcessType::DeleteDelivery, $bulk);
             Notes::delete($bulk);
             Alert::delete();
         }
@@ -132,9 +132,9 @@ class BarcodeController extends MasterController
         return Response::redirectBack($transaksi);
     }
 
-    public function barcode(BarcodeRequest $request, UpdateBarcodeService $service)
+    public function delivery(DeliveryRequest $request, UpdateDeliveryService $service)
     {
-        $autoNumber = Query::autoNumber(Transaksi::getTableName(), Transaksi::field_barcode(), 'BC' . date('Ymd'), env('AUTO_NUMBER', 15));
+        $autoNumber = Query::autoNumber(Transaksi::getTableName(), Transaksi::field_delivery(), 'DO' . date('Ymd'), env('AUTO_NUMBER', 15));
         $check = $service->update($request->rfid, $autoNumber);
         return $check;
     }

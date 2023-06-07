@@ -6,12 +6,12 @@ use App\Dao\Models\Detail;
 use App\Dao\Models\Transaksi;
 use Illuminate\Foundation\Http\FormRequest;
 
-class BarcodeRequest extends FormRequest
+class DeliveryRequest extends FormRequest
 {
     public function rules()
     {
         return [
-            RFID => 'required|array',
+            'barcode' => 'required|array',
             RS_ID => 'required',
             STATUS_TRANSAKSI => 'required',
         ];
@@ -19,9 +19,9 @@ class BarcodeRequest extends FormRequest
 
     public function withValidator($validator)
     {
-        $total = count($this->rfid);
+        $total = count($this->barcode);
 
-        $rfid = Detail::whereIn(Detail::field_primary(), $this->rfid)->count();
+        $rfid = Detail::whereIn(Detail::field_primary(), $this->barcode)->count();
         $compare = $total != $rfid;
 
         $validator->after(function ($validator) use ($compare) {

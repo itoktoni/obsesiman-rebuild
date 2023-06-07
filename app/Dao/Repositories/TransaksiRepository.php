@@ -6,6 +6,7 @@ use App\Dao\Enums\TransactionType;
 use App\Dao\Interfaces\CrudInterface;
 use App\Dao\Models\Transaksi;
 use App\Dao\Models\ViewBarcode;
+use App\Dao\Models\ViewDelivery;
 use App\Dao\Models\ViewTotalJenis;
 use App\Dao\Models\ViewTransaksi;
 use Plugins\Notes;
@@ -13,11 +14,26 @@ use Plugins\Notes;
 class TransaksiRepository extends MasterRepository implements CrudInterface
 {
     public $barcode;
+    public $delivery;
 
     public function __construct()
     {
         $this->model = empty($this->model) ? new ViewTransaksi() : $this->model;
+        $this->delivery = empty($this->delivery) ? new ViewDelivery() : $this->delivery;
         $this->barcode = empty($this->barcode) ? new ViewBarcode() : $this->barcode;
+    }
+
+    public function filterRepository($query){
+        if(request()->hasHeader('authorization')){
+            if($paging = request()->get('paginate')){
+                return $query->paginate($paging);
+            }
+
+            return Notes::data($query->get());
+        }
+
+        $query = env('PAGINATION_SIMPLE') ? $query->simplePaginate(env('PAGINATION_NUMBER')) : $query->paginate(env('PAGINATION_NUMBER'));
+        return $query;
     }
 
     public function dataRepository()
@@ -26,16 +42,7 @@ class TransaksiRepository extends MasterRepository implements CrudInterface
             ->select($this->model->getSelectedField())
             ->sortable()->filter();
 
-            if(request()->hasHeader('authorization')){
-                if($paging = request()->get('paginate')){
-                    return $query->paginate($paging);
-                }
-
-                return Notes::data($query->get());
-            }
-
-        $query = env('PAGINATION_SIMPLE') ? $query->simplePaginate(env('PAGINATION_NUMBER')) : $query->paginate(env('PAGINATION_NUMBER'));
-        return $query;
+        return $this->filterRepository($query);
     }
 
     public function dataBarcode()
@@ -44,16 +51,16 @@ class TransaksiRepository extends MasterRepository implements CrudInterface
             ->select($this->barcode->getSelectedField())
             ->sortable()->filter();
 
-            if(request()->hasHeader('authorization')){
-                if($paging = request()->get('paginate')){
-                    return $query->paginate($paging);
-                }
+        return $this->filterRepository($query);
+    }
 
-                return Notes::data($query->get());
-            }
+    public function dataDelivery()
+    {
+        $query = $this->delivery
+            ->select($this->delivery->getSelectedField())
+            ->sortable()->filter();
 
-        $query = env('PAGINATION_SIMPLE') ? $query->simplePaginate(env('PAGINATION_NUMBER')) : $query->paginate(env('PAGINATION_NUMBER'));
-        return $query;
+        return $this->filterRepository($query);
     }
 
     public function getDetailKotor($type = TransactionType::Kotor){

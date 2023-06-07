@@ -16,6 +16,7 @@ use App\Dao\Models\SystemPermision;
 use App\Dao\Models\SystemRole;
 use App\Dao\Models\TicketSystem;
 use App\Dao\Models\User;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 
@@ -74,11 +75,11 @@ class Query
         try {
             $menu = DB::table((new SystemMenu())->getTable())
             ->select([
-                DB::raw('COALESCE(system_menu.system_menu_code, system_link.system_link_code) as menu_code'),
-                DB::raw('COALESCE(system_menu.system_menu_controller, system_link.system_link_controller) as menu_controller'),
-                DB::raw('COALESCE(system_menu.system_menu_action, system_link.system_link_action) as menu_action'),
-                DB::raw('COALESCE(system_menu.system_menu_name, system_link.system_link_name) as menu_name'),
-                DB::raw('COALESCE(system_menu.system_menu_url, system_link.system_link_url) as menu_url'),
+                DB::raw('COALESCE(system_link.system_link_code, system_menu.system_menu_code) as menu_code'),
+                DB::raw('COALESCE(system_link.system_link_controller, system_menu.system_menu_controller) as menu_controller'),
+                DB::raw('COALESCE(system_link.system_link_action, system_menu.system_menu_action) as menu_action'),
+                DB::raw('COALESCE(system_link.system_link_name, system_menu.system_menu_name) as menu_name'),
+                DB::raw('COALESCE(system_link.system_link_url, system_menu.system_menu_url) as menu_url'),
             ])
             ->leftJoin('system_menu_connection_link', 'system_menu.system_menu_code', '=', 'system_menu_connection_link.system_menu_code')
             ->leftJoin((new SystemLink())->getTable(), 'system_menu_connection_link.system_link_code', '=', 'system_link.system_link_code')

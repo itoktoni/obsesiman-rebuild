@@ -3,29 +3,21 @@
 use App\Dao\Enums\BooleanType;
 use App\Dao\Enums\ProcessType;
 use App\Dao\Enums\RegisterType;
-use App\Dao\Enums\StatusType;
-use App\Dao\Enums\StockType;
 use App\Dao\Enums\TransactionType;
 use App\Dao\Models\Detail;
-use App\Dao\Models\DetailLinen;
 use App\Dao\Models\History as ModelsHistory;
-use App\Dao\Models\Kotor;
 use App\Dao\Models\Rs;
 use App\Dao\Models\Transaksi;
 use App\Dao\Models\ViewDetailLinen;
 use App\Http\Controllers\BarcodeController;
+use App\Http\Controllers\DeliveryController;
 use App\Http\Controllers\TransaksiController;
 use App\Http\Controllers\UserController;
 use App\Http\Requests\DetailDataRequest;
-use App\Http\Requests\DetailRequest;
 use App\Http\Requests\DetailUpdateRequest;
-use App\Http\Requests\GantiRfidRequest;
-use App\Http\Requests\KotorRequest;
 use App\Http\Requests\RegisterRequest;
-use App\Http\Requests\TransactionRequest;
 use App\Http\Resources\DetailResource;
 use App\Http\Resources\DownloadLinenResource;
-use App\Http\Resources\LinenDetailResource;
 use App\Http\Resources\RsResource;
 use App\Http\Services\SaveTransaksiService;
 use Illuminate\Http\Request;
@@ -241,7 +233,7 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
             $data = ViewDetailLinen::findOrFail($rfid);
 
             $data_transaksi = [];
-            $linen[$rfid] = ProcessType::Grouping;
+            $linen[] = $rfid;
 
             $date = date('Y-m-d H:i:s');
             $user = auth()->user()->id;
@@ -278,12 +270,14 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
                 ModelsHistory::field_description() => json_encode($linen),
             ];
 
-            $check = $service->save(TransactionType::Kotor, $data_transaksi, $linen, $log);
+            $check = $service->save(TransactionType::Kotor, ProcessType::Grouping, $data_transaksi, $linen, $log);
             if(!$check['status']){
                 return $check;
             }
 
-            $collection = new DetailResource($data);
+            $update = ViewDetailLinen::findOrFail($rfid);
+
+            $collection = new DetailResource($update);
             return Notes::data($collection);
         }
         catch (\Illuminate\Database\Eloquent\ModelNotFoundException $th) {
@@ -295,6 +289,7 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
     });
 
     Route::post('barcode', [BarcodeController::class, 'barcode']);
+    Route::post('delivery', [DeliveryController::class, 'delivery']);
 
     Route::get('/opname', function (Request $request) {
 

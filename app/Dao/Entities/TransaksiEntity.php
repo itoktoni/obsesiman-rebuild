@@ -185,4 +185,24 @@ trait TransaksiEntity
         return $this->{User::field_username()};
     }
 
+    public static function field_delivery_by()
+    {
+        return 'transaksi_delivery_by';
+    }
+
+    public function getFieldDeliveryByAttribute()
+    {
+        return $this->{$this->field_delivery_by()};
+    }
+
+    public static function field_delivery_at()
+    {
+        return 'transaksi_delivery_at';
+    }
+
+    public function getFieldDeliveryAtAttribute()
+    {
+        return $this->{$this->field_delivery_at()};
+    }
+
 }

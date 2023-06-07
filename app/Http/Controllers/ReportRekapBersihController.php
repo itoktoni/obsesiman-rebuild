@@ -9,7 +9,7 @@ use App\Dao\Models\ViewDetailLinen;
 use App\Dao\Repositories\TransaksiRepository;
 use App\Http\Requests\TransactionReportRequest;
 
-class ReportRekapKotorController extends MinimalController
+class ReportRekapBersihController extends MinimalController
 {
     public $data;
 

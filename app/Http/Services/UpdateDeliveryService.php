@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\DB;
 use Plugins\History;
 use Plugins\Notes;
 
-class UpdateBarcodeService
+class UpdateDeliveryService
 {
     public function update($data, $code)
     {
@@ -17,17 +17,17 @@ class UpdateBarcodeService
 
         try {
             Transaksi::whereIn(Transaksi::field_rfid(), $data)
-            ->whereNull(Transaksi::field_barcode())
-            ->update([
-                Transaksi::field_barcode() => $code,
-                Transaksi::field_barcode_by() => auth()->user()->id,
-                Transaksi::field_barcode_at() => date('Y-m-d H:i:s'),
-            ]);
+                ->whereNull(Transaksi::field_barcode())
+                ->update([
+                    Transaksi::field_barcode() => $code,
+                    Transaksi::field_barcode_by() => auth()->user()->id,
+                    Transaksi::field_barcode_at() => date('Y-m-d H:i:s'),
+                ]);
 
             Detail::whereIn(Detail::field_primary(), $data)
-            ->update([
-                Detail::field_status_process() => ProcessType::Barcode,
-            ]);
+                ->update([
+                    Detail::field_status_process() => ProcessType::Barcode,
+                ]);
 
             History::bulk($data, ProcessType::Barcode);
             DB::commit();

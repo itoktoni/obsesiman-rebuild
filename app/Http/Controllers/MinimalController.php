@@ -4,12 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Dao\Enums\BooleanType;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\DeleteRequest;
-use App\Http\Services\DeleteService;
-use Coderello\SharedData\Facades\SharedData;
-use Illuminate\Http\Request;
-use Plugins\Response;
-use Plugins\Template;
 
 class MinimalController extends Controller
 {

@@ -10,7 +10,7 @@
             "request": "launch",
             "port": 9003,
             "pathMappings": {
-                "c:/xampp/htdocs/obsesiman-rebuild": "${workspaceRoot}"
+                "d:/obsesiman-rebuild": "${workspaceRoot}"
             },
             "ignore": [
                 "**/vendor/**/*.php"

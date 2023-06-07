@@ -125,4 +125,14 @@ class Transaksi extends Model
     {
         return $this->hasMany(HistoryModel::class, HistoryModel::field_name(), self::field_primary());
     }
+
+    public function has_created_barcode()
+    {
+        return $this->hasOne(User::class, User::field_primary(), self::field_barcode_by());
+    }
+
+    public function has_created_delivery()
+    {
+        return $this->hasOne(User::class, User::field_primary(), self::field_delivery_by());
+    }
 }

@@ -3,7 +3,7 @@
 		<td></td>
 		<td colspan="6">
 			<h3>
-				<b>REKAP KOTOR </b>
+				<b>REKAP BERSIH </b>
 			</h3>
 		</td>
 		<td rowspan="3">
@@ -38,10 +38,9 @@
                 @foreach($location as $loc_name => $loc)
                     <th>{{ $loc_name }}</th>
                 @endforeach
-                <th>Beda RS</th>
-                <th>Total Kotor (Pcs)</th>
-                <th>(Kg) Bersih</th>
                 <th>Total Bersih (Pcs)</th>
+                <th>(Kg) Bersih</th>
+                <th>Total Kotor (Pcs)</th>
                 <th>-</th>
                 <th>+</th>
             </tr>
@@ -51,7 +50,6 @@
                 $sum_kurang = $sum_lebih = $sum_per_linen = $sum_kotor = $sum_beda_rs = $sum_kg = $sum_lawan = 0;
                 $total_number = $selisih = 0;
                 $total_lawan = 0;
-                $total_beda_rs = $data->where('transaksi_beda_rs', 1)->where('transaksi_status', 1)->count();
             @endphp
             @forelse($linen as $name => $table)
                 @php
@@ -69,7 +67,7 @@
 
                     $selisih = $total_lawan - $total_per_linen;
 					$selisih_kurang = $selisih < 0 ? $selisih : 0;
-                    $selisih_lebih=$selisih> 0 ? $selisih : 0;
+                    $selisih_lebih = $selisih> 0 ? $selisih : 0;
 					$sum_kurang = $sum_kurang + $selisih_kurang;
 					$sum_lebih = $sum_lebih + $selisih_lebih;
                 @endphp
@@ -84,7 +82,6 @@
                             {{ $total_lokasi > 0 ? $total_lokasi : '' }}
                         </td>
                     @endforeach
-                    <td><!-- tempat beda rs --></td>
                     <td>{{ $total_per_linen_kanan }}</td>
                     <td>{{ $total_kg }}</td>
                     <td>
@@ -95,19 +92,6 @@
                 </tr>
 			@empty
 			@endforelse
-            <tr>
-                <td>{{ $total_number }}</td>
-                <td>Linen Lain</td>
-                @foreach($location as $loc)
-                <td></td>
-                @endforeach
-                <td>{{ $total_beda_rs }}</td>
-                <td></td>
-                <td></td>
-                <td>{{ $total_beda_rs }}</td>
-                <td></td>
-                <td>{{ $total_beda_rs }}</td>
-            </tr>
 		</tbody>
 		<tr>
             <td colspan="2">Total</td>
@@ -117,22 +101,19 @@
                 </td>
             @endforeach
             <td>
-                {{ $total_beda_rs }}
-            </td>
-            <td>
                 {{ $sum_per_linen }}
             </td>
             <td>
                 {{ $sum_kg }}
             </td>
             <td>
-                {{ $sum_lawan +  $total_beda_rs  }}
+                {{ $sum_lawan  }}
             </td>
             <td>
                 {{ $sum_kurang }}
             </td>
             <td>
-                {{ $sum_lebih + $total_beda_rs }}
+                {{ $sum_lebih }}
             </td>
         </tr>
 	</table>

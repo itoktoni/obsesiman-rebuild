@@ -121,6 +121,7 @@ table.footer{
 @page {
 	margin: 0;
     margin-top: 10px;
+    margin-right: 10px;
 }
 
 @media print{
@@ -211,10 +212,6 @@ table.footer{
 
         dd {
             margin: 0
-        }
-
-        @page {
-            margin: 1cm 0.5cm
         }
 
         p,
