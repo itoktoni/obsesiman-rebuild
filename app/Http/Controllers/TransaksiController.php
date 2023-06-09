@@ -136,7 +136,7 @@ class TransaksiController extends MasterController
             return false;
         }
 
-        if($form_transaksi == TransactionType::Kotor && now()->diffInDays($date) <= env('TRANSACTION_DAY_ALLOWED', 1)){
+        if($form_transaksi == TransactionType::Kotor && now()->diffInDays($date) < env('TRANSACTION_DAY_ALLOWED', 1)){
             return false;
         }
 
