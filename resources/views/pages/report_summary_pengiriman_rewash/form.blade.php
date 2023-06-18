@@ -1,5 +1,5 @@
 <x-layout>
-    <x-card label="Summary Pengiriman Bersih">
+    <x-card label="Summary Pengiriman Rewash">
         <x-form :model="$model" :spa="false" target="_blank"  method="GET" action="{{ moduleRoute('getPrint') }}" :upload="true">
             <x-action form="print" />
                 <input type="hidden" name="report_name" value="Laporan Transaksi">
