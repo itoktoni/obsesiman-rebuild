@@ -58,7 +58,7 @@ class ViewTransaksi extends Model
             DataBuilder::build($this->field_status_transaction())->name('Status')->show()->sort(),
             DataBuilder::build($this->field_key())->name('Nomer Transaksi')->show()->sort(),
             DataBuilder::build(Rs::field_name())->name('Rumah Sakit')->show()->sort(),
-            DataBuilder::build($this->field_report())->name('Tanggal')->show()->sort(),
+            DataBuilder::build($this->field_created_at())->name('Tanggal')->show()->sort(),
             DataBuilder::build($this->field_created_by())->name('User')->show(false)->sort(),
             DataBuilder::build(User::field_username())->name('User')->show()->sort(),
         ];

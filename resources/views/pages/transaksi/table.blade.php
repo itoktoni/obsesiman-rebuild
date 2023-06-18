@@ -44,7 +44,7 @@
                                     <td>{{ $table->field_status_transaction_name }}</td>
                                     <td>{{ $table->field_key }}</td>
                                     <td>{{ $table->field_rs_name }}</td>
-                                    <td>{{ formatDate($table->field_report) }}</td>
+                                    <td>{{ formatDate($table->field_created_at) }}</td>
                                     <td>{{ $table->field_created_name }}</td>
                                 </tr>
                             @empty

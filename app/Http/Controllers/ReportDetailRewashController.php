@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Dao\Enums\TransactionType;
 use App\Dao\Models\Rs;
 use App\Dao\Models\User;
 use App\Dao\Repositories\TransaksiRepository;
@@ -28,7 +29,11 @@ class ReportDetailRewashController extends MinimalController
     }
 
     private function getQuery($request){
-        return self::$repository->getDetailRewash()->get();
+        return self::$repository
+            ->leftJoinRelationship(HAS_REWASH)
+            ->leftJoinRelationship(HAS_CUCI)
+            ->getDetailKotor(TransactionType::Rewash)
+            ->get();
     }
 
     public function getPrint(TransactionReportRequest $request){

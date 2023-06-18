@@ -97,6 +97,12 @@ class BarcodeController extends MasterController
             $transaksi->transaksi_barcode_at = null;
             $transaksi->transaksi_barcode_by = null;
             $transaksi->transaksi_barcode = null;
+
+            $transaksi->transaksi_delivery_at = null;
+            $transaksi->transaksi_delivery_by = null;
+            $transaksi->transaksi_delivery = null;
+
+            $transaksi->transaksi_status_bersih = null;
             $transaksi->save();
         }
         return Response::redirectBack();
@@ -114,6 +120,12 @@ class BarcodeController extends MasterController
                 Transaksi::field_barcode_at() => null,
                 Transaksi::field_barcode_by() => null,
                 Transaksi::field_barcode() => null,
+
+                Transaksi::field_delivery_at() => null,
+                Transaksi::field_delivery_by() => null,
+                Transaksi::field_delivery() => null,
+
+                Transaksi::field_status_bersih() => null,
             ]);
 
             $data_rfid = $clone_rfid->get();
@@ -134,8 +146,7 @@ class BarcodeController extends MasterController
 
     public function barcode(BarcodeRequest $request, UpdateBarcodeService $service)
     {
-        $autoNumber = Query::autoNumber(Transaksi::getTableName(), Transaksi::field_barcode(), 'BC' . date('Ymd'), env('AUTO_NUMBER', 15));
-        $check = $service->update($request->rfid, $autoNumber);
+        $check = $service->update($request->rfid, $request->code, $request->status_transaksi);
         return $check;
     }
 }

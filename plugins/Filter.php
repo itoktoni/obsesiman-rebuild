@@ -24,6 +24,8 @@ class Filter
                 ->where('module', str_replace('_api', '', Route::currentRouteName()))
                 ->where('table', $table)
                 ->all();
+
+                Cache::put('filter', $data);
             if (!empty($data)) {
                 return $data;
             }

@@ -2,15 +2,6 @@
 
 namespace App\Dao\Traits;
 
-use App\Dao\Enums\BooleanType;
-use App\Dao\Enums\ProcessType;
-use App\Dao\Enums\RegisterType;
-use App\Dao\Scopes\FilterScope;
-use Facades\App\Models\User;
-use Illuminate\Support\Facades\Cache;
-use Facades\Modules\System\Dao\Models\Filter;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
 
 trait DataTableTrait
@@ -64,7 +55,7 @@ trait DataTableTrait
     public function start_date($query){
         $date = request()->get('start_date');
         if($date){
-            $query = $query->whereDate($this->field_reported_at(), '>=', $date);
+            $query = $query->whereDate($this->field_created_at(), '>=', $date);
         }
 
         return $query;
@@ -74,7 +65,7 @@ trait DataTableTrait
         $date = request()->get('end_date');
 
         if($date){
-            $query = $query->whereDate($this->field_reported_at(), '<=', $date);
+            $query = $query->whereDate($this->field_created_at(), '<=', $date);
         }
 
         return $query;

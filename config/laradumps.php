@@ -50,11 +50,79 @@ return [
     |
     */
 
-    'send_queries' => [
-        'enabled'                     => env('DS_SEND_QUERIES', false),
-        'formatted'                   => false,
-        'show_connection_information' => false,
-    ],
+    'send_queries' => env('DS_SEND_QUERIES', false),
+
+    /*
+    |--------------------------------------------------------------------------
+    | HTTP Client dump
+    |--------------------------------------------------------------------------
+    |
+    | When `true`, it allows to dump HTTP and send them to Desktop App.
+    | Required for: ds()->httpOn() method.
+    |
+    */
+
+    'send_http_client_requests' => env('DS_SEND_HTTP_CLIENT_REQUESTS', false),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Commands dump
+    |--------------------------------------------------------------------------
+    |
+    | When `true`, it allows to dump Commands and send them to Desktop App.
+    | Required for: ds()->commandsOn() method.
+    |
+    */
+
+    'send_commands' => env('DS_SEND_COMMANDS', false),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Job dump
+    |--------------------------------------------------------------------------
+    |
+    | When `true`, it allows to dump Job and send them to Desktop App.
+    | Required for: ds()->jobsOn() method.
+    |
+    */
+
+    'send_jobs' => env('DS_SEND_JOBS', false),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Cache dump
+    |--------------------------------------------------------------------------
+    |
+    | When `true`, it allows to dump Cache and send them to Desktop App.
+    | Required for: ds()->cacheOn() method.
+    |
+    */
+
+    'send_cache' => env('DS_SEND_CACHE', false),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Dump Scheduled Commands
+    |--------------------------------------------------------------------------
+    |
+    | When `true`, it allows to dump Scheduled Commands and send them to Desktop App.
+    | Required for: ds()->scheduledCommandOn() method.
+    |
+    */
+
+    'send_scheduled_commands' => env('DS_SEND_SCHEDULED_COMMANDS', false),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Gate & Policy dump
+    |--------------------------------------------------------------------------
+    |
+    | When `true`, it allows to dump Gate & Policy and send them to Desktop App.
+    | Required for: ds()->gateOn() method.
+    |
+    */
+
+    'send_gate' => env('DS_SEND_GATE', false),
 
     /*
     |--------------------------------------------------------------------------
@@ -327,13 +395,13 @@ return [
     ],
 
     /*
-    |--------------------------------------------------------------------------
-    | Level Log Colors Map
-    |--------------------------------------------------------------------------
-    |
-    | Definition of Tailwind CSS class for LaraDumps color tag.
-    |
-    */
+   |--------------------------------------------------------------------------
+   | Level Log Colors Map
+   |--------------------------------------------------------------------------
+   |
+   | Definition of Tailwind CSS class for LaraDumps color tag.
+   |
+   */
 
     'level_log_colors_map' => [
         'error'     => env('DS_LOG_COLOR_ERROR', 'border-red-600'),
@@ -344,21 +412,5 @@ return [
         'notice'    => env('DS_LOG_COLOR_NOTICE', 'border-green-300'),
         'info'      => env('DS_LOG_COLOR_INFO', 'border-blue-300'),
         'debug'     => env('DS_LOG_COLOR_INFO', 'border-black'),
-    ],
-
-    /*
-    |--------------------------------------------------------------------------
-    | Auto Start With Deeplink
-    |--------------------------------------------------------------------------
-    |
-    | Will launch the app automatically using deeplink when there is no
-    | connection on the first try
-    |
-    */
-
-    'auto_start_with_deeplink' => [
-        'enabled' => true,
-        'timeout' => 10, // The timeout in seconds to execute with Symphony Process
-        'command' => null, // Custom command, ex: cmd.exe /c start
     ],
 ];

@@ -49,7 +49,7 @@ class TransaksiController extends MasterController
             $transaksi = Transaksi::with([HAS_DETAIL, HAS_RS])
             ->where(Transaksi::field_key(), $view->field_key)
             ->where(Transaksi::field_status_transaction(), $view->field_status_transaction)
-            ->where(Transaksi::field_report(), $view->field_report);
+            ->whereDate(Transaksi::CREATED_AT, $view->field_report);
 
             return $transaksi;
         }
@@ -179,7 +179,6 @@ class TransaksiController extends MasterController
                         Transaksi::field_status_transaction() => $status_transaksi,
                         Transaksi::field_rs_id() => $request->rs_id,
                         Transaksi::field_beda_rs() => $beda_rs,
-                        Transaksi::field_report() => date('Y-m-d'),
                         Transaksi::CREATED_AT => $date,
                         Transaksi::CREATED_BY => $user,
                         Transaksi::UPDATED_AT => $date,

@@ -24,10 +24,12 @@ define('HAS_RFID', 'has_rfid');
 define('HAS_JENIS', 'has_jenis');
 define('HAS_DETAIL', 'has_detail');
 define('HAS_CUCI', 'has_cuci');
+define('HAS_PEMAKAIAN', 'has_cuci');
 define('HAS_RETUR', 'has_retur');
 define('HAS_REWASH', 'has_rewash');
 define('HAS_USER', 'has_user');
 define('HAS_VIEW', 'has_view');
+define('HAS_LOG', 'has_log');
 
 define('UPLOAD', 'upload');
 define('KEY', 'key');
@@ -42,6 +44,7 @@ define('STATUS_PROCESS', 'status_process');
 define('STATUS_SYNC', 'status_sync');
 define('TANGGAL_UPDATE', 'tanggal_update');
 
+define('KOTOR', [TransactionType::Kotor, TransactionType::Retur, TransactionType::Rewash]);
 define('BERSIH', [TransactionType::BersihKotor, TransactionType::BersihRetur, TransactionType::BersihRewash]);
 
 function module($module = null){
@@ -85,10 +88,10 @@ function modulePathTable($name = null)
 function modulePathPrint($name = null)
 {
     if ($name) {
-        return 'pages.' . $name . '.print';
+        return 'pages.' . moduleCode() . '.'.$name;
     }
 
-    return 'pages.' . moduleCode() . '.print';
+    return 'pages.master.print';
 }
 
 function modulePathForm($name = null, $template = null)
@@ -164,10 +167,9 @@ function imageUrl($value, $folder = null){
     return asset('public/storage/'.$path.'/'.$value);
 }
 
-function formatDate($value){
+function formatDate($value, $datetime = false){
 
-    $format = 'd/m/Y';
-
+    $format = $datetime ? 'd/m/Y H:i:s' : 'd/m/Y';
     if($value instanceof Carbon){
         $value = $value->format($format);
     } else if(is_string($value)){

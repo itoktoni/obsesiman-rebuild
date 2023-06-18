@@ -11,6 +11,8 @@ class ProcessType extends Enum implements LocalizedEnum
 {
     use StatusTrait;
 
+    #[Description('')]
+    const NotSet = null;
     const Unknown = 0;
     const Register = 1;
     const GantiChip = 2;
@@ -25,4 +27,6 @@ class ProcessType extends Enum implements LocalizedEnum
     const Delivery = 40;
     const DeleteDelivery = 41;
     const DeleteTransaksi = 50;
+    const Pending = 70;
+    const Hilang = 80;
 }

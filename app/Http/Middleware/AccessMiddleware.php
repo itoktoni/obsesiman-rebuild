@@ -108,7 +108,7 @@ class AccessMiddleware
                 'template' => $action_controller,//legacy
                 'route' => $action_route,
                 'controller' => $action_full_controller,
-                'filter' => Template::filter(),
+                // 'filter' => Query::filter() ?? [],
                 'groups' => $group,
                 'environment' => env('APP_ENV', 'local'),
                 'app_url' => url('/'),

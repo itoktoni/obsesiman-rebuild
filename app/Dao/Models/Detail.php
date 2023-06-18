@@ -43,6 +43,10 @@ class Detail extends Model
         'detail_created_by',
         'detail_updated_by',
         'detail_deleted_by',
+        'detail_pending_created_at',
+        'detail_pending_updated_at',
+        'detail_hilang_created_at',
+        'detail_hilang_updated_at',
     ];
 
     public $sortable = [

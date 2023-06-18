@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Dao\Enums\TransactionType;
 use App\Dao\Models\Rs;
+use App\Dao\Models\Transaksi;
 use App\Dao\Models\User;
-use App\Dao\Models\ViewDetailLinen;
 use App\Dao\Repositories\TransaksiRepository;
 use App\Http\Requests\TransactionReportRequest;
+use Illuminate\Support\Carbon;
 
 class ReportRekapBersihController extends MinimalController
 {
@@ -29,12 +29,38 @@ class ReportRekapBersihController extends MinimalController
         ];
     }
 
-    private function getQueryKotor($request){
-        return self::$repository->getDetailKotor()->get();
+    private function getQueryBersih($request){
+        $query = self::$repository->getDetailAllBersih();
+
+        if ($start_date = $request->start_rekap) {
+            $query = $query->whereDate(Transaksi::field_report(), '>=', $start_date);
+        }
+
+        if ($end_date = $request->end_rekap) {
+            $query = $query->whereDate(Transaksi::field_report(), '<=', $end_date);
+        }
+
+        return $query->get();
     }
 
-    private function getQueryBersih($request){
-        return self::$repository->getDetailKotor(TransactionType::BersihKotor)->get();
+    private function getQueryKotor($request){
+        $query = self::$repository->getDetailAllKotor();
+
+        if ($start_date = $request->start_rekap) {
+            $bersih_from = Carbon::createFromFormat('Y-m-d', $start_date) ?? false;
+            if($bersih_from){
+                $query = $query->where(Transaksi::field_created_at(), '>=', $bersih_from->addDay(-1)->format('Y-m-d'));
+            }
+        }
+
+        if ($end_date = $request->end_rekap) {
+            $bersih_to = Carbon::createFromFormat('Y-m-d', $end_date) ?? false;
+            if($bersih_to){
+                $query = $query->where(Transaksi::field_created_at(), '<=', $bersih_to->addDay(-1)->format('Y-m-d'));
+            }
+        }
+
+        return $query->get();
     }
 
     public function getPrint(TransactionReportRequest $request){
@@ -45,27 +71,19 @@ class ReportRekapBersihController extends MinimalController
         $location = $rs->has_ruangan;
         $linen = $rs->has_jenis;
 
-        $this->data = $this->getQueryKotor($request);
-        $lawan = $this->getQueryBersih($request);
+        $kotor = $this->getQueryKotor($request);
+        $bersih = $this->getQueryBersih($request);
 
-        if($this->data){
-            if($location){
-                $location = $this->data->mapToGroups(function ($item, $key) {
-                    return [$item[ViewDetailLinen::field_ruangan_name()] => $item];
-                })->sortKeys();
-            }
+        $this->data = $kotor->merge($bersih);
 
-            if($linen){
-                $linen = $this->data->mapToGroups(function ($item, $key) {
-                    return [$item[ViewDetailLinen::field_name()] => $item];
-                })->sortKeys();;
-            }
-        }
+        if ($this->data) {
+            $location = $this->data->mapWithKeys(function ($item) {
+                return [$item->view_ruangan_id => strtoupper($item->view_ruangan_nama)];
+            })->sort();
 
-        if($lawan){
-            $lawan = $lawan->mapToGroups(function ($item, $key) {
-                return [$item[ViewDetailLinen::field_name()] => $item];
-            });
+            $linen = $this->data->mapWithKeys(function ($item) {
+                return [$item->view_linen_id => strtoupper($item->view_linen_nama)];
+            })->sort();
         }
 
         return moduleView(modulePathPrint(), $this->share([
@@ -73,7 +91,8 @@ class ReportRekapBersihController extends MinimalController
             'rs' => $rs,
             'location' => $location,
             'linen' => $linen,
-            'lawan' => $lawan,
+            'bersih' => $bersih,
+            'kotor' => $kotor,
         ]));
     }
 }

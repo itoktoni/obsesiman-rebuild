@@ -5,11 +5,14 @@ namespace App\Dao\Enums;
 use App\Dao\Traits\StatusTrait;
 use BenSampo\Enum\Contracts\LocalizedEnum;
 use BenSampo\Enum\Enum as Enum;
+use BenSampo\Enum\Attributes\Description;
 
 class TransactionType extends Enum implements LocalizedEnum
 {
     use StatusTrait;
 
+    #[Description('')]
+    const NotSet = null;
     const Unknown = 0;
     const Kotor = 1;
     const Retur = 2;

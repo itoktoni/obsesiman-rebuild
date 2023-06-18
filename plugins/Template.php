@@ -9,6 +9,7 @@ use App\Dao\Models\Groups;
 use App\Dao\Models\Routes;
 use Coderello\SharedData\Facades\SharedData;
 use Collective\Html\FormFacade as Form;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
 
@@ -84,41 +85,6 @@ class Template
     public static function tableResponsive()
     {
         return self::isMobile() ? 'table-responsive-stack' : 'table-responsive';
-    }
-
-    public static function routes()
-    {
-        if (Session::has('routes')) {
-            return Session::get('routes');
-        }
-
-        $routes = [];
-        try {
-            $routes = Routes::select(RoutesFacades::getSelectedField())
-                ->with('has_menu')->get()->groupBy(RoutesFacades::field_group());
-            Session::put('routes', $routes, 1200);
-        } catch (\Throwable $th) {
-            //throw $th;
-        }
-
-        return $routes;
-    }
-
-    public static function filter()
-    {
-        if (Session::has('filter')) {
-            return Session::get('filter');
-        }
-
-        $filter = [];
-        try {
-            $filter = Filters::get();
-            Session::put('filter', $filter, 12000);
-        } catch (\Throwable $th) {
-            //throw $th;
-        }
-
-        return $filter;
     }
 
     public static function extractColumn($value)

@@ -11,7 +11,7 @@ use Plugins\Notes;
 
 class UpdateBarcodeService
 {
-    public function update($data, $code)
+    public function update($data, $code, $status)
     {
         DB::beginTransaction();
 
@@ -20,6 +20,7 @@ class UpdateBarcodeService
             ->whereNull(Transaksi::field_barcode())
             ->update([
                 Transaksi::field_barcode() => $code,
+                Transaksi::field_status_bersih() => $status,
                 Transaksi::field_barcode_by() => auth()->user()->id,
                 Transaksi::field_barcode_at() => date('Y-m-d H:i:s'),
             ]);

@@ -2,9 +2,12 @@
 
 namespace App\Http\Requests;
 
+use App\Dao\Enums\ProcessType;
+use App\Dao\Enums\TransactionType;
 use App\Dao\Models\Detail;
 use App\Dao\Models\Transaksi;
 use Illuminate\Foundation\Http\FormRequest;
+use Plugins\Query;
 
 class DeliveryRequest extends FormRequest
 {
@@ -21,41 +24,64 @@ class DeliveryRequest extends FormRequest
     {
         $total = count($this->barcode);
 
-        $rfid = Detail::whereIn(Detail::field_primary(), $this->barcode)->count();
-        $compare = $total != $rfid;
+        //RFID HARUS SUDAH DI BARCODE
+        $empty = Detail::where(Detail::field_rs_id(), $this->rs_id)
+            ->where(Detail::field_status_process(), ProcessType::Barcode)
+            ->count();
+
+        $validator->after(function ($validator) use ($empty) {
+            if ($empty == 0) {
+                $validator->errors()->add('rfid', 'RFID tidak ditemukan!');
+            }
+        });
+
+        if ($empty == 0) {
+            return;
+        }
+
+        $barcode = Transaksi::with(['has_rfid' => function($query){
+            $query->where(Detail::field_rs_id(), $this->rs_id);
+        }])->whereIn(Transaksi::field_barcode(), $this->barcode)
+                    ->where(Transaksi::field_status_bersih(), $this->status_transaksi)
+                    ->count();
+
+        $compare = $total != $barcode;
 
         $validator->after(function ($validator) use ($compare) {
             if ($compare) {
-                $validator->errors()->add('rfid', 'RFID tidak ditemukan!');
+                $validator->errors()->add('rfid', 'konfigurasi Barcode tidak cocok!');
             }
         });
 
         if ($compare) {
             return;
         }
+    }
 
-        $check = Transaksi::whereIn(Transaksi::field_rfid(), $this->rfid)
-            ->where(Transaksi::field_rs_id(), $this->rs_id)
-            ->whereNull(Transaksi::field_barcode())->count();
+    public function prepareForValidation()
+    {
+        $code = '';
 
-        $validate = $total != $check;
-
-        $validator->after(function ($validator) use ($validate) {
-            if ($validate) {
-                $validator->errors()->add('rfid', 'RFID sudah di barcode!');
-            }
-        });
-
-        if ($validate) {
-            return;
+        switch ($this->status_transaksi) {
+            case TransactionType::BersihKotor:
+                $code = env('CODE_BERSIH', 'BRS');
+                break;
+            case TransactionType::BersihRetur:
+                $code = env('CODE_RETUR', 'RTR');
+                break;
+            case TransactionType::BersihRewash:
+                $code = env('CODE_REWASH', 'WSH');
+                break;
+            default:
+                $code = env('CODE_BERSIH', 'KTR');
+                break;
         }
 
-        $validator->after(function ($validator) use ($total) {
-            $maksimal = env('TRANSACTION_BARCODE_MAXIMAL', 10);
-            if ($total > $maksimal) {
-                $validator->errors()->add('rfid', 'RFID maksimal ' . $maksimal);
-            }
-        });
+        $autoNumber = Query::autoNumber(Transaksi::getTableName(), Transaksi::field_delivery(), $code . date('Ymd'), env('AUTO_NUMBER', 15));
+
+        $this->merge([
+            'code' => $autoNumber,
+        ]);
     }
 
 }

@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Session;
 
 class LoginController extends Controller
 {
@@ -82,12 +81,8 @@ class LoginController extends Controller
 
     public function logout(Request $request)
     {
-        Session::flush();
-
-        if (Session::has('routes')) {
-            Session::forget(['routes', 'groups', 'filter']);
-            Session::flush();
-        }
+        session()->flush();
+        cache()->flush();
 
         Auth::logout();
 

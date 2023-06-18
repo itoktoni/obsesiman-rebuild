@@ -6,18 +6,27 @@ use App\Dao\Enums\CuciType;
 use App\Dao\Enums\ProcessType;
 use App\Dao\Enums\RegisterType;
 use App\Dao\Enums\TransactionType;
-use App\Dao\Models\Kategori;
 
 trait ViewDetailLinenEntity
 {
     public static function field_primary()
     {
-        return 'view_linen_id';
+        return 'view_linen_rfid';
     }
 
     public function getFieldPrimaryAttribute()
     {
         return $this->{$this->field_primary()};
+    }
+
+    public static function field_id()
+    {
+        return 'view_linen_id';
+    }
+
+    public function getFieldIdAttribute()
+    {
+        return $this->{$this->field_id()};
     }
 
     public static function field_name()
@@ -250,8 +259,53 @@ trait ViewDetailLinenEntity
         return 'view_tanggal_create';
     }
 
+    public static function field_created_at()
+    {
+        return 'view_tanggal_create';
+    }
+
     public function getFieldRewashAttribute()
     {
         return $this->{$this->field_rewash()};
+    }
+
+    public static function field_pending_create()
+    {
+        return 'view_pending_create';
+    }
+
+    public function getFieldPendingCreatedAtAttribute()
+    {
+        return $this->{$this->field_pending_create()};
+    }
+
+    public static function field_pending_update()
+    {
+        return 'view_pending_update';
+    }
+
+    public function getFieldPendingUpdateAtAttribute()
+    {
+        return $this->{$this->field_pending_update()};
+    }
+
+    public static function field_hilang_create()
+    {
+        return 'view_hilang_create';
+    }
+
+    public function getFieldHilangCreatedAtAttribute()
+    {
+        return $this->{$this->field_hilang_create()};
+    }
+
+    public static function field_hilang_update()
+    {
+        return 'view_hilang_update';
+    }
+
+    public function getFieldHilangUpdateAtAttribute()
+    {
+        return $this->{$this->field_hilang_update()};
     }
 }

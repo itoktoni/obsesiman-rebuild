@@ -164,5 +164,43 @@ trait DetailEntity
         return $this->{self::UPDATED_AT};
     }
 
+    public static function field_pending_created_at()
+    {
+        return 'detail_pending_created_at';
+    }
 
+    public function getFieldPendingCreatedAtAttribute()
+    {
+        return $this->{$this->field_pending_created_at()};
+    }
+
+    public static function field_pending_updated_at()
+    {
+        return 'detail_pending_updated_at';
+    }
+
+    public function getFieldPendingUpdateAtAttribute()
+    {
+        return $this->{$this->field_pending_updated_at()};
+    }
+
+    public static function field_hilang_created_at()
+    {
+        return 'detail_hilang_created_at';
+    }
+
+    public function getFieldHilangCreatedAtAttribute()
+    {
+        return $this->{$this->field_hilang_created_at()};
+    }
+
+    public static function field_hilang_updated_at()
+    {
+        return 'detail_hilang_updated_at';
+    }
+
+    public function getFieldHilangUpdateAtAttribute()
+    {
+        return $this->{$this->field_hilang_updated_at()};
+    }
 }

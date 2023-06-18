@@ -2,31 +2,25 @@
 
 namespace Plugins;
 
-use App\Dao\Enums\EnvType;
-use App\Dao\Enums\KontrakType;
-use App\Dao\Enums\RoleLevel;
-use App\Dao\Enums\TicketStatus;
+use App\Dao\Models\Filters;
 use App\Dao\Models\Inventaris;
 use App\Dao\Models\Location;
-use App\Dao\Models\Product;
 use App\Dao\Models\SystemGroup;
 use App\Dao\Models\SystemLink;
 use App\Dao\Models\SystemMenu;
 use App\Dao\Models\SystemPermision;
 use App\Dao\Models\SystemRole;
-use App\Dao\Models\TicketSystem;
 use App\Dao\Models\User;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Cache;
 
 class Query
 {
     public static function groups($role = false)
     {
-        if (env('APP_ENV') == EnvType::Production) {
-            if (Session::has('groups')) {
-                $cache = Session::get('groups');
+        if (env('CACHE_ACCESS', false)) {
+            if (Cache::has('groups')) {
+                $cache = Cache::get('groups');
                 if ($role && !empty($cache)) {
                     $cache = $cache->where('system_role_code', auth()->user()->role);
                 }
@@ -47,9 +41,9 @@ class Query
                 ->leftJoin('system_group_connection_role', 'system_group_connection_role.system_group_code', 'system_group.system_group_code')
                 ->orderBy('system_group_sort', 'DESC')
                 ->get();
-            Session::put('groups', $groups, 12000);
+            Cache::put('groups', $groups);
         } catch (\Throwable$th) {
-            //throw $th;
+            throw $th;
         }
 
         if ($role) {
@@ -61,9 +55,9 @@ class Query
 
     public static function getMenu($action = false)
     {
-        if (env('APP_ENV') == EnvType::Production) {
-            if (Session::has('menu')) {
-                $cache = Session::get('menu');
+        if (env('CACHE_ACCESS', false)) {
+            if (Cache::has('menu')) {
+                $cache = Cache::get('menu');
                 if ($action && !empty($cache)) {
                     $cache = $cache->where('menu_action', $action)->first();
                 }
@@ -84,6 +78,8 @@ class Query
             ->leftJoin('system_menu_connection_link', 'system_menu.system_menu_code', '=', 'system_menu_connection_link.system_menu_code')
             ->leftJoin((new SystemLink())->getTable(), 'system_menu_connection_link.system_link_code', '=', 'system_link.system_link_code')
             ->get();
+
+            Cache::put('menu', $menu);
         } catch (\Throwable $th) {
             //throw $th;
         }
@@ -95,18 +91,35 @@ class Query
         return $menu;
     }
 
+    public static function filter()
+    {
+        if (Cache::has('filter')) {
+            return Cache::get('filter');
+        }
+
+        $filter = [];
+        try {
+            $filter = Filters::get();
+            Cache::put('filter', $filter, 1200);
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
+
+        return $filter;
+    }
+
     public static function role()
     {
-        if (env('APP_ENV') == EnvType::Production) {
-            if (Session::has('role')) {
-                return Session::get('role');
+        if (env('CACHE_ACCESS', false)) {
+            if (Cache::has('role')) {
+                return Cache::get('role');
             }
         }
 
         $role = [];
         try {
             $role = SystemRole::get();
-            Session::put('role', $role, 1200);
+            Cache::put('role', $role, 1200);
         } catch (\Throwable$th) {
             //throw $th;
         }
@@ -116,16 +129,16 @@ class Query
 
     public static function permision()
     {
-        if (env('APP_ENV') == EnvType::Production) {
-            if (Session::has('permision')) {
-                return Session::get('permision');
+        if (env('CACHE_ACCESS', false)) {
+            if (Cache::has('permision')) {
+                return Cache::get('permision');
             }
         }
 
         $permision = [];
         try {
             $permision = SystemPermision::query()->get();
-            Session::put('permision', $permision, 1200);
+            Cache::put('permision', $permision, 1200);
         } catch (\Throwable$th) {
             //throw $th;
         }
@@ -160,63 +173,6 @@ class Query
         }
         $newcode = $prefix . str_pad($countcode, $codelength - strlen($prefix), "0", STR_PAD_LEFT);
         return $newcode;
-    }
-
-    public static function getInventaris()
-    {
-        $product = Inventaris::with(['has_name', 'has_location', 'has_type', 'has_brand', 'has_instansi'])
-        ->get()
-            ->mapWithKeys(function ($item) {
-                $name = $item->field_name;
-
-                if($group = $item->has_name ?? false){
-                    $name = $name.' - '.$group->field_name;
-                }
-
-                if($type = $item->has_type){
-                    $type_name = $type->field_name ?? '';
-                    $name = $name . ' ' . $type_name;
-                }
-
-                if($location = $item->has_location){
-                    $location_name = $location->field_name ?? '';
-                    $name = $name . ' - ' . $location_name;
-
-                    if($instansi = $item->has_location->has_instansi->first()){
-                        $instansi_name = $instansi->field_name ?? '';
-                        $name = $name . ' ' . $instansi_name;
-                    }
-                }
-
-                // if($building = $item->has_location->has_building ?? false){
-                //     $building_name = $building->field_name ?? '';
-                //     $name = $name . ' - ' . $building_name;
-                // }
-
-                $id = $item->field_code ?? '' . '';
-                return [$id => $name];
-            });
-
-        return $product;
-    }
-
-    public static function getLocation()
-    {
-        $location = Location::with(['has_building', 'has_floor'])
-        ->get()
-            ->mapWithKeys(function ($item) {
-                $name = $item->field_name;
-                if($item->has_building){
-                    $name = $name.' - '.$item->has_building->field_name;
-                }
-                if($item->has_floor){
-                    $name = $name.' - '.$item->has_floor->field_name;
-                }
-                $id = $item->field_primary . '';
-                return [$id => $name];
-            });
-
-        return $location;
     }
 
     public static function getUserByRole($role)

@@ -94,9 +94,10 @@ class DeliveryController extends MasterController
             Notes::delete($transaksi->get()->toArray());
             Alert::delete();
 
-            $transaksi->transaksi_barcode_at = null;
-            $transaksi->transaksi_barcode_by = null;
-            $transaksi->transaksi_barcode = null;
+            $transaksi->transaksi_delivery_at = null;
+            $transaksi->transaksi_delivery_by = null;
+            $transaksi->transaksi_delivery = null;
+
             $transaksi->save();
         }
         return Response::redirectBack();
@@ -134,8 +135,7 @@ class DeliveryController extends MasterController
 
     public function delivery(DeliveryRequest $request, UpdateDeliveryService $service)
     {
-        $autoNumber = Query::autoNumber(Transaksi::getTableName(), Transaksi::field_delivery(), 'DO' . date('Ymd'), env('AUTO_NUMBER', 15));
-        $check = $service->update($request->rfid, $autoNumber);
+        $check = $service->update($request->barcode, $request->code, $request->status_transaksi);
         return $check;
     }
 }

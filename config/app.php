@@ -9,6 +9,7 @@ use App\Dao\Enums\StatusType;
 use App\Dao\Enums\StockType;
 use App\Dao\Enums\TransactionType;
 use App\Dao\Enums\UserLevel;
+use App\Dao\Models\Transaksi;
 use App\Providers\CacheableAuthUserServiceProvider;
 use Coderello\SharedData\Facades\SharedData;
 use Modules\System\Plugins\WhatsApp;
@@ -261,7 +262,8 @@ return [
         'SharedData' => SharedData::class,
         'Query' => Query::class,
         'FastExcel' => Rap2hpoutre\FastExcel\Facades\FastExcel::class,
-        'Str' => Str::class
+        'Str' => Str::class,
+        'Transaksi' => Transaksi::class,
     ],
 
 ];

@@ -12,10 +12,11 @@ class ViewDetailLinen extends Model
     use ViewDetailLinenEntity, FilterQueryString, PowerJoins;
 
     protected $table = 'view_detail_linen';
-    protected $primaryKey = 'view_linen_id';
+    protected $primaryKey = 'view_linen_rfid';
 
     protected $casts = [
-        'view_linen_id' => 'string',
+        'view_linen_rfid' => 'string',
+        'view_linen_id' => 'integer',
         'view_pemakaian' => 'integer',
         'view_status_cuci' => 'integer',
         'view_status_register' => 'integer',
@@ -81,5 +82,10 @@ class ViewDetailLinen extends Model
     public function has_cuci()
     {
         return $this->hasOne(ViewTransaksiCuci::class, ViewTransaksiCuci::field_primary(), self::field_primary());
+    }
+
+    public function has_log()
+    {
+        return $this->hasOne(ViewLog::class, ViewLog::field_primary(), self::field_primary());
     }
 }

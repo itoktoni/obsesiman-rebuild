@@ -43,6 +43,7 @@
 				<th>STATUS TRANSAKSI</th>
 				<th>STATUS LINEN</th>
 				<th>CUCI/RENTAL</th>
+				<th>JUMLAH PEMAKAIAN LINEN</th>
 				<th>JUMLAH RETUR</th>
 				<th>TANGGAL PENERIMAAN</th>
 				<th>TANGGAL REGISTER</th>
@@ -62,6 +63,7 @@
 				<td>{{ $table->field_status_transaction_name }}</td>
 				<td>{{ ProcessType::getDescription($table->view_status_proses) }}</td>
 				<td>{{ CuciType::getDescription($table->view_status_cuci) }}</td>
+				<td>{{ $table->view_transaksi_cuci_total ?? 0 }}</td>
 				<td>{{ $table->view_transaksi_retur_total ?? 0 }}</td>
 				<td>{{ formatDate($table->transaksi_created_at) }}</td>
 				<td>{{ formatDate($table->view_tanggal_create) }}</td>

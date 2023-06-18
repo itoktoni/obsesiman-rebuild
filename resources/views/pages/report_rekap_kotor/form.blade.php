@@ -4,8 +4,8 @@
             <x-action form="print" />
                 <input type="hidden" name="report_name" value="Laporan Rekap Kotor">
                 <x-form-select col="6" class="search" name="rs_id" label="Rumah Sakit" :options="$rs" />
-                <x-form-input col="3" type="date" label="Tanggal Awal" name="start_date" />
-                <x-form-input col="3" type="date" label="Tanggal Akhir" name="end_date" />
+                <x-form-input col="3" type="date" label="Tanggal Awal" name="start_rekap" />
+                <x-form-input col="3" type="date" label="Tanggal Akhir" name="end_rekap" />
             @endbind
 
         </x-form>

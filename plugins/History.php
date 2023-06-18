@@ -24,7 +24,7 @@ class History
             $log[] = [
                 ModelsHistory::field_name() => $item,
                 ModelsHistory::field_status() => $status,
-                ModelsHistory::field_created_by() => auth()->user()->name,
+                ModelsHistory::field_created_by() => auth()->user()->name ?? 'System',
                 ModelsHistory::field_created_at() => date('Y-m-d H:i:s'),
                 ModelsHistory::field_description() => json_encode($message),
             ];

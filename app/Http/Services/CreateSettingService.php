@@ -19,6 +19,11 @@ class CreateSettingService
             EnvFacades::setValue('TRANSACTION_ACTIVE_RS_ONLY', $data->transaction_active);
             EnvFacades::setValue('TRANSACTION_CHUNK', $data->transaction_chunk);
 
+            EnvFacades::setValue('CODE_BERSIH', $data->code_bersih);
+            EnvFacades::setValue('CODE_KOTOR', $data->code_kotor);
+            EnvFacades::setValue('CODE_RETUR', $data->code_retur);
+            EnvFacades::setValue('CODE_REWASH', $data->code_rewash);
+
             if ($data->has('logo')) {
                 $file_logo = $data->file('logo');
                 $extension = $file_logo->extension();

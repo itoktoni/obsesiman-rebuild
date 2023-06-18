@@ -246,7 +246,6 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
                     Transaksi::field_status_transaction() => TransactionType::Kotor,
                     Transaksi::field_rs_id() => $data->field_rs_id,
                     Transaksi::field_beda_rs() => BooleanType::No,
-                    Transaksi::field_report() => date('Y-m-d'),
                     Transaksi::CREATED_AT => $date,
                     Transaksi::CREATED_BY => $user,
                     Transaksi::UPDATED_AT => $date,

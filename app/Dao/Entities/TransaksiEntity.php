@@ -125,9 +125,14 @@ trait TransaksiEntity
         return $this->{$this->field_delivery()};
     }
 
+    public static function field_created_at()
+    {
+        return 'transaksi_created_at';
+    }
+
     public function getFieldCreatedAtAttribute()
     {
-        return $this->{self::CREATED_AT};
+        return $this->{$this->field_created_at()};
     }
 
     public function getFieldUpdatedAtAttribute()
@@ -154,6 +159,7 @@ trait TransaksiEntity
     {
         return $this->{$this->field_created_by()};
     }
+
 
     public function getFieldCreatedNameAttribute()
     {
@@ -203,6 +209,26 @@ trait TransaksiEntity
     public function getFieldDeliveryAtAttribute()
     {
         return $this->{$this->field_delivery_at()};
+    }
+
+    public static function field_status_bersih()
+    {
+        return 'transaksi_bersih';
+    }
+
+    public function getFieldStatusBersihAttribute()
+    {
+        return $this->{$this->field_status_bersih()};
+    }
+
+    public function getFieldStatusBersihNameAttribute()
+    {
+        return TransactionType::getDescription($this->getFieldStatusBersihAttribute());
+    }
+
+    public static function field_nama_linen()
+    {
+        return 'view_linen_nama';
     }
 
 }

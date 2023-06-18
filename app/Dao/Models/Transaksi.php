@@ -44,6 +44,7 @@ class Transaksi extends Model
         'transaksi_barcode_by',
         'transaksi_delivery_at',
         'transaksi_delivery_by',
+        'transaksi_bersih',
     ];
 
     public $sortable = [
@@ -60,6 +61,8 @@ class Transaksi extends Model
         'transaksi_id_rs',
         'transaksi_status',
         'transaksi_created_by',
+        'start_date',
+        'end_date',
         'rs_id'
     ];
 
@@ -89,6 +92,11 @@ class Transaksi extends Model
     public function apiTransform()
     {
         return GeneralResource::class;
+    }
+
+    public function has_rfid()
+    {
+        return $this->hasOne(Detail::class, Detail::field_primary(), self::field_rfid());
     }
 
     public function has_detail()

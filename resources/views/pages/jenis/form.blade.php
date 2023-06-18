@@ -16,7 +16,7 @@
 
             @if($model)
             <div class="col-md-3">
-                <img class="img-fluid" src="{{ $model->field_image_url }}" alt="$model->field_name">
+                <img class="img-fluid" src="{{ $model->field_image_url }}" alt="{{ $model->field_name }}">
             </div>
             @endif
 
