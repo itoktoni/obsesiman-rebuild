@@ -1,6 +1,7 @@
 <?php
 
 use App\Dao\Enums\BooleanType;
+use App\Dao\Enums\CuciType;
 use App\Dao\Enums\ProcessType;
 use App\Dao\Enums\RegisterType;
 use App\Dao\Enums\TransactionType;
@@ -47,6 +48,19 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
 
         $data = [];
         foreach(RegisterType::getInstances() as $value => $key){
+            $data[] = [
+                'status_id' => $key,
+                'status_nama' => formatWorld($value),
+            ];
+        }
+
+        return $data;
+    });
+
+    Route::get('status_cuci', function(){
+
+        $data = [];
+        foreach(CuciType::getInstances() as $value => $key){
             $data[] = [
                 'status_id' => $key,
                 'status_nama' => formatWorld($value),
