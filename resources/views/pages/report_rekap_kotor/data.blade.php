@@ -22,7 +22,7 @@
 		<td></td>
 		<td colspan="10">
 			<h3>
-				Periode : {{ formatDate(request()->get('start_date')) }} - {{ formatDate(request()->get('end_date')) }}
+				Periode : {{ formatDate(request()->get('start_rekap')) }} - {{ formatDate(request()->get('end_rekap')) }}
 			</h3>
 		</td>
 	</tr>

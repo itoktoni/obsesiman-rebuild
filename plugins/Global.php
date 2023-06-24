@@ -175,7 +175,16 @@ function imageUrl($value, $folder = null){
 
 function formatDate($value, $datetime = false){
 
-    $format = $datetime ? 'd/m/Y H:i:s' : 'd/m/Y';
+    if($datetime === false){
+        $format = 'd/m/Y';
+    }
+    else if($datetime === true){
+        $format = 'd/m/Y H:i:s';
+    }
+    else{
+        $format = $datetime;
+    }
+
     if($value instanceof Carbon){
         $value = $value->format($format);
     } else if(is_string($value)){

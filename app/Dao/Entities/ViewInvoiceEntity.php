@@ -6,7 +6,7 @@ trait ViewInvoiceEntity
 {
     public static function field_primary()
     {
-        return 'inv_key';
+        return 'view_key';
     }
 
     public function getFieldPrimaryAttribute()
@@ -16,7 +16,7 @@ trait ViewInvoiceEntity
 
     public static function field_name()
     {
-        return 'inv_nama_linen';
+        return 'view_linen_nama';
     }
 
     public function getFieldNameAttribute()
@@ -26,7 +26,7 @@ trait ViewInvoiceEntity
 
     public static function field_rs()
     {
-        return 'inv_nama_rs';
+        return 'view_rs_nama';
     }
 
     public function getFieldRsAttribute()
@@ -36,7 +36,7 @@ trait ViewInvoiceEntity
 
     public static function field_tanggal()
     {
-        return 'inv_tanggal';
+        return 'view_tanggal';
     }
 
     public function getFieldTanggalAttribute()
@@ -46,7 +46,7 @@ trait ViewInvoiceEntity
 
     public static function field_qty()
     {
-        return 'inv_qty';
+        return 'view_qty';
     }
 
     public function getFieldQtyAttribute()
@@ -56,7 +56,7 @@ trait ViewInvoiceEntity
 
     public static function field_berat()
     {
-        return 'inv_berat';
+        return 'view_berat';
     }
 
     public function getFieldBeratAttribute()
@@ -64,43 +64,23 @@ trait ViewInvoiceEntity
         return $this->{$this->field_berat()};
     }
 
-    public static function field_total_berat()
+    public static function field_harga_cuci()
     {
-        return 'inv_total_berat';
+        return 'view_harga_cuci';
     }
 
-    public function getFieldTotalBeratAttribute()
+    public function getFieldHargaCuciAttribute()
     {
-        return $this->{$this->field_total_berat()};
+        return $this->{$this->field_harga_cuci()};
     }
 
-    public static function field_harga()
+    public static function field_harga_sewa()
     {
-        return 'inv_harga';
+        return 'view_harga_sewa';
     }
 
-    public function getFieldHargaAttribute()
+    public function getFieldHargaSewaAttribute()
     {
-        return $this->{$this->field_harga()};
-    }
-
-    public static function field_invoice()
-    {
-        return 'inv_total_invoice';
-    }
-
-    public function getFieldInvoiceAttribute()
-    {
-        return $this->{$this->field_invoice()};
-    }
-
-    public static function field_reported_at()
-    {
-        return 'inv_tanggal';
-    }
-
-    public function getFieldReportedAtAttribute()
-    {
-        return $this->{$this->field_reported_at()};
+        return $this->{$this->field_harga_sewa()};
     }
 }

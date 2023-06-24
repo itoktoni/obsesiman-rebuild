@@ -3,7 +3,7 @@
 		<td></td>
 		<td colspan="6">
 			<h3>
-				<b>REKAP BERSIH </b>
+				<b>REKAP INVOICE {{ strtoupper(CuciType::getDescription((int)request()->get('view_status'))) }} </b>
 			</h3>
 		</td>
 		<td rowspan="3">
@@ -35,43 +35,48 @@
             <tr>
                 <th style="width: 10px" width="1">No. </th>
                 <th style="width: 200px" width="20">Nama Linen</th>
-                @foreach($location as $loc_id => $loc_name)
-                    <th>{{ $loc_name }}</th>
+                @foreach($tanggal as $tgl => $item)
+                    <th>{{ formatDate($tgl, 'd') }}</th>
                 @endforeach
-                <th>Total Bersih (Pcs)</th>
-                <th>(Kg) Bersih</th>
-                <th>Total Kotor (Pcs)</th>
-                <th>-</th>
-                <th>+</th>
+                <th>QTY</th>
+                <th>Berat (KG)</th>
+                <th>Total (Kg)</th>
+                <th>Harga</th>
+                <th>Total Invoice</th>
             </tr>
         </thead>
 		<tbody>
             @php
-                $sum_kurang = $sum_lebih = $sum_per_linen = $sum_kotor = $sum_beda_rs = $sum_kg = $sum_lawan = 0;
+                $sum_kurang = $sum_lebih = $sum_per_linen = $sum_harga = $sum_berat = $sum_kg = $sum_lawan = 0;
                 $total_number = $selisih = 0;
-                $total_lawan = 0;
+                $total_berat = 0;
             @endphp
-            @forelse($linen as $linen_id => $name)
+            @forelse($linen as $linen_id => $nama)
                 @php
                     $total_number = $total_number + $loop->iteration;
-                    $total_per_linen = $bersih
-                        ->where('view_linen_id', $linen_id)
-                        ->whereIn(Transaksi::field_status_bersih(), BERSIH)
-                        ->count();
+                    $data_linen = $data
+                        ->where('view_linen_id', $linen_id);
+
+                    $single_linen = $data_linen->first();
+
+                    $total_per_linen = $data_linen->sum('view_qty');
+                    $total_berat = $total_per_linen * $single_linen->view_berat;
+                    $sum_berat = $sum_berat + $total_berat;
 
                     $total_per_linen_kanan = $total_per_linen ?? 0;
 
                     $sum_per_linen = $sum_per_linen + $total_per_linen_kanan;
 
-                    $total_lawan = $kotor
-                        ->where(Transaksi::field_beda_rs(), 0)
-                        ->where('view_linen_id', $linen_id)
-                        ->whereIn(Transaksi::field_status_transaction(), KOTOR)
-                        ->count();
+                    $harga = $single_linen->view_status == CuciType::Cuci ? $single_linen->view_harga_cuci : $single_linen->view_harga_sewa;
+
+                    $total_harga = $total_berat * $harga;
+                    $sum_harga = $sum_harga + $total_harga;
+
+                    $total_lawan = 0;
 
                     $sum_lawan = $sum_lawan + $total_lawan;
 
-                    $total_kg = $bersih[0]->view_linen_berat * $total_per_linen;
+                    $total_kg = $data[0]->view_linen_berat * $total_per_linen;
                     $sum_kg = $sum_kg + $total_kg;
 
                     $selisih = $total_per_linen - $total_lawan;
@@ -82,35 +87,32 @@
                 @endphp
                 <tr>
                     <td>{{ $loop->iteration }}</td>
-                    <td>{{ Str::ucfirst($name) }}</td>
-                    @foreach($location as $loc_id => $loc_name)
+                    <td>{{ strtoupper($nama) }}</td>
+                    @foreach($tanggal as $tgl => $item)
                         <td>
                             @php
-                            $total_lokasi = $bersih
+                            $total_tanggal = $item
+                                ->where('view_tanggal', $tgl)
                                 ->where('view_linen_id', $linen_id)
-                                ->where('view_ruangan_id', $loc_id)
-                                ->whereIn(Transaksi::field_status_bersih(), BERSIH)
                                 ->count();
                             @endphp
-                            {{ $total_lokasi > 0 ? $total_lokasi : '' }}
+                            {{ $total_tanggal > 0 ? $total_tanggal : '' }}
                         </td>
-                    @endforeach
-                    <td>{{ $total_per_linen_kanan }}</td>
-                    <td>{{ $total_kg }}</td>
-                    <td>
-                        {{ $total_lawan }}
-                    </td>
-                    <td>{{ $selisih < 0 ? $selisih : '' }}</td>
-                    <td>{{ $selisih > 0 ? $selisih : '' }}</td>
+                        @endforeach
+                        <td>{{ $total_per_linen }}</td>
+                        <td class="text-right">{{ $single_linen->view_berat }}</td>
+                        <td class="text-right">{{ $total_berat }}</td>
+                        <td class="text-right">{{ number_format($harga) }}</td>
+                        <td class="text-right">{{ number_format($total_harga) }}</td>
                 </tr>
 			@empty
 			@endforelse
 		</tbody>
 		<tr>
             <td colspan="2">Total</td>
-            @foreach($location as $loc_id => $loc_name)
+            @foreach($tanggal as $tgl => $item)
             @php
-            $sum_lokasi = $bersih->where('view_ruangan_id', $loc_id)->count();
+            $sum_lokasi = $data->where('view_tanggal', $tgl)->sum('view_qty');
             @endphp
                 <td>
                     {{ $sum_lokasi }}
@@ -119,17 +121,11 @@
             <td>
                 {{ $sum_per_linen }}
             </td>
-            <td>
-                {{ $sum_kg }}
+            <td colspan="2" class="text-right">
+                {{ $sum_berat  }}
             </td>
-            <td>
-                {{ $sum_lawan  }}
-            </td>
-            <td>
-                {{ $sum_kurang }}
-            </td>
-            <td>
-                {{ $sum_lebih }}
+            <td colspan="2" class="text-right">
+                {{ number_format($sum_harga) }}
             </td>
         </tr>
 	</table>

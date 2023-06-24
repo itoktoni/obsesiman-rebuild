@@ -2,7 +2,7 @@
     <x-card label="Summary Pengiriman Retur">
         <x-form :model="$model" :spa="false" target="_blank"  method="GET" action="{{ moduleRoute('getPrint') }}" :upload="true">
             <x-action form="print" />
-                <input type="hidden" name="report_name" value="Laporan Transaksi">
+                <input type="hidden" name="report_name" value="Laporan Summary Pengiriman Retur">
                 <x-form-select col="6" class="search" name="rs_id" label="Rumah Sakit" :options="$rs" />
                 <x-form-input col="3" type="date" label="Tanggal Awal" name="start_delivery" />
                 <x-form-input col="3" type="date" label="Tanggal Akhir" name="end_delivery" />

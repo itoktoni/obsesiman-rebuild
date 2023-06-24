@@ -20,7 +20,6 @@ class ReportRekapKotorController extends MinimalController
 
     protected function beforeForm()
     {
-
         $rs = Rs::getOptions();
         $user = User::getOptions();
 

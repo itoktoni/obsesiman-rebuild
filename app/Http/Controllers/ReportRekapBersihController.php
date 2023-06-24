@@ -6,7 +6,7 @@ use App\Dao\Models\Rs;
 use App\Dao\Models\Transaksi;
 use App\Dao\Models\User;
 use App\Dao\Repositories\TransaksiRepository;
-use App\Http\Requests\TransactionReportRequest;
+use App\Http\Requests\RekapReportRequest;
 use Illuminate\Support\Carbon;
 
 class ReportRekapBersihController extends MinimalController
@@ -63,7 +63,7 @@ class ReportRekapBersihController extends MinimalController
         return $query->get();
     }
 
-    public function getPrint(TransactionReportRequest $request){
+    public function getPrint(RekapReportRequest $request){
         set_time_limit(0);
         $location = $linen = $lawan = [];
 

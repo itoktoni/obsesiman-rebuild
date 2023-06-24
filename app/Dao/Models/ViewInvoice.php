@@ -22,22 +22,22 @@ class ViewInvoice extends Model
     use Sortable, FilterQueryString, Sanitizable, DataTableTrait, ViewInvoiceEntity, ActiveTrait, OptionTrait, QueryCacheable;
 
     protected $table = 'view_invoice';
-    protected $primaryKey = 'inv_nama_linen';
-    // protected $cacheFor = 10;
+    protected $primaryKey = 'view_key';
 
     public $sortable = [
-        'inv_nama_rs',
-        'inv_nama_linen',
-        'inv_tanggal',
+        'view_nama_rs',
+        'view_linen_nama',
+        'view_tanggal',
     ];
 
     protected $filters = [
         'filter',
         'start_date',
         'end_date',
-        'inv_nama_rs',
-        'inv_nama_linen',
-        'inv_tanggal',
+        'view_nama_rs',
+        'view_linen_nama',
+        'view_tanggal',
+        'view_status',
     ];
 
     public $timestamps = false;
