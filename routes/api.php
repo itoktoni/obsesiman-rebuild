@@ -26,6 +26,7 @@ use Illuminate\Support\Facades\Route;
 use Plugins\History;
 use Plugins\Notes;
 use Plugins\Query;
+use Illuminate\Support\Str;
 
 /*
 |--------------------------------------------------------------------------
@@ -41,6 +42,45 @@ use Plugins\Query;
 Route::post('login', [UserController::class, 'postLoginApi'])->name('postLoginApi');
 
 Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
+
+    Route::get('status_register', function(){
+
+        $data = [];
+        foreach(RegisterType::getInstances() as $value => $key){
+            $data[] = [
+                'status_id' => $key,
+                'status_nama' => formatWorld($value),
+            ];
+        }
+
+        return $data;
+    });
+
+    Route::get('status_proses', function(){
+
+        $data = [];
+        foreach(ProcessType::getInstances() as $value => $key){
+            $data[] = [
+                'status_id' => $key,
+                'status_nama' => formatWorld($value),
+            ];
+        }
+
+        return $data;
+    });
+
+    Route::get('status_transaksi', function(){
+
+        $data = [];
+        foreach(TransactionType::getInstances() as $value => $key){
+            $data[] = [
+                'status_id' => $key,
+                'status_nama' => formatWorld($value),
+            ];
+        }
+
+        return $data;
+    });
 
     Route::get('download/{rsid}', function ($rsid){
         $data = ViewDetailLinen::where(ViewDetailLinen::field_rs_id(), $rsid)->get();

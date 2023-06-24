@@ -146,6 +146,12 @@ function formatAttribute($value){
     return ucfirst($label);
 }
 
+function formatWorld($value){
+    if (!empty($value)) {
+        return Str::title(str_replace('_', ' ', Str::snake($value))) ?? 'Unknow';
+    }
+}
+
 function showValue($value){
     if($value == 0){
         return '';
