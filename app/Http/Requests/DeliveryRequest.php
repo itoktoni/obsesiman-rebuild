@@ -44,17 +44,17 @@ class DeliveryRequest extends FormRequest
         }])->whereIn(Transaksi::field_barcode(), $this->barcode)
                     ->count();
 
-        $compare = $total != $barcode;
+        // $compare = $total != $barcode;
 
-        $validator->after(function ($validator) use ($compare) {
-            if ($compare) {
-                $validator->errors()->add('rfid', 'konfigurasi Barcode tidak cocok!');
-            }
-        });
+        // $validator->after(function ($validator) use ($compare) {
+        //     if ($compare) {
+        //         $validator->errors()->add('rfid', 'konfigurasi Barcode tidak cocok!');
+        //     }
+        // });
 
-        if ($compare) {
-            return;
-        }
+        // if ($compare) {
+        //     return;
+        // }
     }
 
     public function prepareForValidation()
