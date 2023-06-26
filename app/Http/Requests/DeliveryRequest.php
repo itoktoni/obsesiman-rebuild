@@ -42,7 +42,7 @@ class DeliveryRequest extends FormRequest
         $barcode = Transaksi::with(['has_rfid' => function($query){
             $query->where(Detail::field_rs_id(), $this->rs_id);
         }])->whereIn(Transaksi::field_barcode(), $this->barcode)
-                    ->where(Transaksi::field_status_bersih(), $this->status_transaksi)
+                    ->whereNull(Transaksi::field_status_bersih())
                     ->count();
 
         $compare = $total != $barcode;
