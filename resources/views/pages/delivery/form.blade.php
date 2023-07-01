@@ -9,7 +9,7 @@
             <x-form-input col="6" name="rs_nama" />
             <x-form-input col="6" name="transaksi_report" label="Tanggal" />
             <x-form-input col="6" name="username" label="User" />
-            <x-form-input col="6" name="transaksi_barcode_at" label="Tgl & Jam Barcode" />
+            <x-form-input col="6" name="transaksi_delivery_at" label="Tgl & Jam Delivery" />
 
             @endbind
 

@@ -90,6 +90,11 @@ class Jenis extends Model
         return $this->hasOne(Rs::class, Rs::field_primary(), self::field_rs_id());
     }
 
+    public function has_detail()
+    {
+        return $this->hasMany(Detail::class, Detail::field_jenis_id(), self::field_rs_id());
+    }
+
     public function has_total()
     {
         return $this->hasOne(ViewTotalJenis::class, ViewTotalJenis::field_primary(), self::field_primary());

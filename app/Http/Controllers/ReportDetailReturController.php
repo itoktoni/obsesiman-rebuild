@@ -30,9 +30,9 @@ class ReportDetailReturController extends MinimalController
 
     private function getQuery($request){
         return self::$repository
+            ->getDetailKotor(TransactionType::Retur)
             ->leftJoinRelationship(HAS_RETUR)
             ->leftJoinRelationship(HAS_CUCI)
-            ->getDetailKotor(TransactionType::Retur)
             ->get();
     }
 

@@ -30,6 +30,7 @@
                                 <th class="text-left">JUMLAH PEMAKAIAN LINEN</th>
                                 <th class="text-left">JUMLAH RETUR</th>
                                 <th class="text-left">JUMLAH REWASH</th>
+                                <th class="text-left">STATUS TRANSAKSI</th>
                                 <th class="text-left">POSISI TERAKHIR</th>
                                 <th class="text-left">TANGGAL POSISI TERAKHIR</th>
                                 <th class="text-left">OPERATOR UPDATE TERAKHIR</th>
@@ -62,6 +63,7 @@
                                     <td>{{ $table->view_transaksi_cuci_total ?? 0 }}</td>
                                     <td>{{ $table->view_transaksi_retur_total ?? 0 }}</td>
                                     <td>{{ $table->view_transaksi_rewash_total ?? 0 }}</td>
+                                    <td>{{ $table->field_status_transaction_name }}</td>
                                     <td>{{ $table->field_status_process_name }}</td>
                                     <td>{{ formatDate($table->field_updated_at) }}</td>
                                     <td>{{ $table->view_updated_name }}</td>

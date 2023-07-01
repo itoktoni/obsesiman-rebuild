@@ -125,9 +125,30 @@ trait TransaksiEntity
         return $this->{$this->field_delivery()};
     }
 
+    public static function field_created_by()
+    {
+        return 'transaksi_created_by';
+    }
+
     public static function field_created_at()
     {
         return 'transaksi_created_at';
+    }
+
+
+    public static function field_updated_by()
+    {
+        return 'transaksi_updated_by';
+    }
+
+    public static function field_updated_at()
+    {
+        return 'transaksi_updated_at';
+    }
+
+    public function getFieldCreatedByAttribute()
+    {
+        return $this->{$this->field_created_by()};
     }
 
     public function getFieldCreatedAtAttribute()
@@ -135,9 +156,14 @@ trait TransaksiEntity
         return $this->{$this->field_created_at()};
     }
 
+    public function getFieldUpdatedByAttribute()
+    {
+        return $this->{$this->field_updated_by()};
+    }
+
     public function getFieldUpdatedAtAttribute()
     {
-        return $this->{self::UPDATED_AT};
+        return $this->{$this->field_updated_at()};
     }
 
     public static function field_report()
@@ -149,17 +175,6 @@ trait TransaksiEntity
     {
         return $this->{$this->field_report()};
     }
-
-    public static function field_created_by()
-    {
-        return 'transaksi_created_by';
-    }
-
-    public function getFieldCreatedByAttribute()
-    {
-        return $this->{$this->field_created_by()};
-    }
-
 
     public function getFieldCreatedNameAttribute()
     {

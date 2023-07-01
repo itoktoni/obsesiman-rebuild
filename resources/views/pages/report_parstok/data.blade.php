@@ -53,11 +53,11 @@
 				<td>{{ $loop->iteration }}</td>
 				<td>{{ $table->field_name }}</td>
 				<td>{{ $table->field_rs_name }}</td>
-				<td>{{ $table->field_total }}</td>
-				<td>{{ $table->field_weight }}</td>
-				<td>{{ $table->field_total * $table->field_weight }}</td>
-				<td>{{ $table->field_parstock }}</td>
-				<td>{{ $table->field_total - $table->field_parstock }}</td>
+				<td>{{ $table->qty }}</td>
+				<td>{{ $table->jenis_berat }}</td>
+				<td>{{ $table->qty * $table->jenis_berat }}</td>
+				<td>{{ $table->jenis_parstok }}</td>
+				<td>{{ $table->qty - $table->jenis_parstok }}</td>
 			</tr>
 			@empty
 			@endforelse

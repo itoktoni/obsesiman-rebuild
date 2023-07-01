@@ -22,8 +22,6 @@ class DeliveryRequest extends FormRequest
 
     public function withValidator($validator)
     {
-        $total = count($this->barcode);
-
         //RFID HARUS SUDAH DI BARCODE
         $empty = Detail::where(Detail::field_rs_id(), $this->rs_id)
             ->where(Detail::field_status_process(), ProcessType::Barcode)
@@ -36,24 +34,6 @@ class DeliveryRequest extends FormRequest
         });
 
         if ($empty == 0) {
-            return;
-        }
-
-        $barcode = Transaksi::with(['has_rfid' => function($query){
-            $query->where(Detail::field_rs_id(), $this->rs_id);
-        }])->whereIn(Transaksi::field_barcode(), $this->barcode)
-                    ->where(Transaksi::field_status_bersih(), $this->status_transaksi)
-                    ->count();
-
-        $compare = $total != $barcode;
-
-        $validator->after(function ($validator) use ($compare) {
-            if ($compare) {
-                $validator->errors()->add('rfid', 'konfigurasi Barcode tidak cocok!');
-            }
-        });
-
-        if ($compare) {
             return;
         }
     }

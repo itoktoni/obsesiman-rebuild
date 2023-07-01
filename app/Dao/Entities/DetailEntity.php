@@ -154,14 +154,34 @@ trait DetailEntity
         return ProcessType::getDescription($this->getFieldStatusProcessAttribute());
     }
 
+    public static function field_created_at()
+    {
+        return 'detail_created_at';
+    }
+
     public function getFieldCreatedAtAttribute()
     {
-        return $this->{self::CREATED_AT};
+        return $this->{self::field_created_at()};
+    }
+
+    public static function field_created_by()
+    {
+        return 'detail_created_by';
+    }
+
+    public static function field_updated_at()
+    {
+        return 'detail_updated_at';
+    }
+
+    public static function field_updated_by()
+    {
+        return 'detail_updated_by';
     }
 
     public function getFieldUpdatedAtAttribute()
     {
-        return $this->{self::UPDATED_AT};
+        return $this->{$this->field_updated_at()};
     }
 
     public static function field_pending_created_at()

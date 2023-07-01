@@ -3,8 +3,10 @@
 namespace App\Dao\Repositories;
 
 use App\Dao\Interfaces\CrudInterface;
+use App\Dao\Models\Detail;
 use App\Dao\Models\Jenis;
 use App\Dao\Models\ViewTotalJenis;
+use Illuminate\Support\Facades\DB;
 use Plugins\Notes;
 
 class JenisRepository extends MasterRepository implements CrudInterface
@@ -44,10 +46,11 @@ class JenisRepository extends MasterRepository implements CrudInterface
     }
 
     public function getParstok(){
-        return $this->model::query()
-        ->addSelect(['*'])
+        return Detail::query()
+        ->addSelect(['*', DB::raw('count(detail_rfid) as qty')])
+        ->leftJoinRelationship('has_jenis')
         ->leftJoinRelationship('has_rs')
-        ->leftJoinRelationship('has_total')
+        ->groupBy(Detail::field_jenis_id())
         ->filter();
     }
 }

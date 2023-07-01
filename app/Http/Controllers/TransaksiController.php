@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Dao\Enums\BedaRsType;
 use App\Dao\Enums\BooleanType;
 use App\Dao\Enums\ProcessType;
 use App\Dao\Enums\TransactionType;
@@ -136,11 +137,15 @@ class TransaksiController extends MasterController
             return false;
         }
 
-        if($form_transaksi == TransactionType::Kotor && now()->diffInDays($date) < env('TRANSACTION_DAY_ALLOWED', 1)){
-            return false;
+        if(in_array($form_transaksi, [TransactionType::Retur, TransactionType::Rewash])){
+            return true;
         }
 
-        return true;
+        if(($form_transaksi == TransactionType::Kotor) && now()->diffInDays($date) >= env('TRANSACTION_DAY_ALLOWED', 1)){
+            return true;
+        }
+
+        return false;
     }
 
     private function transaction($request, $service){
@@ -166,7 +171,6 @@ class TransaksiController extends MasterController
 
             if(isset($data[$item])){
                 $detail = $data[$item];
-
                 if($this->checkValidation($status_transaksi, $detail->field_status_transaction, $detail->field_updated_at)){
 
                     $status_sync = BooleanType::Yes;
@@ -179,10 +183,10 @@ class TransaksiController extends MasterController
                         Transaksi::field_status_transaction() => $status_transaksi,
                         Transaksi::field_rs_id() => $request->rs_id,
                         Transaksi::field_beda_rs() => $beda_rs,
-                        Transaksi::CREATED_AT => $date,
-                        Transaksi::CREATED_BY => $user,
-                        Transaksi::UPDATED_AT => $date,
-                        Transaksi::UPDATED_BY => $user,
+                        Transaksi::field_created_at() => $date,
+                        Transaksi::field_created_by() => $user,
+                        Transaksi::field_updated_at() => $date,
+                        Transaksi::field_updated_by() => $user,
                     ];
 
                     $transaksi[] = $data_transaksi;
@@ -201,6 +205,7 @@ class TransaksiController extends MasterController
                     $status_transaksi = $detail->field_status_transaction;
                     $date = $detail->field_updated_at->format('Y-m-d H:i:s');
                     $status_process = $detail->field_status_process;
+                    $status_sync = BooleanType::No;
                 }
 
                 $return[] = [
@@ -224,7 +229,7 @@ class TransaksiController extends MasterController
             }
         }
 
-        $check = $service->save($status_transaksi, $status_process, $transaksi, $linen, $log, $return);
+        $check = $service->save($request->{STATUS_TRANSAKSI}, $request->{STATUS_PROCESS}, $transaksi, $linen, $log, $return);
         return $check;
     }
 }

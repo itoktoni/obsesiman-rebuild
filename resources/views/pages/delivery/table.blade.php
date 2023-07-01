@@ -38,8 +38,8 @@
                                     <td class="col-md-2 text-center column-action">
                                         <x-crud :model="$table" />
                                     </td>
-                                    <td>{{ $table->field_barcode }}</td>
                                     <td>{{ $table->field_primary }}</td>
+                                    <td>{{ $table->field_barcode }}</td>
                                     <td>{{ $table->field_status_bersih_name }}</td>
                                     <td>{{ $table->field_rs_name }}</td>
                                     <td>{{ formatdate($table->field_delivery_at) }}</td>

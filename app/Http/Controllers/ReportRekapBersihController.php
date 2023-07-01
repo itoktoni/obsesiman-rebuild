@@ -49,14 +49,14 @@ class ReportRekapBersihController extends MinimalController
         if ($start_date = $request->start_rekap) {
             $bersih_from = Carbon::createFromFormat('Y-m-d', $start_date) ?? false;
             if($bersih_from){
-                $query = $query->where(Transaksi::field_created_at(), '>=', $bersih_from->addDay(-1)->format('Y-m-d'));
+                $query = $query->whereDate(Transaksi::field_created_at(), '>=', $bersih_from->addDay(-1)->format('Y-m-d'));
             }
         }
 
         if ($end_date = $request->end_rekap) {
             $bersih_to = Carbon::createFromFormat('Y-m-d', $end_date) ?? false;
             if($bersih_to){
-                $query = $query->where(Transaksi::field_created_at(), '<=', $bersih_to->addDay(-1)->format('Y-m-d'));
+                $query = $query->whereDate(Transaksi::field_created_at(), '<=', $bersih_to->addDay(-1)->format('Y-m-d'));
             }
         }
 

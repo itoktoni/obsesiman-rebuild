@@ -43,10 +43,6 @@ class UpdateDeliveryService
             if ($rfid && $check) {
 
                 $data_rfid = $rfid->pluck(Transaksi::field_rfid());
-                Detail::whereIn(Detail::field_primary(), $data_rfid)
-                    ->update([
-                        Detail::field_status_process() => ProcessType::Delivery,
-                    ]);
 
                 History::bulk($data_rfid, ProcessType::Delivery);
 
@@ -54,6 +50,8 @@ class UpdateDeliveryService
                     ->update([
                         Detail::field_status_transaction() => $status_transaksi,
                         Detail::field_status_process() => ProcessType::Bersih,
+                        Detail::field_updated_at() => date('Y-m-d H:i:s'),
+                        Detail::field_updated_by() => auth()->user()->id,
                     ]);
 
                 History::bulk($data_rfid, ProcessType::Bersih);

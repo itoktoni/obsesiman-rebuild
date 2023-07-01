@@ -28,6 +28,8 @@ class UpdateBarcodeService
             Detail::whereIn(Detail::field_primary(), $data)
             ->update([
                 Detail::field_status_process() => ProcessType::Barcode,
+                Detail::field_updated_at() => date('Y-m-d H:i:s'),
+                Detail::field_updated_by() => auth()->user()->id,
             ]);
 
             History::bulk($data, ProcessType::Barcode);

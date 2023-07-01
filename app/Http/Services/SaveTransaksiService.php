@@ -21,13 +21,14 @@ class SaveTransaksiService
                     Transaksi::insert($save_transaksi);
                 }
             }
-
             if(!empty($linen)){
                 foreach(array_chunk($linen, env('TRANSACTION_CHUNK')) as $save_detail){
                     Detail::whereIn(Detail::field_primary(), $save_detail)
                     ->update([
                         Detail::field_status_transaction() => $status,
                         Detail::field_status_process() => $process,
+                        Detail::field_updated_at() => date('Y-m-d H:i:s'),
+                        Detail::field_updated_by() => auth()->user()->id,
                     ]);
                 }
             }

@@ -65,6 +65,8 @@ class Detail extends Model
     protected $filters = [
         'filter',
         'detail_status_register',
+        'detail_id_rs',
+        'detail_id_jenis',
         'ruangan_nama',
     ];
 

@@ -150,10 +150,10 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
                         Detail::field_status_cuci() => $request->status_cuci,
                         Detail::field_status_register() => RegisterType::Register,
                         Detail::field_status_process() => ProcessType::Register,
-                        Detail::CREATED_AT => date('Y-m-d H:i:s'),
-                        Detail::UPDATED_AT => date('Y-m-d H:i:s'),
-                        Detail::CREATED_BY => auth()->user()->id,
-                        Detail::UPDATED_BY => auth()->user()->id,
+                        Detail::field_created_at() => date('Y-m-d H:i:s'),
+                        Detail::field_updated_at() => date('Y-m-d H:i:s'),
+                        Detail::field_created_by() => auth()->user()->id,
+                        Detail::field_updated_by() => auth()->user()->id,
                     ];
                 });
 
@@ -187,6 +187,10 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
                     Detail::field_status_cuci() => $request->status_cuci,
                     Detail::field_status_register() => RegisterType::Register,
                     Detail::field_status_process() => ProcessType::Register,
+                    Detail::field_created_at() => date('Y-m-d H:i:s'),
+                    Detail::field_updated_at() => date('Y-m-d H:i:s'),
+                    Detail::field_created_by() => auth()->user()->id,
+                    Detail::field_updated_by() => auth()->user()->id,
                 ]);
 
                 History::log($request->rfid, ProcessType::Register, $request->rfid);
@@ -256,6 +260,9 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
                 $data->{Detail::field_ruangan_id()} = $request->ruangan_id;
                 $data->{Detail::field_jenis_id()} = $request->jenis_id;
 
+                $data->{Detail::field_updated_at()} = date('Y-m-d H:i:s');
+                $data->{Detail::field_updated_by()} = auth()->user()->id;
+
                 if($request->status_cuci){
                     $data->{Detail::field_status_cuci()} = $request->status_cuci;
                 }
@@ -284,7 +291,7 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
 
     Route::get('grouping/{rfid}', function ($rfid, SaveTransaksiService $service) {
         try {
-            $data = ViewDetailLinen::findOrFail($rfid);
+            $data = Detail::findOrFail($rfid);
 
             $data_transaksi = [];
             $linen[] = $rfid;
@@ -300,10 +307,8 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
                     Transaksi::field_status_transaction() => TransactionType::Kotor,
                     Transaksi::field_rs_id() => $data->field_rs_id,
                     Transaksi::field_beda_rs() => BooleanType::No,
-                    Transaksi::CREATED_AT => $date,
-                    Transaksi::CREATED_BY => $user,
-                    Transaksi::UPDATED_AT => $date,
-                    Transaksi::UPDATED_BY => $user,
+                    Transaksi::field_updated_at() => $date,
+                    Transaksi::field_updated_by() => $user,
                 ];
 
                 $log[] = [
@@ -322,6 +327,11 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
                 ModelsHistory::field_created_at() => $date,
                 ModelsHistory::field_description() => json_encode($linen),
             ];
+
+            $data->update([
+                Detail::field_updated_at() => date('Y-m-d H:i:s'),
+                Detail::field_updated_by() => auth()->user()->id,
+            ]);
 
             $check = $service->save(TransactionType::Kotor, ProcessType::Grouping, $data_transaksi, $linen, $log);
             if(!$check['status']){
