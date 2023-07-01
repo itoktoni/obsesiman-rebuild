@@ -234,6 +234,22 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
         }
     });
 
+    Route::match(['POST', 'GET'], 'detail', function (Request $request) {
+        try {
+            $query = ViewDetailLinen::query();
+            $data = $query->filter()->get();
+
+            $collection = DetailResource::collection($data);
+            return Notes::data($collection);
+        }
+        catch (\Illuminate\Database\Eloquent\ModelNotFoundException $th) {
+            return Notes::error('data RFID tidak ditemukan');
+        }
+        catch (\Throwable $th) {
+            return Notes::error($th->getMessage());
+        }
+    });
+
     Route::post('detail/rfid', function (DetailDataRequest $request) {
         try {
             $data = ViewDetailLinen::whereIn(ViewDetailLinen::field_primary() , $request->rfid)->get();
