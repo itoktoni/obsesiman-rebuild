@@ -8,6 +8,7 @@ use App\Dao\Enums\ProcessType;
 use App\Dao\Enums\TransactionType;
 use App\Dao\Models\Detail;
 use App\Dao\Models\History;
+use App\Dao\Models\Opname;
 use App\Dao\Models\Rs;
 use App\Dao\Models\Transaksi;
 use App\Dao\Models\ViewTransaksi;
@@ -132,6 +133,24 @@ class TransaksiController extends MasterController
 
     private function checkValidation($form_transaksi, $status_transaksi, $date){
 
+        if(!in_array($status_transaksi, BERSIH)){
+            return false;
+        }
+
+        if(in_array($form_transaksi, [TransactionType::Retur, TransactionType::Rewash])){
+            return true;
+        }
+
+        if(($form_transaksi == TransactionType::Kotor) && now()->diffInDays($date) >= env('TRANSACTION_DAY_ALLOWED', 1)){
+            return true;
+        }
+
+        return false;
+    }
+
+    private function checkOpname($form_transaksi, $status_transaksi, $date){
+
+        $opname = Opname::where();
         if(!in_array($status_transaksi, BERSIH)){
             return false;
         }

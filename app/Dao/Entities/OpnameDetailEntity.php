@@ -106,14 +106,34 @@ trait OpnameDetailEntity
         return $this->{Rs::field_name()};
     }
 
+    public static function field_created_at()
+    {
+        return 'opname_detail_created_at';
+    }
+
+    public static function field_updated_at()
+    {
+        return 'opname_detail_updated_at';
+    }
+
     public function getFieldCreatedAtAttribute()
     {
-        return $this->{self::CREATED_AT};
+        return $this->{$this->field_created_at()};
     }
 
     public function getFieldUpdatedAtAttribute()
     {
-        return $this->{self::UPDATED_AT};
+        return $this->{$this->field_updated_at()};
+    }
+
+    public static function field_ketemu()
+    {
+        return 'opname_detail_ketemu';
+    }
+
+    public function getFieldKetemuAttribute()
+    {
+        return $this->{$this->field_ketemu()};
     }
 
 

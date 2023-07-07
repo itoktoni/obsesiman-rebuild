@@ -2,6 +2,7 @@
 
 namespace App\Dao\Entities;
 
+use App\Dao\Enums\OpnameType;
 use App\Dao\Models\Rs;
 
 trait OpnameEntity
@@ -23,7 +24,7 @@ trait OpnameEntity
 
     public function getFieldNameAttribute()
     {
-        return $this->{$this->field_start()}.' '.$this->{$this->field_end()};
+        return $this->{$this->field_name()};
     }
 
     public static function field_start()
@@ -46,6 +47,26 @@ trait OpnameEntity
         return $this->{$this->field_end()};
     }
 
+    public static function field_created_at()
+    {
+        return 'opname_created_at';
+    }
+
+    public function getFieldCreatedAtAttribute()
+    {
+        return $this->{$this->field_created_at()};
+    }
+
+    public static function field_updated_at()
+    {
+        return 'opname_updated_at';
+    }
+
+    public function getFieldUpdatedAtAttribute()
+    {
+        return $this->{$this->field_updated_at()};
+    }
+
     public static function field_rs_id()
     {
         return 'opname_id_rs';
@@ -59,6 +80,21 @@ trait OpnameEntity
     public function getFieldRsNameAttribute()
     {
         return $this->{Rs::field_name()};
+    }
+
+    public static function field_status()
+    {
+        return 'opname_status';
+    }
+
+    public function getFieldStatusAttribute()
+    {
+        return $this->{$this->field_status()};
+    }
+
+    public function getFieldStatusNameAttribute()
+    {
+        return $this->getFieldStatusAttribute() ? OpnameType::getDescription($this->getFieldStatusAttribute()) : 'Draft';
     }
 
 }
