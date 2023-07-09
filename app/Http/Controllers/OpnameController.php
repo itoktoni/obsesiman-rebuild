@@ -25,10 +25,12 @@ class OpnameController extends MasterController
     protected function beforeForm(){
         $rs = Rs::getOptions();
         $status = OpnameType::getOptions();
+        $detail = [];
 
         self::$share = [
             'rs' => $rs,
             'status' => $status,
+            'detail' => $detail,
         ];
     }
 

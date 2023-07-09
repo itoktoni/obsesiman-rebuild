@@ -24,6 +24,11 @@ class OpnameDetail extends Model
     protected $table = 'opname_detail';
     protected $primaryKey = 'opname_detail_id';
 
+    const CREATED_AT = 'opname_detail_created_at';
+    const UPDATED_AT = 'opname_detail_updated_at';
+    const CREATED_BY = 'opname_detail_created_by';
+    const UPDATED_BY = 'opname_detail_updated_by';
+
     protected $fillable = [
         'opname_detail_id',
         'opname_detail_id_opname',
@@ -75,5 +80,10 @@ class OpnameDetail extends Model
     public function has_view()
     {
         return $this->hasOne(ViewDetailLinen::class, ViewDetailLinen::field_primary(), self::field_rfid());
+    }
+
+    public function has_master()
+    {
+        return $this->hasOne(Opname::class, Opname::field_primary(), self::field_opname());
     }
 }

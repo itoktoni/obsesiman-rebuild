@@ -9,6 +9,7 @@ use App\Dao\Enums\TransactionType;
 use App\Dao\Models\Detail;
 use App\Dao\Models\History;
 use App\Dao\Models\Opname;
+use App\Dao\Models\OpnameDetail;
 use App\Dao\Models\Rs;
 use App\Dao\Models\Transaksi;
 use App\Dao\Models\ViewTransaksi;
@@ -148,22 +149,26 @@ class TransaksiController extends MasterController
         return false;
     }
 
-    private function checkOpname($form_transaksi, $status_transaksi, $date){
+    private function checkOpname($status_transaksi, $status_proses, $rfid){
 
-        $opname = Opname::where();
-        if(!in_array($status_transaksi, BERSIH)){
-            return false;
+        try {
+            $today = date('Y-m-d');
+            $waktu = date('Y-m-d H:i:s');
+            OpnameDetail::leftJoinRelationship('has_master')
+                ->where(Opname::field_start(), '<=', $today)
+                ->where(Opname::field_end(), '>=', $today)
+                ->whereIn(OpnameDetail::field_rfid(), $rfid)
+                ->whereNull(OpnameDetail::field_ketemu())
+                ->update([
+                    OpnameDetail::field_ketemu() => BooleanType::Yes,
+                    OpnameDetail::field_waktu() => $waktu,
+                    OpnameDetail::field_proses() => $status_transaksi,
+                    OpnameDetail::field_proses() => $status_proses,
+                ]);
+
+        } catch (\Throwable $th) {
+            //throw $th;
         }
-
-        if(in_array($form_transaksi, [TransactionType::Retur, TransactionType::Rewash])){
-            return true;
-        }
-
-        if(($form_transaksi == TransactionType::Kotor) && now()->diffInDays($date) >= env('TRANSACTION_DAY_ALLOWED', 1)){
-            return true;
-        }
-
-        return false;
     }
 
     private function transaction($request, $service){
@@ -180,6 +185,8 @@ class TransaksiController extends MasterController
         $status_transaksi = $request->{STATUS_TRANSAKSI};
         $status_process = $request->{STATUS_PROCESS};
         $status_sync = BooleanType::No;
+
+        $this->checkOpname($status_transaksi, $status_process, $rfid);
 
         $return = $transaksi = $linen = $log = [];
 
