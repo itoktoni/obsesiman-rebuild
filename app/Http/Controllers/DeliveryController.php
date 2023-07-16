@@ -135,7 +135,7 @@ class DeliveryController extends MasterController
 
     public function delivery(DeliveryRequest $request, UpdateDeliveryService $service)
     {
-        $check = $service->update($request->barcode, $request->code, $request->status_transaksi);
+        $check = $service->update($request->code, $request->status_transaksi);
         return $check;
     }
 }

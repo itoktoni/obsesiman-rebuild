@@ -14,7 +14,6 @@ class DeliveryRequest extends FormRequest
     public function rules()
     {
         return [
-            'barcode' => 'required|array',
             RS_ID => 'required',
             STATUS_TRANSAKSI => 'required',
         ];

@@ -21,7 +21,9 @@ use App\Http\Requests\DetailDataRequest;
 use App\Http\Requests\DetailUpdateRequest;
 use App\Http\Requests\OpnameDetailRequest;
 use App\Http\Requests\RegisterRequest;
+use App\Http\Resources\DetailCollection;
 use App\Http\Resources\DetailResource;
+use App\Http\Resources\DownloadCollection;
 use App\Http\Resources\DownloadLinenResource;
 use App\Http\Resources\OpnameResource;
 use App\Http\Resources\RsResource;
@@ -60,7 +62,7 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
             ];
         }
 
-        return $data;
+        return Notes::data($data);
     });
 
     Route::get('status_cuci', function(){
@@ -73,7 +75,7 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
             ];
         }
 
-        return $data;
+        return Notes::data($data);
     });
 
     Route::get('status_proses', function(){
@@ -86,7 +88,7 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
             ];
         }
 
-        return $data;
+        return Notes::data($data);
     });
 
     Route::get('status_transaksi', function(){
@@ -99,12 +101,12 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
             ];
         }
 
-        return $data;
+        return Notes::data($data);
     });
 
     Route::get('download/{rsid}', function ($rsid){
         $data = ViewDetailLinen::where(ViewDetailLinen::field_rs_id(), $rsid)->get();
-        $resource = DownloadLinenResource::collection($data);
+        $resource = new DownloadCollection($data);
         return response()->streamDownload(function () use ($resource) {
             echo json_encode($resource);
         }, $rsid . '_linen.json');
@@ -243,10 +245,10 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
     Route::match(['POST', 'GET'], 'detail', function (Request $request) {
         try {
             $query = ViewDetailLinen::query();
-            $data = $query->filter()->get();
+            $data = $query->filter()->paginate(env('PAGINATION_NUMBER', 10));
 
-            $collection = DetailResource::collection($data);
-            return Notes::data($collection);
+            $collection = new DetailCollection($data);
+            return $collection;
         }
         catch (\Illuminate\Database\Eloquent\ModelNotFoundException $th) {
             return Notes::error('data RFID tidak ditemukan');
