@@ -7,19 +7,25 @@ use App\Dao\Enums\RegisterType;
 use App\Dao\Enums\TransactionType;
 use App\Dao\Models\Detail;
 use App\Dao\Models\History as ModelsHistory;
+use App\Dao\Models\Opname;
+use App\Dao\Models\OpnameDetail;
 use App\Dao\Models\Rs;
 use App\Dao\Models\Transaksi;
 use App\Dao\Models\ViewDetailLinen;
 use App\Http\Controllers\BarcodeController;
 use App\Http\Controllers\DeliveryController;
+use App\Http\Controllers\OpnameController;
 use App\Http\Controllers\TransaksiController;
 use App\Http\Controllers\UserController;
 use App\Http\Requests\DetailDataRequest;
 use App\Http\Requests\DetailUpdateRequest;
+use App\Http\Requests\OpnameDetailRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Http\Resources\DetailResource;
 use App\Http\Resources\DownloadLinenResource;
+use App\Http\Resources\OpnameResource;
 use App\Http\Resources\RsResource;
+use App\Http\Services\SaveOpnameService;
 use App\Http\Services\SaveTransaksiService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -370,11 +376,47 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
     Route::post('barcode', [BarcodeController::class, 'barcode']);
     Route::post('delivery', [DeliveryController::class, 'delivery']);
 
-    Route::get('/opname', function (Request $request) {
+    Route::get('opname', function (Request $request) {
+        try {
+            $today = today()->format('Y-m-d');
+            $data = OpnameDetail::addSelect([
+                Opname::field_primary(),
+                Opname::field_start(),
+                Opname::field_end(),
+                Rs::field_primary(),
+                Rs::field_name(),
+            ])
+            ->leftJoinRelationship('has_master')
+            ->join(Rs::getTableName(), Rs::field_primary(), '=', Opname::field_rs_id())
+            ->where(Opname::field_start(), '<=', $today)
+            ->where(Opname::field_end(), '>=', $today)
+            ->get();
 
-    });
+            $collection = OpnameResource::collection($data);
+            return Notes::data($collection);
 
-    Route::post('/opname', function (Request $request) {
+        } catch (\Throwable $th) {
+            return Notes::error($th->getCode() ,$th->getMessage());
+        }
+    })->name('opname_data');
 
+    Route::get('opname/{id}', function ($id ,Request $request) {
+        try {
+            $data = Opname::find($id)
+            ->joinRelationship('has_rs')
+            ->addSelect([Rs::field_primary(), Rs::field_name()])
+            ->first();
+
+            $collection = new OpnameResource($data);
+            return Notes::data($collection);
+
+        } catch (\Throwable $th) {
+            return Notes::error($th->getCode() ,$th->getMessage());
+        }
+    })->name('opname_detail');
+
+    Route::post('/opname', function (OpnameDetailRequest $request, SaveOpnameService $service) {
+        $data = $service->save($request->{Opname::field_primary()}, $request->data);
+        return $data;
     });
 });
