@@ -23,8 +23,8 @@ class OpnameResource extends JsonResource
             'opname_id' => $this->{Opname::field_primary()},
             'opname_start' => $this->{Opname::field_start()},
             'opname_end' => $this->{Opname::field_end()},
-            'rs_id' => $this->{Rs::field_primary()},
-            'rs_nama' => $this->{Rs::field_name()},
+            'rs_id' => $this->has_rs->{Rs::field_primary()} ?? '',
+            'rs_nama' => $this->has_rs->{Rs::field_name()} ?? '',
         ];
         // return parent::toArray($request);
     }

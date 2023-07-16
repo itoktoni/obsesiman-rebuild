@@ -379,15 +379,7 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
     Route::get('opname', function (Request $request) {
         try {
             $today = today()->format('Y-m-d');
-            $data = OpnameDetail::addSelect([
-                Opname::field_primary(),
-                Opname::field_start(),
-                Opname::field_end(),
-                Rs::field_primary(),
-                Rs::field_name(),
-            ])
-            ->leftJoinRelationship('has_master')
-            ->join(Rs::getTableName(), Rs::field_primary(), '=', Opname::field_rs_id())
+            $data = Opname::with([HAS_RS])
             ->where(Opname::field_start(), '<=', $today)
             ->where(Opname::field_end(), '>=', $today)
             ->get();
@@ -402,10 +394,7 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
 
     Route::get('opname/{id}', function ($id ,Request $request) {
         try {
-            $data = Opname::find($id)
-            ->joinRelationship('has_rs')
-            ->addSelect([Rs::field_primary(), Rs::field_name()])
-            ->first();
+            $data = Opname::with([HAS_RS])->find($id);
 
             $collection = new OpnameResource($data);
             return Notes::data($collection);

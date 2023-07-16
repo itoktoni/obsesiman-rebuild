@@ -111,7 +111,7 @@ function modulePathForm($name = null, $template = null)
     return 'pages.' . moduleCode() . '.form';
 }
 
-function moduleView($template, $data){
+function moduleView($template, $data = []){
     $view = view($template)->with($data);
     if(request()->header('hx-request') && env('APP_SPA', false)){
         $view = $view->fragment('content');

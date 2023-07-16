@@ -2,12 +2,8 @@
 
 namespace App\Http\Services;
 
-use App\Dao\Enums\BooleanType;
 use App\Dao\Enums\ProcessType;
-use App\Dao\Models\Detail;
-use App\Dao\Models\History;
 use App\Dao\Models\OpnameDetail;
-use App\Dao\Models\Transaksi;
 use Illuminate\Support\Facades\DB;
 use Plugins\History as PluginsHistory;
 use Plugins\Notes;
@@ -22,14 +18,16 @@ class SaveOpnameService
             DB::beginTransaction();
 
             if(!empty($rfid)){
-                foreach(array_chunk($rfid, env('TRANSACTION_CHUNK')) as $key => $detail){
-                    OpnameDetail::where(OpnameDetail::field_rfid(), $key)
-                    ->where(OpnameDetail::field_opname(), $opname_id)
-                    ->update($detail);
+                foreach($rfid->chunk(env('TRANSACTION_CHUNK', 500)) as $chunk){
+                    foreach($chunk as $key => $detail){
+                        OpnameDetail::where(OpnameDetail::field_rfid(), $key)
+                        ->where(OpnameDetail::field_opname(), $opname_id)
+                        ->update($detail);
+                    }
                 }
             }
 
-            PluginsHistory::bulk(array_keys($rfid), ProcessType::Opname, 'Ketemu ketika Opname');
+            PluginsHistory::bulk($rfid->keys(), ProcessType::Opname, 'Ketemu ketika Opname');
 
             DB::commit();
            return Notes::create($rfid);

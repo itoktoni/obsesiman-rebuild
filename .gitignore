@@ -5,6 +5,7 @@
 /postman/*
 .env
 /vendor
+/encrypted
 .htaccess
 firebase.json
 .env.backup

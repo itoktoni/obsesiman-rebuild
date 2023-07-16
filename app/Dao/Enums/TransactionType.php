@@ -11,7 +11,6 @@ class TransactionType extends Enum implements LocalizedEnum
 {
     use StatusTrait;
 
-    #[Description('')]
     const NotSet = null;
     const Unknown = 0;
     const Kotor = 1;

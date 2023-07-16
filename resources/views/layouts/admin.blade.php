@@ -22,10 +22,8 @@
         </div>
 
         <div class="main-content" id="content">
-            @fragment('content')
-                @yield('container')
-                @include('layouts.alert')
-            @endfragment()
+            @yield('container')
+            @include('layouts.alert')
         </div>
 
         <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
