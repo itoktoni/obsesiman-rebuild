@@ -88,4 +88,9 @@ class Opname extends Model
     {
         return $this->hasMany(OpnameDetail::class, OpnameDetail::field_opname(), $this->field_primary());
     }
+
+    public function has_rs()
+    {
+        return $this->hasOne(Rs::class, Rs::field_primary(), self::field_rs_id());
+    }
 }

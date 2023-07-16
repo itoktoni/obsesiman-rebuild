@@ -29,4 +29,5 @@ class ProcessType extends Enum implements LocalizedEnum
     const DeleteTransaksi = 50;
     const Pending = 70;
     const Hilang = 80;
+    const Opname = 90;
 }

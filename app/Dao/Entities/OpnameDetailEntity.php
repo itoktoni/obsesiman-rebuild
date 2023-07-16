@@ -2,6 +2,7 @@
 
 namespace App\Dao\Entities;
 
+use App\Dao\Enums\OpnameType;
 use App\Dao\Enums\StatusType;
 use App\Dao\Enums\StockType;
 use App\Dao\Enums\TransactionType;
@@ -19,6 +20,16 @@ trait OpnameDetailEntity
     public function getFieldPrimaryAttribute()
     {
         return $this->{$this->field_primary()};
+    }
+
+    public static function field_code()
+    {
+        return 'opname_detail_code';
+    }
+
+    public function getFieldCodeAttribute()
+    {
+        return $this->{$this->field_code()};
     }
 
     public static function field_opname()
@@ -58,7 +69,7 @@ trait OpnameDetailEntity
 
     public function getFieldStatusAttribute()
     {
-        return StatusType::getDescription($this->{$this->field_status()});
+        return OpnameType::getDescription($this->{$this->field_status()});
     }
 
     public static function field_transaksi()
@@ -116,6 +127,11 @@ trait OpnameDetailEntity
         return 'opname_detail_updated_at';
     }
 
+    public static function field_updated_by()
+    {
+        return 'opname_detail_updated_by';
+    }
+
     public function getFieldCreatedAtAttribute()
     {
         return $this->{$this->field_created_at()};
@@ -124,6 +140,11 @@ trait OpnameDetailEntity
     public function getFieldUpdatedAtAttribute()
     {
         return $this->{$this->field_updated_at()};
+    }
+
+    public function getFieldUpdatedByAttribute()
+    {
+        return $this->{$this->field_updated_by()};
     }
 
     public static function field_ketemu()

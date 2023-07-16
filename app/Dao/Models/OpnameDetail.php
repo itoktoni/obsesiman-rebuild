@@ -32,6 +32,7 @@ class OpnameDetail extends Model
     protected $fillable = [
         'opname_detail_id',
         'opname_detail_id_opname',
+        'opname_detail_code',
         'opname_detail_rfid',
         'opname_detail_waktu',
         'opname_detail_status',

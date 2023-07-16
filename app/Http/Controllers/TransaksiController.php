@@ -162,9 +162,11 @@ class TransaksiController extends MasterController
                 ->update([
                     OpnameDetail::field_ketemu() => BooleanType::Yes,
                     OpnameDetail::field_waktu() => $waktu,
-                    OpnameDetail::field_proses() => $status_transaksi,
+                    OpnameDetail::field_transaksi() => $status_transaksi,
                     OpnameDetail::field_proses() => $status_proses,
                 ]);
+
+            PluginsHistory::bulk($rfid, $status_proses, 'Ketemu di kotor');
 
         } catch (\Throwable $th) {
             //throw $th;
