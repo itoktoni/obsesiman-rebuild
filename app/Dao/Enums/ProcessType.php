@@ -20,6 +20,7 @@ class ProcessType extends Enum implements LocalizedEnum
     const DeleteChip = 4;
     #[Description('Scan')]
     const Kotor = 10;
+    const Gate = 11;
     const Bersih = 20;
     const Grouping = 30;
     const Barcode = 31;
