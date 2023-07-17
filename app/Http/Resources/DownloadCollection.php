@@ -32,12 +32,10 @@ class DownloadCollection extends ResourceCollection
             'code' => 200,
             'name' => 'List',
             'message' => 'Data berhasil diambil',
-            'data' => [
-                'rs' => $rs,
-                'linen' => $rs,
-                'status' => $status,
-                'detail' => DownloadLinenResource::collection($this->collection)
-            ],
+            'data' => DownloadLinenResource::collection($this->collection),
+            'rs' => $rs,
+            'linen' => $jenis,
+            'status_proses' => $status,
         ];
         // return parent::toArray($request);
     }

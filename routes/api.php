@@ -25,8 +25,11 @@ use App\Http\Resources\DetailCollection;
 use App\Http\Resources\DetailResource;
 use App\Http\Resources\DownloadCollection;
 use App\Http\Resources\DownloadLinenResource;
+use App\Http\Resources\JenisResource;
 use App\Http\Resources\OpnameResource;
+use App\Http\Resources\RsCollection;
 use App\Http\Resources\RsResource;
+use App\Http\Resources\RuanganResource;
 use App\Http\Services\SaveOpnameService;
 use App\Http\Services\SaveTransaksiService;
 use Illuminate\Http\Request;
@@ -107,9 +110,7 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
     Route::get('download/{rsid}', function ($rsid){
         $data = ViewDetailLinen::where(ViewDetailLinen::field_rs_id(), $rsid)->get();
         $resource = new DownloadCollection($data);
-        return response()->streamDownload(function () use ($resource) {
-            echo json_encode($resource);
-        }, $rsid . '_linen.json');
+        return $resource;
     });
 
     Route::get('rs', function (Request $request) {
@@ -129,11 +130,51 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
 
     Route::get('rs/{rsid}', function ($rsid) {
 
+        $status_register = [];
+        foreach(RegisterType::getInstances() as $value => $key){
+            $status_register[] = [
+                'status_id' => $key,
+                'status_nama' => formatWorld($value),
+            ];
+        }
+
+        $status_cuci = [];
+        foreach(CuciType::getInstances() as $value => $key){
+            $status_cuci[] = [
+                'status_id' => $key,
+                'status_nama' => formatWorld($value),
+            ];
+        }
+
+        $status_proses = [];
+        foreach(ProcessType::getInstances() as $value => $key){
+            $status_proses[] = [
+                'status_id' => $key,
+                'status_nama' => formatWorld($value),
+            ];
+        }
+
+        $status_transaksi = [];
+        foreach(TransactionType::getInstances() as $value => $key){
+            $status_transaksi[] = [
+                'status_id' => $key,
+                'status_nama' => formatWorld($value),
+            ];
+        }
+
         try {
 
-            $data = Rs::with([HAS_RUANGAN, HAS_JENIS])->findOrFail($rsid);
-            $collection = new RsResource($data);
-            return Notes::data($collection);
+            $rs = Rs::with([HAS_RUANGAN, HAS_JENIS])->findOrFail($rsid);
+            $collection = new RsResource($rs);
+            $data = Notes::data($collection);
+            // $data['ruangan'] = RuanganResource::collection($rs->has_ruangan);
+            // $data['linen'] = JenisResource::collection($rs->has_jenis);
+            $data['status_transaksi'] = $status_transaksi;
+            $data['status_proses'] = $status_proses;
+            $data['status_cuci'] = $status_cuci;
+            $data['status_register'] = $status_register;
+
+            return $data;
 
         } catch (\Throwable$th) {
 
