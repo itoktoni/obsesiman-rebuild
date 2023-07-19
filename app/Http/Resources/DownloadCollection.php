@@ -23,7 +23,7 @@ class DownloadCollection extends ResourceCollection
 
         $rs = Rs::find($rsid)->addSelect(
             [Rs::field_primary(), Rs::field_name()]
-        );
+        )->first();
 
         $jenis = Jenis::where(Jenis::field_rs_id(), $rsid)
             ->addSelect([Jenis::field_primary(), Jenis::field_name()])
