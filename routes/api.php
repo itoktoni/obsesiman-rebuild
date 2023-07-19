@@ -115,11 +115,49 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
 
     Route::get('rs', function (Request $request) {
 
+        $status_register = [];
+        foreach(RegisterType::getInstances() as $value => $key){
+            $status_register[] = [
+                'status_id' => $key,
+                'status_nama' => formatWorld($value),
+            ];
+        }
+
+        $status_cuci = [];
+        foreach(CuciType::getInstances() as $value => $key){
+            $status_cuci[] = [
+                'status_id' => $key,
+                'status_nama' => formatWorld($value),
+            ];
+        }
+
+        $status_proses = [];
+        foreach(ProcessType::getInstances() as $value => $key){
+            $status_proses[] = [
+                'status_id' => $key,
+                'status_nama' => formatWorld($value),
+            ];
+        }
+
+        $status_transaksi = [];
+        foreach(TransactionType::getInstances() as $value => $key){
+            $status_transaksi[] = [
+                'status_id' => $key,
+                'status_nama' => formatWorld($value),
+            ];
+        }
+
         try {
 
             $rs = Rs::with([HAS_RUANGAN, HAS_JENIS])->get();
             $collection = RsResource::collection($rs);
-            return Notes::data($collection);
+            $data = Notes::data($collection);
+            $data['status_transaksi'] = $status_transaksi;
+            $data['status_proses'] = $status_proses;
+            $data['status_cuci'] = $status_cuci;
+            $data['status_register'] = $status_register;
+
+            return $data;
 
         } catch (\Throwable$th) {
 

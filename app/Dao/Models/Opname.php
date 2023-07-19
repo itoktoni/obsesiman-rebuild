@@ -5,6 +5,7 @@ namespace App\Dao\Models;
 use App\Dao\Builder\DataBuilder;
 use App\Dao\Entities\OpnameEntity;
 use App\Dao\Entities\RsEntity;
+use App\Dao\Enums\OpnameType;
 use App\Dao\Enums\UserLevel;
 use App\Dao\Traits\ActiveTrait;
 use App\Dao\Traits\ApiTrait;

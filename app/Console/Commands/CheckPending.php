@@ -4,7 +4,6 @@ namespace App\Console\Commands;
 
 use App\Dao\Enums\ProcessType;
 use App\Dao\Models\Detail;
-use App\Dao\Models\History;
 use Illuminate\Console\Command;
 use Illuminate\Support\Carbon;
 use Plugins\History as PluginsHistory;

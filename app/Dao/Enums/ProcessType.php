@@ -29,6 +29,7 @@ class ProcessType extends Enum implements LocalizedEnum
     const Pending = 70;
     const Hilang = 80;
     const Opname = 90;
+    const OpnameSelesai = 91;
 
     public static function getDescription($value): string
     {
