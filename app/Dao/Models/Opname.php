@@ -37,7 +37,6 @@ class Opname extends Model
         'opname_created_by',
         'opname_updated_at',
         'opname_updated_by',
-
     ];
 
     public $sortable = [
@@ -46,7 +45,8 @@ class Opname extends Model
 
     protected $casts = [
         'opname_id_rs' => 'int',
-        'opname_id' => 'int'
+        'opname_id' => 'int',
+        'opname_status' => 'int'
     ];
 
     protected $filteopname = [

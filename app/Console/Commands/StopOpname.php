@@ -47,13 +47,15 @@ class StopOpname extends Command
         if($data->count() > 0){
             $pluck = $data->pluck(Opname::field_primary(), Opname::field_primary());
 
+            Opname::whereIn(Opname::field_primary(), $pluck)
+                ->update([
+                    Opname::field_status() => OpnameType::Selesai
+                ]);
+
             OpnameDetail::whereIn(OpnameDetail::field_opname(), $pluck)
                 ->update([
                     OpnameDetail::field_status() => OpnameType::Selesai
                 ]);
-
-            Opname::whereIn(Opname::field_primary(), $pluck)
-                ->update(Opname::field_status(), OpnameType::Selesai);
 
             $rfid = OpnameDetail::select(OpnameDetail::field_rfid())
                 ->whereIn(OpnameDetail::field_opname(), $pluck)
