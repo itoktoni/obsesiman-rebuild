@@ -5,7 +5,9 @@ namespace App\Http\Resources;
 use App\Dao\Enums\ProcessType;
 use App\Dao\Models\Jenis;
 use App\Dao\Models\Rs;
+use App\Dao\Models\Ruangan;
 use Illuminate\Http\Resources\Json\ResourceCollection;
+use Illuminate\Support\Facades\DB;
 
 class DownloadCollection extends ResourceCollection
 {
@@ -17,8 +19,21 @@ class DownloadCollection extends ResourceCollection
      */
     public function toArray($request)
     {
-        $rs = Rs::all([Rs::field_primary(), Rs::field_name()]);
-        $jenis = Jenis::all([Jenis::field_primary(), Jenis::field_name()]);
+        $rsid = $request->rsid;
+
+        $rs = Rs::find($rsid)->addSelect(
+            [Rs::field_primary(), Rs::field_name()]
+        );
+
+        $jenis = Jenis::where(Jenis::field_rs_id(), $rsid)
+            ->addSelect([Jenis::field_primary(), Jenis::field_name()])
+            ->get();
+
+        $ruangan = Ruangan::addSelect([DB::raw('ruangan.ruangan_id, ruangan.ruangan_nama')])
+            ->join('rs_dan_ruangan', 'rs_dan_ruangan.ruangan_id', 'ruangan.ruangan_id')
+            ->where('rs_id', $rsid)
+            ->get();
+
         $status = [];
         foreach(ProcessType::getInstances() as $value => $key){
             $status[] = [
@@ -34,7 +49,8 @@ class DownloadCollection extends ResourceCollection
             'message' => 'Data berhasil diambil',
             'data' => DownloadLinenResource::collection($this->collection),
             'rs' => $rs,
-            'linen' => $jenis,
+            'ruangan' => $ruangan,
+            'jenis_linen' => $jenis,
             'status_proses' => $status,
         ];
         // return parent::toArray($request);

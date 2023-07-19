@@ -107,8 +107,11 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
         return Notes::data($data);
     });
 
-    Route::get('download/{rsid}', function ($rsid){
+    Route::get('download/{rsid}', function ($rsid, Request $request){
         $data = ViewDetailLinen::where(ViewDetailLinen::field_rs_id(), $rsid)->get();
+        $request->request->add([
+            'rsid' => $rsid
+        ]);
         $resource = new DownloadCollection($data);
         return $resource;
     });
