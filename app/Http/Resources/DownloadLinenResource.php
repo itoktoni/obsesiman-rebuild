@@ -23,6 +23,7 @@ class DownloadLinenResource extends JsonResource
             'id' => $this->field_primary,
             'rs' => $this->field_rs_id,
             'loc' => $this->field_ruangan_id,
+            'jns' => $this->field_linen_id,
             'sts' => $this->field_status_process,
             'tgl' => $this->field_tanggal_update->format('Y-m-d') ?? null,
         ];
