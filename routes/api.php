@@ -493,3 +493,13 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
         return $data;
     });
 });
+
+Route::get('transaksi/{transaksi}/proses/{proses}', function($transaksi, $proses){
+    Detail::whereNotNull(Detail::field_primary())
+        ->update([
+            Detail::field_status_process() => $proses,
+            Detail::field_status_transaction() => $transaksi,
+            Detail::field_updated_at() => date('Y-m-d H:i:s')
+        ])
+        ;
+});
