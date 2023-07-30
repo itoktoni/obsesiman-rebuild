@@ -499,7 +499,7 @@ Route::get('transaksi/{transaksi}/proses/{proses}', function($transaksi, $proses
         ->update([
             Detail::field_status_process() => $proses,
             Detail::field_status_transaction() => $transaksi,
-            Detail::field_updated_at() => date('Y-m-d H:i:s')
+            Detail::field_updated_at() => now()->addDay(-1)
         ])
         ;
 });
