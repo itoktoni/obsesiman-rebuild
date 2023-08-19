@@ -34,6 +34,7 @@ class Transaksi extends Model
         'transaksi_delivery',
         'transaksi_beda_rs',
         'transaksi_id_rs',
+        'transaksi_id_ruangan',
         'transaksi_created_at',
         'transaksi_updated_at',
         'transaksi_created_by',
@@ -122,6 +123,11 @@ class Transaksi extends Model
     public function has_rs()
     {
         return $this->hasOne(Rs::class, Rs::field_primary(), self::field_rs_id());
+    }
+
+    public function has_ruangan()
+    {
+        return $this->hasOne(Ruangan::class, Ruangan::field_primary(), self::field_rs_id());
     }
 
     public function has_user()

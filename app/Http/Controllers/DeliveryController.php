@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Dao\Enums\ProcessType;
+use App\Dao\Models\Cetak;
 use App\Dao\Models\Detail;
 use App\Dao\Models\Transaksi;
 use App\Dao\Models\ViewDelivery;
+use App\Dao\Models\ViewDetailLinen;
 use App\Dao\Repositories\TransaksiRepository;
 use App\Http\Requests\DeliveryRequest;
 use App\Http\Requests\GeneralRequest;
@@ -137,5 +139,53 @@ class DeliveryController extends MasterController
     {
         $check = $service->update($request->code, $request->status_transaksi);
         return $check;
+    }
+
+    public function print($code){
+
+        $total = Transaksi::where(Transaksi::field_delivery(), $code)
+        ->join((new ViewDetailLinen())->getTable(), ViewDetailLinen::field_primary(), Transaksi::field_rfid())
+        ->get();
+
+        $data = null;
+        $passing = [];
+
+        if($total->count() > 0){
+
+            $cetak = Cetak::where(Cetak::field_name(), $code)->first();
+            if(!$cetak){
+                $cetak = Cetak::create([
+                    Cetak::field_date() => date('Y-m-d'),
+                    Cetak::field_name() => $code,
+                    Cetak::field_user() => auth()->user()->id ?? null,
+                    Cetak::field_rs_id() => $total[0]->field_rs_id ?? null,
+                ]);
+            }
+
+            $data = $total->mapToGroups(function($item){
+                $parse = [
+                    'id' => $item->view_linen_id,
+                    'name' => $item->view_linen_nama,
+                ];
+
+                return [$item[ViewDetailLinen::field_id()] => $parse];
+            })->map(function($item){
+
+                $data['id'] = $item[0]['id'];
+                $data['nama'] = $item[0]['name'];
+                $data['total'] = count($item);
+
+                return $data;
+            });
+
+            $passing['total'] = count($total);
+            $passing['user'] = $cetak->field_user;
+            $passing['rs_nama'] = $cetak->has_rs->field_name ?? null;
+            $passing['tanggal_cetak'] = $cetak->field_date;
+        }
+
+        $passing = array_merge($passing, Notes::data($data));
+
+        return $passing;
     }
 }

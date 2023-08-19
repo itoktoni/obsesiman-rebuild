@@ -15,6 +15,7 @@ class BarcodeRequest extends FormRequest
         return [
             RFID => 'required|array',
             RS_ID => 'required',
+            RUANGAN_ID => 'required',
             STATUS_TRANSAKSI => 'required',
         ];
     }

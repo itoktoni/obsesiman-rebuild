@@ -3,9 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Dao\Enums\ProcessType;
+use App\Dao\Models\Cetak;
 use App\Dao\Models\Detail;
 use App\Dao\Models\Transaksi;
 use App\Dao\Models\ViewBarcode;
+use App\Dao\Models\ViewDetailLinen;
+use App\Dao\Models\ViewTransaksi;
 use App\Dao\Repositories\TransaksiRepository;
 use App\Http\Requests\BarcodeRequest;
 use App\Http\Requests\GeneralRequest;
@@ -13,6 +16,7 @@ use App\Http\Services\CreateService;
 use App\Http\Services\SingleService;
 use App\Http\Services\UpdateBarcodeService;
 use App\Http\Services\UpdateService;
+use Faker\Provider\Barcode;
 use Plugins\Alert;
 use Plugins\History as PluginsHistory;
 use Plugins\Notes;
@@ -146,7 +150,57 @@ class BarcodeController extends MasterController
 
     public function barcode(BarcodeRequest $request, UpdateBarcodeService $service)
     {
-        $check = $service->update($request->rfid, $request->code, $request->status_transaksi);
+        $check = $service->update($request->rfid, $request->code, $request->status_transaksi, $request->ruangan_id);
         return $check;
+    }
+
+    public function print($code){
+
+        $total = Transaksi::where(Transaksi::field_barcode(), $code)
+        ->join((new ViewDetailLinen())->getTable(), ViewDetailLinen::field_primary(), Transaksi::field_rfid())
+        ->get();
+
+        $data = null;
+        $passing = [];
+
+        if($total->count() > 0){
+
+            $cetak = Cetak::where(Cetak::field_name(), $code)->first();
+            if(!$cetak){
+                $cetak = Cetak::create([
+                    Cetak::field_date() => date('Y-m-d'),
+                    Cetak::field_name() => $code,
+                    Cetak::field_user() => auth()->user()->id ?? null,
+                    Cetak::field_rs_id() => $total[0]->field_rs_id ?? null,
+                    Cetak::field_ruangan_id() => $total[0]->field_ruangan_id ?? null,
+                ]);
+            }
+
+            $data = $total->mapToGroups(function($item){
+                $parse = [
+                    'id' => $item->view_linen_id,
+                    'name' => $item->view_linen_nama,
+                ];
+
+                return [$item[ViewDetailLinen::field_id()] => $parse];
+            })->map(function($item){
+
+                $data['id'] = $item[0]['id'];
+                $data['nama'] = $item[0]['name'];
+                $data['total'] = count($item);
+
+                return $data;
+            });
+
+            $passing['total'] = count($total);
+            $passing['user'] = $cetak->field_user;
+            $passing['rs_nama'] = $cetak->has_rs->field_name ?? null;
+            $passing['ruangan_nama'] = $cetak->has_ruangan->field_name ?? null;
+            $passing['tanggal_cetak'] = $cetak->field_date;
+        }
+
+        $passing = array_merge($passing, Notes::data($data));
+
+        return $passing;
     }
 }

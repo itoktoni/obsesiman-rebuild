@@ -492,7 +492,11 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
         $data = $service->save($request->{Opname::field_primary()}, $request->data);
         return $data;
     });
+
 });
+
+Route::get('barcode/{code}', [BarcodeController::class, 'print']);
+Route::get('delivery/{code}', [DeliveryController::class, 'print']);
 
 Route::get('transaksi/{transaksi}/proses/{proses}', function($transaksi, $proses){
     Detail::whereNotNull(Detail::field_primary())
@@ -500,6 +504,5 @@ Route::get('transaksi/{transaksi}/proses/{proses}', function($transaksi, $proses
             Detail::field_status_process() => $proses,
             Detail::field_status_transaction() => $transaksi,
             Detail::field_updated_at() => now()->addDay(-1)
-        ])
-        ;
+        ]);
 });
