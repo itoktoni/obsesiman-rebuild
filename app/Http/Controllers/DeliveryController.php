@@ -157,7 +157,7 @@ class DeliveryController extends MasterController
                 $cetak = Cetak::create([
                     Cetak::field_date() => date('Y-m-d'),
                     Cetak::field_name() => $code,
-                    Cetak::field_user() => auth()->user()->id ?? null,
+                    Cetak::field_user() => auth()->user()->name ?? null,
                     Cetak::field_rs_id() => $total[0]->field_rs_id ?? null,
                 ]);
             }
@@ -165,26 +165,29 @@ class DeliveryController extends MasterController
             $data = $total->mapToGroups(function($item){
                 $parse = [
                     'id' => $item->view_linen_id,
-                    'name' => $item->view_linen_nama,
+                    'nama' => $item->view_linen_nama,
+                    'lokasi' => $item->view_ruangan_nama,
                 ];
 
-                return [$item[ViewDetailLinen::field_id()] => $parse];
-            })->map(function($item){
-
-                $data['id'] = $item[0]['id'];
-                $data['nama'] = $item[0]['name'];
-                $data['total'] = count($item);
-
-                return $data;
+                return [$item['view_linen_id'].'#'.$item['view_ruangan_id'] => $parse];
             });
+
+            foreach($data as $item){
+                $return[] = [
+                    'id' => $item[0]['id'],
+                    'nama' => $item[0]['nama'],
+                    'lokasi' => $item[0]['lokasi'],
+                    'total' => count($item),
+                ];
+            }
+
+            $passing = Notes::data($return);
 
             $passing['total'] = count($total);
             $passing['user'] = $cetak->field_user;
-            $passing['rs_nama'] = $cetak->has_rs->field_name ?? null;
+            $passing['rs_nama'] = $cetak->has_rs->field_name ?? 'Admin';
             $passing['tanggal_cetak'] = $cetak->field_date;
         }
-
-        $passing = array_merge($passing, Notes::data($data));
 
         return $passing;
     }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Dao\Enums\ProcessType;
+use App\Dao\Enums\RegisterType;
 use App\Dao\Models\Cetak;
 use App\Dao\Models\Detail;
 use App\Dao\Models\Transaksi;
@@ -170,27 +171,30 @@ class BarcodeController extends MasterController
                 $cetak = Cetak::create([
                     Cetak::field_date() => date('Y-m-d'),
                     Cetak::field_name() => $code,
-                    Cetak::field_user() => auth()->user()->id ?? null,
+                    Cetak::field_user() => auth()->user()->name ?? 'Admin',
                     Cetak::field_rs_id() => $total[0]->field_rs_id ?? null,
-                    Cetak::field_ruangan_id() => $total[0]->field_ruangan_id ?? null,
+                    Cetak::field_ruangan_id() => $total[0]->view_ruangan_id ?? null,
                 ]);
             }
 
             $data = $total->mapToGroups(function($item){
                 $parse = [
                     'id' => $item->view_linen_id,
-                    'name' => $item->view_linen_nama,
+                    'nama' => $item->view_linen_nama,
                 ];
 
                 return [$item[ViewDetailLinen::field_id()] => $parse];
-            })->map(function($item){
-
-                $data['id'] = $item[0]['id'];
-                $data['nama'] = $item[0]['name'];
-                $data['total'] = count($item);
-
-                return $data;
             });
+
+            foreach($data as $item){
+                $return[] = [
+                    'id' => $item[0]['id'],
+                    'nama' => $item[0]['nama'],
+                    'total' => count($item),
+                ];
+            }
+
+            $passing = Notes::data($return);
 
             $passing['total'] = count($total);
             $passing['user'] = $cetak->field_user;
@@ -198,8 +202,6 @@ class BarcodeController extends MasterController
             $passing['ruangan_nama'] = $cetak->has_ruangan->field_name ?? null;
             $passing['tanggal_cetak'] = $cetak->field_date;
         }
-
-        $passing = array_merge($passing, Notes::data($data));
 
         return $passing;
     }
