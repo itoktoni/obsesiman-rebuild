@@ -468,7 +468,7 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
             ->where(Transaksi::field_rs_id(), $rsid)
             ->count();
 
-        return Notes::data($data);
+        return Notes::data(['total' => $data]);
     });
 
     Route::get('opname', function (Request $request) {
