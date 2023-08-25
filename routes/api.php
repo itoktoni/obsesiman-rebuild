@@ -462,6 +462,15 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
     Route::post('barcode', [BarcodeController::class, 'barcode']);
     Route::post('delivery', [DeliveryController::class, 'delivery']);
 
+    Route::get('total/delivery/{rsid}', function($rsid){
+        $data = Transaksi::whereNull(Transaksi::field_delivery())
+            ->whereNotNull(Transaksi::field_barcode())
+            ->where(Transaksi::field_rs_id(), $rsid)
+            ->count();
+
+        return Notes::data($data);
+    });
+
     Route::get('opname', function (Request $request) {
         try {
             $today = today()->format('Y-m-d');
