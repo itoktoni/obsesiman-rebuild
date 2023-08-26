@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Dao\Enums\CetakType;
 use App\Dao\Enums\ProcessType;
 use App\Dao\Models\Cetak;
 use App\Dao\Models\Detail;
@@ -157,6 +158,7 @@ class DeliveryController extends MasterController
                 $cetak = Cetak::create([
                     Cetak::field_date() => date('Y-m-d'),
                     Cetak::field_name() => $code,
+                    Cetak::field_type() => CetakType::Delivery,
                     Cetak::field_user() => auth()->user()->name ?? null,
                     Cetak::field_rs_id() => $total[0]->field_rs_id ?? null,
                 ]);

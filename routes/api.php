@@ -1,10 +1,12 @@
 <?php
 
 use App\Dao\Enums\BooleanType;
+use App\Dao\Enums\CetakType;
 use App\Dao\Enums\CuciType;
 use App\Dao\Enums\ProcessType;
 use App\Dao\Enums\RegisterType;
 use App\Dao\Enums\TransactionType;
+use App\Dao\Models\Cetak;
 use App\Dao\Models\Detail;
 use App\Dao\Models\History as ModelsHistory;
 use App\Dao\Models\Opname;
@@ -460,7 +462,30 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
     });
 
     Route::post('barcode', [BarcodeController::class, 'barcode']);
+    Route::get('barcode/{code}', [BarcodeController::class, 'print']);
+
+    Route::get('list/barcode/{rsid}', function($rsid){
+        $data = Cetak::select([Cetak::field_name()])
+            ->where(Cetak::field_rs_id(), $rsid)
+            ->where(Cetak::field_type(), CetakType::Barcode)
+            ->where(Cetak::field_date(), '>=', now()->addDay(-30))
+            ->get();
+
+        return Notes::data(['total' => $data]);
+    });
+
     Route::post('delivery', [DeliveryController::class, 'delivery']);
+    Route::get('delivery/{code}', [DeliveryController::class, 'print']);
+
+    Route::get('list/delivery/{rsid}', function($rsid){
+        $data = Cetak::select([Cetak::field_name()])
+            ->where(Cetak::field_rs_id(), $rsid)
+            ->where(Cetak::field_type(), CetakType::Delivery)
+            ->where(Cetak::field_date(), '>=', now()->addDay(-30))
+            ->get();
+
+        return Notes::data(['total' => $data]);
+    });
 
     Route::get('total/delivery/{rsid}', function($rsid){
         $data = Transaksi::whereNull(Transaksi::field_delivery())
@@ -506,8 +531,7 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
 
 });
 
-Route::get('barcode/{code}', [BarcodeController::class, 'print']);
-Route::get('delivery/{code}', [DeliveryController::class, 'print']);
+
 
 Route::get('transaksi/{transaksi}/proses/{proses}', function($transaksi, $proses){
     Detail::whereNotNull(Detail::field_primary())

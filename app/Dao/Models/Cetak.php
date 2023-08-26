@@ -29,6 +29,7 @@ class Cetak extends Model
         'cetak_user',
         'cetak_id_ruangan',
         'cetak_id_rs',
+        'cetak_type',
     ];
 
     public $sortable = [

@@ -64,4 +64,14 @@ trait CetakEntity
         return $this->{$this->field_ruangan_id()};
     }
 
+    public static function field_type()
+    {
+        return 'cetak_type';
+    }
+
+    public function getFieldTypeAttribute()
+    {
+        return $this->{$this->field_type()};
+    }
+
 }
