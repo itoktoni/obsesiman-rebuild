@@ -6,7 +6,6 @@
 .env
 /vendor
 /encrypted
-.htaccess
 firebase.json
 .env.backup
 .phpunit.result.cache
