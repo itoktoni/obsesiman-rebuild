@@ -23,12 +23,13 @@ class DeliveryRequest extends FormRequest
     {
         //RFID HARUS SUDAH DI BARCODE
         $empty = Detail::where(Detail::field_rs_id(), $this->rs_id)
+            ->where(Detail::field_status_transaction(), $this->status_transaksi)
             ->where(Detail::field_status_process(), ProcessType::Barcode)
             ->count();
 
         $validator->after(function ($validator) use ($empty) {
             if ($empty == 0) {
-                $validator->errors()->add('rfid', 'RFID tidak ditemukan!');
+                $validator->errors()->add('rfid', 'RFID tidak valid !');
             }
         });
 

@@ -415,11 +415,82 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
                 $status_baru = TransactionType::Retur;
             } elseif($data->field_status_transaction == TransactionType::Rewash){
                 $status_baru = TransactionType::Rewash;
-            } elseif(empty($data->field_status_transaction) || $data->field_status_process == ProcessType::Register){
-                $status_baru = TransactionType::Baru;
+            } else {
+                return Notes::error($rfid , 'Grouping tidak valid !');
             }
 
-            if((!in_array($data->field_status_transaction, [TransactionType::Kotor, TransactionType::Retur, TransactionType::Rewash])) or (empty($data->field_status_transaction))){
+            if((!in_array($data->field_status_transaction, [TransactionType::Kotor, TransactionType::Retur, TransactionType::Rewash]))){
+
+                $data_transaksi[] = [
+                    Transaksi::field_key() => Query::autoNumber((new Transaksi())->getTable(), Transaksi::field_key(), 'GROUP'.date('Ymd', 15)),
+                    Transaksi::field_rfid() => $rfid,
+                    Transaksi::field_status_transaction() => $status_baru,
+                    Transaksi::field_rs_id() => $data->field_rs_id,
+                    Transaksi::field_beda_rs() => BooleanType::No,
+                    Transaksi::field_created_at() => $date,
+                    Transaksi::field_created_by() => $user,
+                    Transaksi::field_updated_at() => $date,
+                    Transaksi::field_updated_by() => $user,
+                ];
+
+                $log[] = [
+                    ModelsHistory::field_name() => $rfid,
+                    ModelsHistory::field_status() => ProcessType::Kotor,
+                    ModelsHistory::field_created_by() => auth()->user()->name,
+                    ModelsHistory::field_created_at() => $date,
+                    ModelsHistory::field_description() => json_encode($data_transaksi),
+                ];
+            }
+
+            $log[] = [
+                ModelsHistory::field_name() => $rfid,
+                ModelsHistory::field_status() => ProcessType::Grouping,
+                ModelsHistory::field_created_by() => auth()->user()->name,
+                ModelsHistory::field_created_at() => $date,
+                ModelsHistory::field_description() => json_encode($linen),
+            ];
+
+            $data->update([
+                Detail::field_updated_at() => date('Y-m-d H:i:s'),
+                Detail::field_updated_by() => auth()->user()->id,
+            ]);
+
+            $check = $service->save($status_baru, ProcessType::Grouping, $data_transaksi, $linen, $log);
+            if(!$check['status']){
+                return $check;
+            }
+
+            $update = ViewDetailLinen::findOrFail($rfid);
+
+            $collection = new DetailResource($update);
+            return Notes::data($collection);
+        }
+        catch (\Illuminate\Database\Eloquent\ModelNotFoundException $th) {
+            return Notes::error($rfid , 'RFID '.$rfid.' tidak ditemukan');
+        }
+        catch (\Throwable $th) {
+            return Notes::error($rfid ,$th->getMessage());
+        }
+    });
+
+    Route::get('grouping-baru/{rfid}', function ($rfid, SaveTransaksiService $service) {
+        try {
+            $data = Detail::findOrFail($rfid);
+
+            $data_transaksi = [];
+            $linen[] = $rfid;
+
+            $date = date('Y-m-d H:i:s');
+            $user = auth()->user()->id;
+
+            $status_baru = TransactionType::Baru;
+
+            if($data->field_status_transaction != $status_baru){
+                $status_baru = TransactionType::Kotor;
+                return Notes::error($rfid , 'RFID bukan termasuk pengiriman linen baru !');
+            }
+
+            if((empty($data->field_status_transaction)) or ($data->field_status_process == ProcessType::Register)){
 
                 $data_transaksi[] = [
                     Transaksi::field_key() => Query::autoNumber((new Transaksi())->getTable(), Transaksi::field_key(), 'GROUP'.date('Ymd', 15)),

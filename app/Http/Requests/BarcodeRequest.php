@@ -26,53 +26,31 @@ class BarcodeRequest extends FormRequest
 
         // CASE KETIKA RFID TIDAK DITEMUKAN
 
+        $where = TransactionType::Baru;
+
+        if ($this->status_transaksi == TransactionType::BersihKotor) {
+            $where = TransactionType::Kotor;
+        } else if($this->status_transaksi == TransactionType::BersihRetur) {
+            $where = TransactionType::BersihRetur;
+        } else if($this->status_transaksi == TransactionType::BersihRewash) {
+            $where = TransactionType::BersihRewash;
+        }
+
         $rfid = Detail::whereIn(Detail::field_primary(), $this->rfid)
+                ->where(Detail::field_status_transaction(), $where)
                 ->where(Detail::field_rs_id(), $this->rs_id);
 
-        $rfid_kotor = clone $rfid;
-        $total_rfid_kotor = $rfid_kotor->whereNotIn(Detail::field_status_transaction(), BERSIH)->count();
         $total_rfid_original = $rfid->count();
 
         $compare = $total != $total_rfid_original;
 
         $validator->after(function ($validator) use ($compare) {
             if ($compare) {
-                $validator->errors()->add('rfid', 'RFID tidak ditemukan!');
+                $validator->errors()->add('rfid', 'RFID tidak valid !');
             }
         });
 
         if ($compare) {
-            return;
-        }
-
-        // CASE KETIKA YANG DITEMBAK RFID YANG BERSIH
-
-        $bersih = $total != $total_rfid_kotor;
-
-        $validator->after(function ($validator) use ($bersih) {
-            if ($bersih) {
-                $validator->errors()->add('rfid', 'RFID harus melewat grouping!');
-            }
-        });
-
-        if ($bersih) {
-            return;
-        }
-
-        // CASE RFID SUDAH DI BARCODE
-
-        $check = Transaksi::whereIn(Transaksi::field_rfid(), $this->rfid)
-            ->whereNull(Transaksi::field_barcode())->count();
-
-        $validate = $total != $check;
-
-        $validator->after(function ($validator) use ($validate) {
-            if ($validate) {
-                $validator->errors()->add('rfid', 'RFID sudah di barcode!');
-            }
-        });
-
-        if ($validate) {
             return;
         }
 
@@ -82,16 +60,6 @@ class BarcodeRequest extends FormRequest
             $maksimal = env('TRANSACTION_BARCODE_MAXIMAL', 10);
             if ($total > $maksimal) {
                 $validator->errors()->add('rfid', 'RFID maksimal ' . $maksimal);
-            }
-        });
-
-        // CASE KALAU YANG DIPILIH BUKAN TRANSAKSI BERSIH
-
-        $status_transaksi = $this->status_transaksi;
-
-        $validator->after(function ($validator) use ($status_transaksi) {
-            if (!in_array($status_transaksi, BERSIH)) {
-                $validator->errors()->add('rfid', 'Status Transaksi harus bersih, return atau rewash');
             }
         });
     }
