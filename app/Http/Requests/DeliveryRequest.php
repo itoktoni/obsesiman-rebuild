@@ -43,7 +43,7 @@ class DeliveryRequest extends FormRequest
 
         switch ($this->status_transaksi) {
             case TransactionType::BersihKotor:
-                $code = env('CODE_BERSIH', 'BRS');
+                $code = env('CODE_BERSIH', 'BSH');
                 break;
             case TransactionType::BersihRetur:
                 $code = env('CODE_RETUR', 'RTR');
@@ -52,7 +52,7 @@ class DeliveryRequest extends FormRequest
                 $code = env('CODE_REWASH', 'WSH');
                 break;
             default:
-                $code = env('CODE_BERSIH', 'KTR');
+                $code = env('CODE_BERSIH', 'BSH');
                 break;
         }
 

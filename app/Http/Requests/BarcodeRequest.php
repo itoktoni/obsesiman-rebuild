@@ -111,7 +111,7 @@ class BarcodeRequest extends FormRequest
                 $code = env('CODE_REWASH', 'WSH');
                 break;
             default:
-                $code = env('CODE_KOTOR', 'KTR');
+                $code = env('CODE_BERSIH', 'BSH');
                 break;
         }
 
