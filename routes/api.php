@@ -407,12 +407,24 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
             $date = date('Y-m-d H:i:s');
             $user = auth()->user()->id;
 
-            if(!in_array($data->field_status_transaction, [TransactionType::Kotor, TransactionType::Retur, TransactionType::Rewash])){
+            $status_baru = TransactionType::Kotor;
+
+            if($data->field_status_transaction == TransactionType::Kotor){
+                $status_baru = TransactionType::Kotor;
+            } elseif($data->field_status_transaction == TransactionType::Retur){
+                $status_baru = TransactionType::Retur;
+            } elseif($data->field_status_transaction == TransactionType::Rewash){
+                $status_baru = TransactionType::Rewash;
+            } elseif(empty($data->field_status_transaction) || $data->field_status_process == ProcessType::Register){
+                $status_baru = TransactionType::Baru;
+            }
+
+            if((!in_array($data->field_status_transaction, [TransactionType::Kotor, TransactionType::Retur, TransactionType::Rewash])) or (empty($data->field_status_transaction))){
 
                 $data_transaksi[] = [
                     Transaksi::field_key() => Query::autoNumber((new Transaksi())->getTable(), Transaksi::field_key(), 'GROUP'.date('Ymd', 15)),
                     Transaksi::field_rfid() => $rfid,
-                    Transaksi::field_status_transaction() => TransactionType::Kotor,
+                    Transaksi::field_status_transaction() => $status_baru,
                     Transaksi::field_rs_id() => $data->field_rs_id,
                     Transaksi::field_beda_rs() => BooleanType::No,
                     Transaksi::field_created_at() => $date,
@@ -443,7 +455,7 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
                 Detail::field_updated_by() => auth()->user()->id,
             ]);
 
-            $check = $service->save(TransactionType::Kotor, ProcessType::Grouping, $data_transaksi, $linen, $log);
+            $check = $service->save($status_baru, ProcessType::Grouping, $data_transaksi, $linen, $log);
             if(!$check['status']){
                 return $check;
             }
