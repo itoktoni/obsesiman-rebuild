@@ -56,7 +56,7 @@ class CheckHilang extends Command
             Detail::whereIn(Detail::field_primary(), $rfid)->update([
                 Detail::field_status_process() => ProcessType::Pending,
                 Detail::field_pending_created_at() => date('Y-m-d H:i:s'),
-                Detail::field_pending_update_at() => date('Y-m-d H:i:s'),
+                Detail::field_pending_updated_at() => date('Y-m-d H:i:s'),
             ]);
         }
 
