@@ -5,6 +5,7 @@ namespace App\Dao\Models;
 use App\Dao\Builder\DataBuilder;
 use App\Dao\Entities\OpnameEntity;
 use App\Dao\Entities\RsEntity;
+use App\Dao\Enums\OpnameType;
 use App\Dao\Enums\UserLevel;
 use App\Dao\Traits\ActiveTrait;
 use App\Dao\Traits\ApiTrait;
@@ -36,7 +37,6 @@ class Opname extends Model
         'opname_created_by',
         'opname_updated_at',
         'opname_updated_by',
-
     ];
 
     public $sortable = [
@@ -45,7 +45,8 @@ class Opname extends Model
 
     protected $casts = [
         'opname_id_rs' => 'int',
-        'opname_id' => 'int'
+        'opname_id' => 'int',
+        'opname_status' => 'int'
     ];
 
     protected $filteopname = [

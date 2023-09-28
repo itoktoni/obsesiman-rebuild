@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Dao\Enums\CetakType;
 use App\Dao\Enums\ProcessType;
+use App\Dao\Models\Cetak;
 use App\Dao\Models\Detail;
 use App\Dao\Models\Transaksi;
 use App\Dao\Models\ViewDelivery;
+use App\Dao\Models\ViewDetailLinen;
 use App\Dao\Repositories\TransaksiRepository;
 use App\Http\Requests\DeliveryRequest;
 use App\Http\Requests\GeneralRequest;
@@ -135,7 +138,59 @@ class DeliveryController extends MasterController
 
     public function delivery(DeliveryRequest $request, UpdateDeliveryService $service)
     {
-        $check = $service->update($request->barcode, $request->code, $request->status_transaksi);
+        $check = $service->update($request->code, $request->status_transaksi);
         return $check;
+    }
+
+    public function print($code){
+
+        $total = Transaksi::where(Transaksi::field_delivery(), $code)
+        ->join((new ViewDetailLinen())->getTable(), ViewDetailLinen::field_primary(), Transaksi::field_rfid())
+        ->get();
+
+        $data = null;
+        $passing = [];
+
+        if($total->count() > 0){
+
+            $cetak = Cetak::where(Cetak::field_name(), $code)->first();
+            if(!$cetak){
+                $cetak = Cetak::create([
+                    Cetak::field_date() => date('Y-m-d'),
+                    Cetak::field_name() => $code,
+                    Cetak::field_type() => CetakType::Delivery,
+                    Cetak::field_user() => auth()->user()->name ?? null,
+                    Cetak::field_rs_id() => $total[0]->field_rs_id ?? null,
+                ]);
+            }
+
+            $data = $total->mapToGroups(function($item){
+                $parse = [
+                    'id' => $item->view_linen_id,
+                    'nama' => $item->view_linen_nama,
+                    'lokasi' => $item->view_ruangan_nama,
+                ];
+
+                return [$item['view_linen_id'].'#'.$item['view_ruangan_id'] => $parse];
+            });
+
+            foreach($data as $item){
+                $return[] = [
+                    'id' => $item[0]['id'],
+                    'nama' => $item[0]['nama'],
+                    'lokasi' => $item[0]['lokasi'],
+                    'total' => count($item),
+                ];
+            }
+
+            $passing = Notes::data($return);
+
+            $passing['total'] = count($total);
+            $passing['user'] = $cetak->field_user;
+            $passing['rs_nama'] = $cetak->has_rs->field_name ?? 'Admin';
+            $passing['tanggal_cetak'] = $cetak->field_date;
+        }
+
+        return $passing;
     }
 }

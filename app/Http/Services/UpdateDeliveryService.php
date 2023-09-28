@@ -12,7 +12,7 @@ use Plugins\Notes;
 
 class UpdateDeliveryService
 {
-    public function update($data, $code, $status_transaksi)
+    public function update($code, $status_transaksi)
     {
         DB::beginTransaction();
 
@@ -27,8 +27,9 @@ class UpdateDeliveryService
                 $report_date = Carbon::now()->addDay(1);
             }
 
-            $check = Transaksi::whereIn(Transaksi::field_barcode(), $data)
+            $check = Transaksi::query()
                 ->whereNull(Transaksi::field_delivery())
+                ->whereNotNull(Transaksi::field_barcode())
                 ->update([
                     Transaksi::field_delivery() => $code,
                     Transaksi::field_delivery_by() => auth()->user()->id,

@@ -3,13 +3,6 @@
 namespace App\Http\Controllers;
 
 use Alkhachatryan\LaravelWebConsole\LaravelWebConsole;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
-use Plugins\Query;
-use Plugins\Template;
-use App\Charts\dashboard;
-use App\Dao\Enums\TicketStatus;
-use App\Dao\Models\TicketSystem;
 
 class HomeController extends Controller
 {

@@ -37,12 +37,13 @@ class OpnameDetailRequest extends FormRequest
                         OpnameDetail::field_transaksi() => $item->field_status_transaction,
                         OpnameDetail::field_proses() => $item->field_status_process,
                         OpnameDetail::field_ketemu() => BooleanType::Yes,
+                        OpnameDetail::field_waktu() => date('y-m-d H:i:s'),
                         OpnameDetail::field_updated_at() => date('Y-m-d H:i:s'),
                         OpnameDetail::field_updated_by() => auth()->user()->id,
                     ];
 
                     return [$item->field_primary => $data];
-                })->toArray();
+                });
             } else{
                 $rfid = [];
             }

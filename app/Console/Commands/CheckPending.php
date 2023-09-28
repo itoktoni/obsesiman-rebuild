@@ -4,7 +4,6 @@ namespace App\Console\Commands;
 
 use App\Dao\Enums\ProcessType;
 use App\Dao\Models\Detail;
-use App\Dao\Models\History;
 use Illuminate\Console\Command;
 use Illuminate\Support\Carbon;
 use Plugins\History as PluginsHistory;
@@ -58,7 +57,7 @@ class CheckPending extends Command
             Detail::whereIn(Detail::field_primary(), $rfid)->update([
                 Detail::field_status_process() => ProcessType::Pending,
                 Detail::field_pending_created_at() => date('Y-m-d H:i:s'),
-                Detail::field_pending_update_at() => date('Y-m-d H:i:s'),
+                Detail::field_pending_updated_at() => date('Y-m-d H:i:s'),
             ]);
         }
 

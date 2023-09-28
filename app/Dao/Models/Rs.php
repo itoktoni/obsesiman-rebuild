@@ -10,13 +10,10 @@ use App\Dao\Traits\ApiTrait;
 use App\Dao\Traits\DataTableTrait;
 use App\Dao\Traits\OptionTrait;
 use App\Http\Resources\GeneralResource;
-use App\Http\Resources\RsResource;
 use Illuminate\Database\Eloquent\Model;
 use Kirschbaum\PowerJoins\PowerJoins;
 use Kyslik\ColumnSortable\Sortable;
 use Mehradsadeghi\FilterQueryString\FilterQueryString as FilterQueryString;
-use PHPUnit\Framework\MockObject\Api;
-use Plugins\Query;
 use Touhidurabir\ModelSanitize\Sanitizable as Sanitizable;
 
 class Rs extends Model

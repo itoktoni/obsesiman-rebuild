@@ -19,7 +19,7 @@ class DetailResource extends JsonResource
 
     public function toArray($request)
     {
-        return [
+        $data = [
             'linen_id' => $this->field_primary,
             'linen_nama' => $this->field_name ?? '',
             'rs_id' => $this->field_rs_id,
@@ -34,7 +34,10 @@ class DetailResource extends JsonResource
             'tanggal_update' => $this->field_tanggal_update ? $this->field_tanggal_update->format('Y-m-d') : null,
             'tanggal_delete' => $this->field_tanggal_delete ? $this->field_tanggal_delete->format('Y-m-d') : null,
             'pemakaian' => $this->field_pemakaian ?? 0,
+            'user_nama' => $this->field_created_name ? $this->field_created_name : null,
         ];
+
+        return $data;
         // return parent::toArray($request);
     }
 }

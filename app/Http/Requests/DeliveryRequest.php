@@ -14,7 +14,6 @@ class DeliveryRequest extends FormRequest
     public function rules()
     {
         return [
-            'barcode' => 'required|array',
             RS_ID => 'required',
             STATUS_TRANSAKSI => 'required',
         ];
@@ -24,12 +23,13 @@ class DeliveryRequest extends FormRequest
     {
         //RFID HARUS SUDAH DI BARCODE
         $empty = Detail::where(Detail::field_rs_id(), $this->rs_id)
+            ->where(Detail::field_status_transaction(), $this->status_transaksi)
             ->where(Detail::field_status_process(), ProcessType::Barcode)
             ->count();
 
         $validator->after(function ($validator) use ($empty) {
             if ($empty == 0) {
-                $validator->errors()->add('rfid', 'RFID tidak ditemukan!');
+                $validator->errors()->add('rfid', 'RFID tidak valid !');
             }
         });
 
@@ -44,7 +44,7 @@ class DeliveryRequest extends FormRequest
 
         switch ($this->status_transaksi) {
             case TransactionType::BersihKotor:
-                $code = env('CODE_BERSIH', 'BRS');
+                $code = env('CODE_BERSIH', 'BSH');
                 break;
             case TransactionType::BersihRetur:
                 $code = env('CODE_RETUR', 'RTR');
@@ -53,7 +53,7 @@ class DeliveryRequest extends FormRequest
                 $code = env('CODE_REWASH', 'WSH');
                 break;
             default:
-                $code = env('CODE_BERSIH', 'KTR');
+                $code = env('CODE_BERSIH', 'BSH');
                 break;
         }
 

@@ -4,8 +4,7 @@
 /storage/*.key
 /postman/*
 .env
-/vendor
-.htaccess
+/encrypted
 firebase.json
 .env.backup
 .phpunit.result.cache

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Dao\Enums\BedaRsType;
 use App\Dao\Enums\BooleanType;
 use App\Dao\Enums\ProcessType;
+use App\Dao\Enums\SyncType;
 use App\Dao\Enums\TransactionType;
 use App\Dao\Models\Detail;
 use App\Dao\Models\History;
@@ -186,7 +187,7 @@ class TransaksiController extends MasterController
 
         $status_transaksi = $request->{STATUS_TRANSAKSI};
         $status_process = $request->{STATUS_PROCESS};
-        $status_sync = BooleanType::No;
+        $status_sync = SyncType::No;
 
         $this->checkOpname($status_transaksi, $status_process, $rfid);
 
@@ -200,7 +201,7 @@ class TransaksiController extends MasterController
                 $detail = $data[$item];
                 if($this->checkValidation($status_transaksi, $detail->field_status_transaction, $detail->field_updated_at)){
 
-                    $status_sync = BooleanType::Yes;
+                    $status_sync = SyncType::Yes;
 
                     $beda_rs = $request->rs_id == $detail->field_rs_id ? BooleanType::No : BooleanType::Yes;
 
@@ -232,7 +233,7 @@ class TransaksiController extends MasterController
                     $status_transaksi = $detail->field_status_transaction;
                     $date = $detail->field_updated_at->format('Y-m-d H:i:s');
                     $status_process = $detail->field_status_process;
-                    $status_sync = BooleanType::No;
+                    $status_sync = SyncType::No;
                 }
 
                 $return[] = [
@@ -247,7 +248,7 @@ class TransaksiController extends MasterController
             else{
                 $return[] = [
                     KEY => $request->key,
-                    STATUS_SYNC => $status_sync,
+                    STATUS_SYNC => SyncType::Unknown,
                     STATUS_TRANSAKSI => TransactionType::Unknown,
                     STATUS_PROCESS => ProcessType::Unknown,
                     RFID => $item,

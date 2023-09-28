@@ -12,7 +12,6 @@ use App\Dao\Traits\DataTableTrait;
 use App\Dao\Traits\OptionTrait;
 use App\Http\Resources\GeneralResource;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Kirschbaum\PowerJoins\PowerJoins;
 use Kyslik\ColumnSortable\Sortable;
 use Mehradsadeghi\FilterQueryString\FilterQueryString as FilterQueryString;
@@ -22,7 +21,7 @@ use Wildside\Userstamps\Userstamps;
 
 class Detail extends Model
 {
-    use Sortable, FilterQueryString, Sanitizable, DataTableTrait, DetailEntity, ActiveTrait, OptionTrait, PowerJoins, ApiTrait, Userstamps, SoftDeletes;
+    use Sortable, FilterQueryString, Sanitizable, DataTableTrait, DetailEntity, ActiveTrait, OptionTrait, PowerJoins, ApiTrait, Userstamps;
 
     protected $table = 'detail';
     protected $primaryKey = 'detail_rfid';

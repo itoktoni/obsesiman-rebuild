@@ -1,10 +1,12 @@
 <?php
 
 use App\Dao\Enums\BooleanType;
+use App\Dao\Enums\CetakType;
 use App\Dao\Enums\CuciType;
 use App\Dao\Enums\ProcessType;
 use App\Dao\Enums\RegisterType;
 use App\Dao\Enums\TransactionType;
+use App\Dao\Models\Cetak;
 use App\Dao\Models\Detail;
 use App\Dao\Models\History as ModelsHistory;
 use App\Dao\Models\Opname;
@@ -21,10 +23,15 @@ use App\Http\Requests\DetailDataRequest;
 use App\Http\Requests\DetailUpdateRequest;
 use App\Http\Requests\OpnameDetailRequest;
 use App\Http\Requests\RegisterRequest;
+use App\Http\Resources\DetailCollection;
 use App\Http\Resources\DetailResource;
+use App\Http\Resources\DownloadCollection;
 use App\Http\Resources\DownloadLinenResource;
+use App\Http\Resources\JenisResource;
 use App\Http\Resources\OpnameResource;
+use App\Http\Resources\RsCollection;
 use App\Http\Resources\RsResource;
+use App\Http\Resources\RuanganResource;
 use App\Http\Services\SaveOpnameService;
 use App\Http\Services\SaveTransaksiService;
 use Illuminate\Http\Request;
@@ -60,7 +67,7 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
             ];
         }
 
-        return $data;
+        return Notes::data($data);
     });
 
     Route::get('status_cuci', function(){
@@ -73,7 +80,7 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
             ];
         }
 
-        return $data;
+        return Notes::data($data);
     });
 
     Route::get('status_proses', function(){
@@ -86,7 +93,7 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
             ];
         }
 
-        return $data;
+        return Notes::data($data);
     });
 
     Route::get('status_transaksi', function(){
@@ -99,24 +106,63 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
             ];
         }
 
-        return $data;
+        return Notes::data($data);
     });
 
-    Route::get('download/{rsid}', function ($rsid){
+    Route::get('download/{rsid}', function ($rsid, Request $request){
         $data = ViewDetailLinen::where(ViewDetailLinen::field_rs_id(), $rsid)->get();
-        $resource = DownloadLinenResource::collection($data);
-        return response()->streamDownload(function () use ($resource) {
-            echo json_encode($resource);
-        }, $rsid . '_linen.json');
+        $request->request->add([
+            'rsid' => $rsid
+        ]);
+        $resource = new DownloadCollection($data);
+        return $resource;
     });
 
     Route::get('rs', function (Request $request) {
+
+        $status_register = [];
+        foreach(RegisterType::getInstances() as $value => $key){
+            $status_register[] = [
+                'status_id' => $key,
+                'status_nama' => formatWorld($value),
+            ];
+        }
+
+        $status_cuci = [];
+        foreach(CuciType::getInstances() as $value => $key){
+            $status_cuci[] = [
+                'status_id' => $key,
+                'status_nama' => formatWorld($value),
+            ];
+        }
+
+        $status_proses = [];
+        foreach(ProcessType::getInstances() as $value => $key){
+            $status_proses[] = [
+                'status_id' => $key,
+                'status_nama' => formatWorld($value),
+            ];
+        }
+
+        $status_transaksi = [];
+        foreach(TransactionType::getInstances() as $value => $key){
+            $status_transaksi[] = [
+                'status_id' => $key,
+                'status_nama' => formatWorld($value),
+            ];
+        }
 
         try {
 
             $rs = Rs::with([HAS_RUANGAN, HAS_JENIS])->get();
             $collection = RsResource::collection($rs);
-            return Notes::data($collection);
+            $data = Notes::data($collection);
+            $data['status_transaksi'] = $status_transaksi;
+            $data['status_proses'] = $status_proses;
+            $data['status_cuci'] = $status_cuci;
+            $data['status_register'] = $status_register;
+
+            return $data;
 
         } catch (\Throwable$th) {
 
@@ -127,11 +173,51 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
 
     Route::get('rs/{rsid}', function ($rsid) {
 
+        $status_register = [];
+        foreach(RegisterType::getInstances() as $value => $key){
+            $status_register[] = [
+                'status_id' => $key,
+                'status_nama' => formatWorld($value),
+            ];
+        }
+
+        $status_cuci = [];
+        foreach(CuciType::getInstances() as $value => $key){
+            $status_cuci[] = [
+                'status_id' => $key,
+                'status_nama' => formatWorld($value),
+            ];
+        }
+
+        $status_proses = [];
+        foreach(ProcessType::getInstances() as $value => $key){
+            $status_proses[] = [
+                'status_id' => $key,
+                'status_nama' => formatWorld($value),
+            ];
+        }
+
+        $status_transaksi = [];
+        foreach(TransactionType::getInstances() as $value => $key){
+            $status_transaksi[] = [
+                'status_id' => $key,
+                'status_nama' => formatWorld($value),
+            ];
+        }
+
         try {
 
-            $data = Rs::with([HAS_RUANGAN, HAS_JENIS])->findOrFail($rsid);
-            $collection = new RsResource($data);
-            return Notes::data($collection);
+            $rs = Rs::with([HAS_RUANGAN, HAS_JENIS])->findOrFail($rsid);
+            $collection = new RsResource($rs);
+            $data = Notes::data($collection);
+            // $data['ruangan'] = RuanganResource::collection($rs->has_ruangan);
+            // $data['linen'] = JenisResource::collection($rs->has_jenis);
+            $data['status_transaksi'] = $status_transaksi;
+            $data['status_proses'] = $status_proses;
+            $data['status_cuci'] = $status_cuci;
+            $data['status_register'] = $status_register;
+
+            return $data;
 
         } catch (\Throwable$th) {
 
@@ -243,10 +329,10 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
     Route::match(['POST', 'GET'], 'detail', function (Request $request) {
         try {
             $query = ViewDetailLinen::query();
-            $data = $query->filter()->get();
+            $data = $query->filter()->paginate(env('PAGINATION_NUMBER', 10));
 
-            $collection = DetailResource::collection($data);
-            return Notes::data($collection);
+            $collection = new DetailCollection($data);
+            return $collection;
         }
         catch (\Illuminate\Database\Eloquent\ModelNotFoundException $th) {
             return Notes::error('data RFID tidak ditemukan');
@@ -321,14 +407,28 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
             $date = date('Y-m-d H:i:s');
             $user = auth()->user()->id;
 
-            if(!in_array($data->field_status_transaction, [TransactionType::Kotor, TransactionType::Retur, TransactionType::Rewash])){
+            $status_baru = TransactionType::Kotor;
+
+            if($data->field_status_transaction == TransactionType::Kotor){
+                $status_baru = TransactionType::Kotor;
+            } elseif($data->field_status_transaction == TransactionType::Retur){
+                $status_baru = TransactionType::Retur;
+            } elseif($data->field_status_transaction == TransactionType::Rewash){
+                $status_baru = TransactionType::Rewash;
+            } else {
+                return Notes::error($rfid , 'Grouping tidak valid !');
+            }
+
+            if((!in_array($data->field_status_transaction, [TransactionType::Kotor, TransactionType::Retur, TransactionType::Rewash]))){
 
                 $data_transaksi[] = [
                     Transaksi::field_key() => Query::autoNumber((new Transaksi())->getTable(), Transaksi::field_key(), 'GROUP'.date('Ymd', 15)),
                     Transaksi::field_rfid() => $rfid,
-                    Transaksi::field_status_transaction() => TransactionType::Kotor,
+                    Transaksi::field_status_transaction() => $status_baru,
                     Transaksi::field_rs_id() => $data->field_rs_id,
                     Transaksi::field_beda_rs() => BooleanType::No,
+                    Transaksi::field_created_at() => $date,
+                    Transaksi::field_created_by() => $user,
                     Transaksi::field_updated_at() => $date,
                     Transaksi::field_updated_by() => $user,
                 ];
@@ -355,7 +455,78 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
                 Detail::field_updated_by() => auth()->user()->id,
             ]);
 
-            $check = $service->save(TransactionType::Kotor, ProcessType::Grouping, $data_transaksi, $linen, $log);
+            $check = $service->save($status_baru, ProcessType::Grouping, $data_transaksi, $linen, $log);
+            if(!$check['status']){
+                return $check;
+            }
+
+            $update = ViewDetailLinen::findOrFail($rfid);
+
+            $collection = new DetailResource($update);
+            return Notes::data($collection);
+        }
+        catch (\Illuminate\Database\Eloquent\ModelNotFoundException $th) {
+            return Notes::error($rfid , 'RFID '.$rfid.' tidak ditemukan');
+        }
+        catch (\Throwable $th) {
+            return Notes::error($rfid ,$th->getMessage());
+        }
+    });
+
+    Route::get('grouping-baru/{rfid}', function ($rfid, SaveTransaksiService $service) {
+        try {
+            $data = Detail::findOrFail($rfid);
+
+            $data_transaksi = [];
+            $linen[] = $rfid;
+
+            $date = date('Y-m-d H:i:s');
+            $user = auth()->user()->id;
+
+            $status_baru = TransactionType::Baru;
+
+            if($data->field_status_transaction != $status_baru){
+                $status_baru = TransactionType::Kotor;
+                return Notes::error($rfid , 'RFID bukan termasuk pengiriman linen baru !');
+            }
+
+            if((empty($data->field_status_transaction)) or ($data->field_status_process == ProcessType::Register)){
+
+                $data_transaksi[] = [
+                    Transaksi::field_key() => Query::autoNumber((new Transaksi())->getTable(), Transaksi::field_key(), 'GROUP'.date('Ymd', 15)),
+                    Transaksi::field_rfid() => $rfid,
+                    Transaksi::field_status_transaction() => $status_baru,
+                    Transaksi::field_rs_id() => $data->field_rs_id,
+                    Transaksi::field_beda_rs() => BooleanType::No,
+                    Transaksi::field_created_at() => $date,
+                    Transaksi::field_created_by() => $user,
+                    Transaksi::field_updated_at() => $date,
+                    Transaksi::field_updated_by() => $user,
+                ];
+
+                $log[] = [
+                    ModelsHistory::field_name() => $rfid,
+                    ModelsHistory::field_status() => ProcessType::Kotor,
+                    ModelsHistory::field_created_by() => auth()->user()->name,
+                    ModelsHistory::field_created_at() => $date,
+                    ModelsHistory::field_description() => json_encode($data_transaksi),
+                ];
+            }
+
+            $log[] = [
+                ModelsHistory::field_name() => $rfid,
+                ModelsHistory::field_status() => ProcessType::Grouping,
+                ModelsHistory::field_created_by() => auth()->user()->name,
+                ModelsHistory::field_created_at() => $date,
+                ModelsHistory::field_description() => json_encode($linen),
+            ];
+
+            $data->update([
+                Detail::field_updated_at() => date('Y-m-d H:i:s'),
+                Detail::field_updated_by() => auth()->user()->id,
+            ]);
+
+            $check = $service->save($status_baru, ProcessType::Grouping, $data_transaksi, $linen, $log);
             if(!$check['status']){
                 return $check;
             }
@@ -374,20 +545,44 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
     });
 
     Route::post('barcode', [BarcodeController::class, 'barcode']);
+    Route::get('barcode/{code}', [BarcodeController::class, 'print']);
+
+    Route::get('list/barcode/{rsid}', function($rsid){
+        $data = Cetak::select([Cetak::field_name()])
+            ->where(Cetak::field_rs_id(), $rsid)
+            ->where(Cetak::field_type(), CetakType::Barcode)
+            ->where(Cetak::field_date(), '>=', now()->addDay(-30))
+            ->get();
+
+        return Notes::data(['total' => $data]);
+    });
+
     Route::post('delivery', [DeliveryController::class, 'delivery']);
+    Route::get('delivery/{code}', [DeliveryController::class, 'print']);
+
+    Route::get('list/delivery/{rsid}', function($rsid){
+        $data = Cetak::select([Cetak::field_name()])
+            ->where(Cetak::field_rs_id(), $rsid)
+            ->where(Cetak::field_type(), CetakType::Delivery)
+            ->where(Cetak::field_date(), '>=', now()->addDay(-30))
+            ->get();
+
+        return Notes::data(['total' => $data]);
+    });
+
+    Route::get('total/delivery/{rsid}', function($rsid){
+        $data = Transaksi::whereNull(Transaksi::field_delivery())
+            ->whereNotNull(Transaksi::field_barcode())
+            ->where(Transaksi::field_rs_id(), $rsid)
+            ->count();
+
+        return Notes::data(['total' => $data]);
+    });
 
     Route::get('opname', function (Request $request) {
         try {
             $today = today()->format('Y-m-d');
-            $data = OpnameDetail::addSelect([
-                Opname::field_primary(),
-                Opname::field_start(),
-                Opname::field_end(),
-                Rs::field_primary(),
-                Rs::field_name(),
-            ])
-            ->leftJoinRelationship('has_master')
-            ->join(Rs::getTableName(), Rs::field_primary(), '=', Opname::field_rs_id())
+            $data = Opname::with([HAS_RS])
             ->where(Opname::field_start(), '<=', $today)
             ->where(Opname::field_end(), '>=', $today)
             ->get();
@@ -402,10 +597,7 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
 
     Route::get('opname/{id}', function ($id ,Request $request) {
         try {
-            $data = Opname::find($id)
-            ->joinRelationship('has_rs')
-            ->addSelect([Rs::field_primary(), Rs::field_name()])
-            ->first();
+            $data = Opname::with([HAS_RS])->find($id);
 
             $collection = new OpnameResource($data);
             return Notes::data($collection);
@@ -419,4 +611,16 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
         $data = $service->save($request->{Opname::field_primary()}, $request->data);
         return $data;
     });
+
+});
+
+
+
+Route::get('transaksi/{transaksi}/proses/{proses}', function($transaksi, $proses){
+    Detail::whereNotNull(Detail::field_primary())
+        ->update([
+            Detail::field_status_process() => $proses,
+            Detail::field_status_transaction() => $transaksi,
+            Detail::field_updated_at() => now()->addDay(-1)
+        ]);
 });
