@@ -4,6 +4,7 @@ use Alkhachatryan\LaravelWebConsole\LaravelWebConsoleServiceProvider;
 use App\Dao\Enums\BooleanType;
 use App\Dao\Enums\CuciType;
 use App\Dao\Enums\MenuType;
+use App\Dao\Enums\ObsesimanType;
 use App\Dao\Enums\ProcessType;
 use App\Dao\Enums\StatusType;
 use App\Dao\Enums\StockType;
@@ -255,6 +256,7 @@ return [
         'Views' => Views::class,
         'BooleanType' => BooleanType::class,
         'ProcessType' => ProcessType::class,
+        'ObsesimanType' => ObsesimanType::class,
         'TransactionType' => TransactionType::class,
         'CuciType' => CuciType::class,
         'MenuType' => MenuType::class,
