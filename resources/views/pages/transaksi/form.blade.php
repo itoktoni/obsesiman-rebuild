@@ -27,7 +27,7 @@
                         <th>Nama Linen</th>
                         <th>Rumah Sakit</th>
                         <th>Scan RS</th>
-                        <th>Beda RS</th>
+                        <th>Status</th>
                         <th class="text-center column-action">{{ __('Hapus') }}</th>
                     </tr>
                 </thead>
