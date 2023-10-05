@@ -246,6 +246,19 @@ class TransaksiController extends MasterController
                 ];
             }
             else{
+
+                $transaksi[] = [
+                    Transaksi::field_key() => $request->key,
+                    Transaksi::field_rfid() => $item,
+                    Transaksi::field_status_transaction() => $status_transaksi,
+                    Transaksi::field_rs_id() => $request->rs_id,
+                    Transaksi::field_beda_rs() => BedaRsType::BelumRegister,
+                    Transaksi::field_created_at() => $date,
+                    Transaksi::field_created_by() => $user,
+                    Transaksi::field_updated_at() => $date,
+                    Transaksi::field_updated_by() => $user,
+                ];
+
                 $return[] = [
                     KEY => $request->key,
                     STATUS_SYNC => SyncType::Unknown,

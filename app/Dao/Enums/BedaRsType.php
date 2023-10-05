@@ -10,6 +10,7 @@ class BedaRsType extends Enum implements LocalizedEnum
 {
     use StatusTrait;
 
-    const Sama          =  0;
-    const Beda          =  1;
+    const Sama              =  0;
+    const Beda              =  1;
+    const BelumRegister     =  2;
 }
