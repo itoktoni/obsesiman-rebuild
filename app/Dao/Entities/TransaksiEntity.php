@@ -122,7 +122,7 @@ trait TransaksiEntity
 
     public function getFieldBedaRsNameAttribute()
     {
-        return BooleanType::getDescription($this->getFieldBedaRsAttribute());
+        return BedaRsType::getDescription($this->getFieldBedaRsAttribute());
     }
 
     public static function field_delivery()

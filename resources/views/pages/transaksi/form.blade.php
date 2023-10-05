@@ -22,6 +22,7 @@
             <table class="table table-bordered table-striped">
                 <thead>
                     <tr>
+                        <th>No.</th>
                         <th>No. RFID</th>
                         <th>Nama Linen</th>
                         <th>Rumah Sakit</th>
@@ -33,6 +34,7 @@
                 <tbody>
                     @forelse($data as $table)
                     <tr>
+                        <td>{{ $loop->iteration }}</td>
                         <td>{{ $table->field_rfid }}</td>
                         <td>{{ $table->has_detail->field_name ?? '' }}</td>
                         <td>{{ $table->has_detail->field_rs_name ?? '' }}</td>

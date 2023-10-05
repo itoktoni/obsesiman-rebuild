@@ -1,6 +1,7 @@
 <?php
 
 use Alkhachatryan\LaravelWebConsole\LaravelWebConsoleServiceProvider;
+use App\Dao\Enums\BedaRsType;
 use App\Dao\Enums\BooleanType;
 use App\Dao\Enums\CuciType;
 use App\Dao\Enums\MenuType;
@@ -258,6 +259,7 @@ return [
         'ProcessType' => ProcessType::class,
         'ObsesimanType' => ObsesimanType::class,
         'TransactionType' => TransactionType::class,
+        'BedaRsType' => BedaRsType::class,
         'CuciType' => CuciType::class,
         'MenuType' => MenuType::class,
         'UserLevel' => UserLevel::class,
