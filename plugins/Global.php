@@ -173,6 +173,27 @@ function imageUrl($value, $folder = null){
     return asset('public/storage/'.$path.'/'.$value);
 }
 
+function formatDateMySql($value, $datetime = false){
+
+    if($datetime === false){
+        $format = 'Y-m-d';
+    }
+    else if($datetime === true){
+        $format = 'Y-m-d H:i:s';
+    }
+    else{
+        $format = $datetime;
+    }
+
+    if($value instanceof Carbon){
+        $value = $value->format($format);
+    } else if(is_string($value)){
+        $value = SupportCarbon::parse($value)->format($format);
+    }
+
+    return $value ?  : null;
+}
+
 function formatDate($value, $datetime = false){
 
     if($datetime === false){

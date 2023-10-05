@@ -256,4 +256,14 @@ trait TransaksiEntity
         return 'view_linen_nama';
     }
 
+    public static function field_total()
+    {
+        return 'transaksi_total';
+    }
+
+    public function getFieldTotalAttribute()
+    {
+        return $this->{$this->field_total()};
+    }
+
 }

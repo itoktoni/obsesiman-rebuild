@@ -7,7 +7,7 @@
             <x-form-input col="6" name="transaksi_id" label="ID Unik" />
             <x-form-input col="6" name="transaksi_key" label="Transaksi ID" />
             <x-form-input col="6" name="rs_nama" />
-            <x-form-input col="6" name="transaksi_report" label="Tanggal" />
+            <x-form-input type="date" col="6" name="transaksi_report" value="{{ $model->field_transaksi_report ?? formatDateMySql($model->field_created_at) }}" label="Tanggal" />
             <x-form-input col="6" name="username" label="User" />
             <x-form-input col="6" name="status" value="{{ $model->field_status_transaction_name ?? '' }}"
                 label="Status" />
