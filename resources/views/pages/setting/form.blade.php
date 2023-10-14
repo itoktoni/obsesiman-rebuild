@@ -11,8 +11,9 @@
                     <img class="img-thumbnail img-fluid" src="{{ env('APP_LOGO') ? url('public/storage/'.env('APP_LOGO')) : url('assets/media/image/logo.png') }}" alt="">
                 </div>
                 <x-form-input col="6" value="{{ env('APP_LOCATION') }}" label="Lokasi Report" name="location" />
-                <x-form-input col="6" value="{{ env('TRANSACTION_DAY_ALLOWED') }}" label="Toleransi hari untuk Tembak kotor" name="transaction_day" />
+                <x-form-input col="3" value="{{ env('TRANSACTION_DAY_ALLOWED') }}" label="Toleransi hari untuk Tembak kotor" name="transaction_day" />
                 <x-form-select col="3" name="transaction_active" :default="env('TRANSACTION_ACTIVE_RS_ONLY')" label="Proteksi transaksi" :options="$active" />
+                <x-form-select col="3" name="telescope_enable" label="Telescope Debugger" :options="$active" />
                 <x-form-input col="3" value="{{ env('TRANSACTION_CHUNK') }}" label="Jumlah Batch Per Transaksi" name="transaction_chunk" />
 
                 <x-form-input col="6" value="{{ env('CODE_BERSIH') }}" label="Kode Bersih" name="code_bersih" />

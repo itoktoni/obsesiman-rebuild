@@ -24,6 +24,8 @@ class CreateSettingService
             EnvFacades::setValue('CODE_RETUR', $data->code_retur);
             EnvFacades::setValue('CODE_REWASH', $data->code_rewash);
 
+            EnvFacades::setValue('TELESCOPE_ENABLED', $data->telescope_enable);
+
             if ($data->has('logo')) {
                 $file_logo = $data->file('logo');
                 $extension = $file_logo->extension();
