@@ -7,7 +7,7 @@
             <x-form-input col="6" name="transaksi_id" label="ID Unik" />
             <x-form-input col="6" name="transaksi_key" label="Transaksi ID" />
             <x-form-input col="6" name="rs_nama" />
-            <x-form-input col="6" name="transaksi_report" label="Tanggal" />
+            <x-form-input type="date" col="6" name="transaksi_report" value="{{ $model->field_transaksi_report ?? formatDateMySql($model->field_created_at) }}" label="Tanggal" />
             <x-form-input col="6" name="username" label="User" />
             <x-form-input col="6" name="status" value="{{ $model->field_status_transaction_name ?? '' }}"
                 label="Status" />
@@ -22,17 +22,19 @@
             <table class="table table-bordered table-striped">
                 <thead>
                     <tr>
+                        <th>No.</th>
                         <th>No. RFID</th>
                         <th>Nama Linen</th>
                         <th>Rumah Sakit</th>
                         <th>Scan RS</th>
-                        <th>Beda RS</th>
+                        <th>Status</th>
                         <th class="text-center column-action">{{ __('Hapus') }}</th>
                     </tr>
                 </thead>
                 <tbody>
                     @forelse($data as $table)
                     <tr>
+                        <td>{{ $loop->iteration }}</td>
                         <td>{{ $table->field_rfid }}</td>
                         <td>{{ $table->has_detail->field_name ?? '' }}</td>
                         <td>{{ $table->has_detail->field_rs_name ?? '' }}</td>
