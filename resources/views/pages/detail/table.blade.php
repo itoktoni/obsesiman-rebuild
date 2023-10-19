@@ -47,10 +47,13 @@
                                             value="{{ $table->field_primary }}">
                                     </td>
                                     <td class="col-md-3 text-center column-action">
+                                        @if(!empty($table->field_primary))
                                         <x-crud :model="$table">
                                             <x-button module="getHistory" key="{{ $table->field_primary }}" color="success"
                                                 icon="book" />
                                         </x-crud>
+                                        @else
+                                        @endif
                                     </td>
                                     <td>{{ iteration($data, $key) }}</td>
                                     <td>{{ $table->field_primary }}</td>
