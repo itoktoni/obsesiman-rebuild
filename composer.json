@@ -47,7 +47,10 @@
         "optimize-autoloader": true,
         "preferred-install": "dist",
         "sort-packages": true,
-        "platform-check": false
+        "platform-check": false,
+        "platform": {
+            "php": "7.4.3"
+        }
     },
     "extra": {
         "laravel": {
