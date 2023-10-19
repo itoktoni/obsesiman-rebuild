@@ -22,8 +22,19 @@ class DeliveryRequest extends FormRequest
     public function withValidator($validator)
     {
         //RFID HARUS SUDAH DI BARCODE
+
+        $transaksi = $this->status_transaksi;
+
+        if ($transaksi == TransactionType::BersihKotor) {
+            $transaksi = TransactionType::Kotor;
+        } else if ($transaksi == TransactionType::BersihRetur){
+            $transaksi = TransactionType::Retur;
+        } else if ($transaksi == TransactionType::BersihRewash){
+            $transaksi = TransactionType::Rewash;
+        }
+
         $empty = Detail::where(Detail::field_rs_id(), $this->rs_id)
-            ->where(Detail::field_status_transaction(), $this->status_transaksi)
+            ->where(Detail::field_status_transaction(), $transaksi)
             ->where(Detail::field_status_process(), ProcessType::Barcode)
             ->count();
 
