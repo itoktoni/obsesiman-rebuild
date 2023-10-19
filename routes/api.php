@@ -415,8 +415,14 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
                 $status_baru = TransactionType::Retur;
             } elseif($data->field_status_transaction == TransactionType::BersihRewash){
                 $status_baru = TransactionType::Rewash;
-            } else {
-                return Notes::error($rfid , 'Grouping tidak valid !');
+            } elseif($data->field_status_transaction == TransactionType::Kotor){
+                $status_baru = TransactionType::Kotor;
+            } elseif($data->field_status_transaction == TransactionType::Retur){
+                $status_baru = TransactionType::Retur;
+            } elseif($data->field_status_transaction == TransactionType::Rewash){
+                $status_baru = TransactionType::Rewash;
+            } elseif(!in_array($data->field_status_transaction, [TransactionType::Kotor, TransactionType::Retur, TransactionType::Rewash])) {
+                $status_baru = TransactionType::Kotor;
             }
 
             if((!in_array($data->field_status_transaction, [TransactionType::Kotor, TransactionType::Retur, TransactionType::Rewash]))){
