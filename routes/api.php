@@ -421,8 +421,6 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
                 $status_baru = TransactionType::Retur;
             } elseif($data->field_status_transaction == TransactionType::Rewash){
                 $status_baru = TransactionType::Rewash;
-            } elseif(!in_array($data->field_status_transaction, [TransactionType::Kotor, TransactionType::Retur, TransactionType::Rewash])) {
-                $status_baru = TransactionType::Kotor;
             }
 
             if((!in_array($data->field_status_transaction, [TransactionType::Kotor, TransactionType::Retur, TransactionType::Rewash]))){
