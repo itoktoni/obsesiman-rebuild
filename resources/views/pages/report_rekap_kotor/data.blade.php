@@ -36,8 +36,11 @@
                 <th style="width: 10px" width="1">No. </th>
                 <th style="width: 200px" width="20">Nama Linen</th>
                 @foreach($location as $loc_id => $loc_name)
+                    @if(!empty($loc_name))
                     <th>{{ $loc_name }}</th>
+                    @endif
                 @endforeach
+                <th>Belum teregister</th>
                 <th>Beda RS</th>
                 <th>Total Kotor (Pcs)</th>
                 <th>(Kg) Bersih</th>
@@ -51,13 +54,17 @@
                 $sum_kurang = $sum_lebih = $sum_per_linen = $sum_kotor = $sum_beda_rs = $sum_kg = $sum_lawan = 0;
                 $total_number = $selisih = 0;
                 $total_lawan = 0;
-                $total_beda_rs = $kotor->where(Transaksi::field_beda_rs(), 1)
+                $total_beda_rs = $kotor->where(Transaksi::field_beda_rs(), BedaRsType::Beda)
+                    ->whereIn(Transaksi::field_status_transaction(), KOTOR)
+                    ->count();
+                $total_belum_register = $kotor->where(Transaksi::field_beda_rs(), BedaRsType::BelumRegister)
                     ->whereIn(Transaksi::field_status_transaction(), KOTOR)
                     ->count();
             @endphp
             @forelse($linen as $linen_id => $name)
+                @if(!empty($name))
                 @php
-                    $total_number = $total_number +  $loop->iteration ;
+                    $total_number = $loop->iteration++;
                     $total_per_linen = $kotor
                         ->where(Transaksi::field_beda_rs(), 0)
                         ->whereIn(Transaksi::field_status_transaction(), KOTOR)
@@ -88,9 +95,10 @@
 					$sum_lebih = $sum_lebih + $selisih_lebih;
                 @endphp
                 <tr>
-                    <td>{{ $loop->iteration }}</td>
-                    <td>{{ $name }}</td>
+                    <td>{{ $loop->index }}</td>
+                    <td>{{ $name ?? 'Belum teregister' }}</td>
                     @foreach($location as $loc_id => $loc_name)
+                    @if(!empty($loc_name))
                         <td>
                             @php
                                 $total_lokasi = $kotor->where(Transaksi::field_beda_rs(), 0)
@@ -100,7 +108,9 @@
                             @endphp
                             {{ $total_lokasi > 0 ? $total_lokasi : '' }}
                         </td>
+                    @endif
                     @endforeach
+                    <td><!-- tempat belum register --></td>
                     <td><!-- tempat beda rs --></td>
                     <td>{{ $total_per_linen }}</td>
                     <td>{{ $total_kg }}</td>
@@ -110,25 +120,46 @@
                     <td>{{ $selisih < 0 ? $selisih : '' }}</td>
                     <td>{{ $selisih > 0 ? $selisih : '' }}</td>
                 </tr>
+                @endif
 			@empty
 			@endforelse
             <tr>
                 <td>{{ $total_number }}</td>
+                <td>Belum teregister</td>
+                @foreach($location as $loc)
+                @if(!empty($loc))
+                <td></td>
+                @endif
+                @endforeach
+                <td>{{ $total_belum_register }}</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>-{{ $total_belum_register }}</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>{{ $total_number }}</td>
                 <td>Linen Lain</td>
                 @foreach($location as $loc)
+                @if(!empty($loc))
                 <td></td>
+                @endif
                 @endforeach
-                <td>{{ $total_beda_rs }}</td>
-                <td></td>
-                <td></td>
-                <td></td>
                 <td></td>
                 <td>{{ $total_beda_rs }}</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>-{{ $total_beda_rs }}</td>
+                <td></td>
             </tr>
 		</tbody>
 		<tr>
             <td colspan="2">Total</td>
             @foreach($location as $loc_id => $loc_name)
+                @if(!empty($loc_name))
                 @php
                 $sum_lokasi = $kotor->where(Transaksi::field_beda_rs(), 0)
                                 ->where('view_ruangan_id', $loc_id)
@@ -137,7 +168,11 @@
                 <td>
                     {{ $sum_lokasi }}
                 </td>
+                @endif
             @endforeach
+            <td>
+                {{ $total_belum_register }}
+            </td>
             <td>
                 {{ $total_beda_rs }}
             </td>
@@ -151,10 +186,10 @@
                 {{ $sum_lawan  }}
             </td>
             <td>
-                {{ $sum_kurang }}
+                {{ $sum_kurang + -($total_beda_rs) + -($total_belum_register) }}
             </td>
             <td>
-                {{ $sum_lebih + $total_beda_rs }}
+                {{ $sum_lebih  }}
             </td>
         </tr>
 	</table>
