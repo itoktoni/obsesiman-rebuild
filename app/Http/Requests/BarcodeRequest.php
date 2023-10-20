@@ -34,6 +34,12 @@ class BarcodeRequest extends FormRequest
             $where = TransactionType::BersihRetur;
         } else if($this->status_transaksi == TransactionType::BersihRewash) {
             $where = TransactionType::BersihRewash;
+        } elseif ($this->status_transaksi == TransactionType::Kotor) {
+            $where = TransactionType::Kotor;
+        } else if($this->status_transaksi == TransactionType::Retur) {
+            $where = TransactionType::BersihRetur;
+        } else if($this->status_transaksi == TransactionType::Rewash) {
+            $where = TransactionType::Kotor;
         }
 
         $rfid = Detail::whereIn(Detail::field_primary(), $this->rfid)
