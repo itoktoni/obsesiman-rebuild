@@ -84,6 +84,15 @@ class BarcodeRequest extends FormRequest
             case TransactionType::BersihRewash:
                 $code = env('CODE_REWASH', 'WSH');
                 break;
+            case TransactionType::Kotor:
+                $code = env('CODE_KOTOR', 'KTR');
+                break;
+            case TransactionType::Retur:
+                $code = env('CODE_RETUR', 'RTR');
+                break;
+            case TransactionType::Rewash:
+                $code = env('CODE_REWASH', 'WSH');
+                break;
             default:
                 $code = env('CODE_BERSIH', 'BSH');
                 break;
