@@ -31,6 +31,8 @@ class DeliveryRequest extends FormRequest
             $transaksi = TransactionType::Retur;
         } else if ($transaksi == TransactionType::BersihRewash){
             $transaksi = TransactionType::Rewash;
+        } else if ($transaksi == TransactionType::Unknown){
+            $transaksi = TransactionType::Register;
         }
 
         $empty = Detail::where(Detail::field_rs_id(), $this->rs_id)
