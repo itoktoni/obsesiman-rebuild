@@ -240,6 +240,7 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
                         Detail::field_ruangan_id() => $request->ruangan_id,
                         Detail::field_jenis_id() => $request->jenis_id,
                         Detail::field_status_cuci() => $request->status_cuci,
+                        Detail::field_status_transaction() => TransactionType::Register,
                         Detail::field_status_register() => RegisterType::Register,
                         Detail::field_status_process() => ProcessType::Register,
                         Detail::field_created_at() => date('Y-m-d H:i:s'),
@@ -278,6 +279,7 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
                     Detail::field_jenis_id() => $request->jenis_id,
                     Detail::field_status_cuci() => $request->status_cuci,
                     Detail::field_status_register() => RegisterType::Register,
+                    Detail::field_status_transaction() => TransactionType::Register,
                     Detail::field_status_process() => ProcessType::Register,
                     Detail::field_created_at() => date('Y-m-d H:i:s'),
                     Detail::field_updated_at() => date('Y-m-d H:i:s'),
@@ -489,7 +491,7 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
             $date = date('Y-m-d H:i:s');
             $user = auth()->user()->id;
 
-            $status_baru = TransactionType::Baru;
+            $status_baru = TransactionType::Register;
 
             if($data->field_status_transaction != $status_baru){
                 $status_baru = TransactionType::Kotor;

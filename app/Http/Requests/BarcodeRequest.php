@@ -26,7 +26,7 @@ class BarcodeRequest extends FormRequest
 
         // CASE KETIKA RFID TIDAK DITEMUKAN
 
-        $where = TransactionType::Baru;
+        $where = TransactionType::Register;
 
         if ($this->status_transaksi == TransactionType::BersihKotor) {
             $where = TransactionType::Kotor;
