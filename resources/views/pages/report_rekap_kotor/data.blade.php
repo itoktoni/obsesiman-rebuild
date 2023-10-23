@@ -133,7 +133,7 @@
                 @endforeach
                 <td>{{ $total_belum_register }}</td>
                 <td></td>
-                <td></td>
+                <td>{{ $total_belum_register }}</td>
                 <td></td>
                 <td></td>
                 <td>-{{ $total_belum_register }}</td>
@@ -149,7 +149,7 @@
                 @endforeach
                 <td></td>
                 <td>{{ $total_beda_rs }}</td>
-                <td></td>
+                <td>{{ $total_beda_rs }}</td>
                 <td></td>
                 <td></td>
                 <td>-{{ $total_beda_rs }}</td>
@@ -177,7 +177,7 @@
                 {{ $total_beda_rs }}
             </td>
             <td>
-                {{ $sum_per_linen }}
+                {{ $sum_per_linen + $total_belum_register + $total_beda_rs }}
             </td>
             <td>
                 {{ $sum_kg }}
