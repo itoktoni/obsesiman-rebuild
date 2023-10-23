@@ -228,6 +228,10 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
 
     Route::post('register', function (RegisterRequest $request) {
         try {
+
+            $code = env('CODE_BERSIH', 'BSH');
+            $autoNumber = Query::autoNumber(Transaksi::getTableName(), Transaksi::field_delivery(), $code . date('Ymd'), env('AUTO_NUMBER', 15));
+
             if(is_array($request->rfid)){
 
                 DB::beginTransaction();
@@ -240,6 +244,7 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
                         Detail::field_ruangan_id() => $request->ruangan_id,
                         Detail::field_jenis_id() => $request->jenis_id,
                         Detail::field_status_cuci() => $request->status_cuci,
+                        Detail::field_status_transaction() => TransactionType::Register,
                         Detail::field_status_register() => RegisterType::Register,
                         Detail::field_status_process() => ProcessType::Register,
                         Detail::field_created_at() => date('Y-m-d H:i:s'),
@@ -250,6 +255,23 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
                 });
 
                 Detail::insert($linen->toArray());
+
+                $linen_transaksi = collect($request->rfid)->map(function($item) use ($request, $autoNumber){
+
+                    return [
+                        Transaksi::field_key() => $autoNumber,
+                        Transaksi::field_rs_id() => $request->rs_id,
+                        Transaksi::field_ruangan_id() => $request->ruangan_id,
+                        Transaksi::field_rfid() => $item,
+                        Transaksi::field_status_transaction() => TransactionType::Register,
+                        Transaksi::field_created_at() => date('Y-m-d H:i:s'),
+                        Transaksi::field_updated_at() => date('Y-m-d H:i:s'),
+                        Transaksi::field_created_by() => auth()->user()->id,
+                        Transaksi::field_updated_by() => auth()->user()->id,
+                    ];
+                });
+
+                Transaksi::insert($linen_transaksi->toArray());
 
                 $history = collect($request->rfid)->map(function($item) use($request){
 
@@ -271,6 +293,7 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
             }
             else{
                 DB::beginTransaction();
+
                 $detail = Detail::create([
                     Detail::field_primary() => $request->rfid,
                     Detail::field_rs_id() => $request->rs_id,
@@ -278,11 +301,24 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
                     Detail::field_jenis_id() => $request->jenis_id,
                     Detail::field_status_cuci() => $request->status_cuci,
                     Detail::field_status_register() => RegisterType::Register,
+                    Detail::field_status_transaction() => TransactionType::Register,
                     Detail::field_status_process() => ProcessType::Register,
                     Detail::field_created_at() => date('Y-m-d H:i:s'),
                     Detail::field_updated_at() => date('Y-m-d H:i:s'),
                     Detail::field_created_by() => auth()->user()->id,
                     Detail::field_updated_by() => auth()->user()->id,
+                ]);
+
+                $transaksi = Transaksi::create([
+                    Transaksi::field_key() => $autoNumber,
+                    Transaksi::field_rs_id() => $request->rs_id,
+                    Transaksi::field_ruangan_id() => $request->ruangan_id,
+                    Transaksi::field_rfid() => $request->rfid,
+                    Transaksi::field_status_transaction() => TransactionType::Register,
+                    Transaksi::field_created_at() => date('Y-m-d H:i:s'),
+                    Transaksi::field_updated_at() => date('Y-m-d H:i:s'),
+                    Transaksi::field_created_by() => auth()->user()->id,
+                    Transaksi::field_updated_by() => auth()->user()->id,
                 ]);
 
                 History::log($request->rfid, ProcessType::Register, $request->rfid);
@@ -487,7 +523,7 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
             $date = date('Y-m-d H:i:s');
             $user = auth()->user()->id;
 
-            $status_baru = TransactionType::Baru;
+            $status_baru = TransactionType::Register;
 
             if($data->field_status_transaction != $status_baru){
                 $status_baru = TransactionType::Kotor;

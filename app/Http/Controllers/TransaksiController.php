@@ -175,9 +175,6 @@ class TransaksiController extends MasterController
     }
 
     private function transaction($request, $service){
-        if(env('TRANSACTION_ACTIVE_RS_ONLY', 1) && !(Rs::find($request->rs_id)->field_active)){
-            return Notes::error($request->rs_id, 'Rs belum di registrasi');
-        }
 
         $rfid = $request->rfid;
         $data = Detail::whereIn(Detail::field_primary() ,$rfid)

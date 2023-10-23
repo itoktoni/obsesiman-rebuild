@@ -26,14 +26,20 @@ class BarcodeRequest extends FormRequest
 
         // CASE KETIKA RFID TIDAK DITEMUKAN
 
-        $where = TransactionType::Baru;
+        $where = TransactionType::Register;
 
         if ($this->status_transaksi == TransactionType::BersihKotor) {
             $where = TransactionType::Kotor;
         } else if($this->status_transaksi == TransactionType::BersihRetur) {
-            $where = TransactionType::BersihRetur;
+            $where = TransactionType::Retur;
         } else if($this->status_transaksi == TransactionType::BersihRewash) {
-            $where = TransactionType::BersihRewash;
+            $where = TransactionType::Rewash;
+        } elseif ($this->status_transaksi == TransactionType::Kotor) {
+            $where = TransactionType::Kotor;
+        } else if($this->status_transaksi == TransactionType::Retur) {
+            $where = TransactionType::Retur;
+        } else if($this->status_transaksi == TransactionType::Rewash) {
+            $where = TransactionType::Rewash;
         }
 
         $rfid = Detail::whereIn(Detail::field_primary(), $this->rfid)
@@ -76,6 +82,15 @@ class BarcodeRequest extends FormRequest
                 $code = env('CODE_RETUR', 'RTR');
                 break;
             case TransactionType::BersihRewash:
+                $code = env('CODE_REWASH', 'WSH');
+                break;
+            case TransactionType::Kotor:
+                $code = env('CODE_KOTOR', 'KTR');
+                break;
+            case TransactionType::Retur:
+                $code = env('CODE_RETUR', 'RTR');
+                break;
+            case TransactionType::Rewash:
                 $code = env('CODE_REWASH', 'WSH');
                 break;
             default:
