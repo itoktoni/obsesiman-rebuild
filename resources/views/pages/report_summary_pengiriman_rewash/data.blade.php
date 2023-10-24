@@ -37,7 +37,6 @@
 				<th>NO. DO</th>
 				<th>NO. BARCODE</th>
 				<th>RUMAH SAKIT</th>
-				<th>RUANGAN</th>
 				<th>TOTAL</th>
 				<th>TANGGAL PENGIRIMAN BERSIH</th>
 				<th>OPERATOR</th>
@@ -50,7 +49,6 @@
 				<td>{{ $table->field_delivery }}</td>
 				<td>{{ $table->field_barcode }}</td>
 				<td>{{ $table->view_rs_nama }}</td>
-				<td>{{ $table->view_ruangan_nama }}</td>
 				<td>{{ $table->total_rfid ?? 0 }}</td>
 				<td>{{ formatDate($table->transaksi_delivery_at) }}</td>
 				<td>{{ $table->user_delivery ?? '' }}</td>
