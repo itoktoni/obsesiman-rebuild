@@ -459,8 +459,11 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
                 $status_baru = TransactionType::Rewash;
             }
 
-            if((!in_array($data->field_status_transaction, [TransactionType::Kotor, TransactionType::Retur, TransactionType::Rewash]))){
+            $check_transaksi = Transaksi::where(Transaksi::field_rfid(), $rfid)
+                ->whereDate(Transaksi::field_created_at(), date('Y-m-d'))
+                ->count();
 
+            if($check_transaksi == 0){
                 $data_transaksi[] = [
                     Transaksi::field_key() => Query::autoNumber((new Transaksi())->getTable(), Transaksi::field_key(), 'GROUP'.date('Ymd', 15)),
                     Transaksi::field_rfid() => $rfid,
@@ -475,20 +478,20 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
 
                 $log[] = [
                     ModelsHistory::field_name() => $rfid,
-                    ModelsHistory::field_status() => ProcessType::Kotor,
+                    ModelsHistory::field_status() => $status_baru,
                     ModelsHistory::field_created_by() => auth()->user()->name,
                     ModelsHistory::field_created_at() => $date,
                     ModelsHistory::field_description() => json_encode($data_transaksi),
                 ];
+            } else {
+                $log[] = [
+                    ModelsHistory::field_name() => $rfid,
+                    ModelsHistory::field_status() => ProcessType::Grouping,
+                    ModelsHistory::field_created_by() => auth()->user()->name,
+                    ModelsHistory::field_created_at() => $date,
+                    ModelsHistory::field_description() => json_encode($linen),
+                ];
             }
-
-            $log[] = [
-                ModelsHistory::field_name() => $rfid,
-                ModelsHistory::field_status() => ProcessType::Grouping,
-                ModelsHistory::field_created_by() => auth()->user()->name,
-                ModelsHistory::field_created_at() => $date,
-                ModelsHistory::field_description() => json_encode($linen),
-            ];
 
             $data->update([
                 Detail::field_updated_at() => date('Y-m-d H:i:s'),
