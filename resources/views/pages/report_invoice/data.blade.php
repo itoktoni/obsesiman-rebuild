@@ -94,7 +94,7 @@
                             $total_tanggal = $item
                                 ->where('view_tanggal', $tgl)
                                 ->where('view_linen_id', $linen_id)
-                                ->count();
+                                ->sum('view_qty');
                             @endphp
                             {{ $total_tanggal > 0 ? $total_tanggal : '' }}
                         </td>
