@@ -28,6 +28,9 @@ class BarcodeRequest extends FormRequest
 
         $where = TransactionType::Register;
 
+        /*
+        notes : status transaksi berasal dari menu desktop
+        */
         if ($this->status_transaksi == TransactionType::BersihKotor) {
             $where = TransactionType::Kotor;
         } else if($this->status_transaksi == TransactionType::BersihRetur) {

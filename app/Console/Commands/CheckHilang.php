@@ -45,6 +45,7 @@ class CheckHilang extends Command
 
         $outstanding = Detail::whereDate(Detail::UPDATED_AT, '<=', Carbon::now()->subMinutes(4320)->toDateString())
             ->whereNotIn(Detail::field_status_transaction(), BERSIH)
+            ->where(Detail::field_status_process(), '!=', ProcessType::Hilang)
             ->get();
 
         if ($outstanding) {

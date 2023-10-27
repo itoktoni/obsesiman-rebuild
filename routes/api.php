@@ -512,6 +512,8 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
         }
     });
 
+    /*
+    gak dipake, semua masuk ke grouping 1, karena pas register sudah dimasukan ke transaksi
     Route::get('grouping-baru/{rfid}', function ($rfid, SaveTransaksiService $service) {
         try {
             $data = Detail::findOrFail($rfid);
@@ -582,6 +584,7 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
             return Notes::error($rfid ,$th->getMessage());
         }
     });
+    */
 
     Route::post('barcode', [BarcodeController::class, 'barcode']);
     Route::get('barcode/{code}', [BarcodeController::class, 'print']);
