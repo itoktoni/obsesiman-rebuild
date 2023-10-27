@@ -45,18 +45,17 @@ class CheckHilang extends Command
 
         $outstanding = Detail::whereDate(Detail::UPDATED_AT, '<=', Carbon::now()->subMinutes(4320)->toDateString())
             ->whereNotIn(Detail::field_status_transaction(), BERSIH)
-            ->where(Detail::field_status_process(), '!=', ProcessType::Pending)
             ->get();
 
         if ($outstanding) {
 
             $rfid = $outstanding->pluck(Detail::field_primary());
 
-            History::bulk($rfid, ProcessType::Pending, 'RFID Pending');
+            History::bulk($rfid, ProcessType::Pending, 'RFID Hilang');
             Detail::whereIn(Detail::field_primary(), $rfid)->update([
-                Detail::field_status_process() => ProcessType::Pending,
-                Detail::field_pending_created_at() => date('Y-m-d H:i:s'),
-                Detail::field_pending_updated_at() => date('Y-m-d H:i:s'),
+                Detail::field_status_process() => ProcessType::Hilang,
+                Detail::field_hilang_created_at() => date('Y-m-d H:i:s'),
+                Detail::field_hilang_updated_at() => date('Y-m-d H:i:s'),
             ]);
         }
 
