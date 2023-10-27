@@ -83,7 +83,7 @@ class Detail extends Model
     const UPDATED_BY = 'detail_updated_by';
     const DELETED_BY = 'detail_deleted_by';
 
-    public $timestamps = true;
+    public $timestamps = false;
     public $incrementing = false;
     protected $keyType = 'string';
 
