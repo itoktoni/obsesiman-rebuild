@@ -43,6 +43,7 @@
                                     </td>
                                     <td>{{ iteration($data, $key) }}</td>
                                     <td>{{ $table->field_primary }}</td>
+                                    <td>{{ $table->field_code }}</td>
                                     <td>{{ $table->field_name }}</td>
                                     <td>{{ $table->field_alamat }}</td>
                                     <td>{{ $table->field_description }}</td>

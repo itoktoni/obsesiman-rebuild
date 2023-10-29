@@ -435,13 +435,14 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
 
     Route::get('grouping/{rfid}', function ($rfid, SaveTransaksiService $service) {
         try {
-            $data = Detail::findOrFail($rfid);
+            $data = Detail::with(['has_rs'])->findOrFail($rfid);
 
             $data_transaksi = [];
             $linen[] = $rfid;
 
             $date = date('Y-m-d H:i:s');
             $user = auth()->user()->id;
+            $code_rs = $data->has_rs->rs_code ?? 'XXX';
 
             $status_baru = TransactionType::Kotor;
 
@@ -461,7 +462,7 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
 
             if($check_transaksi == 0 and (in_array($data->field_status_transaction, [TransactionType::BersihKotor, TransactionType::BersihRetur, TransactionType::BersihRewash]))){
                 $data_transaksi[] = [
-                    Transaksi::field_key() => Query::autoNumber((new Transaksi())->getTable(), Transaksi::field_key(), 'GROUP'.date('Ymd', 15)),
+                    Transaksi::field_key() => Query::autoNumber((new Transaksi())->getTable(), Transaksi::field_key(), 'GROUP'.date('Ymd').$code_rs, 20),
                     Transaksi::field_rfid() => $rfid,
                     Transaksi::field_status_transaction() => $status_baru,
                     Transaksi::field_rs_id() => $data->field_rs_id,

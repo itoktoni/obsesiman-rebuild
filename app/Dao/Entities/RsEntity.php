@@ -79,4 +79,14 @@ trait RsEntity
         return $this->{$this->field_active()};
     }
 
+    public static function field_code()
+    {
+        return 'rs_code';
+    }
+
+    public function getFieldCodeAttribute()
+    {
+        return $this->{$this->field_code()};
+    }
+
 }
