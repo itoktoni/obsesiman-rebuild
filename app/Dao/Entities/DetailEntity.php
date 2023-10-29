@@ -31,7 +31,7 @@ trait DetailEntity
 
     public static function field_name()
     {
-        return Jenis::field_name();
+        return self::field_primary();
     }
 
     public function getFieldNameAttribute()
