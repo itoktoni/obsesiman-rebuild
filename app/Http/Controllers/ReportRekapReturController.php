@@ -10,7 +10,7 @@ use App\Dao\Repositories\TransaksiRepository;
 use App\Http\Requests\RekapReportRequest;
 use Illuminate\Support\Carbon;
 
-class ReportRekapKotorController extends MinimalController
+class ReportRekapReturController extends MinimalController
 {
     public $data;
 
@@ -32,7 +32,7 @@ class ReportRekapKotorController extends MinimalController
 
     private function getQueryKotor($request)
     {
-        $query = self::$repository->getDetailAllKotor([TransactionType::Kotor]);
+        $query = self::$repository->getDetailAllKotor([TransactionType::Retur]);
 
         if ($start_date = $request->start_rekap) {
             $query = $query->whereDate(Transaksi::field_created_at(), '>=', $start_date);
@@ -47,7 +47,7 @@ class ReportRekapKotorController extends MinimalController
 
     private function getQueryBersih($request)
     {
-        $query = self::$repository->getDetailAllBersih([TransactionType::BersihKotor]);
+        $query = self::$repository->getDetailAllBersih([TransactionType::BersihRetur]);
 
         if ($start_date = $request->start_rekap) {
             $bersih_from = Carbon::createFromFormat('Y-m-d', $start_date) ?? false;
