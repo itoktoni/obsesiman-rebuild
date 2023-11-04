@@ -70,7 +70,7 @@ class DeliveryRequest extends FormRequest
                 break;
         }
 
-        $autoNumber = Query::autoNumber(Transaksi::getTableName(), Transaksi::field_delivery(), $code . date('Ymd'), env('AUTO_NUMBER', 15));
+        $autoNumber = Query::autoNumber(Transaksi::getTableName(), Transaksi::field_delivery(), $code . date('ymd'), env('AUTO_NUMBER', 15));
 
         $this->merge([
             'code' => $autoNumber,

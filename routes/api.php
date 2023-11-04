@@ -230,7 +230,7 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
         try {
 
             $code = env('CODE_BERSIH', 'BSH');
-            $autoNumber = Query::autoNumber(Transaksi::getTableName(), Transaksi::field_delivery(), $code . date('Ymd'), env('AUTO_NUMBER', 15));
+            $autoNumber = Query::autoNumber(Transaksi::getTableName(), Transaksi::field_delivery(), $code . date('ymd'), env('AUTO_NUMBER', 15));
 
             if(is_array($request->rfid)){
 
@@ -462,7 +462,7 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
 
             if($check_transaksi == 0 and (in_array($data->field_status_transaction, [TransactionType::BersihKotor, TransactionType::BersihRetur, TransactionType::BersihRewash]))){
                 $data_transaksi[] = [
-                    Transaksi::field_key() => Query::autoNumber((new Transaksi())->getTable(), Transaksi::field_key(), 'GROUP'.date('Ymd').$code_rs, 20),
+                    Transaksi::field_key() => Query::autoNumber((new Transaksi())->getTable(), Transaksi::field_key(), 'GROUP'.date('ymd').$code_rs, 20),
                     Transaksi::field_rfid() => $rfid,
                     Transaksi::field_status_transaction() => $status_baru,
                     Transaksi::field_rs_id() => $data->field_rs_id,
