@@ -460,7 +460,15 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
                 ->whereDate(Transaksi::field_created_at(), date('Y-m-d'))
                 ->count();
 
-            if($check_transaksi == 0 and (in_array($data->field_status_transaction, [TransactionType::BersihKotor, TransactionType::BersihRetur, TransactionType::BersihRewash]))){
+            if($check_transaksi == 0 and (in_array($data->field_status_transaction, [
+                TransactionType::BersihKotor,
+                TransactionType::BersihRetur,
+                TransactionType::BersihRewash,
+                TransactionType::Kotor,
+                TransactionType::Retur,
+                TransactionType::Rewash,
+            ])))
+            {
                 $data_transaksi[] = [
                     Transaksi::field_key() => Query::autoNumber((new Transaksi())->getTable(), Transaksi::field_key(), 'GROUP'.date('ymd').$code_rs, 20),
                     Transaksi::field_rfid() => $rfid,
