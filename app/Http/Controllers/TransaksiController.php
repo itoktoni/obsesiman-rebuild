@@ -140,7 +140,6 @@ class TransaksiController extends MasterController
 
     private function checkValidation($form_transaksi, $status_transaksi, $date)
     {
-
         if (!in_array($status_transaksi, BERSIH)) {
             return false;
         }
@@ -199,7 +198,6 @@ class TransaksiController extends MasterController
     {
         $return = [];
         try {
-            DB::beginTransaction();
 
             if (!$this->checkRsAktif()) {
                 return Notes::error($request->rs_id, 'Rs belum di registrasi');
@@ -218,6 +216,8 @@ class TransaksiController extends MasterController
             $this->checkOpname($status_transaksi, $status_process, $rfid);
 
             $transaksi = $linen = $log = [];
+
+            DB::beginTransaction();
 
             foreach ($rfid as $item) {
                 $date = date('Y-m-d H:i:s');
