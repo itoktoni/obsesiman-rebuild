@@ -223,8 +223,6 @@ class TransaksiController extends MasterController
                 $date = date('Y-m-d H:i:s');
                 $user = auth()->user()->id;
 
-                $linen[] = (string) $item;
-
                 if (isset($data[$item])) {
                     $detail = $data[$item];
                     if ($this->checkValidation($status_transaksi, $detail->field_status_transaction, $detail->field_updated_at)) {
@@ -244,6 +242,8 @@ class TransaksiController extends MasterController
                             Transaksi::field_updated_at() => $date,
                             Transaksi::field_updated_by() => $user,
                         ];
+
+                        $linen[] = (string) $item;
 
                         $transaksi[] = $data_transaksi;
 
