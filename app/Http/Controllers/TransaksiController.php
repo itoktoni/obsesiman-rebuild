@@ -217,7 +217,7 @@ class TransaksiController extends MasterController
 
             $transaksi = $linen = $log = [];
 
-            DB::beginTransaction();
+            // DB::beginTransaction();
 
             foreach ($rfid as $item) {
                 $date = date('Y-m-d H:i:s');
@@ -319,12 +319,12 @@ class TransaksiController extends MasterController
                 }
             }
 
-            DB::commit();
+            // DB::commit();
 
             return $return;
 
         } catch (\Throwable $th) {
-            DB::rollBack();
+            // DB::rollBack();
             return Notes::error($th->getMessage());
         }
 
