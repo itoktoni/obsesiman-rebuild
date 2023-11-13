@@ -140,7 +140,6 @@ class TransaksiController extends MasterController
 
     private function checkValidation($form_transaksi, $status_transaksi, $date)
     {
-
         if (!in_array($status_transaksi, BERSIH)) {
             return false;
         }
@@ -187,7 +186,7 @@ class TransaksiController extends MasterController
             return true;
         }
 
-        $rs = Rs::find(request()->rs_id)->first();
+        $rs = Rs::find(request()->rs_id);
         if (empty($rs)) {
             return true;
         }
@@ -198,7 +197,7 @@ class TransaksiController extends MasterController
     private function transaction($request, $service)
     {
         if (!$this->checkRsAktif()) {
-            return Notes::error($request->rs_id, 'Rs belum di registrasi');
+            return response()->json('Rs belum di registrasi', 400);
         }
 
         try {
@@ -210,6 +209,12 @@ class TransaksiController extends MasterController
                 ->get()->mapWithKeys(function ($item) {
                 return [$item[Detail::field_primary()] => $item];
             });
+
+            $query_transaksi = Transaksi::select(Transaksi::field_rfid())
+                ->whereIn(Transaksi::field_rfid(), $rfid)
+                ->whereDate(Transaksi::field_created_at(), date('Y-m-d'))
+                ->get()->pluck(Transaksi::field_rfid(), Transaksi::field_rfid())
+                ->toArray();
 
             $status_transaksi = $request->{STATUS_TRANSAKSI};
             $status_process = $request->{STATUS_PROCESS};
@@ -225,7 +230,7 @@ class TransaksiController extends MasterController
 
                 if (isset($data[$item])) {
                     $detail = $data[$item];
-                    if ($this->checkValidation($status_transaksi, $detail->field_status_transaction, $detail->field_updated_at)) {
+                    if (!in_array($item, $query_transaksi) and $this->checkValidation($status_transaksi, $detail->field_status_transaction, $detail->field_updated_at)) {
 
                         $status_sync = SyncType::Yes;
 
@@ -277,17 +282,20 @@ class TransaksiController extends MasterController
                         ];
                     }
                 } else {
-                    $transaksi[] = [
-                        Transaksi::field_key() => $request->key,
-                        Transaksi::field_rfid() => $item,
-                        Transaksi::field_status_transaction() => $status_transaksi,
-                        Transaksi::field_rs_id() => $request->rs_id,
-                        Transaksi::field_beda_rs() => BedaRsType::BelumRegister,
-                        Transaksi::field_created_at() => $date,
-                        Transaksi::field_created_by() => $user,
-                        Transaksi::field_updated_at() => $date,
-                        Transaksi::field_updated_by() => $user,
-                    ];
+
+                    if (!in_array($item, $query_transaksi) and !empty($item)) {
+                        $transaksi[] = [
+                            Transaksi::field_key() => $request->key,
+                            Transaksi::field_rfid() => $item,
+                            Transaksi::field_status_transaction() => $status_transaksi,
+                            Transaksi::field_rs_id() => $request->rs_id,
+                            Transaksi::field_beda_rs() => BedaRsType::BelumRegister,
+                            Transaksi::field_created_at() => $date,
+                            Transaksi::field_created_by() => $user,
+                            Transaksi::field_updated_at() => $date,
+                            Transaksi::field_updated_by() => $user,
+                        ];
+                    }
 
                     $return[] = [
                         KEY => $request->key,
@@ -295,16 +303,23 @@ class TransaksiController extends MasterController
                         STATUS_TRANSAKSI => TransactionType::Unknown,
                         STATUS_PROCESS => ProcessType::Unknown,
                         RFID => $item,
-                        TANGGAL_UPDATE => 'test',
+                        TANGGAL_UPDATE => $date,
                     ];
                 }
             }
+
+            /*
+            cleansing duplicate rfid
+            ketika transaksi dikirim 2x rfid
+            */
+            $transaksi = collect($transaksi)->unique('transaksi_rfid')->values()->all();
 
             if (!empty($transaksi)) {
                 foreach (array_chunk($transaksi, env('TRANSACTION_CHUNK')) as $save_transaksi) {
                     Transaksi::insert($save_transaksi);
                 }
             }
+
             if (!empty($linen)) {
                 foreach (array_chunk($linen, env('TRANSACTION_CHUNK')) as $save_detail) {
                     Detail::whereIn(Detail::field_primary(), $save_detail)
@@ -327,10 +342,16 @@ class TransaksiController extends MasterController
 
         } catch (\Throwable $th) {
             DB::rollBack();
-            return Notes::error($th->getMessage());
+            return response()->json($th->getMessage(), 400);
         }
 
         // $check = $service->save($request->{STATUS_TRANSAKSI}, $request->{STATUS_PROCESS}, $transaksi, $linen, $log, $return);
+
+        /*
+        cleansing duplicate rfid
+        ketika rfid dibalikin
+        */
+        $return = collect($return)->unique(RFID)->values()->all();
         return $return;
     }
 }
