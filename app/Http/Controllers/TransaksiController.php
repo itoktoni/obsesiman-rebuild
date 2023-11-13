@@ -197,7 +197,7 @@ class TransaksiController extends MasterController
     private function transaction($request, $service)
     {
         if (!$this->checkRsAktif()) {
-            return response()->json('Rs belum di registrasi', 400);
+            return Notes::error('Rs belum di registrasi');
         }
 
         try {
@@ -342,7 +342,7 @@ class TransaksiController extends MasterController
 
         } catch (\Throwable $th) {
             DB::rollBack();
-            return response()->json($th->getMessage(), 400);
+            return Notes::error($th->getMessage());
         }
 
         // $check = $service->save($request->{STATUS_TRANSAKSI}, $request->{STATUS_PROCESS}, $transaksi, $linen, $log, $return);
