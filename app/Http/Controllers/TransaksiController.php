@@ -352,6 +352,6 @@ class TransaksiController extends MasterController
         ketika rfid dibalikin
         */
         $return = collect($return)->unique(RFID)->values()->all();
-        return $return;
+        return Notes::create($return);
     }
 }
