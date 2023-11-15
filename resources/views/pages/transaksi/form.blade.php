@@ -33,13 +33,14 @@
                 </thead>
                 <tbody>
                     @forelse($data as $table)
+
                     <tr>
                         <td>{{ $loop->iteration }}</td>
                         <td>{{ $table->field_rfid }}</td>
                         <td>{{ $table->has_detail->field_name ?? '' }}</td>
                         <td>{{ $table->has_detail->field_rs_name ?? '' }}</td>
                         <td>{{ $table->has_rs->field_name ?? '' }}</td>
-                        <td>{{ $table->field_beda_rs_name ?? '' }} </td>
+                        <td>{{ $table->has_detail->view_status_nama ?? '' }} </td>
                         <td class="col-md-2 text-center column-action">
                             <div>
                                 <x-button module="getDeleteTransaksi" key="{{ $table->field_primary }}" color="danger" icon="trash3"  onclick="return confirm('Apakah anda yakin ingin menghapus ?')" class="button-delete" />
