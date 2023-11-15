@@ -42,6 +42,7 @@
                                     <td>{{ $table->field_barcode }}</td>
                                     <td>{{ $table->field_status_bersih_name }}</td>
                                     <td>{{ $table->field_rs_name }}</td>
+                                    <td>{{ $table->field_total }}</td>
                                     <td>{{ formatdate($table->field_delivery_at) }}</td>
                                     <td>{{ $table->field_created_name }}</td>
                                 </tr>

@@ -148,6 +148,10 @@ class TransaksiController extends MasterController
             return true;
         }
 
+        if ($form_transaksi == TransactionType::Register) {
+            return true;
+        }
+
         if (($form_transaksi == TransactionType::Kotor) && now()->diffInDays($date) >= env('TRANSACTION_DAY_ALLOWED', 1)) {
             return true;
         }
@@ -157,7 +161,6 @@ class TransaksiController extends MasterController
 
     private function checkOpname($status_transaksi, $status_proses, $rfid)
     {
-
         try {
             $today = date('Y-m-d');
             $waktu = date('Y-m-d H:i:s');

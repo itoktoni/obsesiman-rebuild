@@ -51,7 +51,7 @@
 			@forelse($data as $table)
 			<tr>
 				<td>{{ $loop->iteration }}</td>
-				<td>{{ $table->field_name }}</td>
+				<td>{{ $table->jenis_nama }}</td>
 				<td>{{ $table->field_rs_name }}</td>
 				<td>{{ $table->qty }}</td>
 				<td>{{ $table->jenis_berat }}</td>
