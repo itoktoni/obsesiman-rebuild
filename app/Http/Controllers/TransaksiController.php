@@ -140,7 +140,7 @@ class TransaksiController extends MasterController
 
     private function checkValidation($form_transaksi, $status_transaksi, $date)
     {
-        if (!in_array($status_transaksi, array_merge(BERSIH, TransactionType::Register))) {
+        if (!in_array($status_transaksi, array_merge(BERSIH, [TransactionType::Register]))) {
             return false;
         }
 
