@@ -140,7 +140,7 @@ class TransaksiController extends MasterController
 
     private function checkValidation($form_transaksi, $status_transaksi, $date)
     {
-        if (!in_array($status_transaksi, BERSIH)) {
+        if (!in_array($status_transaksi, array_merge(BERSIH, TransactionType::Register))) {
             return false;
         }
 
@@ -233,6 +233,7 @@ class TransaksiController extends MasterController
 
                 if (isset($data[$item])) {
                     $detail = $data[$item];
+
                     if (!in_array($item, $query_transaksi) and $this->checkValidation($status_transaksi, $detail->field_status_transaction, $detail->field_updated_at)) {
 
                         $status_sync = SyncType::Yes;
