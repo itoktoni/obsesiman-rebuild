@@ -33,7 +33,7 @@ class ReportSummaryPengirimanReturController extends MinimalController
     }
 
     private function getQuery($request){
-        $query =  self::$repository->getDetailBersih(TransactionType::Retur)
+        $query =  self::$repository->getDetailBersih(TransactionType::BersihRetur)
             ->select([
                 'transaksi_delivery',
                 'transaksi_barcode',

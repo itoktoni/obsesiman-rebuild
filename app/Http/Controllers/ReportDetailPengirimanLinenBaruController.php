@@ -9,10 +9,9 @@ use App\Dao\Models\User;
 use App\Dao\Repositories\TransaksiRepository;
 use App\Http\Requests\DeliveryReportRequest;
 use App\Http\Requests\TransactionReportRequest;
-use Dietercoopman\Showsql\ShowSql;
 use Illuminate\Support\Facades\DB;
 
-class ReportSummaryPengirimanRewashController extends MinimalController
+class ReportDetailPengirimanLinenBaruController extends MinimalController
 {
     public $data;
 
@@ -33,17 +32,10 @@ class ReportSummaryPengirimanRewashController extends MinimalController
     }
 
     private function getQuery($request){
-        $query =  self::$repository->getDetailBersih(TransactionType::BersihRewash)
-            ->select([
-                'transaksi_delivery',
-                'transaksi_barcode',
-                'view_rs_nama',
-                'view_ruangan_nama',
-                DB::raw('count(transaksi_rfid) as total_rfid'),
-                'transaksi_delivery_at',
-                DB::raw('user_delivery.name as user_delivery'),
-            ])
+        $query = self::$repository->getDetailBersih(TransactionType::Register)
+            ->addSelect(['*', DB::raw('user_delivery.name as user_delivery')])
             ->leftJoinRelationship('has_created_delivery', 'user_delivery');
+
 
         if ($start_date = $request->start_delivery) {
             $query = $query->where(Transaksi::field_report(), '>=', $start_date);
@@ -53,13 +45,7 @@ class ReportSummaryPengirimanRewashController extends MinimalController
             $query = $query->where(Transaksi::field_report(), '<=', $end_date);
         }
 
-        $query = $query->get();
-
-        if($query->sum('total_rfid') > 0){
-            return $query;
-        }
-
-        return [];
+        return $query->get();
     }
 
     public function getPrint(DeliveryReportRequest $request){

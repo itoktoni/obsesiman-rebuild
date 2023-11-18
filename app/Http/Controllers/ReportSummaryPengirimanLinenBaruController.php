@@ -12,7 +12,7 @@ use App\Http\Requests\TransactionReportRequest;
 use Dietercoopman\Showsql\ShowSql;
 use Illuminate\Support\Facades\DB;
 
-class ReportSummaryPengirimanRewashController extends MinimalController
+class ReportSummaryPengirimanLinenBaruController extends MinimalController
 {
     public $data;
 
@@ -33,7 +33,7 @@ class ReportSummaryPengirimanRewashController extends MinimalController
     }
 
     private function getQuery($request){
-        $query =  self::$repository->getDetailBersih(TransactionType::BersihRewash)
+        $query =  self::$repository->getDetailBersih(TransactionType::Register)
             ->select([
                 'transaksi_delivery',
                 'transaksi_barcode',
