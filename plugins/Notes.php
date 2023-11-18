@@ -23,7 +23,7 @@ class Notes
         $log['message'] = 'Data berhasil diambil';
         $log['data'] = $data;
         Log::info($log);
-        return $log;
+        return response()->json($log, 200);
     }
 
     public static function single($data = null)
@@ -34,7 +34,7 @@ class Notes
         $log['message'] = 'Data di dapat';
         $log['data'] = $data;
         Log::info($log);
-        return $log;
+        return response()->json($log, 200);
     }
 
     public static function create($data = null)
@@ -45,7 +45,7 @@ class Notes
         $log['message'] = 'Data berhasil di buat';
         $log['data'] = $data;
         Log::info($log);
-        return $log;
+        return response()->json($log, 200);
     }
 
     public static function token($data = null)
@@ -56,7 +56,7 @@ class Notes
         $log['message'] = 'Data token '.self::token;
         $log['data'] = $data;
         Log::info($log);
-        return $log;
+        return response()->json($log, 200);
     }
 
     public static function update($data = null)
@@ -66,11 +66,8 @@ class Notes
         $log['name'] = self::update;
         $log['message'] = 'Data berhasil di ubah';
         $log['data'] = $data;
-        // if(request()->wantsJson()){
-        //     $log['data'] = is_array($data) ? $data : $data->toArray();
-        // }
         Log::info($log);
-        return $log;
+        return response()->json($log, 200);
     }
 
     public static function delete($data = null)
@@ -81,7 +78,7 @@ class Notes
         $log['message'] = 'Data berhasil di hapus';
         $log['data'] = $data;
         Log::warning($log);
-        return $log;
+        return response()->json($log, 204);
     }
 
     public static function error($data = null, $message = null)
@@ -92,7 +89,7 @@ class Notes
         $log['message'] = $message ?? 'Data '.self::error;
         $log['data'] = $data;
         Log::error($log);
-        return $log;
+        return response()->json($log, 400);
     }
 
     public static function validation($message = null, $data = null)
@@ -103,7 +100,7 @@ class Notes
         $log['message'] = $message;
         $log['data'] = 'Validation Error';
         Log::warning($log);
-        return $log;
+        return response()->json($log, 422);
     }
 
     public static function notFound($data = null, $url = null)
@@ -114,6 +111,6 @@ class Notes
         $log['message'] = 'Url tidak ditemukan';
         $log['data'] = $data;
         Log::warning($log);
-        return $log;
+        return response()->json($log, 404);
     }
 }

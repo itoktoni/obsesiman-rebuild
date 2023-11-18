@@ -670,8 +670,6 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
 
 });
 
-
-
 Route::get('transaksi/{transaksi}/proses/{proses}', function($transaksi, $proses){
     Detail::whereNotNull(Detail::field_primary())
         ->update([
