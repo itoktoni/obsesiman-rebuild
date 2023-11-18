@@ -111,6 +111,9 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
 
     Route::get('download/{rsid}', function ($rsid, Request $request){
         $data = ViewDetailLinen::where(ViewDetailLinen::field_rs_id(), $rsid)->get();
+        if (count($data) == 0) {
+            return Notes::error('Data Tidak Ditemukan !');
+        }
         $request->request->add([
             'rsid' => $rsid
         ]);
@@ -156,11 +159,14 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
 
             $rs = Rs::with([HAS_RUANGAN, HAS_JENIS])->get();
             $collection = RsResource::collection($rs);
-            $data = Notes::data($collection);
-            $data['status_transaksi'] = $status_transaksi;
-            $data['status_proses'] = $status_proses;
-            $data['status_cuci'] = $status_cuci;
-            $data['status_register'] = $status_register;
+            $add = [
+                'status_transaksi' => $status_transaksi,
+                'status_proses' => $status_proses,
+                'status_cuci' => $status_cuci,
+                'status_register' => $status_register,
+            ];
+
+            $data = Notes::data($collection, $add);
 
             return $data;
 
@@ -209,15 +215,14 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
 
             $rs = Rs::with([HAS_RUANGAN, HAS_JENIS])->findOrFail($rsid);
             $collection = new RsResource($rs);
-            $data = Notes::data($collection);
             // $data['ruangan'] = RuanganResource::collection($rs->has_ruangan);
             // $data['linen'] = JenisResource::collection($rs->has_jenis);
-            $data['status_transaksi'] = $status_transaksi;
-            $data['status_proses'] = $status_proses;
-            $data['status_cuci'] = $status_cuci;
-            $data['status_register'] = $status_register;
+            $add['status_transaksi'] = $status_transaksi;
+            $add['status_proses'] = $status_proses;
+            $add['status_cuci'] = $status_cuci;
+            $add['status_register'] = $status_register;
 
-            return $data;
+            return Notes::data($collection, $add);
 
         } catch (\Throwable$th) {
 

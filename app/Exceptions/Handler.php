@@ -65,22 +65,22 @@ class Handler extends ExceptionHandler
         if(request()->hasHeader('authorization')){
 
             if($e instanceof ValidationException){
-                return response()->json(Notes::validation($e->getMessage()), 422);
+                return Notes::validation($e->getMessage());
             }
 
             if($e instanceof ModelNotFoundException){
-                return response()->json(Notes::error($e->getMessage()), 400);
+                return Notes::error($e->getMessage());
             }
 
             if($e instanceof NotFoundHttpException){
-                return response()->json(Notes::notFound($e->getMessage()), 404);
+                return Notes::error($e->getMessage());
             }
 
             if($e instanceof QueryException){
-                return response()->json(Notes::notFound($e->getMessage()), 500);
+                return Notes::error($e->getMessage());
             }
 
-            return response()->json(Notes::error($e->getMessage()), $e->getCode() != 0 ? $e->getMessage() : 500);
+            return Notes::error($e->getMessage(), 'Error '.$e->getCode());
         }
 
         if ($this->isHttpException($e)) {

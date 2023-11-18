@@ -8,9 +8,9 @@ use Illuminate\Support\Facades\Route;
 
 class Response
 {
-    public static function sentJson($data)
+    public static function sentJson($data, $code = 200)
     {
-        return response()->json($data);
+        return response()->json($data, $code);
     }
 
     public static function redirectBack($data = null, $back = false)

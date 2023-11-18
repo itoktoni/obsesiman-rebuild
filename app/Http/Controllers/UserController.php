@@ -74,6 +74,6 @@ class UserController extends MasterController
         $user->api_token = $string_token;
         $user->save();
 
-        return response()->json(Notes::token($user->toArray()));
+        return Notes::token($user->toArray());
     }
 }
