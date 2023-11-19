@@ -120,6 +120,8 @@ class Notes
         }
 
         if (request()->wantsJson()) {
+
+            $data['data'] = [];
             return response()->json($data, 200);
         }
 
