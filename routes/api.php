@@ -17,6 +17,7 @@ use App\Dao\Models\ViewDetailLinen;
 use App\Http\Controllers\BarcodeController;
 use App\Http\Controllers\DeliveryController;
 use App\Http\Controllers\OpnameController;
+use App\Http\Controllers\RsController;
 use App\Http\Controllers\TransaksiController;
 use App\Http\Controllers\UserController;
 use App\Http\Requests\DetailDataRequest;

@@ -19,7 +19,7 @@ class UpdateGroupUserService extends UpdateService
         if ($check['status']) {
             Alert::update();
         } else {
-            Alert::error($check['data']);
+            Alert::error($check['message']);
         }
         return $check;
     }

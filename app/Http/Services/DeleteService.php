@@ -18,7 +18,7 @@ class DeleteService
         if ($check['status']) {
             Alert::delete();
         } else {
-            Alert::error($check['data']);
+            Alert::error($check['message']);
         }
 
         if (request()->wantsJson()) {

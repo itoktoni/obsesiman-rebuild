@@ -87,7 +87,7 @@ class Notes
         $log['code'] = 400;
         $log['name'] = self::error;
         $log['message'] = $message ?? $data;
-        $log['data'] = $data;
+        $log['data'] = [$data];
         Log::error($log);
         return self::sentJson($log, 400);
     }
