@@ -120,7 +120,7 @@ class Notes
         }
 
         if (request()->wantsJson()) {
-            return response()->json($data, $status);
+            return response()->json($data, 200);
         }
 
         return $data;

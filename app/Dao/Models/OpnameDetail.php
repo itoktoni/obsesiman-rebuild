@@ -39,6 +39,7 @@ class OpnameDetail extends Model
         'opname_detail_transaksi',
         'opname_detail_proses',
         'opname_detail_ketemu',
+        'opname_detail_register',
         'opname_detail_created_at',
         'opname_detail_updated_at',
         'opname_detail_created_by',
@@ -51,6 +52,7 @@ class OpnameDetail extends Model
         'opname_detail_transaksi' => 'int',
         'opname_detail_proses' => 'int',
         'opname_detail_ketemu' => 'int',
+        'opname_detail_blm_register' => 'int',
     ];
 
     protected $filters = [

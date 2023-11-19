@@ -157,5 +157,13 @@ trait OpnameDetailEntity
         return $this->{$this->field_ketemu()};
     }
 
+    public static function field_register()
+    {
+        return 'opname_detail_register';
+    }
 
+    public function getFieldRegisterAttribute()
+    {
+        return $this->{$this->field_register()};
+    }
 }
