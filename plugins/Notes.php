@@ -121,7 +121,9 @@ class Notes
 
         if (request()->wantsJson()) {
 
-            $data['data'] = [];
+            if ($status >= 400) {
+                $data['data'] = [];
+            }
             return response()->json($data, 200);
         }
 

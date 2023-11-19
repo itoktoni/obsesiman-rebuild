@@ -25,7 +25,7 @@ class DownloadLinenResource extends JsonResource
             'loc' => $this->field_ruangan_id,
             'jns' => $this->field_id,
             'sts' => $this->field_status_process,
-            'tgl' => $this->field_tanggal_update->format('Y-m-d H:i:s') ?? null,
+            'tgl' => $this->field_tanggal_update->format('Y-m-d H:i:s') ?? date('Y-m-d H:i:s'),
         ];
         // return parent::toArray($request);
     }
