@@ -44,7 +44,7 @@ class SaveOpnameService
                         }
 
                         $update = OpnameDetail::where(OpnameDetail::field_rfid(), $detail)
-                            ->where(OpnameDetail::field_proses(), $detail->field_status_process);
+                            ->where(OpnameDetail::field_opname(), $opname_id);
 
                         if($update->count() > 0) {
                             $update->update($add);
