@@ -23,9 +23,9 @@ return [
     */
     'route' => [
         // Prefix url for route Group
-        'prefix' => 'setting',
+        'prefix' => env('SETTING', 'configuration'),
         // Routes base name
-        'name' => 'setting',
+        'name' => env('SETTING', 'configuration'),
         // Middleware(s) applied on route Group
         // 'middleware' => ['web', 'auth'],
         'middleware' => ['web', 'auth'],
