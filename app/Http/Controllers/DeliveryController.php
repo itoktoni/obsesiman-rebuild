@@ -183,12 +183,12 @@ class DeliveryController extends MasterController
                 ];
             }
 
-            $add['total'] = count($total);
-            $add['user'] = $cetak->field_user;
-            $add['rs_nama'] = $cetak->has_rs->field_name ?? 'Admin';
-            $add['tanggal_cetak'] = $cetak->field_date;
+            $return['total'] = count($total);
+            $return['user'] = $cetak->field_user;
+            $return['rs_nama'] = $cetak->has_rs->field_name ?? 'Admin';
+            $return['tanggal_cetak'] = $cetak->field_date;
 
-            $passing = Notes::data($return, $add);
+            $passing = Notes::data($return);
 
         }
 

@@ -24,10 +24,9 @@ class SaveOpnameService
             if(!empty($original)){
                 foreach(array_chunk($original, env('TRANSACTION_CHUNK', 500)) as $chunk){
                     foreach($chunk as $detail){
-
                         $add = [
-                            // OpnameDetail::field_rfid() => $detail,
-                            // OpnameDetail::field_code() => $opname_id,
+                            OpnameDetail::field_rfid() => $detail,
+                            OpnameDetail::field_code() => $opname_id,
                             OpnameDetail::field_ketemu() => BooleanType::Yes,
                             OpnameDetail::field_register() => BooleanType::No,
                             OpnameDetail::field_waktu() => date('y-m-d H:i:s'),
@@ -44,10 +43,14 @@ class SaveOpnameService
                             ]);
                         }
 
-                        OpnameDetail::updateOrCreate([
-                            OpnameDetail::field_rfid() => $detail,
-                            OpnameDetail::field_code() => $opname_id,
-                        ], $add);
+                        $update = OpnameDetail::where(OpnameDetail::field_rfid(), $detail)
+                            ->where(OpnameDetail::field_proses(), $detail->field_status_process);
+
+                        if($update->count() > 0) {
+                            $update->update($add);
+                        } else {
+                            OpnameDetail::create($add);
+                        }
 
                         $sent[] = $add;
                     }
