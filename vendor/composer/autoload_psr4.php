@@ -89,7 +89,6 @@ return array(
     'GuzzleHttp\\Promise\\' => array($vendorDir . '/guzzlehttp/promises/src'),
     'GuzzleHttp\\' => array($vendorDir . '/guzzlehttp/guzzle/src'),
     'GrahamCampbell\\ResultType\\' => array($vendorDir . '/graham-campbell/result-type/src'),
-    'GeoSot\\EnvEditor\\' => array($vendorDir . '/geo-sot/laravel-env-editor/src'),
     'Fruitcake\\Cors\\' => array($vendorDir . '/fruitcake/laravel-cors/src', $vendorDir . '/fruitcake/php-cors/src'),
     'FontLib\\' => array($vendorDir . '/phenx/php-font-lib/src/FontLib'),
     'Faker\\' => array($vendorDir . '/fzaninotto/faker/src/Faker'),

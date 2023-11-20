@@ -3,7 +3,7 @@
         'name' => 'laravel/laravel',
         'pretty_version' => 'dev-master',
         'version' => 'dev-master',
-        'reference' => '16993579fd118d15b341b97246db1d53a36186b7',
+        'reference' => '9930eb04603821c7fba1df193ea239f58b78a435',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -257,15 +257,6 @@
                 0 => '1.9.x-dev',
             ),
             'dev_requirement' => true,
-        ),
-        'geo-sot/laravel-env-editor' => array(
-            'pretty_version' => '2.1.1',
-            'version' => '2.1.1.0',
-            'reference' => '00eb54c0caa7c2e88ea6aed8a6ab246207ec92cb',
-            'type' => 'library',
-            'install_path' => __DIR__ . '/../geo-sot/laravel-env-editor',
-            'aliases' => array(),
-            'dev_requirement' => false,
         ),
         'graham-campbell/result-type' => array(
             'pretty_version' => 'v1.1.2',
@@ -585,7 +576,7 @@
         'laravel/laravel' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
-            'reference' => '16993579fd118d15b341b97246db1d53a36186b7',
+            'reference' => '9930eb04603821c7fba1df193ea239f58b78a435',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
@@ -1041,8 +1032,8 @@
         'psr/log-implementation' => array(
             'dev_requirement' => false,
             'provided' => array(
-                0 => '1.0|2.0|3.0',
-                1 => '1.0.0 || 2.0.0 || 3.0.0',
+                0 => '1.0.0 || 2.0.0 || 3.0.0',
+                1 => '1.0|2.0|3.0',
             ),
         ),
         'psr/simple-cache' => array(
