@@ -95,6 +95,8 @@ Review and validate the code changes for missed edge cases:
 - `Enum::coerce()`: If only values were passed, you can replace it with `tryFrom()`.
    If keys or instances could also be passed, you might need additional logic to cover this.
 - `Enum::$description` and `Enum::getDescription()`: Implement an alternative.
+- try/catch-blocks that handle `BenSampo\Enum\Exceptions\InvalidEnumKeyException` or `BenSampo\Enum\Exceptions\InvalidEnumMemberException`.
+  Either catch the `ValueError` thrown by native enums, or switch to using `tryFrom()` and handle `null`.
 
 Once all enums are converted, you can remove your dependency on this library.
 
@@ -189,7 +191,7 @@ Once you have an enum instance, you can access the `key`, `value` and `descripti
 $userType = UserType::fromValue(UserType::SuperAdministrator);
 
 $userType->key; // SuperAdministrator
-$userType->value; // 0
+$userType->value; // 3
 $userType->description; // Super Administrator
 ```
 
@@ -203,7 +205,7 @@ This also means they can be echoed in blade views, for example.
 ```php
 $userType = UserType::fromValue(UserType::SuperAdministrator);
 
-(string) $userType // '0'
+(string) $userType // '3'
 ```
 
 ### Instance Equality
@@ -857,11 +859,11 @@ Use the [nova-enum-field](https://github.com/simplesquid/nova-enum-field) packag
 
 ## PHPStan Integration
 
-If you are using [PHPStan](https://github.com/phpstan/phpstan) for static
-analysis, you can enable the extension for proper recognition of the
-magic instantiation methods.
+If you are using [PHPStan](https://github.com/phpstan/phpstan) for static analysis, enable the extension for:
+- proper recognition of the magic instantiation methods
+- detection of duplicate enum values
 
-Add the following to your projects `phpstan.neon` includes:
+Use [PHPStan Extension Installer](https://github.com/phpstan/extension-installer) or add the following to your projects `phpstan.neon` includes:
 
 ```neon
 includes:
