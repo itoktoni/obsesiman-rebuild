@@ -196,13 +196,13 @@ class BarcodeController extends MasterController
                 ];
             }
 
-            $passing = Notes::data($return);
+            $add['total'] = count($total);
+            $add['user'] = $cetak->field_user;
+            $add['rs_nama'] = $cetak->has_rs->field_name ?? null;
+            $add['ruangan_nama'] = $cetak->has_ruangan->field_name ?? null;
+            $add['tanggal_cetak'] = $cetak->field_date;
 
-            $passing['total'] = count($total);
-            $passing['user'] = $cetak->field_user;
-            $passing['rs_nama'] = $cetak->has_rs->field_name ?? null;
-            $passing['ruangan_nama'] = $cetak->has_ruangan->field_name ?? null;
-            $passing['tanggal_cetak'] = $cetak->field_date;
+            $passing = Notes::data($return, $add);
         }
 
         return $passing;
