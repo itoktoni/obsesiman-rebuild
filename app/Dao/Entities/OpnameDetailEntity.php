@@ -62,16 +62,6 @@ trait OpnameDetailEntity
         return $this->{$this->field_waktu()};
     }
 
-    public static function field_status()
-    {
-        return 'opname_detail_status';
-    }
-
-    public function getFieldStatusAttribute()
-    {
-        return OpnameType::getDescription($this->{$this->field_status()});
-    }
-
     public static function field_transaksi()
     {
         return 'opname_detail_transaksi';

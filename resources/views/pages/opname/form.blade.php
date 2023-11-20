@@ -34,7 +34,7 @@
                 <tbody>
                     @forelse($detail as $table)
                     @php
-                    $view = $table->has_view;
+                    $view = $table->has_view ?? false;
                     @endphp
                     <tr>
                         <td>{{ $table->field_rfid }}</td>
@@ -42,8 +42,8 @@
                         <td>{{ $view->field_ruangan_name ?? '' }}</td>
                         <td>{{ $view->field_status_cuci_name ?? '' }}</td>
                         <td>{{ $view->field_pemakaian ?? '0' }}</td>
-                        <td>{{ formatDate($view->field_tanggal_update) ?? '' }} </td>
-                        <td>{{ $view->field_status_process_name ?? '' }} </td>
+                        <td>{{ $view ? formatDate($view->field_tanggal_update) : '' }} </td>
+                        <td>{{ $view->field_status_process_name ?? 'Belum Register' }} </td>
                         <td>{{ $table->field_ketemu == 1 ? 'Ketemu' : '-' }}</td>
                     </tr>
                     @empty

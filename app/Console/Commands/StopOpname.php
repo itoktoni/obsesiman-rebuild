@@ -52,11 +52,6 @@ class StopOpname extends Command
                     Opname::field_status() => OpnameType::Selesai
                 ]);
 
-            OpnameDetail::whereIn(OpnameDetail::field_opname(), $pluck)
-                ->update([
-                    OpnameDetail::field_status() => OpnameType::Selesai
-                ]);
-
             $rfid = OpnameDetail::select(OpnameDetail::field_rfid())
                 ->whereIn(OpnameDetail::field_opname(), $pluck)
                 ->get()
