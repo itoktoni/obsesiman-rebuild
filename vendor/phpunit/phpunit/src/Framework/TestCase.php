@@ -60,8 +60,6 @@ use function setlocale;
 use function sprintf;
 use function strpos;
 use function substr;
-use function sys_get_temp_dir;
-use function tempnam;
 use function trim;
 use function var_export;
 use DeepCopy\DeepCopy;
@@ -926,7 +924,6 @@ abstract class TestCase extends Assert implements Reorderable, SelfDescribing, T
             $codeCoverageCacheDirectory = "'." . $codeCoverageCacheDirectory . ".'";
 
             $configurationFilePath = $GLOBALS['__PHPUNIT_CONFIGURATION_FILE'] ?? '';
-            $processResultFile     = tempnam(sys_get_temp_dir(), 'phpunit_');
 
             $var = [
                 'composerAutoload'                           => $composerAutoload,
@@ -953,7 +950,6 @@ abstract class TestCase extends Assert implements Reorderable, SelfDescribing, T
                 'codeCoverageFilter'                         => $codeCoverageFilter,
                 'configurationFilePath'                      => $configurationFilePath,
                 'name'                                       => $this->getName(false),
-                'processResultFile'                          => $processResultFile,
             ];
 
             if (!$runEntireClass) {
@@ -963,7 +959,7 @@ abstract class TestCase extends Assert implements Reorderable, SelfDescribing, T
             $template->setVar($var);
 
             $php = AbstractPhpProcess::factory();
-            $php->runTestJob($template->render(), $this, $result, $processResultFile);
+            $php->runTestJob($template->render(), $this, $result);
         } else {
             $result->run($this);
         }

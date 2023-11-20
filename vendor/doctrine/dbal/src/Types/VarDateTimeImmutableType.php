@@ -5,7 +5,8 @@ namespace Doctrine\DBAL\Types;
 use DateTimeImmutable;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\Deprecations\Deprecation;
-use Exception;
+
+use function date_create_immutable;
 
 /**
  * Immutable type of {@see VarDateTimeType}.
@@ -61,10 +62,10 @@ class VarDateTimeImmutableType extends VarDateTimeType
             return $value;
         }
 
-        try {
-            $dateTime = new DateTimeImmutable($value);
-        } catch (Exception $e) {
-            throw ConversionException::conversionFailed($value, $this->getName(), $e);
+        $dateTime = date_create_immutable($value);
+
+        if ($dateTime === false) {
+            throw ConversionException::conversionFailed($value, $this->getName());
         }
 
         return $dateTime;

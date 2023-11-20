@@ -8,9 +8,6 @@ use KitLoong\MigrationsGenerator\Setting;
 
 class IndexNameHelper
 {
-    /**
-     * @var \KitLoong\MigrationsGenerator\Setting
-     */
     private $setting;
 
     public function __construct(Setting $setting)

@@ -40,13 +40,7 @@ final class Statement implements StatementInterface
         $this->statement  = $statement;
     }
 
-    /**
-     * @throws UnknownParameterType
-     *
-     * {@inheritDoc}
-     *
-     * @psalm-assert ParameterType::* $type
-     */
+    /** @inheritdoc */
     public function bindValue($param, $value, $type = ParameterType::STRING): bool
     {
         if (func_num_args() < 3) {
@@ -61,13 +55,7 @@ final class Statement implements StatementInterface
         return $this->statement->bindValue($param, $value, $this->convertParamType($type));
     }
 
-    /**
-     * @throws UnknownParameterType
-     *
-     * {@inheritDoc}
-     *
-     * @psalm-assert ParameterType::* $type
-     */
+    /** @inheritdoc */
     public function bindParam($param, &$variable, $type = ParameterType::STRING, $length = null): bool
     {
         Deprecation::trigger(
@@ -89,7 +77,7 @@ final class Statement implements StatementInterface
         return $this->statement->bindParam($param, $variable, $this->convertParamType($type));
     }
 
-    /** @inheritDoc */
+    /** @inheritdoc */
     public function execute($params = null): Result
     {
         if ($params !== null) {
@@ -120,11 +108,6 @@ final class Statement implements StatementInterface
         return new Result($result, $this->connection->changes());
     }
 
-    /**
-     * @psalm-return value-of<self::PARAM_TYPE_MAP>
-     *
-     * @psalm-assert ParameterType::* $type
-     */
     private function convertParamType(int $type): int
     {
         if (! isset(self::PARAM_TYPE_MAP[$type])) {

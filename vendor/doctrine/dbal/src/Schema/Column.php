@@ -36,7 +36,7 @@ class Column extends AbstractAsset
     /** @var bool */
     protected $_notnull = true;
 
-    /** @var mixed */
+    /** @var string|null */
     protected $_default;
 
     /** @var bool */
@@ -278,7 +278,7 @@ class Column extends AbstractAsset
         return $this->_notnull;
     }
 
-    /** @return mixed */
+    /** @return string|null */
     public function getDefault()
     {
         return $this->_default;

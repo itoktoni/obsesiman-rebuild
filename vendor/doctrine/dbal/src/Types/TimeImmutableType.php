@@ -62,15 +62,15 @@ class TimeImmutableType extends TimeType
 
         $dateTime = DateTimeImmutable::createFromFormat('!' . $platform->getTimeFormatString(), $value);
 
-        if ($dateTime !== false) {
-            return $dateTime;
+        if ($dateTime === false) {
+            throw ConversionException::conversionFailedFormat(
+                $value,
+                $this->getName(),
+                $platform->getTimeFormatString(),
+            );
         }
 
-        throw ConversionException::conversionFailedFormat(
-            $value,
-            $this->getName(),
-            $platform->getTimeFormatString(),
-        );
+        return $dateTime;
     }
 
     /**

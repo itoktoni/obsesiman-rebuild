@@ -95,8 +95,6 @@ Review and validate the code changes for missed edge cases:
 - `Enum::coerce()`: If only values were passed, you can replace it with `tryFrom()`.
    If keys or instances could also be passed, you might need additional logic to cover this.
 - `Enum::$description` and `Enum::getDescription()`: Implement an alternative.
-- try/catch-blocks that handle `BenSampo\Enum\Exceptions\InvalidEnumKeyException` or `BenSampo\Enum\Exceptions\InvalidEnumMemberException`.
-  Either catch the `ValueError` thrown by native enums, or switch to using `tryFrom()` and handle `null`.
 
 Once all enums are converted, you can remove your dependency on this library.
 
@@ -191,7 +189,7 @@ Once you have an enum instance, you can access the `key`, `value` and `descripti
 $userType = UserType::fromValue(UserType::SuperAdministrator);
 
 $userType->key; // SuperAdministrator
-$userType->value; // 3
+$userType->value; // 0
 $userType->description; // Super Administrator
 ```
 
@@ -205,7 +203,7 @@ This also means they can be echoed in blade views, for example.
 ```php
 $userType = UserType::fromValue(UserType::SuperAdministrator);
 
-(string) $userType // '3'
+(string) $userType // '0'
 ```
 
 ### Instance Equality

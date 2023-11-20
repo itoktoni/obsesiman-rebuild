@@ -21,7 +21,6 @@ use MyCLabs\Enum\Enum;
  * @method static self USE_CURRENT()
  * @method static self USE_CURRENT_ON_UPDATE()
  * @method static self VIRTUAL_AS()
- * @extends \MyCLabs\Enum\Enum<string>
  */
 final class ColumnModifier extends Enum
 {

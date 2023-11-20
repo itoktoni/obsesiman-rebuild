@@ -10,9 +10,6 @@ use KitLoong\MigrationsGenerator\Setting;
 
 class CollationModifier implements Modifier
 {
-    /**
-     * @var \KitLoong\MigrationsGenerator\Setting
-     */
     private $setting;
 
     public function __construct(Setting $setting)

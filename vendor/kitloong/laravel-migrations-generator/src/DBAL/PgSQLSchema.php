@@ -15,14 +15,8 @@ use KitLoong\MigrationsGenerator\Repositories\PgSQLRepository;
 use KitLoong\MigrationsGenerator\Schema\Models\Table;
 use KitLoong\MigrationsGenerator\Schema\Models\View;
 
-/**
- * @extends \KitLoong\MigrationsGenerator\DBAL\DBALSchema<\Doctrine\DBAL\Platforms\PostgreSQLPlatform>
- */
 class PgSQLSchema extends DBALSchema
 {
-    /**
-     * @var \KitLoong\MigrationsGenerator\Repositories\PgSQLRepository
-     */
     private $pgSQLRepository;
 
     public function __construct(RegisterColumnType $registerColumnType, PgSQLRepository $pgSQLRepository)
@@ -110,6 +104,7 @@ class PgSQLSchema extends DBALSchema
      */
     public function getProcedures(): Collection
     {
+        $this->pgSQLRepository->getProcedures();
         return (new Collection($this->pgSQLRepository->getProcedures()))
             ->map(function (ProcedureDefinition $procedureDefinition) {
                 return new PgSQLProcedure($procedureDefinition->getName(), $procedureDefinition->getDefinition());

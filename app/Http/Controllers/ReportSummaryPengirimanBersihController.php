@@ -35,7 +35,6 @@ class ReportSummaryPengirimanBersihController extends MinimalController
         $query =  self::$repository->getDetailBersih()
             ->select([
                 'transaksi_delivery',
-                'transaksi_barcode',
                 'view_rs_nama',
                 'view_ruangan_nama',
                 DB::raw('count(transaksi_rfid) as total_rfid'),

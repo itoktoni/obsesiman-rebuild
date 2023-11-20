@@ -40,7 +40,7 @@ class Notes
     public static function create($data = null)
     {
         $log['status'] = true;
-        $log['code'] = 201;
+        $log['code'] = 200;
         $log['name'] = self::create;
         $log['message'] = 'Data berhasil di buat';
         $log['data'] = $data;
@@ -73,7 +73,7 @@ class Notes
     public static function delete($data = null)
     {
         $log['status'] = true;
-        $log['code'] = 204;
+        $log['code'] = 200;
         $log['name'] = self::delete;
         $log['message'] = 'Data berhasil di hapus';
         $log['data'] = $data;

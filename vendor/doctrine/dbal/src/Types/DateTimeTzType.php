@@ -3,12 +3,8 @@
 namespace Doctrine\DBAL\Types;
 
 use DateTime;
-use DateTimeImmutable;
 use DateTimeInterface;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
-use Doctrine\Deprecations\Deprecation;
-
-use function get_class;
 
 /**
  * DateTime type saving additional timezone information.
@@ -59,17 +55,6 @@ class DateTimeTzType extends Type implements PhpDateTimeMappingType
             return $value;
         }
 
-        if ($value instanceof DateTimeImmutable) {
-            Deprecation::triggerIfCalledFromOutside(
-                'doctrine/dbal',
-                'https://github.com/doctrine/dbal/pull/6017',
-                'Passing an instance of %s is deprecated, use %s::%s() instead.',
-                get_class($value),
-                DateTimeTzImmutableType::class,
-                __FUNCTION__,
-            );
-        }
-
         if ($value instanceof DateTimeInterface) {
             return $value->format($platform->getDateTimeTzFormatString());
         }
@@ -77,7 +62,7 @@ class DateTimeTzType extends Type implements PhpDateTimeMappingType
         throw ConversionException::conversionFailedInvalidType(
             $value,
             $this->getName(),
-            ['null', DateTime::class],
+            ['null', 'DateTime'],
         );
     }
 
@@ -92,30 +77,19 @@ class DateTimeTzType extends Type implements PhpDateTimeMappingType
      */
     public function convertToPHPValue($value, AbstractPlatform $platform)
     {
-        if ($value instanceof DateTimeImmutable) {
-            Deprecation::triggerIfCalledFromOutside(
-                'doctrine/dbal',
-                'https://github.com/doctrine/dbal/pull/6017',
-                'Passing an instance of %s is deprecated, use %s::%s() instead.',
-                get_class($value),
-                DateTimeTzImmutableType::class,
-                __FUNCTION__,
-            );
-        }
-
         if ($value === null || $value instanceof DateTimeInterface) {
             return $value;
         }
 
-        $dateTime = DateTime::createFromFormat($platform->getDateTimeTzFormatString(), $value);
-        if ($dateTime !== false) {
-            return $dateTime;
+        $val = DateTime::createFromFormat($platform->getDateTimeTzFormatString(), $value);
+        if ($val === false) {
+            throw ConversionException::conversionFailedFormat(
+                $value,
+                $this->getName(),
+                $platform->getDateTimeTzFormatString(),
+            );
         }
 
-        throw ConversionException::conversionFailedFormat(
-            $value,
-            $this->getName(),
-            $platform->getDateTimeTzFormatString(),
-        );
+        return $val;
     }
 }

@@ -3,7 +3,7 @@
 		<td></td>
 		<td colspan="6">
 			<h3>
-				<b>DETAIL PENGIRIMAN LINEN RETUR </b>
+				<b>SUMMARY PENGIRIMAN LINEN RETUR </b>
 			</h3>
 		</td>
 		<td rowspan="3">
@@ -35,7 +35,6 @@
 			<tr>
 				<th width="1">No. </th>
 				<th>NO. DO</th>
-				<th>NO. BARCODE</th>
 				<th>RUMAH SAKIT</th>
 				<th>TOTAL</th>
 				<th>TANGGAL PENGIRIMAN BERSIH</th>

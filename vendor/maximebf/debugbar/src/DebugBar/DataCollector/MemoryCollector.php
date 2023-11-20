@@ -17,10 +17,6 @@ class MemoryCollector extends DataCollector implements Renderable
 {
     protected $realUsage = false;
 
-    protected $memoryRealStart = 0;
-
-    protected $memoryStart = 0;
-
     protected $peakUsage = 0;
 
     /**
@@ -46,24 +42,13 @@ class MemoryCollector extends DataCollector implements Renderable
     }
 
     /**
-     * Reset memory baseline, to measure multiple requests in a long running process
-     *
-     * @return void
-     */
-    public function resetMemoryBaseline()
-    {
-        $this->memoryStart = memory_get_usage(false);
-        $this->memoryRealStart = memory_get_usage(true);
-    }
-
-    /**
      * Returns the peak memory usage
      *
      * @return integer
      */
     public function getPeakUsage()
     {
-        return $this->peakUsage - ($this->realUsage ? $this->memoryRealStart : $this->memoryStart);
+        return $this->peakUsage;
     }
 
     /**
@@ -81,8 +66,8 @@ class MemoryCollector extends DataCollector implements Renderable
     {
         $this->updatePeakUsage();
         return array(
-            'peak_usage' => $this->getPeakUsage(),
-            'peak_usage_str' => $this->getDataFormatter()->formatBytes($this->getPeakUsage(), 0)
+            'peak_usage' => $this->peakUsage,
+            'peak_usage_str' => $this->getDataFormatter()->formatBytes($this->peakUsage, 0)
         );
     }
 

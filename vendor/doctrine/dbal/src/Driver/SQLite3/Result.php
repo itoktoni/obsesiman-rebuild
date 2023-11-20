@@ -21,7 +21,7 @@ final class Result implements ResultInterface
         $this->changes = $changes;
     }
 
-    /** @inheritDoc */
+    /** @inheritdoc */
     public function fetchNumeric()
     {
         if ($this->result === null) {
@@ -31,7 +31,7 @@ final class Result implements ResultInterface
         return $this->result->fetchArray(SQLITE3_NUM);
     }
 
-    /** @inheritDoc */
+    /** @inheritdoc */
     public function fetchAssociative()
     {
         if ($this->result === null) {
@@ -41,25 +41,25 @@ final class Result implements ResultInterface
         return $this->result->fetchArray(SQLITE3_ASSOC);
     }
 
-    /** @inheritDoc */
+    /** @inheritdoc */
     public function fetchOne()
     {
         return FetchUtils::fetchOne($this);
     }
 
-    /** @inheritDoc */
+    /** @inheritdoc */
     public function fetchAllNumeric(): array
     {
         return FetchUtils::fetchAllNumeric($this);
     }
 
-    /** @inheritDoc */
+    /** @inheritdoc */
     public function fetchAllAssociative(): array
     {
         return FetchUtils::fetchAllAssociative($this);
     }
 
-    /** @inheritDoc */
+    /** @inheritdoc */
     public function fetchFirstColumn(): array
     {
         return FetchUtils::fetchFirstColumn($this);

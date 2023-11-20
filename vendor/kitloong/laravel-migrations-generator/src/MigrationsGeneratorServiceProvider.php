@@ -20,7 +20,6 @@ use KitLoong\MigrationsGenerator\Migration\Generator\Columns\OmitNameColumn;
 use KitLoong\MigrationsGenerator\Migration\Generator\Columns\PresetValuesColumn;
 use KitLoong\MigrationsGenerator\Migration\Generator\Columns\SoftDeleteColumn;
 use KitLoong\MigrationsGenerator\Migration\Generator\Columns\StringColumn;
-use KitLoong\MigrationsGenerator\Migration\Migrator\Migrator;
 use KitLoong\MigrationsGenerator\Repositories\MariaDBRepository;
 use KitLoong\MigrationsGenerator\Repositories\MySQLRepository;
 use KitLoong\MigrationsGenerator\Repositories\PgSQLRepository;
@@ -35,6 +34,9 @@ class MigrationsGeneratorServiceProvider extends ServiceProvider
 {
     /**
      * Register the service provider.
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      */
     public function register(): void
     {
@@ -67,20 +69,10 @@ class MigrationsGeneratorServiceProvider extends ServiceProvider
         }
 
         // Bind the Repository Interface to $app['migrations.repository']
-        $this->app->singleton(
+        $this->app->bind(
             MigrationRepositoryInterface::class,
             function ($app) {
                 return $app['migration.repository'];
-            }
-        );
-
-        // Backward compatible for older Laravel version which failed to resolve Illuminate\Database\ConnectionResolverInterface.
-        $this->app->singleton(
-            Migrator::class,
-            function ($app) {
-                $repository = $app['migration.repository'];
-
-                return new Migrator($repository, $app['db'], $app['files'], $app['events']);
             }
         );
 
@@ -100,6 +92,9 @@ class MigrationsGeneratorServiceProvider extends ServiceProvider
 
     /**
      * Register the config path.
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      */
     protected function registerConfig(): void
     {

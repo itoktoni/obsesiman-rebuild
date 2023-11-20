@@ -26,8 +26,6 @@ use function stripos;
  */
 class RunSqlCommand extends Command
 {
-    use CommandCompatibility;
-
     private ConnectionProvider $connectionProvider;
 
     public function __construct(ConnectionProvider $connectionProvider)
@@ -57,8 +55,14 @@ outputs the results:
 EOT);
     }
 
-    /** @throws Exception */
-    private function doExecute(InputInterface $input, OutputInterface $output): int
+    /**
+     * {@inheritDoc}
+     *
+     * @return int
+     *
+     * @throws Exception
+     */
+    protected function execute(InputInterface $input, OutputInterface $output)
     {
         $conn = $this->getConnection($input);
         $io   = new SymfonyStyle($input, $output);

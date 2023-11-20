@@ -3,7 +3,7 @@
 		<td></td>
 		<td colspan="6">
 			<h3>
-				<b>DETAIL PENGIRIMAN LINEN BARU </b>
+				<b>SUMMARY PENGIRIMAN LINEN BARU </b>
 			</h3>
 		</td>
 		<td rowspan="3">
@@ -35,7 +35,6 @@
 			<tr>
 				<th width="1">No. </th>
 				<th>NO. DO</th>
-				<th>NO. BARCODE</th>
 				<th>RUMAH SAKIT</th>
 				<th>TOTAL</th>
 				<th>TANGGAL PENGIRIMAN BERSIH</th>
@@ -47,7 +46,6 @@
 			<tr>
 				<td>{{ $loop->iteration }}</td>
 				<td>{{ $table->field_delivery }}</td>
-				<td>{{ $table->field_barcode }}</td>
 				<td>{{ $table->view_rs_nama }}</td>
 				<td>{{ $table->total_rfid ?? 0 }}</td>
 				<td>{{ formatDate($table->transaksi_delivery_at) }}</td>

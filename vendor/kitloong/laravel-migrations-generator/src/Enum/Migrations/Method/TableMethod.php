@@ -9,7 +9,6 @@ use MyCLabs\Enum\Enum;
  *
  * @see https://laravel.com/docs/master/migrations#tables
  * @method static self COMMENT()
- * @extends \MyCLabs\Enum\Enum<string>
  */
 final class TableMethod extends Enum
 {

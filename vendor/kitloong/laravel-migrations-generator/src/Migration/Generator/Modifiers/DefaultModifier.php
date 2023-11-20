@@ -14,9 +14,6 @@ class DefaultModifier implements Modifier
 {
     use CheckMigrationMethod;
 
-    /**
-     * @var array<string, \Closure(\KitLoong\MigrationsGenerator\Migration\Blueprint\Method $method, \KitLoong\MigrationsGenerator\Schema\Models\Column $column): \KitLoong\MigrationsGenerator\Migration\Blueprint\Method>
-     */
     private $chainerMap = [];
 
     public function __construct()

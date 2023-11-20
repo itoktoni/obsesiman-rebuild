@@ -9,7 +9,6 @@ use MyCLabs\Enum\Enum;
  * @method static self TABLE()
  * @method static self VIEW()
  * @method static self PROCEDURE()
- * @extends \MyCLabs\Enum\Enum<string>
  */
 final class MigrationFileType extends Enum
 {

@@ -14,6 +14,7 @@
         "coderello/laravel-shared-data": "^4.0",
         "consoletvs/charts": "6.*",
         "fruitcake/laravel-cors": "^3.0",
+        "geo-sot/laravel-env-editor": "^2.1",
         "guzzlehttp/guzzle": "^7.0.1",
         "hammerstone/fast-paginate": "^0.1.10",
         "izniburak/laravel-auto-routes": "1.6.0",

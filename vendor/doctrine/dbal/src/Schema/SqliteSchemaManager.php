@@ -417,13 +417,14 @@ class SqliteSchemaManager extends AbstractSchemaManager
         }
 
         $options = [
-            'length'    => $length,
-            'unsigned'  => $unsigned,
-            'fixed'     => $fixed,
-            'notnull'   => $notnull,
-            'default'   => $default,
+            'length'   => $length,
+            'unsigned' => $unsigned,
+            'fixed'    => $fixed,
+            'notnull'  => $notnull,
+            'default'  => $default,
             'precision' => $precision,
             'scale'     => $scale,
+            'autoincrement' => false,
         ];
 
         return new Column($tableColumn['name'], Type::getType($type), $options);
@@ -470,16 +471,6 @@ class SqliteSchemaManager extends AbstractSchemaManager
             $list[$id]['local'][] = $value['from'];
 
             if ($value['to'] === null) {
-                // Inferring a shorthand form for the foreign key constraint, where the "to" field is empty.
-                // @see https://www.sqlite.org/foreignkeys.html#fk_indexes.
-                $foreignTableIndexes = $this->_getPortableTableIndexesList([], $value['table']);
-
-                if (! isset($foreignTableIndexes['primary'])) {
-                    continue;
-                }
-
-                $list[$id]['foreign'] = [...$list[$id]['foreign'], ...$foreignTableIndexes['primary']->getColumns()];
-
                 continue;
             }
 
