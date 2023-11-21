@@ -57,16 +57,19 @@ class DeliveryRequest extends FormRequest
 
         switch ($this->status_transaksi) {
             case TransactionType::BersihKotor:
-                $code = env('CODE_BERSIH', 'BSH');
+                $code = env('CODE_DELIVERY_BERSIH', 'BBSH');
                 break;
             case TransactionType::BersihRetur:
-                $code = env('CODE_RETUR', 'RTR');
+                $code = env('CODE_DELIVERY_RETUR', 'BRTR');
                 break;
             case TransactionType::BersihRewash:
-                $code = env('CODE_REWASH', 'WSH');
+                $code = env('CODE_DELIVERY_REWASH', 'BWSH');
                 break;
+            case TransactionType::Register:
+                    $code = env('CODE_DELIVERY_REGISTER', 'BBRU');
+                    break;
             default:
-                $code = env('CODE_BERSIH', 'BSH');
+                $code = env('CODE_DELIVERY_BERSIH', 'BBSH');
                 break;
         }
 

@@ -43,7 +43,7 @@
                 <th>Belum teregister</th>
                 <th>Beda RS</th>
                 <th>Total Rewash (Pcs)</th>
-                <th>(Kg) Bersih</th>
+                <th>(Kg) Rewash</th>
                 <th>Total Bersih (Pcs)</th>
                 <th>-</th>
                 <th>+</th>
@@ -55,10 +55,10 @@
                 $total_number = $selisih = 0;
                 $total_lawan = 0;
                 $total_beda_rs = $kotor->where(Transaksi::field_beda_rs(), BedaRsType::Beda)
-                    ->whereIn(Transaksi::field_status_transaction(), KOTOR)
+                    ->whereIn(Transaksi::field_status_transaction(), TransactionType::Rewash)
                     ->count();
                 $total_belum_register = $kotor->where(Transaksi::field_beda_rs(), BedaRsType::BelumRegister)
-                    ->whereIn(Transaksi::field_status_transaction(), KOTOR)
+                    ->whereIn(Transaksi::field_status_transaction(), TransactionType::Rewash)
                     ->count();
             @endphp
             @forelse($linen as $linen_id => $name)
@@ -67,25 +67,25 @@
                     $total_number = $loop->iteration++;
                     $total_per_linen = $kotor
                         ->where(Transaksi::field_beda_rs(), 0)
-                        ->whereIn(Transaksi::field_status_transaction(), KOTOR)
+                        ->whereIn(Transaksi::field_status_transaction(), TransactionType::Rewash)
                         ->where('view_linen_id', $linen_id)
                         ->count();
 
                     $sum_per_linen = $sum_per_linen + $total_per_linen;
 
                     $total_lawan = $bersih
-                        ->whereIn(Transaksi::field_status_bersih(), BERSIH)
+                        ->whereIn(Transaksi::field_status_bersih(), TransactionType::BersihRewash)
                         ->where('view_linen_id', $linen_id)
                         ->count();
 
                     $sum_lawan = $sum_lawan + $total_lawan;
 
                     $berat = $bersih
-                        ->whereIn(Transaksi::field_status_bersih(), BERSIH)
+                        ->whereIn(Transaksi::field_status_transaction(), TransactionType::Rewash)
                         ->where('view_linen_id', $linen_id)
                         ->first()->view_linen_berat ?? 0;
 
-                    $total_kg = $berat * $total_lawan;
+                    $total_kg = $berat * $total_per_linen;
                     $sum_kg = $sum_kg + $total_kg;
 
                     $selisih = $total_lawan - $total_per_linen;
