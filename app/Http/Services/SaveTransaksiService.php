@@ -5,6 +5,8 @@ namespace App\Http\Services;
 use App\Dao\Models\Detail;
 use App\Dao\Models\History;
 use App\Dao\Models\Transaksi;
+use App\Dao\Models\ViewDetailLinen;
+use App\Http\Resources\DetailResource;
 use Illuminate\Support\Facades\DB;
 use Plugins\Notes;
 
@@ -21,6 +23,7 @@ class SaveTransaksiService
                     Transaksi::insert($save_transaksi);
                 }
             }
+
             if(!empty($linen)){
                 foreach(array_chunk($linen, env('TRANSACTION_CHUNK')) as $save_detail){
                     Detail::whereIn(Detail::field_primary(), $save_detail)

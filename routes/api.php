@@ -511,15 +511,11 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
                 Detail::field_updated_by() => auth()->user()->id,
             ]);
 
-            $check = $service->save($status_baru, ProcessType::Grouping, $data_transaksi, $linen, $log);
-            if(!$check['status']){
-                return $check;
-            }
-
             $update = ViewDetailLinen::findOrFail($rfid);
 
             $collection = new DetailResource($update);
-            return Notes::data($collection);
+
+            return $service->save($status_baru, ProcessType::Grouping, $data_transaksi, $linen, $log, $collection);
         }
         catch (\Illuminate\Database\Eloquent\ModelNotFoundException $th) {
             return Notes::error($rfid , 'RFID '.$rfid.' tidak ditemukan');
@@ -674,13 +670,4 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
         return $data;
     });
 
-});
-
-Route::get('transaksi/{transaksi}/proses/{proses}', function($transaksi, $proses){
-    Detail::whereNotNull(Detail::field_primary())
-        ->update([
-            Detail::field_status_process() => $proses,
-            Detail::field_status_transaction() => $transaksi,
-            Detail::field_updated_at() => now()->addDay(-1)
-        ]);
 });
