@@ -355,7 +355,13 @@ class TransaksiController extends MasterController
         cleansing duplicate rfid
         ketika rfid dibalikin
         */
-        $return = collect($return)->unique(RFID)->values()->all();
+
+        $preventif = collect($return);
+        if($preventif->where('status_sync', '!=', 0)->count() == 0){
+            return Notes::error('Data sudah ada di server !');
+        }
+
+        $return = $preventif->unique(RFID)->values()->all();
         return Notes::create($return);
     }
 }
