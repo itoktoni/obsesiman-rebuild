@@ -38,6 +38,23 @@ h4{
         background-color: #fff;
         font-family: sans-serif,
 	}
+
+    a:hover{
+        cursor: pointer;
+    }
+
+    .download{
+        position: fixed;
+        top: 9px;
+        right: 240px;
+    }
+
+    .ready{
+        position: fixed;
+        top: 9px;
+        right: 410px;
+        background-color:  lightgreen;
+    }
 }
 
 a:link, a:visited, a {

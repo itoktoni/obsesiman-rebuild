@@ -2,13 +2,17 @@
 
 use App\Dao\Enums\MenuType;
 use App\Dao\Facades\EnvFacades;
+use App\Exports\ExportRegister;
 use App\Http\Controllers\HomeController;
+use App\Jobs\downloadReport;
 use Buki\AutoRoute\AutoRouteFacade as AutoRoute;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use Plugins\Query;
+use Maatwebsite\Excel\Facades\Excel;
 
 Route::get('console', [HomeController::class, 'console'])->name('console');
 

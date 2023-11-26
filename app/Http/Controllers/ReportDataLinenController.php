@@ -8,6 +8,7 @@ use App\Dao\Models\Rs;
 use App\Dao\Models\Ruangan;
 use App\Dao\Models\ViewDetailLinen;
 use App\Dao\Repositories\DetailRepository;
+use App\Jobs\downloadReport;
 use Illuminate\Http\Request;
 
 class ReportDataLinenController extends MinimalController
@@ -42,11 +43,14 @@ class ReportDataLinenController extends MinimalController
         set_time_limit(0);
         $rs = Rs::find(request()->get(ViewDetailLinen::field_rs_id()));
 
-        $this->data = $this->getQuery($request);
+        $this->data = [];
+        if($request->action != 'export'){
+            $this->data = $this->getQuery($request);
+        }
 
         return moduleView(modulePathPrint(), $this->share([
             'data' => $this->data,
-            'rs' => $rs
+            'rs' => $rs,
         ]));
     }
 }

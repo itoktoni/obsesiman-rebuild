@@ -14,6 +14,7 @@ define('ACTION_DELETE', 'getDelete');
 define('ACTION_EMPTY', 'empty');
 define('ACTION_TABLE', 'getTable');
 define('ACTION_PRINT', 'getPrint');
+define('ACTION_EXPORT', 'getExport');
 define('ERROR_PERMISION', 'Maaf anda tidak punya otorisasi untuk melakukan hal ini');
 
 define('VIEW_DETAIL_LINEN', 'view_detail_linen');
@@ -223,4 +224,30 @@ function checkActive($rsid){
     if (env('TRANSACTION_ACTIVE_RS_ONLY', 1) && !(Rs::find($rsid)->field_active)) {
         return Notes::error($rsid, 'Rs belum di registrasi');
     }
+}
+
+function unic($length)
+{
+    $chars = array_merge(range('a', 'z'), range('A', 'Z'));
+    $length = intval($length) > 0 ? intval($length) : 16;
+    $max = count($chars) - 1;
+    $str = "";
+
+    while ($length--) {
+        shuffle($chars);
+        $rand = mt_rand(0, $max);
+        $str .= $chars[$rand];
+    }
+
+    return $str;
+}
+
+function getClass($class)
+{
+    return (new \ReflectionClass($class))->getShortName();
+}
+
+function getLowerClass($class)
+{
+    return strtolower(getClass($class));
 }
