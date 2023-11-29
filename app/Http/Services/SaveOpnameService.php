@@ -4,6 +4,7 @@ namespace App\Http\Services;
 
 use App\Dao\Enums\BooleanType;
 use App\Dao\Enums\ProcessType;
+use App\Dao\Enums\SyncType;
 use App\Dao\Enums\TransactionType;
 use App\Dao\Models\OpnameDetail;
 use Illuminate\Support\Facades\DB;
@@ -39,7 +40,6 @@ class SaveOpnameService
                         ];
 
                         if (isset($data_rfid[$rfid])) {
-
                             $detail = $data_rfid[$rfid];
                             $add = array_merge($add, [
                                 OpnameDetail::field_transaksi() => $detail->field_status_transaction,
@@ -50,13 +50,16 @@ class SaveOpnameService
                         $update = OpnameDetail::where(OpnameDetail::field_rfid(), $rfid)
                             ->where(OpnameDetail::field_opname(), $opname_id);
 
+                        $opanme_sync = ['opname_detail_sync' => SyncType::No];
                         if($update->count() > 0) {
                             $update->update($add);
+                            $opanme_sync = ['opname_detail_sync' => SyncType::No];
                         } else {
                             OpnameDetail::create($add);
+                            $opanme_sync = ['opname_detail_sync' => SyncType::Yes];
                         }
 
-                        $sent[] = $add;
+                        $sent[] = array_merge($add, $opanme_sync);
                     }
 
                 }
