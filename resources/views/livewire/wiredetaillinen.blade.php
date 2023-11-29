@@ -2,9 +2,16 @@
 
     <div class="header-action">
         <a class="download" wire:click="export">Download Semua</a>
-    </div>
 
-    <h1>{{ $bus_id }}</h1>
+        @if($bus_id)
+        <div class="wrapper">
+            <div class="progress-bar">
+                <span class="progress-bar-fill" style="width: {{ $progress }}%;"></span>
+            </div>
+        </div>
+        @endif
+
+    </div>
 
     @if($exporting && !$finish)
     <div wire:poll.500ms="updateProgress">

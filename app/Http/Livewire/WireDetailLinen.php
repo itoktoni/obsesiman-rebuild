@@ -15,6 +15,7 @@ class WireDetailLinen extends Component
     public $exporting = false;
     public $finish = false;
     public $code;
+    public $progress = 1;
 
     public function export()
     {
@@ -32,17 +33,25 @@ class WireDetailLinen extends Component
 
     public function getBus(){
         if(!$this->bus_id){
-            return null;
+            return false;
         }
 
         return Bus::findBatch($this->bus_id);
     }
 
     public function updateProgress(){
-        $this->finish = $this->getBus()->finished() ? $this->getBus()->finished() : false;
+        $this->finish = $this->getBus() ? $this->getBus()->finished() : false;
 
         if($this->finish){
             $this->exporting = false;
+        }
+
+        if ($this->progress < 90) {
+            $this->progress = $this->progress + 1;
+        }
+
+        if ($this->finish) {
+            $this->progress = 100;
         }
     }
 
