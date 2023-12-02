@@ -38,7 +38,6 @@
     <script src="{{ url('assets/js/app.min.js') }}"></script>
 
     @stack('footer')
-
 </body>
 
 </html>
