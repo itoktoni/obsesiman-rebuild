@@ -92,11 +92,12 @@ class ComposerStaticInit06129aac40bd6363e25876bda7254c44
             'Symfony\\Component\\Console\\' => 26,
             'Svg\\' => 4,
             'Spatie\\SimpleExcel\\' => 19,
+            'Spatie\\MailPreview\\' => 19,
+            'Spatie\\LaravelPackageTools\\' => 27,
             'Sabberworm\\CSS\\' => 15,
         ),
         'R' => 
         array (
-            'Rennokki\\QueryCache\\' => 20,
             'Ramsey\\Uuid\\' => 12,
             'Ramsey\\Collection\\' => 18,
         ),
@@ -375,13 +376,17 @@ class ComposerStaticInit06129aac40bd6363e25876bda7254c44
         array (
             0 => __DIR__ . '/..' . '/spatie/simple-excel/src',
         ),
+        'Spatie\\MailPreview\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/spatie/laravel-mail-preview/src',
+        ),
+        'Spatie\\LaravelPackageTools\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/spatie/laravel-package-tools/src',
+        ),
         'Sabberworm\\CSS\\' => 
         array (
             0 => __DIR__ . '/..' . '/sabberworm/php-css-parser/src',
-        ),
-        'Rennokki\\QueryCache\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/rennokki/laravel-eloquent-query-cache/src',
         ),
         'Ramsey\\Uuid\\' => 
         array (
@@ -6256,11 +6261,6 @@ class ComposerStaticInit06129aac40bd6363e25876bda7254c44
         'Ramsey\\Uuid\\UuidInterface' => __DIR__ . '/..' . '/ramsey/uuid/src/UuidInterface.php',
         'Ramsey\\Uuid\\Validator\\GenericValidator' => __DIR__ . '/..' . '/ramsey/uuid/src/Validator/GenericValidator.php',
         'Ramsey\\Uuid\\Validator\\ValidatorInterface' => __DIR__ . '/..' . '/ramsey/uuid/src/Validator/ValidatorInterface.php',
-        'Rennokki\\QueryCache\\Contracts\\QueryCacheModuleInterface' => __DIR__ . '/..' . '/rennokki/laravel-eloquent-query-cache/src/Contracts/QueryCacheModuleInterface.php',
-        'Rennokki\\QueryCache\\FlushQueryCacheObserver' => __DIR__ . '/..' . '/rennokki/laravel-eloquent-query-cache/src/FlushQueryCacheObserver.php',
-        'Rennokki\\QueryCache\\Query\\Builder' => __DIR__ . '/..' . '/rennokki/laravel-eloquent-query-cache/src/Query/Builder.php',
-        'Rennokki\\QueryCache\\Traits\\QueryCacheModule' => __DIR__ . '/..' . '/rennokki/laravel-eloquent-query-cache/src/Traits/QueryCacheModule.php',
-        'Rennokki\\QueryCache\\Traits\\QueryCacheable' => __DIR__ . '/..' . '/rennokki/laravel-eloquent-query-cache/src/Traits/QueryCacheable.php',
         'Sabberworm\\CSS\\CSSList\\AtRuleBlockList' => __DIR__ . '/..' . '/sabberworm/php-css-parser/src/CSSList/AtRuleBlockList.php',
         'Sabberworm\\CSS\\CSSList\\CSSBlockList' => __DIR__ . '/..' . '/sabberworm/php-css-parser/src/CSSList/CSSBlockList.php',
         'Sabberworm\\CSS\\CSSList\\CSSList' => __DIR__ . '/..' . '/sabberworm/php-css-parser/src/CSSList/CSSList.php',
@@ -6500,6 +6500,18 @@ class ComposerStaticInit06129aac40bd6363e25876bda7254c44
         'SebastianBergmann\\Type\\UnknownType' => __DIR__ . '/..' . '/sebastian/type/src/type/UnknownType.php',
         'SebastianBergmann\\Type\\VoidType' => __DIR__ . '/..' . '/sebastian/type/src/type/VoidType.php',
         'SebastianBergmann\\Version' => __DIR__ . '/..' . '/sebastian/version/src/Version.php',
+        'Spatie\\LaravelPackageTools\\Commands\\InstallCommand' => __DIR__ . '/..' . '/spatie/laravel-package-tools/src/Commands/InstallCommand.php',
+        'Spatie\\LaravelPackageTools\\Exceptions\\InvalidPackage' => __DIR__ . '/..' . '/spatie/laravel-package-tools/src/Exceptions/InvalidPackage.php',
+        'Spatie\\LaravelPackageTools\\Package' => __DIR__ . '/..' . '/spatie/laravel-package-tools/src/Package.php',
+        'Spatie\\LaravelPackageTools\\PackageServiceProvider' => __DIR__ . '/..' . '/spatie/laravel-package-tools/src/PackageServiceProvider.php',
+        'Spatie\\MailPreview\\Events\\MailStoredEvent' => __DIR__ . '/..' . '/spatie/laravel-mail-preview/src/Events/MailStoredEvent.php',
+        'Spatie\\MailPreview\\Facades\\SentMails' => __DIR__ . '/..' . '/spatie/laravel-mail-preview/src/Facades/SentMails.php',
+        'Spatie\\MailPreview\\Http\\Controllers\\ShowMailController' => __DIR__ . '/..' . '/spatie/laravel-mail-preview/src/Http/Controllers/ShowMailController.php',
+        'Spatie\\MailPreview\\Http\\Middleware\\AddMailPreviewOverlayToResponse' => __DIR__ . '/..' . '/spatie/laravel-mail-preview/src/Http/Middleware/AddMailPreviewOverlayToResponse.php',
+        'Spatie\\MailPreview\\MailPreviewServiceProvider' => __DIR__ . '/..' . '/spatie/laravel-mail-preview/src/MailPreviewServiceProvider.php',
+        'Spatie\\MailPreview\\PreviewMailTransport' => __DIR__ . '/..' . '/spatie/laravel-mail-preview/src/PreviewMailTransport.php',
+        'Spatie\\MailPreview\\SentMails\\SentMail' => __DIR__ . '/..' . '/spatie/laravel-mail-preview/src/SentMails/SentMail.php',
+        'Spatie\\MailPreview\\SentMails\\SentMails' => __DIR__ . '/..' . '/spatie/laravel-mail-preview/src/SentMails/SentMails.php',
         'Spatie\\SimpleExcel\\ReaderFactory' => __DIR__ . '/..' . '/spatie/simple-excel/src/ReaderFactory.php',
         'Spatie\\SimpleExcel\\SimpleExcelReader' => __DIR__ . '/..' . '/spatie/simple-excel/src/SimpleExcelReader.php',
         'Spatie\\SimpleExcel\\SimpleExcelWriter' => __DIR__ . '/..' . '/spatie/simple-excel/src/SimpleExcelWriter.php',
