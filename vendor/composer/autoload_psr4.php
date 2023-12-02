@@ -61,6 +61,8 @@ return array(
     'PhpParser\\' => array($vendorDir . '/nikic/php-parser/lib/PhpParser'),
     'PhpOption\\' => array($vendorDir . '/phpoption/phpoption/src/PhpOption'),
     'OpenSpout\\' => array($vendorDir . '/openspout/openspout/src'),
+    'Opcodes\\MailParser\\' => array($vendorDir . '/opcodesio/mail-parser/src'),
+    'Opcodes\\LogViewer\\' => array($vendorDir . '/opcodesio/log-viewer/src'),
     'MyCLabs\\Enum\\' => array($vendorDir . '/myclabs/php-enum/src'),
     'Monolog\\' => array($vendorDir . '/monolog/monolog/src/Monolog'),
     'Mockery\\' => array($vendorDir . '/mockery/mockery/library/Mockery'),
