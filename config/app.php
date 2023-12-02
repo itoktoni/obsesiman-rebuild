@@ -201,7 +201,6 @@ return [
         CacheableAuthUserServiceProvider::class,
         LaravelWebConsoleServiceProvider::class,
         ProtoneMedia\LaravelFormComponents\Support\ServiceProvider::class,
-        Maatwebsite\Excel\ExcelServiceProvider::class,
     ],
 
     /*
@@ -266,8 +265,6 @@ return [
         'UserLevel' => UserLevel::class,
         'SharedData' => SharedData::class,
         'Query' => Query::class,
-        'FastExcel' => Rap2hpoutre\FastExcel\Facades\FastExcel::class,
-        'Excel' => Maatwebsite\Excel\Facades\Excel::class,
         'Str' => Str::class,
         'Transaksi' => Transaksi::class,
     ],

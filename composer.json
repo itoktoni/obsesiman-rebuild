@@ -25,12 +25,11 @@
         "laravel/tinker": "^2.0",
         "laravel/ui": "^3.4",
         "livewire/livewire": "^2.10",
-        "maatwebsite/excel": "^3.1",
         "mehradsadeghi/laravel-filter-querystring": "^1.1",
         "milon/barcode": "^9.0",
         "msztorc/laravel-env": "^1.2",
-        "rap2hpoutre/fast-excel": "^5.3",
         "rennokki/laravel-eloquent-query-cache": "^3.3",
+        "spatie/simple-excel": "^3.2",
         "touhidurabir/laravel-model-sanitize": "^1.1",
         "wildside/userstamps": "^2.2"
     },
