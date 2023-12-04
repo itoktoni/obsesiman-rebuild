@@ -12,7 +12,6 @@ use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use Plugins\Query;
-use Maatwebsite\Excel\Facades\Excel;
 
 Route::get('console', [HomeController::class, 'console'])->name('console');
 
@@ -30,57 +29,62 @@ Route::get('/doc', 'App\Http\Controllers\HomeController@doc')->middleware(['acce
 Route::match(['POST', 'GET'], 'change-password', 'App\Http\Controllers\UserController@changePassword', ['name' => 'change-password'])->middleware('auth');
 Auth::routes();
 
-$routes = Query::groups();
+try {
+    $routes = Query::groups();
+} catch (\Throwable $th) {
+    $routes = [];
+}
 
-Route::middleware(['auth', 'access'])->group(function () use($routes) {
-    Route::prefix('admin')->group(function () use ($routes){
-        if ($routes) {
-            foreach ($routes as $group) {
-                Route::group(['prefix' => $group->field_primary, 'middleware' => [
-                    'auth',
-                    'access',
-                ]], function () use ($group) {
-                    // -- nested group
-                    if ($menus = $group->has_menu) {
-                        foreach ($menus as $menu) {
+if($routes){
+    Route::middleware(['auth', 'access'])->group(function () use($routes) {
+        Route::prefix('admin')->group(function () use ($routes){
+            if ($routes) {
+                foreach ($routes as $group) {
+                    Route::group(['prefix' => $group->field_primary, 'middleware' => [
+                        'auth',
+                        'access',
+                    ]], function () use ($group) {
+                        // -- nested group
+                        if ($menus = $group->has_menu) {
+                            foreach ($menus as $menu) {
 
-                            if($menu->field_type == MenuType::Menu){
+                                if($menu->field_type == MenuType::Menu){
 
-                                Route::group(['prefix' => 'default'], function () use ($menu) {
-                                    try {
-                                        AutoRoute::auto($menu->field_url, $menu->field_controller, ['name' => $menu->field_primary]);
-                                    } catch (\Throwable$th) {
-                                        //throw $th;
-                                    }
-                                });
-
-
-                            } elseif($menu->field_type == MenuType::Group){
-
-                                if ($links = $menu->has_link) {
-                                    Route::group(['prefix' => $menu->field_url], function () use ($links) {
-                                        foreach ($links as $link) {
-
-                                            try {
-                                                AutoRoute::auto($link->field_url, $link->field_controller, ['name' => $link->field_primary]);
-                                            } catch (\Throwable$th) {
-                                                //throw $th;
-                                            }
-
+                                    Route::group(['prefix' => 'default'], function () use ($menu) {
+                                        try {
+                                            AutoRoute::auto($menu->field_url, $menu->field_controller, ['name' => $menu->field_primary]);
+                                        } catch (\Throwable$th) {
+                                            //throw $th;
                                         }
                                     });
+
+
+                                } elseif($menu->field_type == MenuType::Group){
+
+                                    if ($links = $menu->has_link) {
+                                        Route::group(['prefix' => $menu->field_url], function () use ($links) {
+                                            foreach ($links as $link) {
+
+                                                try {
+                                                    AutoRoute::auto($link->field_url, $link->field_controller, ['name' => $link->field_primary]);
+                                                } catch (\Throwable$th) {
+                                                    //throw $th;
+                                                }
+
+                                            }
+                                        });
+                                    }
                                 }
                             }
                         }
-                    }
-                    // end nested group
+                        // end nested group
 
-                });
+                    });
+                }
             }
-        }
+        });
     });
-
-});
+}
 
 Route::post('upload_config', function (Request $request) {
 
