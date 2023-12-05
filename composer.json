@@ -19,6 +19,7 @@
         "izniburak/laravel-auto-routes": "1.6.0",
         "kirschbaum-development/eloquent-power-joins": "^2.6",
         "kyslik/column-sortable": "^6.4",
+        "larabug/larabug": "*",
         "laravel/framework": "^9.0",
         "laravel/sanctum": "^3.1",
         "laravel/telescope": "^4.10",

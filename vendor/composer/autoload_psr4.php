@@ -78,6 +78,7 @@ return array(
     'Laravel\\Telescope\\' => array($vendorDir . '/laravel/telescope/src'),
     'Laravel\\SerializableClosure\\' => array($vendorDir . '/laravel/serializable-closure/src'),
     'Laravel\\Sanctum\\' => array($vendorDir . '/laravel/sanctum/src'),
+    'LaraBug\\' => array($vendorDir . '/larabug/larabug/src'),
     'Laminas\\Code\\' => array($vendorDir . '/laminas/laminas-code/src'),
     'Kyslik\\ColumnSortable\\' => array($vendorDir . '/kyslik/column-sortable/src/ColumnSortable'),
     'KitLoong\\MigrationsGenerator\\' => array($vendorDir . '/kitloong/laravel-migrations-generator/src'),

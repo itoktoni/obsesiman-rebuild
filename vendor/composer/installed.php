@@ -3,7 +3,7 @@
         'name' => 'laravel/laravel',
         'pretty_version' => 'dev-master',
         'version' => 'dev-master',
-        'reference' => '6d7f959615b0a48d672cca62cdfa42d5f91ab296',
+        'reference' => 'ce26d9d0b6ddec4128bf545f90b3d2f4460f0bf6',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -564,6 +564,15 @@
             'aliases' => array(),
             'dev_requirement' => false,
         ),
+        'larabug/larabug' => array(
+            'pretty_version' => '3.0',
+            'version' => '3.0.0.0',
+            'reference' => '32216c1fdf36c4991cd7a3e11560751e98f9479e',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../larabug/larabug',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
         'laravel/framework' => array(
             'pretty_version' => 'v9.52.16',
             'version' => '9.52.16.0',
@@ -576,7 +585,7 @@
         'laravel/laravel' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
-            'reference' => '6d7f959615b0a48d672cca62cdfa42d5f91ab296',
+            'reference' => 'ce26d9d0b6ddec4128bf545f90b3d2f4460f0bf6',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
