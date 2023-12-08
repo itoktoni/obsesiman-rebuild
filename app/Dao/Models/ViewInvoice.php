@@ -3,11 +3,7 @@
 namespace App\Dao\Models;
 
 use App\Dao\Builder\DataBuilder;
-use App\Dao\Entities\TagEntity;
 use App\Dao\Entities\ViewInvoiceEntity;
-use App\Dao\Entities\ViewMutasiEntity;
-use App\Dao\Entities\ViewRsEntity;
-use App\Dao\Enums\UserType;
 use App\Dao\Traits\ActiveTrait;
 use App\Dao\Traits\DataTableTrait;
 use App\Dao\Traits\OptionTrait;
@@ -15,11 +11,10 @@ use Illuminate\Database\Eloquent\Model;
 use Kyslik\ColumnSortable\Sortable;
 use Mehradsadeghi\FilterQueryString\FilterQueryString as FilterQueryString;
 use Touhidurabir\ModelSanitize\Sanitizable as Sanitizable;
-use Rennokki\QueryCache\Traits\QueryCacheable;
 
 class ViewInvoice extends Model
 {
-    use Sortable, FilterQueryString, Sanitizable, DataTableTrait, ViewInvoiceEntity, ActiveTrait, OptionTrait, QueryCacheable;
+    use Sortable, FilterQueryString, Sanitizable, DataTableTrait, ViewInvoiceEntity, ActiveTrait, OptionTrait;
 
     protected $table = 'view_invoice';
     protected $primaryKey = 'view_key';

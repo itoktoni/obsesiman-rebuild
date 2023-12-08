@@ -34,12 +34,13 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         Paginator::useBootstrap();
-
         $roles = Query::role();
-        foreach($roles as $role){
-            Blade::if($role->field_primary, function () use($role) {
-                return auth()->check() && auth()->user()->role == $role->field_primary;
-            });
+        if($roles){
+            foreach($roles as $role){
+                Blade::if($role->field_primary, function () use($role) {
+                    return auth()->check() && auth()->user()->role == $role->field_primary;
+                });
+            }
         }
 
         Blade::if('level', function ($value) {
