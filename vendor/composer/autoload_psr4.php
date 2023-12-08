@@ -125,6 +125,7 @@ return array(
     'Composer\\Pcre\\' => array($vendorDir . '/composer/pcre/src'),
     'Composer\\ClassMapGenerator\\' => array($vendorDir . '/composer/class-map-generator/src'),
     'Coderello\\SharedData\\' => array($vendorDir . '/coderello/laravel-shared-data/src'),
+    'Carbon\\Doctrine\\' => array($vendorDir . '/carbonphp/carbon-doctrine-types/src/Carbon/Doctrine'),
     'Carbon\\' => array($vendorDir . '/nesbot/carbon/src/Carbon'),
     'Buki\\AutoRoute\\' => array($vendorDir . '/izniburak/laravel-auto-routes/src'),
     'Brick\\Math\\' => array($vendorDir . '/brick/math/src'),
