@@ -11,6 +11,7 @@ use Illuminate\Validation\ValidationException;
 use Plugins\Notes;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
+use GuzzleHttp\Client;
 
 class Handler extends ExceptionHandler
 {
@@ -62,6 +63,25 @@ class Handler extends ExceptionHandler
     public function render($request, Throwable $e)
     {
         Log::error($e->getMessage());
+        if(!empty(env('BOT_TELEGRAM')) && !empty(env('TELEGRAM_ID'))){
+
+            $client  = new Client();
+            $url = "https://api.telegram.org/bot".env("BOT_TELEGRAM")."/sendMessage";//<== ganti jadi token yang kita tadi
+            $data    = $client->request('GET', $url, [
+            'json' =>[
+                "chat_id" => env("TELEGRAM_ID"), //<== ganti dengan id_message yang kita dapat tadi
+                "text" =>
+                        "File : ".$e->getFile().
+                        "\nLine : ".$e->getLine().
+                        "\nCode : ".$e->getCode().
+                        "\nMessage : ".$e->getMessage().
+                        "\nRequest : ".request()->getUri().
+                        "\nMethod : ".request()->getMethod()
+                ,"disable_notification" => true
+                ]
+            ]);
+        }
+
         if(request()->hasHeader('authorization')){
 
             if($e instanceof ValidationException){

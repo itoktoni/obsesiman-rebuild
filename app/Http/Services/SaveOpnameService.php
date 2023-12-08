@@ -30,9 +30,7 @@ class SaveOpnameService
                             OpnameDetail::field_rfid() => $rfid,
                             OpnameDetail::field_opname() => $opname_id,
                             OpnameDetail::field_code() => $opname_id,
-                            OpnameDetail::field_ketemu() => BooleanType::Yes,
                             OpnameDetail::field_register() => BooleanType::No,
-                            OpnameDetail::field_waktu() => date('y-m-d H:i:s'),
                             OpnameDetail::field_updated_at() => date('Y-m-d H:i:s'),
                             OpnameDetail::field_updated_by() => auth()->user()->id,
                             OpnameDetail::field_transaksi() => TransactionType::Unknown,
@@ -52,9 +50,30 @@ class SaveOpnameService
 
                         $opanme_sync = ['opname_detail_sync' => SyncType::No];
                         if($update->count() > 0) {
+                            $single = clone $update->first();
+                            if($single->field_ketemu){
+                                $opanme_sync = [
+                                    'opname_detail_sync' => SyncType::No,
+                                    OpnameDetail::field_waktu() => $single->field_waktu,
+                                    OpnameDetail::field_ketemu() => $single->field_ketemu
+                                ];
+                            }
+                            else{
+                                $add = array_merge($add, [
+                                    OpnameDetail::field_ketemu() => BooleanType::No,
+                                    OpnameDetail::field_waktu() => date('Y-m-d H:i:s'),
+                                ]);
+
+                                $opanme_sync = [
+                                    'opname_detail_sync' => SyncType::Yes,
+                                ];
+                            }
                             $update->update($add);
-                            $opanme_sync = ['opname_detail_sync' => SyncType::No];
                         } else {
+                            $add = array_merge($add, [
+                                OpnameDetail::field_ketemu() => BooleanType::Yes,
+                                OpnameDetail::field_waktu() => date('Y-m-d H:i:s'),
+                            ]);
                             OpnameDetail::create($add);
                             $opanme_sync = ['opname_detail_sync' => SyncType::Yes];
                         }

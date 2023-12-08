@@ -7970,6 +7970,7 @@
             "install-path": "../sebastian/version"
         },
         {
+<<<<<<< HEAD
             "name": "spatie/db-dumper",
             "version": "3.4.0",
             "version_normalized": "3.4.0.0",
@@ -8368,6 +8369,18 @@
             },
             "dist": {
                 "type": "zip",
+=======
+            "name": "spatie/simple-excel",
+            "version": "3.3.0",
+            "version_normalized": "3.3.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/spatie/simple-excel.git",
+                "reference": "a3d65a33a482ef57ffb7ee981b9fcf929f87fb36"
+            },
+            "dist": {
+                "type": "zip",
+>>>>>>> 7183b3144d1e441ef098ea6a3d2aaa14d184092d
                 "url": "https://api.github.com/repos/spatie/simple-excel/zipball/a3d65a33a482ef57ffb7ee981b9fcf929f87fb36",
                 "reference": "a3d65a33a482ef57ffb7ee981b9fcf929f87fb36",
                 "shasum": ""

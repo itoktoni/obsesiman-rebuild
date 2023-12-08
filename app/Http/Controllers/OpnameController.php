@@ -32,6 +32,12 @@ class OpnameController extends MasterController
         ];
     }
 
+    public function getData()
+    {
+        $query = self::$repository->dataRepository();
+        return $query;
+    }
+
     public function postCreate(OpnameRequest $request, CreateOpnameService $service)
     {
         $data = $service->save(self::$repository, $request);

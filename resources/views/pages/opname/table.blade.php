@@ -42,6 +42,8 @@
                                         <x-crud :model="$table" />
                                     </td>
                                     <td>{{ iteration($data, $key) }}</td>
+                                    <td>{{ $table->field_primary }}</td>
+                                    <td>{{ $table->rs_nama ?? '' }}</td>
                                     <td>{!! nl2br($table->field_name) !!}</td>
                                     <td>{{ formatDate($table->field_created_at) }}</td>
                                     <td>{{ formatDate($table->field_start) }}</td>
