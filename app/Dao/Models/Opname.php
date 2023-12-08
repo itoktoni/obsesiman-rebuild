@@ -69,7 +69,8 @@ class Opname extends Model
     public function fieldDatatable(): array
     {
         $data = [
-            DataBuilder::build($this->field_primary())->name('ID')->width(20)->show(false)->sort(),
+            DataBuilder::build($this->field_primary())->name('ID Opname')->width(20)->sort(),
+            DataBuilder::build(Rs::field_name())->name('Nama RS')->width(20)->sort(),
             DataBuilder::build($this->field_name())->name('Keterangan Opname')->width('250px')->show()->sort(),
             DataBuilder::build($this->field_created_at())->name('Tgl Buat')->show()->sort(),
             DataBuilder::build($this->field_start())->name('Tgl Mulai')->show()->sort(),

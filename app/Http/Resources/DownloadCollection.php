@@ -2,8 +2,11 @@
 
 namespace App\Http\Resources;
 
+use App\Dao\Enums\OpnameType;
 use App\Dao\Enums\ProcessType;
 use App\Dao\Models\Jenis;
+use App\Dao\Models\Opname;
+use App\Dao\Models\OpnameDetail;
 use App\Dao\Models\Rs;
 use App\Dao\Models\Ruangan;
 use Illuminate\Http\Resources\Json\ResourceCollection;
@@ -34,6 +37,20 @@ class DownloadCollection extends ResourceCollection
             ->where('rs_id', $rsid)
             ->get();
 
+        $opname = Opname::with(['has_detail' => function($query){
+            $query->whereNotNull(OpnameDetail::field_waktu());
+        }])
+            ->where(Opname::field_rs_id(), $rsid)
+            ->where(Opname::field_status(), OpnameType::Proses)
+            ->first();
+
+        $sendOpname = [];
+        if(!empty($opname)){
+            if($opname->has_detail){
+                $sendOpname = DownloadOpnameResource::collection($opname->has_detail);
+            }
+        }
+
         $status = [];
         foreach(ProcessType::getInstances() as $value => $key){
             $status[] = [
@@ -52,6 +69,7 @@ class DownloadCollection extends ResourceCollection
             'ruangan' => $ruangan,
             'jenis_linen' => $jenis,
             'status_proses' => $status,
+            'opname' => $sendOpname,
         ];
         // return parent::toArray($request);
     }

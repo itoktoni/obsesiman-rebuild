@@ -41,4 +41,21 @@ class OpnameRequest extends FormRequest
         ]);
     }
 
+    public function withValidator($validator)
+    {
+        $duplicate = Opname::where(Opname::field_rs_id(), $this->opname_id_rs)
+            ->whereIn(Opname::field_status(), [OpnameType::Draft, OpnameType::Proses])
+            ->count();
+
+        $status = $this->opname_status != OpnameType::Selesai ? true : false;
+
+        $check = $duplicate && $status;
+
+        $validator->after(function ($validator) use ($check) {
+            if ($check) {
+                $validator->errors()->add(Opname::field_rs_id(), 'Opname sedang dilakukan!');
+            }
+        });
+    }
+
 }
