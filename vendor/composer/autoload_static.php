@@ -1003,6 +1003,7 @@ class ComposerStaticInit06129aac40bd6363e25876bda7254c44
         'App\\Http\\Resources\\DetailResource' => __DIR__ . '/../..' . '/app/Http/Resources/DetailResource.php',
         'App\\Http\\Resources\\DownloadCollection' => __DIR__ . '/../..' . '/app/Http/Resources/DownloadCollection.php',
         'App\\Http\\Resources\\DownloadLinenResource' => __DIR__ . '/../..' . '/app/Http/Resources/DownloadLinenResource.php',
+        'App\\Http\\Resources\\DownloadOpnameResource' => __DIR__ . '/../..' . '/app/Http/Resources/DownloadOpnameResource.php',
         'App\\Http\\Resources\\GeneralResource' => __DIR__ . '/../..' . '/app/Http/Resources/GeneralResource.php',
         'App\\Http\\Resources\\JenisResource' => __DIR__ . '/../..' . '/app/Http/Resources/JenisResource.php',
         'App\\Http\\Resources\\OpnameResource' => __DIR__ . '/../..' . '/app/Http/Resources/OpnameResource.php',

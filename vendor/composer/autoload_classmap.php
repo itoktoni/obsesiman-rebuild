@@ -225,6 +225,7 @@ return array(
     'App\\Http\\Resources\\DetailResource' => $baseDir . '/app/Http/Resources/DetailResource.php',
     'App\\Http\\Resources\\DownloadCollection' => $baseDir . '/app/Http/Resources/DownloadCollection.php',
     'App\\Http\\Resources\\DownloadLinenResource' => $baseDir . '/app/Http/Resources/DownloadLinenResource.php',
+    'App\\Http\\Resources\\DownloadOpnameResource' => $baseDir . '/app/Http/Resources/DownloadOpnameResource.php',
     'App\\Http\\Resources\\GeneralResource' => $baseDir . '/app/Http/Resources/GeneralResource.php',
     'App\\Http\\Resources\\JenisResource' => $baseDir . '/app/Http/Resources/JenisResource.php',
     'App\\Http\\Resources\\OpnameResource' => $baseDir . '/app/Http/Resources/OpnameResource.php',
