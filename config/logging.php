@@ -36,7 +36,7 @@ return [
     'channels' => [
         'stack' => [
             'driver' => 'stack',
-            'channels' => ['daily'],
+            'channels' => ['single', 'larabug'],
             'ignore_exceptions' => false,
         ],
 
@@ -44,6 +44,10 @@ return [
             'driver' => 'single',
             'path' => storage_path('logs/laravel.log'),
             'level' => 'debug',
+        ],
+
+        'larabug' => [
+            'driver' => 'larabug',
         ],
 
         'daily' => [
