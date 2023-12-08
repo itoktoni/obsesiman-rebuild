@@ -28,7 +28,9 @@ class OpnameRequest extends FormRequest
 
         if(empty($nama)){
             $rs = Rs::find($this->{Opname::field_rs_id()});
-            $nama = $rs->field_name.PHP_EOL.$this->{Opname::field_start()}.' - '.$this->{Opname::field_end()};
+            if($rs){
+                $nama = $rs->field_name.PHP_EOL.$this->{Opname::field_start()}.' - '.$this->{Opname::field_end()};
+            }
         }
 
         if(empty($status)){
