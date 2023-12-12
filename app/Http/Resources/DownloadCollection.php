@@ -47,7 +47,7 @@ class DownloadCollection extends ResourceCollection
         $sendOpname = [];
         if(!empty($opname)){
             if($opname->has_detail){
-                $sendOpname = DownloadOpnameResource::collection($opname->has_detail);
+                $sendOpname = $opname->has_detail->pluck(OpnameDetail::field_rfid());
             }
         }
 
