@@ -2,8 +2,6 @@
 
 namespace App\Http\Resources;
 
-use App\Dao\Enums\StockType;
-use App\Dao\Models\Lokasi;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class DownloadOpnameResource extends JsonResource
@@ -21,7 +19,6 @@ class DownloadOpnameResource extends JsonResource
     {
         return [
             'id' => $this->field_rfid,
-            'ketemu' => $this->field_waktu,
         ];
         // return parent::toArray($request);
     }
