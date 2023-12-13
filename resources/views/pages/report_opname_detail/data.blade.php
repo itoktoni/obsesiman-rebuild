@@ -38,7 +38,7 @@
 				<th>LINEN </th>
 				<th>RUMAH SAKIT</th>
 				<th>RUANGAN</th>
-				<th>SUDAH OPNAME</th>
+				<th>SUDAH DI OPNAME</th>
 				<th>STATUS TRANSAKSI</th>
 				<th>STATUS LINEN</th>
 				<th>CUCI/RENTAL</th>
