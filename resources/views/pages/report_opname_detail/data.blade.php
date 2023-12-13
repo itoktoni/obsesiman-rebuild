@@ -51,7 +51,7 @@
 			@forelse($data as $table)
 			<tr>
 				<td>{{ $loop->iteration }}</td>
-				<td>{{ $table->view_linen_rfid }}</td>
+				<td>{{ $table->opname_detail_rfid }}</td>
 				<td>{{ $table->view_linen_nama ?? '' }}</td>
 				<td>{{ $table->view_rs_nama ?? '' }}</td>
 				<td>{{ $table->view_ruangan_nama ?? '' }}</td>
