@@ -3,6 +3,7 @@
 namespace App\Http\Services;
 
 use App\Dao\Enums\BooleanType;
+use App\Dao\Enums\OpnameType;
 use App\Dao\Enums\ProcessType;
 use App\Dao\Enums\SyncType;
 use App\Dao\Enums\TransactionType;
@@ -49,9 +50,10 @@ class SaveOpnameService
                             ->where(OpnameDetail::field_opname(), $opname_id);
 
                         $opanme_sync = ['opname_detail_sync' => SyncType::No];
+
                         if($update->count() > 0) {
                             $single = clone $update->first();
-                            if($single->field_ketemu){
+                            if($single->field_ketemu == SyncType::Yes){
                                 $opanme_sync = [
                                     'opname_detail_sync' => SyncType::No,
                                     OpnameDetail::field_waktu() => $single->field_waktu,
@@ -60,7 +62,7 @@ class SaveOpnameService
                             }
                             else{
                                 $add = array_merge($add, [
-                                    OpnameDetail::field_ketemu() => BooleanType::No,
+                                    OpnameDetail::field_ketemu() => SyncType::Yes,
                                     OpnameDetail::field_waktu() => date('Y-m-d H:i:s'),
                                 ]);
 

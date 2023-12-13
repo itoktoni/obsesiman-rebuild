@@ -4,6 +4,8 @@ namespace App\Dao\Repositories;
 
 use App\Dao\Interfaces\CrudInterface;
 use App\Dao\Models\Opname;
+use App\Dao\Models\OpnameDetail;
+use Illuminate\Support\Facades\DB;
 use Plugins\Notes;
 
 class OpnameRepository extends MasterRepository implements CrudInterface
@@ -33,6 +35,17 @@ class OpnameRepository extends MasterRepository implements CrudInterface
             }
 
         $query = env('PAGINATION_SIMPLE') ? $query->simplePaginate(env('PAGINATION_NUMBER')) : $query->paginate(env('PAGINATION_NUMBER'));
+
+        return $query;
+    }
+
+    public function getOpnameByID($opname_id){
+        $query = OpnameDetail::query()
+            ->addSelect(DB::raw('*'))
+            ->leftJoinRelationship('has_view')
+            ->leftJoinRelationship('has_user')
+            ->leftJoinRelationship('has_view.has_cuci')
+        ->where(OpnameDetail::field_opname(), $opname_id);
 
         return $query;
     }

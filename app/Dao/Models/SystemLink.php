@@ -73,10 +73,7 @@ class SystemLink extends Model
     {
         parent::creating(function ($model) {
             if(empty($model->{SystemLink::field_action()}) && ($model->{SystemLink::field_type()} == MenuType::Menu)){
-                $act = '.getTable';
-                if(str_contains($model->{SystemLink::field_name()}, 'Report')){
-                    $act = '.getCreate';
-                }
+                $act = '.getCreate';
                 $model->{SystemLink::field_action()} = Core::getControllerName($model->{SystemLink::field_controller()}).$act;
             }
         });

@@ -89,4 +89,9 @@ class OpnameDetail extends Model
     {
         return $this->hasOne(Opname::class, Opname::field_primary(), self::field_opname());
     }
+
+    public function has_user()
+    {
+        return $this->hasOne(User::class, User::field_primary(), self::field_updated_by());
+    }
 }
