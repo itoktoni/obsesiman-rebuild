@@ -34,7 +34,7 @@ class OpnameRequest extends FormRequest
         }
 
         if(empty($status)){
-            $status = OpnameType::Draft;
+            $status = OpnameType::Proses;
         }
 
         $this->merge([
