@@ -54,10 +54,11 @@ class CheckHilang extends Command
 
             History::bulk($rfid, ProcessType::Pending, 'RFID Hilang');
             Detail::whereIn(Detail::field_primary(), $rfid)->update([
+                Detail::field_pending_created_at() => null,
+                Detail::field_pending_updated_at() => null,
                 Detail::field_status_process() => ProcessType::Hilang,
                 Detail::field_hilang_updated_at() => date('Y-m-d H:i:s'),
                 Detail::field_hilang_created_at() => date('Y-m-d H:i:s'),
-                Detail::field_hilang_updated_at() => date('Y-m-d H:i:s'),
             ]);
         }
 

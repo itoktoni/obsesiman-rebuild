@@ -53,6 +53,10 @@ class UpdateDeliveryService
                         Detail::field_status_process() => ProcessType::Bersih,
                         Detail::field_updated_at() => date('Y-m-d H:i:s'),
                         Detail::field_updated_by() => auth()->user()->id,
+                        Detail::field_pending_created_at() => null,
+                        Detail::field_pending_updated_at() => null,
+                        Detail::field_hilang_created_at() => null,
+                        Detail::field_hilang_updated_at() => null,
                     ]);
 
                 History::bulk($data_rfid, ProcessType::Bersih);

@@ -3,6 +3,7 @@
 namespace App\Http\Services;
 
 use App\Dao\Enums\BooleanType;
+use App\Dao\Enums\OpnameType;
 use App\Dao\Interfaces\CrudInterface;
 use App\Dao\Models\Detail;
 use App\Dao\Models\OpnameDetail;
@@ -40,7 +41,7 @@ class CreateOpnameService
                         $data['opname_detail_created_by'] = $id;
                         $data['opname_detail_updated_by'] = $id;
                         $data[OpnameDetail::field_waktu()] = in_array($item->detail_status_transaksi, BERSIH) ? null : $tgl;
-                        $data[OpnameDetail::field_ketemu()] = in_array($item->detail_status_transaksi, BERSIH) ? null : BooleanType::Yes;
+                        $data[OpnameDetail::field_ketemu()] = in_array($item->detail_status_transaksi, BERSIH) ? BooleanType::No : BooleanType::Yes;
                         $data[OpnameDetail::field_opname()] = $opname_id;
 
                         return $data;

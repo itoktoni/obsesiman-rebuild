@@ -509,6 +509,10 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
             $data->update([
                 Detail::field_updated_at() => date('Y-m-d H:i:s'),
                 Detail::field_updated_by() => auth()->user()->id,
+                Detail::field_pending_created_at() => null,
+                Detail::field_pending_updated_at() => null,
+                Detail::field_hilang_created_at() => null,
+                Detail::field_hilang_updated_at() => null,
             ]);
 
             $update = ViewDetailLinen::findOrFail($rfid);
