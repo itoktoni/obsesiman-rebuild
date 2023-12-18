@@ -84,4 +84,3 @@
 		<td colspan="2" class="print-person">{{ auth()->user()->name ?? '' }}</td>
 	</tr>
 </table>
-<livewire:wire-detail-linen />
