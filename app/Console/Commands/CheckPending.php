@@ -56,6 +56,7 @@ class CheckPending extends Command
             PluginsHistory::bulk($rfid, ProcessType::Pending, 'RFID Pending');
             Detail::whereIn(Detail::field_primary(), $rfid)->update([
                 Detail::field_status_process() => ProcessType::Pending,
+                Detail::field_updated_at() => date('Y-m-d H:i:s'),
                 Detail::field_pending_created_at() => date('Y-m-d H:i:s'),
                 Detail::field_pending_updated_at() => date('Y-m-d H:i:s'),
             ]);
