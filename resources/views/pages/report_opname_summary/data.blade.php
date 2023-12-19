@@ -109,13 +109,31 @@
 			<tr>
 				<td colspan="2">Total</td>
 				@php
-				$sub_kotor = $data->where('opname_detail_transaksi', TransactionType::Kotor)->count();
-				$sub_hilang_rs = $data->where('opname_detail_ketemu', BooleanType::No)->count();
-				$sub_scan_rs = $data->where('opname_detail_transaksi', BERSIH)->where('opname_detail_ketemu', BooleanType::Yes)->count();
-				$sub_pending = $data->where('opname_detail_proses', ProcessType::Pending)->count();
-				$sub_hilang = $data->where('opname_detail_proses', ProcessType::Hilang)->count();
-				$sub_retur = $data->where('opname_detail_transaksi', TransactionType::Retur)->count();
-				$sub_rewash = $data->where('opname_detail_transaksi', TransactionType::Rewash)->count();
+				$sub_kotor = $data->where('opname_detail_transaksi', TransactionType::Kotor)
+                ->whereNotIn('opname_detail_proses', [ProcessType::Pending, ProcessType::Hilang])
+                ->count();
+
+				$sub_hilang_rs = $data->where('opname_detail_ketemu', BooleanType::No)
+                    ->count();
+
+				$sub_scan_rs = $data->where('opname_detail_transaksi', BERSIH)
+                    ->where('opname_detail_ketemu', BooleanType::Yes)
+                    ->count();
+
+				$sub_pending = $data->where('opname_detail_proses', ProcessType::Pending)
+                    ->count();
+
+				$sub_hilang = $data->where('opname_detail_proses', ProcessType::Hilang)
+                    ->count();
+
+				$sub_retur = $data->where('opname_detail_transaksi', TransactionType::Retur)
+                    ->whereNotIn('opname_detail_proses', [ProcessType::Pending, ProcessType::Hilang])
+                    ->count();
+
+				$sub_rewash = $data->where('opname_detail_transaksi', TransactionType::Rewash)
+                    ->whereNotIn('opname_detail_proses', [ProcessType::Pending, ProcessType::Hilang])
+                    ->count();
+
 				$sub_not_register = $data->where('opname_detail_transaksi', BooleanType::No)->count();
 				$sub_total = $data->count();
 				@endphp
