@@ -44,7 +44,7 @@
                         <td>{{ $view->field_pemakaian ?? '0' }}</td>
                         <td>{{ $view ? formatDate($view->field_tanggal_update) : '' }} </td>
                         <td>{{ $view->field_status_process_name ?? 'Belum Register' }} </td>
-                        <td>{{ $table->field_ketemu == 1 ? 'Ketemu' : '-' }}</td>
+                        <td>{{ $table->field_ketemu == 1 ? 'Sudah Opname' : '-' }}</td>
                     </tr>
                     @empty
                     @endforelse

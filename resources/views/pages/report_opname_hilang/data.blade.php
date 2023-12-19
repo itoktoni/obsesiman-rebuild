@@ -40,6 +40,7 @@
 				<th>STATUS TERAKHIR</th>
 				<th>STATUS LINEN</th>
 				<th>TANGGAL TERAKHIR</th>
+				<th>LAMA HILANG (hari)</th>
 				<th>JUMLAH PEMAKAIAN LINEN</th>
 			</tr>
 		</thead>
@@ -53,6 +54,7 @@
 				<td>{{ $table->opname_detail_transaksi ? TransactionType::getDescription($table->opname_detail_transaksi) : 'Belum Register' }}</td>
 				<td>{{ $table->opname_detail_proses ? ProcessType::getDescription($table->opname_detail_proses) : 'Belum Register' }}</td>
 				<td>{{ formatDate($table->view_tanggal_update) }}</td>
+				<td>{{ $table->opname_detail_hilang_at ? \Carbon\Carbon::createFromFormat('Y-m-d H:s:i', $table->opname_detail_hilang_at)->diff(now())->format('%a') : '0' }} Hari</td>
 				<td>{{ $table->view_pemakaian ?? 0 }}</td>
 			</tr>
 			@empty

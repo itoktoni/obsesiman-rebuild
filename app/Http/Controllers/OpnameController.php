@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Dao\Enums\FilterType;
 use App\Dao\Enums\OpnameType;
+use App\Dao\Enums\TransactionType;
 use App\Dao\Models\OpnameDetail;
 use App\Dao\Models\Rs;
 use App\Dao\Repositories\OpnameRepository;

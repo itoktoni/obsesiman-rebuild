@@ -157,4 +157,14 @@ trait OpnameDetailEntity
     {
         return $this->{$this->field_register()};
     }
+
+    public static function field_hilang()
+    {
+        return 'opname_detail_hilang_at';
+    }
+
+    public function getFieldHilangAttribute()
+    {
+        return $this->{$this->field_hilang()};
+    }
 }

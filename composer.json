@@ -24,7 +24,7 @@
         "laravel/telescope": "^4.10",
         "laravel/tinker": "^2.0",
         "laravel/ui": "^3.4",
-        "livewire/livewire": "^2.10",
+        "livewire/livewire": "^3.0",
         "mehradsadeghi/laravel-filter-querystring": "^1.1",
         "milon/barcode": "^9.0",
         "msztorc/laravel-env": "^1.2",

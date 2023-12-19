@@ -60,7 +60,6 @@ class DetailRepository extends MasterRepository implements CrudInterface
         ->leftJoinRelationship('has_category')
         ->filter();
 
-
         return $sql;
     }
 }

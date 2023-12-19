@@ -7,6 +7,7 @@
 
     <link rel="stylesheet" href="{{ url('assets/css/app.min.css') }}" type="text/css">
     @yield('css')
+    @livewireStyles
 </head>
 
 <body class="fixed">
@@ -38,6 +39,7 @@
     <script src="{{ url('assets/js/app.min.js') }}"></script>
 
     @stack('footer')
+    @livewireScripts
 </body>
 
 </html>
