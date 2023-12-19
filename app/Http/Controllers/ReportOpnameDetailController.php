@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Dao\Enums\BooleanType;
+use App\Dao\Enums\FilterType;
+use App\Dao\Enums\ProcessType;
+use App\Dao\Enums\TransactionType;
 use App\Dao\Models\Opname;
 use App\Dao\Models\OpnameDetail;
 use App\Dao\Models\User;
@@ -33,14 +36,51 @@ class ReportOpnameDetailController extends MinimalController
                 ];
             });
 
+        $filter = FilterType::getOptions();
+
         self::$share = [
             'rs' => $rs,
+            'filter' => $filter,
         ];
     }
 
     private function getQuery($opname_id){
         $query = self::$repository->getOpnameByID($opname_id)
             ->where(OpnameDetail::field_ketemu(), BooleanType::Yes);
+
+        if($status = request()->get('status')){
+
+            if($status == FilterType::Kotor){
+                $query->where(OpnameDetail::field_transaksi(), TransactionType::Kotor)
+                    ->whereNotIn(OpnameDetail::field_proses(), [ProcessType::Pending, ProcessType::Hilang]);
+            }
+
+            if($status == FilterType::Retur){
+                $query->where(OpnameDetail::field_transaksi(), TransactionType::Retur)
+                    ->whereNotIn(OpnameDetail::field_proses(), [ProcessType::Pending, ProcessType::Hilang]);
+            }
+
+            if($status == FilterType::Rewash){
+                $query->where(OpnameDetail::field_transaksi(), TransactionType::Rewash)
+                    ->whereNotIn(OpnameDetail::field_proses(), [ProcessType::Pending, ProcessType::Hilang]);
+            }
+
+            if($status == FilterType::Pending){
+                $query->where(OpnameDetail::field_proses(), ProcessType::Pending);
+            }
+
+            if($status == FilterType::Hilang){
+                $query->where(OpnameDetail::field_proses(), ProcessType::Hilang);
+            }
+
+            if($status == FilterType::ScanRs){
+                $query->whereIn(OpnameDetail::field_transaksi(), BERSIH);
+            }
+
+            if($status == FilterType::BelumRegister){
+                $query->where(OpnameDetail::field_transaksi(), BooleanType::No);
+            }
+        }
 
         return $query;
     }

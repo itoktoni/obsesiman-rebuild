@@ -4,6 +4,7 @@
             <x-action form="print" />
                 <input type="hidden" name="report_name" value="Laporan Opname Detail">
                 <x-form-select col="6" class="search" name="opname_id" label="Rumah Sakit" :options="$rs" />
+                <x-form-select col="6" name="status" label="Status" :options="$filter" />
             @endbind
         </x-form>
     </x-card>

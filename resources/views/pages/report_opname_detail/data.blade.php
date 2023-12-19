@@ -26,6 +26,16 @@
 			</h3>
 		</td>
 	</tr>
+	@if($filter = request()->get('status'))
+	<tr>
+		<td></td>
+		<td colspan="10">
+			<h5>
+				FILTER : {{ FilterType::getDescription(intval($filter)) }}
+			</h5>
+		</td>
+	</tr>
+	@endif
 </table>
 
 <div class="table-responsive" id="table_data">

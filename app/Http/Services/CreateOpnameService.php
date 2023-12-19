@@ -43,6 +43,7 @@ class CreateOpnameService
                         $data[OpnameDetail::field_waktu()] = in_array($item->detail_status_transaksi, BERSIH) ? null : $tgl;
                         $data[OpnameDetail::field_ketemu()] = in_array($item->detail_status_transaksi, BERSIH) ? BooleanType::No : BooleanType::Yes;
                         $data[OpnameDetail::field_opname()] = $opname_id;
+                        $data[OpnameDetail::field_hilang()] = $item->detail_updated_at;
 
                         return $data;
                     })->toArray();

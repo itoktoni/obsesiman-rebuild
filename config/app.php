@@ -10,6 +10,7 @@ use App\Dao\Enums\ProcessType;
 use App\Dao\Enums\StatusType;
 use App\Dao\Enums\StockType;
 use App\Dao\Enums\TransactionType;
+use App\Dao\Enums\FilterType;
 use App\Dao\Enums\UserLevel;
 use App\Dao\Models\Transaksi;
 use App\Providers\CacheableAuthUserServiceProvider;
@@ -259,6 +260,7 @@ return [
         'ProcessType' => ProcessType::class,
         'ObsesimanType' => ObsesimanType::class,
         'TransactionType' => TransactionType::class,
+        'FilterType' => FilterType::class,
         'BedaRsType' => BedaRsType::class,
         'CuciType' => CuciType::class,
         'MenuType' => MenuType::class,
