@@ -65,7 +65,7 @@
 
 			$hilang_rs = $table->where('opname_detail_ketemu', BooleanType::No)->count();
 
-			$scan_rs = $table->where('opname_detail_transaksi', BERSIH)
+			$scan_rs = $table->whereIn('opname_detail_transaksi', BERSIH)
                         ->where('opname_detail_ketemu', BooleanType::Yes)
                         ->count();
 
@@ -116,7 +116,7 @@
 				$sub_hilang_rs = $data->where('opname_detail_ketemu', BooleanType::No)
                     ->count();
 
-				$sub_scan_rs = $data->where('opname_detail_transaksi', BERSIH)
+				$sub_scan_rs = $data->whereIn('opname_detail_transaksi', BERSIH)
                     ->where('opname_detail_ketemu', BooleanType::Yes)
                     ->count();
 
