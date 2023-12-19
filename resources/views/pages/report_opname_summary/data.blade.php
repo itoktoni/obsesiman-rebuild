@@ -59,13 +59,30 @@
 			@endphp
             @forelse($map as $key => $table)
 			@php
-			$kotor = $table->where('opname_detail_transaksi', TransactionType::Kotor)->count();
+			$kotor = $table->where('opname_detail_transaksi', TransactionType::Kotor)
+                        ->whereNotIn('opname_detail_proses', [ProcessType::Pending, ProcessType::Hilang])
+                        ->count();
+
 			$hilang_rs = $table->where('opname_detail_ketemu', BooleanType::No)->count();
-			$scan_rs = $table->where('opname_detail_transaksi', BERSIH)->where('opname_detail_ketemu', BooleanType::Yes)->count();
-			$pending = $table->where('opname_detail_proses', ProcessType::Pending)->count();
-			$hilang = $table->where('opname_detail_proses', ProcessType::Hilang)->count();
-			$retur = $table->where('opname_detail_transaksi', TransactionType::Retur)->count();
-			$rewash = $table->where('opname_detail_transaksi', TransactionType::Rewash)->count();
+
+			$scan_rs = $table->where('opname_detail_transaksi', BERSIH)
+                        ->where('opname_detail_ketemu', BooleanType::Yes)
+                        ->count();
+
+			$pending = $table->where('opname_detail_proses', ProcessType::Pending)
+                        ->count();
+
+			$hilang = $table->where('opname_detail_proses', ProcessType::Hilang)
+                        ->count();
+
+			$retur = $table->where('opname_detail_transaksi', TransactionType::Retur)
+                        ->whereNotIn('opname_detail_proses', [ProcessType::Pending, ProcessType::Hilang])
+                        ->count();
+
+			$rewash = $table->where('opname_detail_transaksi', TransactionType::Rewash)
+                        ->whereNotIn('opname_detail_proses', [ProcessType::Pending, ProcessType::Hilang])
+                        ->count();
+
 			$not_register = $table->where('opname_detail_transaksi', BooleanType::No)->count();
 			$total = $kotor + $scan_rs + $pending + $hilang + $retur + $rewash;
 			$selisih = $register - $total;
