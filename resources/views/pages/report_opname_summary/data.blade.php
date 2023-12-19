@@ -45,7 +45,6 @@
                 <th>REWASH</th>
                 <th>BELUM REGISTER</th>
                 <th>TOTAL</th>
-                <th>SELISIH</th>
             </tr>
         </thead>
         <tbody>
@@ -56,6 +55,8 @@
 					return [formatDate($item->opname_detail_updated_at) => $item];
 				});
 			}
+
+            $grand_total
 			@endphp
             @forelse($map as $key => $table)
 			@php
@@ -85,7 +86,6 @@
 
 			$not_register = $table->where('opname_detail_transaksi', BooleanType::No)->count();
 			$total = $kotor + $scan_rs + $pending + $hilang + $retur + $rewash;
-			$selisih = $register - $total;
 			@endphp
             <tr>
                 <td>{{ $loop->iteration }}</td>
@@ -100,7 +100,6 @@
                 <td>{{ $rewash }}</td>
                 <td>{{ $not_register }}</td>
                 <td>{{ $total }}</td>
-                <td>{{ -$selisih }}</td>
             </tr>
 
             @empty
@@ -147,7 +146,6 @@
 				<td>{{ $sub_rewash }}</td>
 				<td>{{ $sub_not_register }}</td>
 				<td>{{ $sub_total }}</td>
-				<td>{{ -$sub_total }}</td>
 			</tr>
 
         </tbody>
