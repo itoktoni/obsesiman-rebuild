@@ -41,7 +41,7 @@ class ReportOpnameHilangController extends MinimalController
 
     private function getQuery($opname_id){
         $query = self::$repository->getOpnameByID($opname_id)
-            ->whereNull(OpnameDetail::field_ketemu());
+            ->where(OpnameDetail::field_ketemu(), BooleanType::No);
 
         return $query;
     }
