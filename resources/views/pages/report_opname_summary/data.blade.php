@@ -36,6 +36,7 @@
                 <th width="1">No. </th>
                 <th>TANGGAL </th>
                 <th>REGISTER</th>
+                <th>HILANG RS</th>
                 <th>SCAN RS</th>
                 <th>KOTOR</th>
                 <th>PENDING</th>
@@ -59,20 +60,22 @@
             @forelse($map as $key => $table)
 			@php
 			$kotor = $table->where('opname_detail_transaksi', TransactionType::Kotor)->count();
-			$bersih = $table->whereIn('opname_detail_transaksi', BERSIH)->count();
-			$pending = $table->where('opname_detail_process', ProcessType::Pending)->count();
-			$hilang = $table->where('opname_detail_process', ProcessType::Hilang)->count();
+			$hilang_rs = $table->where('opname_detail_ketemu', BooleanType::No)->count();
+			$scan_rs = $table->where('opname_detail_ketemu', BooleanType::Yes)->count();
+			$pending = $table->where('opname_detail_proces', ProcessType::Pending)->count();
+			$hilang = $table->where('opname_detail_proces', ProcessType::Hilang)->count();
 			$retur = $table->where('opname_detail_transaksi', TransactionType::Retur)->count();
 			$rewash = $table->where('opname_detail_transaksi', TransactionType::Rewash)->count();
 			$not_register = $table->where('opname_detail_transaksi', BooleanType::No)->count();
-			$total = $kotor + $bersih + $pending + $hilang + $retur + $rewash;
+			$total = $kotor + $scan_rs + $pending + $hilang + $retur + $rewash;
 			$selisih = $register - $total;
 			@endphp
             <tr>
                 <td>{{ $loop->iteration }}</td>
                 <td>{{ $key ?? '' }}</td>
                 <td>{{ $register }}</td>
-                <td>{{ $bersih }}</td>
+                <td>{{ $hilang_rs }}</td>
+                <td>{{ $scan_rs }}</td>
                 <td>{{ $kotor }}</td>
                 <td>{{ $pending }}</td>
                 <td>{{ $hilang }}</td>
@@ -90,16 +93,18 @@
 				<td colspan="2">Total</td>
 				@php
 				$sub_kotor = $data->where('opname_detail_transaksi', TransactionType::Kotor)->count();
-				$sub_bersih = $data->whereIn('opname_detail_transaksi', BERSIH)->count();
-				$sub_pending = $data->where('opname_detail_process', ProcessType::Pending)->count();
-				$sub_hilang = $data->where('opname_detail_process', ProcessType::Hilang)->count();
+				$sub_hilang_rs = $data->where('opname_detail_ketemu', BooleanType::No)->count();
+				$sub_scan_rs = $data->where('opname_detail_ketemu', BooleanType::Yes)->count();
+				$sub_pending = $data->where('opname_detail_proces', ProcessType::Pending)->count();
+				$sub_hilang = $data->where('opname_detail_proces', ProcessType::Hilang)->count();
 				$sub_retur = $data->where('opname_detail_transaksi', TransactionType::Retur)->count();
 				$sub_rewash = $data->where('opname_detail_transaksi', TransactionType::Rewash)->count();
 				$sub_not_register = $data->where('opname_detail_transaksi', BooleanType::No)->count();
 				$sub_total = $data->count();
 				@endphp
 				<td>{{ $register }}</td>
-				<td>{{ $sub_bersih }}</td>
+				<td>{{ $sub_hilang_rs }}</td>
+				<td>{{ $sub_scan_rs }}</td>
 				<td>{{ $sub_kotor }}</td>
 				<td>{{ $sub_pending }}</td>
 				<td>{{ $sub_hilang }}</td>
