@@ -62,8 +62,8 @@
 			$kotor = $table->where('opname_detail_transaksi', TransactionType::Kotor)->count();
 			$hilang_rs = $table->where('opname_detail_ketemu', BooleanType::No)->count();
 			$scan_rs = $table->where('opname_detail_ketemu', BooleanType::Yes)->count();
-			$pending = $table->where('opname_detail_proces', ProcessType::Pending)->count();
-			$hilang = $table->where('opname_detail_proces', ProcessType::Hilang)->count();
+			$pending = $table->where('opname_detail_proses', ProcessType::Pending)->count();
+			$hilang = $table->where('opname_detail_proses', ProcessType::Hilang)->count();
 			$retur = $table->where('opname_detail_transaksi', TransactionType::Retur)->count();
 			$rewash = $table->where('opname_detail_transaksi', TransactionType::Rewash)->count();
 			$not_register = $table->where('opname_detail_transaksi', BooleanType::No)->count();
@@ -95,8 +95,8 @@
 				$sub_kotor = $data->where('opname_detail_transaksi', TransactionType::Kotor)->count();
 				$sub_hilang_rs = $data->where('opname_detail_ketemu', BooleanType::No)->count();
 				$sub_scan_rs = $data->where('opname_detail_ketemu', BooleanType::Yes)->count();
-				$sub_pending = $data->where('opname_detail_proces', ProcessType::Pending)->count();
-				$sub_hilang = $data->where('opname_detail_proces', ProcessType::Hilang)->count();
+				$sub_pending = $data->where('opname_detail_proses', ProcessType::Pending)->count();
+				$sub_hilang = $data->where('opname_detail_proses', ProcessType::Hilang)->count();
 				$sub_retur = $data->where('opname_detail_transaksi', TransactionType::Retur)->count();
 				$sub_rewash = $data->where('opname_detail_transaksi', TransactionType::Rewash)->count();
 				$sub_not_register = $data->where('opname_detail_transaksi', BooleanType::No)->count();
