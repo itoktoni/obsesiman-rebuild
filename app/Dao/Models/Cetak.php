@@ -75,6 +75,6 @@ class Cetak extends Model
 
     public function has_ruangan()
     {
-        return $this->hasOne(Ruangan::class, Ruangan::field_primary(), $this->field_rs_id());
+        return $this->hasOne(Ruangan::class, Ruangan::field_primary(), $this->field_ruangan_id());
     }
 }
