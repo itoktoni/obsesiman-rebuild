@@ -37,13 +37,13 @@ class CreateOpnameService
                         $data[OpnameDetail::field_transaksi()] = $item->detail_status_transaksi;
                         $data[OpnameDetail::field_proses()] = $item->detail_status_proses;
                         $data[OpnameDetail::field_created_at()] = $tgl;
-                        $data[OpnameDetail::field_updated_at()] = $tgl;
+                        $data[OpnameDetail::field_updated_at()] = $item->detail_updated_at;
                         $data['opname_detail_created_by'] = $id;
                         $data['opname_detail_updated_by'] = $id;
                         $data[OpnameDetail::field_waktu()] = in_array($item->detail_status_transaksi, BERSIH) ? null : $tgl;
                         $data[OpnameDetail::field_ketemu()] = in_array($item->detail_status_transaksi, BERSIH) ? BooleanType::No : BooleanType::Yes;
                         $data[OpnameDetail::field_opname()] = $opname_id;
-                        $data[OpnameDetail::field_hilang()] = $item->detail_updated_at;
+                        $data[OpnameDetail::field_hilang()] = $item->detail_hilang_created_at;
 
                         return $data;
                     })->toArray();
