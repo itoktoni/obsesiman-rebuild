@@ -465,7 +465,8 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
             }
 
             $check_transaksi = Transaksi::where(Transaksi::field_rfid(), $rfid)
-                ->whereDate(Transaksi::field_created_at(), date('Y-m-d'))
+                // ->whereDate(Transaksi::field_created_at(), date('Y-m-d'))
+                ->whereNull(Transaksi::field_barcode())
                 ->count();
 
             if($check_transaksi == 0 and (in_array($data->field_status_transaction, [
