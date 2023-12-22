@@ -65,14 +65,6 @@ class Handler extends ExceptionHandler
         Log::error($e->getMessage());
         if(!empty(env('BOT_TELEGRAM')) && !empty(env('TELEGRAM_ID'))){
 
-            if ($e->getMessage() == 'The route vendors/bundle.css could not be found.') {
-                return;
-            }
-
-            if ($e->getMessage() == 'CSRF token mismatch.') {
-                return;
-            }
-
             $client  = new Client();
             $url = "https://api.telegram.org/bot".env("BOT_TELEGRAM")."/sendMessage";//<== ganti jadi token yang kita tadi
             $data    = $client->request('GET', $url, [
