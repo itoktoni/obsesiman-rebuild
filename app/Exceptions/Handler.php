@@ -73,10 +73,6 @@ class Handler extends ExceptionHandler
                 return;
             }
 
-            if ($e->getMessage() == 'Unauthenticated.') {
-                return;
-            }
-
             $client  = new Client();
             $url = "https://api.telegram.org/bot".env("BOT_TELEGRAM")."/sendMessage";//<== ganti jadi token yang kita tadi
             $data    = $client->request('GET', $url, [
