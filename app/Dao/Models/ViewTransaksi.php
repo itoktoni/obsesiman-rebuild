@@ -33,6 +33,14 @@ class ViewTransaksi extends Model
 
     public $sortable = [
         'transaksi_key',
+        'rs_nama',
+        'transaksi_delivery',
+        'transaksi_barcode',
+        'transaksi_status',
+        'transaksi_bersih',
+        'transaksi_created_at',
+        'transaksi_barcode_at',
+        'transaksi_delivery_at',
     ];
 
     protected $casts = [
@@ -57,7 +65,7 @@ class ViewTransaksi extends Model
             DataBuilder::build($this->field_primary())->name('ID Unik')->show(false)->sort(),
             DataBuilder::build($this->field_status_transaction())->name('Status')->show()->sort(),
             DataBuilder::build($this->field_key())->name('Nomer Transaksi')->show()->sort(),
-            DataBuilder::build($this->field_total())->name('Total')->show()->sort(),
+            DataBuilder::build($this->field_total())->name('Total')->show(),
             DataBuilder::build(Rs::field_name())->name('Rumah Sakit')->show()->sort(),
             DataBuilder::build($this->field_created_at())->name('Tanggal')->show()->sort(),
             DataBuilder::build($this->field_created_by())->name('User')->show(false)->sort(),

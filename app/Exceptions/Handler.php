@@ -60,6 +60,28 @@ class Handler extends ExceptionHandler
     //     }
     // }
 
+    private function checkError(Throwable $e){
+        if ($e->getMessage() == 'The route vendors/bundle.css could not be found.') {
+            return true;
+        }
+
+        if ($e->getMessage() == 'CSRF token mismatch.') {
+            return true;
+        }
+
+        return false;
+    }
+
+    private function buildMessage($message){
+        $data = ['json' => [
+            "chat_id" => env("TELEGRAM_ID"), //<== ganti dengan id_message yang kita dapat tadi
+            "text" => $message
+            ]
+        ];
+
+        return $data;
+    }
+
     public function render($request, Throwable $e)
     {
         Log::error($e->getMessage());
@@ -67,20 +89,20 @@ class Handler extends ExceptionHandler
 
             $client  = new Client();
             $url = "https://api.telegram.org/bot".env("BOT_TELEGRAM")."/sendMessage";//<== ganti jadi token yang kita tadi
-            $data    = $client->request('GET', $url, [
-            'json' =>[
-                "chat_id" => env("TELEGRAM_ID"), //<== ganti dengan id_message yang kita dapat tadi
-                "text" =>
-                        "File : ".$e->getFile().
-                        "\nLine : ".$e->getLine().
-                        "\nCode : ".$e->getCode().
-                        "\nMessage : ".$e->getMessage().
-                        "\nUrl : ".request()->getUri().
-                        "\nMethod : ".request()->getMethod().
-                        "\Request : ".request()->all()
-                ,"disable_notification" => true
-                ]
-            ]);
+
+            $data = $this->buildMessage(
+                "File : ".$e->getFile().
+                            "\nLine : ".$e->getLine().
+                            "\nCode : ".$e->getCode().
+                            "\nMessage : ".$e->getMessage().
+                            "\nUrl : ".request()->getUri().
+                            "\nMethod : ".request()->getMethod().
+                            "\Request : ".json_encode(request()->all(), JSON_PRETTY_PRINT)
+            );
+
+            if(!$this->checkError($e)){
+                $client->request('GET', $url, $data);
+            }
         }
 
         if(request()->hasHeader('authorization')){
