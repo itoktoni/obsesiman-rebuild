@@ -97,7 +97,7 @@ class Handler extends ExceptionHandler
                             "\nMessage : ".$e->getMessage().
                             "\nUrl : ".request()->getUri().
                             "\nMethod : ".request()->getMethod().
-                            "\Request : ".json_encode(request()->all(), JSON_PRETTY_PRINT)
+                            "\nRequest : ".json_encode(request()->all(), JSON_PRETTY_PRINT)
             );
 
             if(!$this->checkError($e)){
