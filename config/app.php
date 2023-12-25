@@ -20,6 +20,8 @@ use Plugins\Query;
 use Plugins\Template;
 use Plugins\Views;
 use Illuminate\Support\Str;
+use Jackiedo\DotenvEditor\DotenvEditor;
+use Jackiedo\DotenvEditor\DotenvEditorServiceProvider;
 
 return [
 
@@ -201,6 +203,7 @@ return [
         Barryvdh\DomPDF\ServiceProvider::class,
         CacheableAuthUserServiceProvider::class,
         LaravelWebConsoleServiceProvider::class,
+        DotenvEditorServiceProvider::class,
         ProtoneMedia\LaravelFormComponents\Support\ServiceProvider::class,
     ],
 
@@ -269,6 +272,7 @@ return [
         'Query' => Query::class,
         'Str' => Str::class,
         'Transaksi' => Transaksi::class,
+        'DotenvEditor' => DotenvEditor::class
     ],
 
 ];

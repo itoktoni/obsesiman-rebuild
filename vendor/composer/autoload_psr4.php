@@ -7,7 +7,6 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'voku\\' => array($vendorDir . '/voku/portable-ascii/src/voku'),
-    'msztorc\\LaravelEnv\\' => array($vendorDir . '/msztorc/laravel-env/src'),
     'Wnx\\LaravelBackupRestore\\Database\\Factories\\' => array($vendorDir . '/wnx/laravel-backup-restore/database/factories'),
     'Wnx\\LaravelBackupRestore\\' => array($vendorDir . '/wnx/laravel-backup-restore/src'),
     'Wildside\\Userstamps\\' => array($vendorDir . '/wildside/userstamps/src'),
@@ -91,6 +90,8 @@ return array(
     'Kyslik\\ColumnSortable\\' => array($vendorDir . '/kyslik/column-sortable/src/ColumnSortable'),
     'KitLoong\\MigrationsGenerator\\' => array($vendorDir . '/kitloong/laravel-migrations-generator/src'),
     'Kirschbaum\\PowerJoins\\' => array($vendorDir . '/kirschbaum-development/eloquent-power-joins/src'),
+    'Jackiedo\\PathHelper\\' => array($vendorDir . '/jackiedo/path-helper/src'),
+    'Jackiedo\\DotenvEditor\\' => array($vendorDir . '/jackiedo/dotenv-editor/src'),
     'Illuminate\\Support\\' => array($vendorDir . '/laravel/framework/src/Illuminate/Macroable', $vendorDir . '/laravel/framework/src/Illuminate/Collections', $vendorDir . '/laravel/framework/src/Illuminate/Conditionable'),
     'Illuminate\\Foundation\\Auth\\' => array($vendorDir . '/laravel/ui/auth-backend'),
     'Illuminate\\' => array($vendorDir . '/laravel/framework/src/Illuminate'),
