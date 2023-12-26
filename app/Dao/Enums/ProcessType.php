@@ -37,6 +37,10 @@ class ProcessType extends Enum implements LocalizedEnum
             return 'Scan';
         }
 
+        if ($value === self::Barcode) {
+            return 'Delivery';
+        }
+
         return parent::getDescription($value);
     }
 }
