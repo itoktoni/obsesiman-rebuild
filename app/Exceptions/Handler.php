@@ -81,6 +81,10 @@ class Handler extends ExceptionHandler
             return true;
         }
 
+        if ($e->getMessage() == 'Unauthenticated.') {
+            return true;
+        }
+
         return false;
     }
 
