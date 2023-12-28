@@ -13,7 +13,7 @@ class ViewTransaksiCuci extends Model
     protected $primaryKey = 'view_transaksi_cuci_id';
 
     protected $casts = [
-        'view_transaksi_cuci_id' => 'integer',
+        'view_transaksi_cuci_id' => 'string',
         'view_transaksi_cuci_total' => 'integer',
     ];
 }

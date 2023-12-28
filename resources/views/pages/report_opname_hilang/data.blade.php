@@ -55,7 +55,7 @@
 				<td>{{ $table->opname_detail_proses ? ProcessType::getDescription($table->opname_detail_proses) : 'Belum Register' }}</td>
 				<td>{{ formatDate($table->view_tanggal_update) }}</td>
 				<td>{{ $table->view_tanggal_update ? \Carbon\Carbon::createFromFormat('Y-m-d H:s:i', $table->view_tanggal_update)->diff(now())->format('%a') : '0' }} Hari</td>
-				<td>{{ $table->view_pemakaian ?? 0 }}</td>
+				<td>{{ $table->view_transaksi_cuci_total ?? 0 }}</td>
 			</tr>
 			@empty
 			@endforelse

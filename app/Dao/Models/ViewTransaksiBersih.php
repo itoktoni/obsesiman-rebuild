@@ -13,7 +13,7 @@ class ViewTransaksiBersih extends Model
     protected $primaryKey = 'view_transaksi_bersih_id';
 
     protected $casts = [
-        'view_transaksi_bersih_id' => 'integer',
+        'view_transaksi_bersih_id' => 'string',
         'view_transaksi_bersih_total' => 'integer',
     ];
 }

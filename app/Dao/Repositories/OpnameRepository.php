@@ -20,6 +20,7 @@ class OpnameRepository extends MasterRepository implements CrudInterface
         $query = $this->model
             ->select($this->model->getSelectedField())
             ->leftJoinRelationship('has_rs')
+            ->leftJoinRelationship('has_view.has_cuci')
             ->sortable()->filter();
 
             if(request()->hasHeader('authorization')){

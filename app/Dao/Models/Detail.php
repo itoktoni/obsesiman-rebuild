@@ -46,6 +46,13 @@ class Detail extends Model
         'detail_pending_updated_at',
         'detail_hilang_created_at',
         'detail_hilang_updated_at',
+        'detail_total_bersih_kotor',
+        'detail_total_bersih_retur',
+        'detail_total_bersih_rewash',
+        'detail_total_kotor',
+        'detail_total_retur',
+        'detail_total_rewash',
+        'detail_total_cuci',
     ];
 
     public $sortable = [

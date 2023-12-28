@@ -51,7 +51,11 @@ class OpnameController extends MasterController
         $this->beforeForm();
         $this->beforeUpdate($code);
 
-        $model = $this->get($code, ['has_detail', 'has_detail.has_view']);
+        $model = $this->get($code, [
+            'has_detail',
+            'has_detail.has_view',
+            'has_detail.has_view.has_cuci',
+        ]);
         return moduleView(modulePathForm(), $this->share([
             'model' => $model,
             'detail' => $model->has_detail
