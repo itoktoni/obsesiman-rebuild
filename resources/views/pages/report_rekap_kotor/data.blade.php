@@ -64,7 +64,7 @@
             @forelse($linen as $linen_id => $name)
                 @if(!empty($name))
                 @php
-                    $total_number = $loop->iteration++;
+                    $total_number = $loop->iteration;
                     $total_per_linen = $kotor
                         ->where(Transaksi::field_beda_rs(), 0)
                         ->whereIn(Transaksi::field_status_transaction(), TransactionType::Kotor)
@@ -94,7 +94,7 @@
 					$sum_lebih = $sum_lebih + $selisih_lebih;
                 @endphp
                 <tr>
-                    <td>{{ $loop->index }}</td>
+                    <td>{{ $loop->iteration }}</td>
                     <td>{{ $name ?? 'Belum teregister' }}</td>
                     @foreach($location as $loc_id => $loc_name)
                     @if(!empty($loc_name))
@@ -123,7 +123,7 @@
 			@empty
 			@endforelse
             <tr>
-                <td>{{ $total_number }}</td>
+                <td>{{ $total_number + 1 }}</td>
                 <td>Belum teregister</td>
                 @foreach($location as $loc)
                 @if(!empty($loc))
@@ -139,7 +139,7 @@
                 <td></td>
             </tr>
             <tr>
-                <td>{{ $total_number }}</td>
+                <td>{{ $total_number + 2 }}</td>
                 <td>Linen Lain</td>
                 @foreach($location as $loc)
                 @if(!empty($loc))
