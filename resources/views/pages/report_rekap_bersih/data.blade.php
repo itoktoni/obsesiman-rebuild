@@ -52,8 +52,9 @@
                 $total_lawan = 0;
             @endphp
             @forelse($linen as $linen_id => $name)
+                @if(!empty($name))
                 @php
-                    $total_number = $total_number + $loop->iteration;
+                    $total_number++;
                     $total_per_linen = $bersih
                         ->where('view_linen_id', $linen_id)
                         ->whereIn(Transaksi::field_status_bersih(), BERSIH)
@@ -81,7 +82,7 @@
 					$sum_lebih = $sum_lebih + $selisih_lebih;
                 @endphp
                 <tr>
-                    <td>{{ $loop->iteration }}</td>
+                    <td>{{ $total_number }}</td>
                     <td>{{ Str::ucfirst($name) }}</td>
                     @foreach($location as $loc_id => $loc_name)
                         <td>
@@ -103,6 +104,7 @@
                     <td>{{ $selisih < 0 ? $selisih : '' }}</td>
                     <td>{{ $selisih > 0 ? $selisih : '' }}</td>
                 </tr>
+                @endif
 			@empty
 			@endforelse
 		</tbody>

@@ -64,7 +64,7 @@
             @forelse($linen as $linen_id => $name)
                 @if(!empty($name))
                 @php
-                    $total_number = $loop->iteration;
+                    $total_number++;
                     $total_per_linen = $kotor
                         ->where(Transaksi::field_beda_rs(), 0)
                         ->whereIn(Transaksi::field_status_transaction(), TransactionType::Rewash)
