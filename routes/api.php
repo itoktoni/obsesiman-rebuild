@@ -475,7 +475,7 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
             } elseif ($data->field_status_transaction == TransactionType::Rewash) {
                 $status_baru = TransactionType::Rewash;
             } elseif ($data->field_status_transaction == TransactionType::Register) {
-                $status_baru = TransactionType::Kotor;
+                $status_baru = TransactionType::Register;
             }
 
             $check_transaksi = Transaksi::where(Transaksi::field_rfid(), $rfid)
