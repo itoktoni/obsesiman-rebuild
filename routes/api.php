@@ -468,7 +468,6 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
             }
 
             $check_transaksi = Transaksi::where(Transaksi::field_rfid(), $rfid)
-            // ->whereDate(Transaksi::field_created_at(), date('Y-m-d'))
                 ->whereNull(Transaksi::field_barcode())
                 ->count();
 
@@ -479,6 +478,7 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
                 TransactionType::Kotor,
                 TransactionType::Retur,
                 TransactionType::Rewash,
+                TransactionType::Register,
             ]))) {
                 $data_transaksi[] = [
                     Transaksi::field_key() => Query::autoNumber((new Transaksi())->getTable(), Transaksi::field_key(), 'GROUP' . date('ymd') . $code_rs, 20),
