@@ -64,6 +64,13 @@ return [
             'url' => env('AWS_URL'),
         ],
 
+        'alphara' => [
+            'driver' => 'webdav',
+            'baseUri' => env('ALPHARA_URL'),
+            'userName' => env('ALPHARA_USERNAME'),
+            'password' => env('ALPHARA_PASSWORD')
+        ],
+
     ],
 
 ];

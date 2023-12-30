@@ -181,6 +181,8 @@ return [
         Illuminate\Translation\TranslationServiceProvider::class,
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
+        App\Providers\WebDavServiceProvider::class,
+
 
         /*
          * Package Service Providers...
@@ -201,6 +203,7 @@ return [
         CacheableAuthUserServiceProvider::class,
         LaravelWebConsoleServiceProvider::class,
         ProtoneMedia\LaravelFormComponents\Support\ServiceProvider::class,
+        Spatie\Backup\BackupServiceProvider::class,
     ],
 
     /*
