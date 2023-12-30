@@ -4,6 +4,7 @@ namespace App\Http\Resources;
 
 use App\Dao\Enums\StockType;
 use App\Dao\Models\Lokasi;
+use App\Dao\Models\Transaksi;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class DownloadLinenResource extends JsonResource

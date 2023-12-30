@@ -215,7 +215,8 @@ class TransaksiController extends MasterController
 
             $query_transaksi = Transaksi::select(Transaksi::field_rfid())
                 ->whereIn(Transaksi::field_rfid(), $rfid)
-                ->whereDate(Transaksi::field_created_at(), date('Y-m-d'))
+                ->whereNull(Transaksi::field_barcode())
+                // ->whereDate(Transaksi::field_created_at(), date('Y-m-d'))
                 ->get()->pluck(Transaksi::field_rfid(), Transaksi::field_rfid())
                 ->toArray();
 
@@ -233,7 +234,6 @@ class TransaksiController extends MasterController
 
                 if (isset($data[$item])) {
                     $detail = $data[$item];
-
                     if (!in_array($item, $query_transaksi) and $this->checkValidation($status_transaksi, $detail->field_status_transaction, $detail->field_updated_at)) {
 
                         $status_sync = SyncType::Yes;
