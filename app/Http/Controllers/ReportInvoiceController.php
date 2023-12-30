@@ -46,6 +46,10 @@ class ReportInvoiceController extends MinimalController
             $query = $query->where(ViewInvoice::field_tanggal(), '<=', $end_date);
         }
 
+        if ($rs_id = $request->rs_id) {
+            $query = $query->where(ViewInvoice::field_rs_id(), $rs_id);
+        }
+
         return $query->get();
     }
 

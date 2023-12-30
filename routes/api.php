@@ -636,7 +636,7 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
     Route::get('total/delivery/{rsid}', function($rsid){
         $data = Transaksi::whereNull(Transaksi::field_delivery())
             ->whereNotNull(Transaksi::field_barcode())
-            ->where(Transaksi::field_rs_id(), $rsid)
+            ->where(Transaksi::field_rs_ori(), $rsid)
             ->count();
 
         return Notes::data(['total' => $data]);

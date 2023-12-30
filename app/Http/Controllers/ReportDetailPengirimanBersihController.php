@@ -7,8 +7,6 @@ use App\Dao\Models\Transaksi;
 use App\Dao\Models\User;
 use App\Dao\Repositories\TransaksiRepository;
 use App\Http\Requests\DeliveryReportRequest;
-use App\Http\Requests\TransactionReportRequest;
-use Dietercoopman\Showsql\ShowSql;
 use Illuminate\Support\Facades\DB;
 
 class ReportDetailPengirimanBersihController extends MinimalController

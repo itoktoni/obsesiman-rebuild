@@ -266,4 +266,14 @@ trait TransaksiEntity
         return $this->{$this->field_total()};
     }
 
+    public static function field_rs_ori()
+    {
+        return 'transaksi_rs_ori';
+    }
+
+    public function getFieldRsOriAttribute()
+    {
+        return $this->{$this->field_rs_ori()};
+    }
+
 }

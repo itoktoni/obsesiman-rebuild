@@ -52,8 +52,8 @@
 			$map = [];
 			if(!empty($data)){
 				$map = $data->mapToGroups(function($item){
-					return [formatDate($item->opname_detail_updated_at) => $item];
-				});
+					return [formatDate($item->opname_detail_waktu) => $item];
+				})->sortDesc();
 			}
 
             $grand_total

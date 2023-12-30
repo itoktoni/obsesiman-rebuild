@@ -46,6 +46,7 @@ class Transaksi extends Model
         'transaksi_delivery_at',
         'transaksi_delivery_by',
         'transaksi_bersih',
+        'transaksi_rs_ori',
     ];
 
     public $sortable = [
@@ -64,7 +65,8 @@ class Transaksi extends Model
         'transaksi_created_by',
         'start_date',
         'end_date',
-        'rs_id'
+        'rs_id',
+        'transaksi_rs_ori'
     ];
 
     const CREATED_AT = 'transaksi_created_at';
@@ -123,6 +125,11 @@ class Transaksi extends Model
     public function has_rs()
     {
         return $this->hasOne(Rs::class, Rs::field_primary(), self::field_rs_id());
+    }
+
+    public function has_rs_delivery()
+    {
+        return $this->hasOne(Rs::class, Rs::field_primary(), self::field_rs_ori());
     }
 
     public function has_ruangan()

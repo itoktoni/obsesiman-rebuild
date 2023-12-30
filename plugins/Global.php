@@ -20,6 +20,7 @@ define('ERROR_PERMISION', 'Maaf anda tidak punya otorisasi untuk melakukan hal i
 define('VIEW_DETAIL_LINEN', 'view_detail_linen');
 
 define('HAS_RS', 'has_rs');
+define('HAS_RS_DELIVERY', 'has_rs_delivery');
 define('HAS_RUANGAN', 'has_ruangan');
 define('HAS_RFID', 'has_rfid');
 define('HAS_JENIS', 'has_jenis');

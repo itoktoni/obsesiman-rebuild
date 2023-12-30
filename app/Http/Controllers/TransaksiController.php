@@ -244,6 +244,7 @@ class TransaksiController extends MasterController
                             Transaksi::field_key() => $request->key,
                             Transaksi::field_rfid() => $item,
                             Transaksi::field_status_transaction() => $status_transaksi,
+                            Transaksi::field_rs_ori() => $detail->field_rs_id,
                             Transaksi::field_rs_id() => $request->rs_id,
                             Transaksi::field_beda_rs() => $beda_rs,
                             Transaksi::field_created_at() => $date,

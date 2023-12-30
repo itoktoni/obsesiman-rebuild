@@ -24,6 +24,16 @@ trait ViewInvoiceEntity
         return $this->{$this->field_name()};
     }
 
+    public static function field_rs_id()
+    {
+        return 'view_rs_id';
+    }
+
+    public function getFieldRsIdAttribute()
+    {
+        return $this->{$this->field_rs()};
+    }
+
     public static function field_rs()
     {
         return 'view_rs_nama';

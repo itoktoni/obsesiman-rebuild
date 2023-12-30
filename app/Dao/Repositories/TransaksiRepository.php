@@ -65,30 +65,33 @@ class TransaksiRepository extends MasterRepository implements CrudInterface
 
     public function getDetailBersih($type = TransactionType::BersihKotor){
         return $this->getQueryReportTransaksi()
+        ->leftJoinRelationship(HAS_RS_DELIVERY)
         ->leftJoinRelationship(HAS_CUCI)
         ->where(Transaksi::field_status_bersih(), $type);
     }
 
     public function getDetailAllBersih($filter = BERSIH){
         return $this->getQueryReportTransaksi()
+        ->leftJoinRelationship(HAS_RS_DELIVERY)
         ->whereIn(Transaksi::field_status_bersih(), $filter);
     }
 
     public function getDetailKotor($type = TransactionType::Kotor){
         return $this->getQueryReportTransaksi()
         ->leftJoinRelationship(HAS_CUCI)
+        ->leftJoinRelationship(HAS_RS)
         ->where(Transaksi::field_status_transaction(), $type);
     }
 
     public function getDetailAllKotor($filter = KOTOR){
         return $this->getQueryReportTransaksi()
+        ->leftJoinRelationship(HAS_RS)
         ->whereIn(Transaksi::field_status_transaction(), $filter);
     }
 
     public function getQueryReportTransaksi(){
         return Transaksi::query()
         ->addSelect(['*'])
-        ->leftJoinRelationship(HAS_RS)
         ->leftJoinRelationship(HAS_DETAIL)
         ->leftJoinRelationship(HAS_USER)
         ->filter();
