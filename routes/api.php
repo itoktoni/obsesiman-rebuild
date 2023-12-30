@@ -261,6 +261,7 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
                         ->count();
 
                     if ($check_transaksi == 0) {
+
                         return [
                             Transaksi::field_key() => $autoNumber,
                             Transaksi::field_rs_id() => $request->rs_id,
@@ -276,8 +277,10 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
                     }
                 });
 
+                $linen_transaksi = array_filter($linen_transaksi->toArray(), fn ($value) => !is_null($value));
+
                 if(!empty($linen_transaksi)){
-                    Transaksi::insert($linen_transaksi->toArray());
+                    Transaksi::insert($linen_transaksi);
                 }
 
                 $history = collect($request->rfid)->map(function ($item) use ($request) {
@@ -528,80 +531,6 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
             return Notes::error($rfid, $th->getMessage());
         }
     });
-
-    /*
-    gak dipake, semua masuk ke grouping 1, karena pas register sudah dimasukan ke transaksi
-    Route::get('grouping-baru/{rfid}', function ($rfid, SaveTransaksiService $service) {
-    try {
-    $data = Detail::findOrFail($rfid);
-
-    $data_transaksi = [];
-    $linen[] = $rfid;
-
-    $date = date('Y-m-d H:i:s');
-    $user = auth()->user()->id;
-
-    $status_baru = TransactionType::Register;
-
-    if($data->field_status_transaction != $status_baru){
-    $status_baru = TransactionType::Kotor;
-    return Notes::error($rfid , 'RFID bukan termasuk pengiriman linen baru !');
-    }
-
-    if((empty($data->field_status_transaction)) or ($data->field_status_process == ProcessType::Register)){
-
-    $data_transaksi[] = [
-    Transaksi::field_key() => Query::autoNumber((new Transaksi())->getTable(), Transaksi::field_key(), 'GROUP'.date('Ymd', 15)),
-    Transaksi::field_rfid() => $rfid,
-    Transaksi::field_status_transaction() => $status_baru,
-    Transaksi::field_rs_id() => $data->field_rs_id,
-    Transaksi::field_beda_rs() => BooleanType::No,
-    Transaksi::field_created_at() => $date,
-    Transaksi::field_created_by() => $user,
-    Transaksi::field_updated_at() => $date,
-    Transaksi::field_updated_by() => $user,
-    ];
-
-    $log[] = [
-    ModelsHistory::field_name() => $rfid,
-    ModelsHistory::field_status() => ProcessType::Kotor,
-    ModelsHistory::field_created_by() => auth()->user()->name,
-    ModelsHistory::field_created_at() => $date,
-    ModelsHistory::field_description() => json_encode($data_transaksi),
-    ];
-    }
-
-    $log[] = [
-    ModelsHistory::field_name() => $rfid,
-    ModelsHistory::field_status() => ProcessType::Grouping,
-    ModelsHistory::field_created_by() => auth()->user()->name,
-    ModelsHistory::field_created_at() => $date,
-    ModelsHistory::field_description() => json_encode($linen),
-    ];
-
-    $data->update([
-    Detail::field_updated_at() => date('Y-m-d H:i:s'),
-    Detail::field_updated_by() => auth()->user()->id,
-    ]);
-
-    $check = $service->save($status_baru, ProcessType::Grouping, $data_transaksi, $linen, $log);
-    if(!$check['status']){
-    return $check;
-    }
-
-    $update = ViewDetailLinen::findOrFail($rfid);
-
-    $collection = new DetailResource($update);
-    return Notes::data($collection);
-    }
-    catch (\Illuminate\Database\Eloquent\ModelNotFoundException $th) {
-    return Notes::error($rfid , 'RFID '.$rfid.' tidak ditemukan');
-    }
-    catch (\Throwable $th) {
-    return Notes::error($rfid ,$th->getMessage());
-    }
-    });
-     */
 
     Route::post('barcode', [BarcodeController::class, 'barcode']);
     Route::get('barcode/{code}', [BarcodeController::class, 'print']);
