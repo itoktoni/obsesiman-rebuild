@@ -2003,6 +2003,71 @@
             "install-path": "../fzaninotto/faker"
         },
         {
+            "name": "geo-sot/laravel-env-editor",
+            "version": "2.1.1",
+            "version_normalized": "2.1.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/GeoSot/Laravel-EnvEditor.git",
+                "reference": "00eb54c0caa7c2e88ea6aed8a6ab246207ec92cb"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/GeoSot/Laravel-EnvEditor/zipball/00eb54c0caa7c2e88ea6aed8a6ab246207ec92cb",
+                "reference": "00eb54c0caa7c2e88ea6aed8a6ab246207ec92cb",
+                "shasum": ""
+            },
+            "require": {
+                "laravel/framework": ">=8.0",
+                "php": ">=8.0"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^3",
+                "nunomaduro/larastan": "^1|^2",
+                "orchestra/testbench": ">=7"
+            },
+            "time": "2023-10-02T17:04:56+00:00",
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "GeoSot\\EnvEditor\\ServiceProvider"
+                    ],
+                    "aliases": {
+                        "EnvEditor": "GeoSot\\EnvEditor\\Facades\\EnvEditor"
+                    }
+                }
+            },
+            "installation-source": "dist",
+            "autoload": {
+                "psr-4": {
+                    "GeoSot\\EnvEditor\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Geo Sot",
+                    "email": "geo.sotis@gmail.com"
+                }
+            ],
+            "description": "A laravel Package that supports .Env File, editing and backup ",
+            "keywords": [
+                "EnvEditor",
+                "geo-sot",
+                "laravel",
+                "laravel-env-editor"
+            ],
+            "support": {
+                "issues": "https://github.com/GeoSot/Laravel-EnvEditor/issues",
+                "source": "https://github.com/GeoSot/Laravel-EnvEditor/tree/2.1.1"
+            },
+            "install-path": "../geo-sot/laravel-env-editor"
+        },
+        {
             "name": "graham-campbell/result-type",
             "version": "v1.1.2",
             "version_normalized": "1.1.2.0",
@@ -2675,125 +2740,6 @@
             "install-path": "../izniburak/laravel-auto-routes"
         },
         {
-            "name": "jackiedo/dotenv-editor",
-            "version": "2.1.0",
-            "version_normalized": "2.1.0.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/JackieDo/Laravel-Dotenv-Editor.git",
-                "reference": "24667e3704b281e0d6c56de340bed1dc718072a1"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/JackieDo/Laravel-Dotenv-Editor/zipball/24667e3704b281e0d6c56de340bed1dc718072a1",
-                "reference": "24667e3704b281e0d6c56de340bed1dc718072a1",
-                "shasum": ""
-            },
-            "require": {
-                "illuminate/console": "^10.0|^9.0|^8.0|^7.0|^6.0|^5.8",
-                "illuminate/contracts": "^10.0|^9.0|^8.0|^7.0|^6.0|^5.8",
-                "illuminate/support": "^10.0|^9.0|^8.0|^7.0|^6.0|^5.8",
-                "jackiedo/path-helper": "^1.0"
-            },
-            "time": "2023-02-19T00:32:40+00:00",
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "2.x-dev"
-                },
-                "laravel": {
-                    "providers": [
-                        "Jackiedo\\DotenvEditor\\DotenvEditorServiceProvider"
-                    ],
-                    "aliases": {
-                        "DotenvEditor": "Jackiedo\\DotenvEditor\\Facades\\DotenvEditor"
-                    }
-                }
-            },
-            "installation-source": "dist",
-            "autoload": {
-                "psr-4": {
-                    "Jackiedo\\DotenvEditor\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Jackie Do",
-                    "email": "anhvudo@gmail.com"
-                }
-            ],
-            "description": "The .env file editor tool for Laravel 5.8+",
-            "keywords": [
-                "dotenv",
-                "dotenv-editor",
-                "laravel"
-            ],
-            "support": {
-                "issues": "https://github.com/JackieDo/Laravel-Dotenv-Editor/issues",
-                "source": "https://github.com/JackieDo/Laravel-Dotenv-Editor/tree/2.1.0"
-            },
-            "install-path": "../jackiedo/dotenv-editor"
-        },
-        {
-            "name": "jackiedo/path-helper",
-            "version": "v1.0.0",
-            "version_normalized": "1.0.0.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/JackieDo/Path-Helper.git",
-                "reference": "43179cfa17d01f94f4889f286430c2cec1071fb2"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/JackieDo/Path-Helper/zipball/43179cfa17d01f94f4889f286430c2cec1071fb2",
-                "reference": "43179cfa17d01f94f4889f286430c2cec1071fb2",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.4.0"
-            },
-            "time": "2022-03-07T20:28:08+00:00",
-            "type": "library",
-            "installation-source": "dist",
-            "autoload": {
-                "files": [
-                    "src/helpers.php"
-                ],
-                "psr-4": {
-                    "Jackiedo\\PathHelper\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Jackie Do",
-                    "email": "anhvudo@gmail.com"
-                }
-            ],
-            "description": "Helper class for working with local paths in PHP",
-            "homepage": "https://github.com/JackieDo/path-helper",
-            "keywords": [
-                "helper",
-                "helpers",
-                "library",
-                "path",
-                "paths",
-                "php"
-            ],
-            "support": {
-                "issues": "https://github.com/JackieDo/Path-Helper/issues",
-                "source": "https://github.com/JackieDo/Path-Helper/tree/v1.0.0"
-            },
-            "install-path": "../jackiedo/path-helper"
-        },
-        {
             "name": "kirschbaum-development/eloquent-power-joins",
             "version": "2.7.3",
             "version_normalized": "2.7.3.0",
@@ -3269,17 +3215,17 @@
         },
         {
             "name": "laravel/sanctum",
-            "version": "v3.3.2",
-            "version_normalized": "3.3.2.0",
+            "version": "v3.3.3",
+            "version_normalized": "3.3.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/sanctum.git",
-                "reference": "e1a272893bec13cf135627f7e156030b3afe1e60"
+                "reference": "8c104366459739f3ada0e994bcd3e6fd681ce3d5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/sanctum/zipball/e1a272893bec13cf135627f7e156030b3afe1e60",
-                "reference": "e1a272893bec13cf135627f7e156030b3afe1e60",
+                "url": "https://api.github.com/repos/laravel/sanctum/zipball/8c104366459739f3ada0e994bcd3e6fd681ce3d5",
+                "reference": "8c104366459739f3ada0e994bcd3e6fd681ce3d5",
                 "shasum": ""
             },
             "require": {
@@ -3296,7 +3242,7 @@
                 "phpstan/phpstan": "^1.10",
                 "phpunit/phpunit": "^9.6"
             },
-            "time": "2023-11-03T13:42:14+00:00",
+            "time": "2023-12-19T18:44:48+00:00",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -8016,17 +7962,17 @@
         },
         {
             "name": "spatie/db-dumper",
-            "version": "3.4.1",
-            "version_normalized": "3.4.1.0",
+            "version": "3.4.2",
+            "version_normalized": "3.4.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spatie/db-dumper.git",
-                "reference": "06d88c596ffa877e5da0bc887b7498765a916cd2"
+                "reference": "59beef7ad612ca7463dfddb64de6e038eb59e0d7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spatie/db-dumper/zipball/06d88c596ffa877e5da0bc887b7498765a916cd2",
-                "reference": "06d88c596ffa877e5da0bc887b7498765a916cd2",
+                "url": "https://api.github.com/repos/spatie/db-dumper/zipball/59beef7ad612ca7463dfddb64de6e038eb59e0d7",
+                "reference": "59beef7ad612ca7463dfddb64de6e038eb59e0d7",
                 "shasum": ""
             },
             "require": {
@@ -8036,7 +7982,7 @@
             "require-dev": {
                 "pestphp/pest": "^1.22"
             },
-            "time": "2023-12-16T14:02:23+00:00",
+            "time": "2023-12-25T11:42:15+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -8066,7 +8012,7 @@
                 "spatie"
             ],
             "support": {
-                "source": "https://github.com/spatie/db-dumper/tree/3.4.1"
+                "source": "https://github.com/spatie/db-dumper/tree/3.4.2"
             },
             "funding": [
                 {
@@ -8468,17 +8414,17 @@
         },
         {
             "name": "spatie/temporary-directory",
-            "version": "2.2.0",
-            "version_normalized": "2.2.0.0",
+            "version": "2.2.1",
+            "version_normalized": "2.2.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spatie/temporary-directory.git",
-                "reference": "efc258c9f4da28f0c7661765b8393e4ccee3d19c"
+                "reference": "76949fa18f8e1a7f663fd2eaa1d00e0bcea0752a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spatie/temporary-directory/zipball/efc258c9f4da28f0c7661765b8393e4ccee3d19c",
-                "reference": "efc258c9f4da28f0c7661765b8393e4ccee3d19c",
+                "url": "https://api.github.com/repos/spatie/temporary-directory/zipball/76949fa18f8e1a7f663fd2eaa1d00e0bcea0752a",
+                "reference": "76949fa18f8e1a7f663fd2eaa1d00e0bcea0752a",
                 "shasum": ""
             },
             "require": {
@@ -8487,7 +8433,7 @@
             "require-dev": {
                 "phpunit/phpunit": "^9.5"
             },
-            "time": "2023-09-25T07:13:36+00:00",
+            "time": "2023-12-25T11:46:58+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -8516,7 +8462,7 @@
             ],
             "support": {
                 "issues": "https://github.com/spatie/temporary-directory/issues",
-                "source": "https://github.com/spatie/temporary-directory/tree/2.2.0"
+                "source": "https://github.com/spatie/temporary-directory/tree/2.2.1"
             },
             "funding": [
                 {
@@ -10355,27 +10301,27 @@
         },
         {
             "name": "symfony/service-contracts",
-            "version": "v3.4.0",
-            "version_normalized": "3.4.0.0",
+            "version": "v3.4.1",
+            "version_normalized": "3.4.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/service-contracts.git",
-                "reference": "b3313c2dbffaf71c8de2934e2ea56ed2291a3838"
+                "reference": "fe07cbc8d837f60caf7018068e350cc5163681a0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/service-contracts/zipball/b3313c2dbffaf71c8de2934e2ea56ed2291a3838",
-                "reference": "b3313c2dbffaf71c8de2934e2ea56ed2291a3838",
+                "url": "https://api.github.com/repos/symfony/service-contracts/zipball/fe07cbc8d837f60caf7018068e350cc5163681a0",
+                "reference": "fe07cbc8d837f60caf7018068e350cc5163681a0",
                 "shasum": ""
             },
             "require": {
                 "php": ">=8.1",
-                "psr/container": "^2.0"
+                "psr/container": "^1.1|^2.0"
             },
             "conflict": {
                 "ext-psr": "<1.1|>=2"
             },
-            "time": "2023-07-30T20:28:31+00:00",
+            "time": "2023-12-26T14:02:43+00:00",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -10420,7 +10366,7 @@
                 "standards"
             ],
             "support": {
-                "source": "https://github.com/symfony/service-contracts/tree/v3.4.0"
+                "source": "https://github.com/symfony/service-contracts/tree/v3.4.1"
             },
             "funding": [
                 {
@@ -10627,23 +10573,23 @@
         },
         {
             "name": "symfony/translation-contracts",
-            "version": "v3.4.0",
-            "version_normalized": "3.4.0.0",
+            "version": "v3.4.1",
+            "version_normalized": "3.4.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/translation-contracts.git",
-                "reference": "dee0c6e5b4c07ce851b462530088e64b255ac9c5"
+                "reference": "06450585bf65e978026bda220cdebca3f867fde7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/translation-contracts/zipball/dee0c6e5b4c07ce851b462530088e64b255ac9c5",
-                "reference": "dee0c6e5b4c07ce851b462530088e64b255ac9c5",
+                "url": "https://api.github.com/repos/symfony/translation-contracts/zipball/06450585bf65e978026bda220cdebca3f867fde7",
+                "reference": "06450585bf65e978026bda220cdebca3f867fde7",
                 "shasum": ""
             },
             "require": {
                 "php": ">=8.1"
             },
-            "time": "2023-07-25T15:08:44+00:00",
+            "time": "2023-12-26T14:02:43+00:00",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -10688,7 +10634,7 @@
                 "standards"
             ],
             "support": {
-                "source": "https://github.com/symfony/translation-contracts/tree/v3.4.0"
+                "source": "https://github.com/symfony/translation-contracts/tree/v3.4.1"
             },
             "funding": [
                 {

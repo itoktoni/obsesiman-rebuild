@@ -23,6 +23,19 @@
 			@endforeach
 			@endif
 
+			@auth
+			@if(auth()->user()->level == UserLevel::Developer)
+			<li>
+				<a class="icon" href="{{ url('env-editor') }}">
+					<i class="bi bi-toggles"></i>
+					<h5 class="text-center text-white">
+						Setting
+					</h5>
+				</a>
+			</li>
+			@endif
+			@endauth
+
 			<li>
 				@auth
 				<a class="icon" href="{{ route('signout') }}">

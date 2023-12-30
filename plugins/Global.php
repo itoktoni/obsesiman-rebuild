@@ -256,3 +256,8 @@ function getLowerClass($class)
 {
     return strtolower(getClass($class));
 }
+
+function setString($value)
+{
+    return '"'.$value.'"';
+}
