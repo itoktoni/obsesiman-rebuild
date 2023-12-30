@@ -256,6 +256,10 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
 
                 $linen_transaksi = collect($request->rfid)->map(function ($item) use ($request, $autoNumber) {
 
+                    Transaksi::where(Transaksi::field_rfid(), $item)
+                        ->whereNull(Transaksi::field_rs_ori())
+                        ->update([Transaksi::field_rs_ori() => $request->rs_id]);
+
                     $check_transaksi = Transaksi::where(Transaksi::field_rfid(), $item)
                         ->whereNull(Transaksi::field_barcode())
                         ->count();
@@ -319,6 +323,10 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
                     Detail::field_created_by() => auth()->user()->id,
                     Detail::field_updated_by() => auth()->user()->id,
                 ]);
+
+                Transaksi::where(Transaksi::field_rfid(), $request->rfid)
+                        ->whereNull(Transaksi::field_rs_ori())
+                        ->update([Transaksi::field_rs_ori() => $request->rs_id]);
 
                 $check_transaksi = Transaksi::where(Transaksi::field_rfid(), $request->rfid)
                     ->whereNull(Transaksi::field_barcode())
