@@ -496,6 +496,7 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
                     Transaksi::field_rfid() => $rfid,
                     Transaksi::field_status_transaction() => $status_baru,
                     Transaksi::field_rs_id() => $data->field_rs_id,
+                    Transaksi::field_rs_ori() => $data->field_rs_id,
                     Transaksi::field_beda_rs() => BooleanType::No,
                     Transaksi::field_created_at() => $date,
                     Transaksi::field_created_by() => $user,
