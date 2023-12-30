@@ -2,8 +2,9 @@
 
 namespace App\Http\Services;
 
-use App\Dao\Facades\EnvFacades;
+use Illuminate\Support\Facades\Artisan;
 use Plugins\Alert;
+use Jackiedo\DotenvEditor\Facades\DotenvEditor;
 
 class CreateSettingService
 {
@@ -12,20 +13,19 @@ class CreateSettingService
         $check = false;
         try {
 
-            EnvFacades::setValue('APP_NAME', $data->name);
-            EnvFacades::setValue('APP_TITLE', $data->title);
-            EnvFacades::setValue('APP_LOCATION', $data->location);
-            EnvFacades::setValue('TRANSACTION_DAY_ALLOWED', $data->transaction_day);
-            EnvFacades::setValue('TRANSACTION_ACTIVE_RS_ONLY', $data->transaction_active);
-            EnvFacades::setValue('TRANSACTION_CHUNK', $data->transaction_chunk);
+            DotenvEditor::setKey('APP_NAME', $data->name);
+            DotenvEditor::setKey('APP_TITLE', $data->title);
+            DotenvEditor::setKey('APP_LOCATION', $data->location);
+            DotenvEditor::setKey('TRANSACTION_DAY_ALLOWED', $data->transaction_day);
+            DotenvEditor::setKey('TRANSACTION_ACTIVE_RS_ONLY', $data->transaction_active);
+            DotenvEditor::setKey('TRANSACTION_CHUNK', $data->transaction_chunk);
 
-            EnvFacades::setValue('CODE_BERSIH', $data->code_bersih);
-            EnvFacades::setValue('CODE_KOTOR', $data->code_kotor);
-            EnvFacades::setValue('CODE_RETUR', $data->code_retur);
-            EnvFacades::setValue('CODE_REWASH', $data->code_rewash);
+            DotenvEditor::setKey('CODE_BERSIH', $data->code_bersih);
+            DotenvEditor::setKey('CODE_KOTOR', $data->code_kotor);
+            DotenvEditor::setKey('CODE_RETUR', $data->code_retur);
+            DotenvEditor::setKey('CODE_REWASH', $data->code_rewash);
 
-            EnvFacades::setValue('TELESCOPE_ENABLED', $data->telescope_enable);
-
+            DotenvEditor::setKey('TELESCOPE_ENABLED', $data->telescope_enable);
             if ($data->has('logo')) {
                 $file_logo = $data->file('logo');
                 $extension = $file_logo->extension();
@@ -33,7 +33,7 @@ class CreateSettingService
                 // $name = time().'.'.$name;
 
                 $file_logo->storeAs('/public/', $name);
-                EnvFacades::setValue('APP_LOGO', $name);
+                DotenvEditor::setKey('APP_LOGO', $name);
             }
 
             Alert::update();

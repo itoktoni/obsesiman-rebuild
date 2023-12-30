@@ -1,1 +1,1 @@
-<img width="180" style="position: absolute;left:40%;top:5px" src="{{ env('APP_LOGO') ? url('storage/'.env('APP_LOGO')) : url('assets/media/image/logo.png') }}" alt="logo">
+<img style="position: absolute;left:40%;top:5px;max-height:80px" src="{{ env('APP_LOGO') ? url('storage/'.env('APP_LOGO')) : url('assets/media/image/logo.png') }}" alt="logo">

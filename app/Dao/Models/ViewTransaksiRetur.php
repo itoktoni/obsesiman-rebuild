@@ -13,7 +13,7 @@ class ViewTransaksiRetur extends Model
     protected $primaryKey = 'view_transaksi_retur_id';
 
     protected $casts = [
-        'view_transaksi_retur_id' => 'integer',
+        'view_transaksi_retur_id' => 'string',
         'view_transaksi_retur_total' => 'integer',
     ];
 }

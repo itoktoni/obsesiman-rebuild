@@ -293,7 +293,9 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
                 ModelsHistory::insert($history->toArray());
                 DB::commit();
 
-                $return = ViewDetailLinen::whereIn(ViewDetailLinen::field_primary(), $request->rfid)->get();
+                $return = ViewDetailLinen::with([HAS_CUCI])
+                    ->whereIn(ViewDetailLinen::field_primary(), $request->rfid)
+                    ->get();
 
                 return Notes::data(DetailResource::collection($return));
             }
@@ -329,7 +331,8 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
 
                 History::log($request->rfid, ProcessType::Register, $request->rfid);
 
-                $collection = new DetailResource($detail->has_view);
+                $view = ViewDetailLinen::with([HAS_CUCI])->findOrFail($request->rfid);
+                $collection = new DetailResource($view);
                 DB::commit();
 
                 return Notes::data($collection);
@@ -355,7 +358,7 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
 
     Route::get('detail/{rfid}', function ($rfid) {
         try {
-            $data = ViewDetailLinen::findOrFail($rfid);
+            $data = ViewDetailLinen::with([HAS_CUCI])->findOrFail($rfid);
             $collection = new DetailResource($data);
             return Notes::data($collection);
 
@@ -386,7 +389,7 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
 
     Route::post('detail/rfid', function (DetailDataRequest $request) {
         try {
-            $data = ViewDetailLinen::whereIn(ViewDetailLinen::field_primary() , $request->rfid)->get();
+            $data = ViewDetailLinen::with([HAS_CUCI])->whereIn(ViewDetailLinen::field_primary() , $request->rfid)->get();
             $collection = DetailResource::collection($data);
             return Notes::data($collection);
         }
@@ -428,7 +431,8 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
                 ]);
             }
 
-            return Notes::data(new DetailResource($data->has_view));
+            $view = ViewDetailLinen::with([HAS_CUCI])->findOrFail($rfid);
+            return Notes::data(new DetailResource($view));
 
         } catch (\Throwable $th) {
             return Notes::error($rfid ,$th->getMessage());
@@ -516,8 +520,7 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
                 Detail::field_hilang_updated_at() => null,
             ]);
 
-            $update = ViewDetailLinen::findOrFail($rfid);
-
+            $update = ViewDetailLinen::with([HAS_CUCI])->findOrFail($rfid);
             $collection = new DetailResource($update);
 
             return $service->save($status_baru, ProcessType::Grouping, $data_transaksi, $linen, $log, $collection);

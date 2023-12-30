@@ -69,6 +69,22 @@ class Handler extends ExceptionHandler
             return true;
         }
 
+        if ($e->getMessage() == 'The route public/storage/logo.png could not be found.') {
+            return true;
+        }
+
+        if ($e->getMessage() == 'The GET method is not supported for route api/barcode.') {
+            return true;
+        }
+
+        if ($e->getMessage() == 'The route _profiler/phpinfo could not be found.') {
+            return true;
+        }
+
+        if ($e->getMessage() == 'Unauthenticated.') {
+            return true;
+        }
+
         return false;
     }
 

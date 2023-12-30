@@ -5,7 +5,6 @@ namespace App\Providers;
 use App\Dao\Enums\RoleLevel;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\ServiceProvider;
-use msztorc\LaravelEnv\Env;
 use Illuminate\Support\Facades\Blade;
 use Plugins\Query;
 use ProtoneMedia\LaravelFormComponents\Components\Form;

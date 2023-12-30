@@ -51,10 +51,16 @@ class OpnameController extends MasterController
         $this->beforeForm();
         $this->beforeUpdate($code);
 
-        $model = $this->get($code, ['has_detail', 'has_detail.has_view']);
+        $model = $this->get($code);
+        $detail = OpnameDetail::with([
+            'has_view',
+            'has_view.has_cuci',
+        ])->where(OpnameDetail::field_opname(), $code)
+        ->get();
+
         return moduleView(modulePathForm(), $this->share([
             'model' => $model,
-            'detail' => $model->has_detail
+            'detail' => $detail
         ]));
     }
 
@@ -74,12 +80,12 @@ class OpnameController extends MasterController
 
     public function postTable()
     {
-        if(request()->exists('delete')){
+        if(request()->exists('delete') and !empty(request()->get('code'))){
             $code = array_unique(request()->get('code'));
             OpnameDetail::whereIn(OpnameDetail::field_opname(), $code)->delete();
             $data = self::$service->delete(self::$repository, $code);
         }
 
-        return Response::redirectBack($data);
+        return Response::redirectBack();
     }
 }

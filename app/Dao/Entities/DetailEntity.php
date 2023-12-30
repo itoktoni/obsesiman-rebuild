@@ -99,16 +99,6 @@ trait DetailEntity
         return CuciType::getDescription($this->getFieldStatusCuciAttribute());
     }
 
-    public static function field_total_cuci()
-    {
-        return ViewTransaksiCuci::field_total();
-    }
-
-    public function getFieldTotalCuciAttribute()
-    {
-        return $this->{$this->field_total_cuci()};
-    }
-
     public static function field_status_transaction()
     {
         return 'detail_status_transaksi';
@@ -222,5 +212,75 @@ trait DetailEntity
     public function getFieldHilangUpdateAtAttribute()
     {
         return $this->{$this->field_hilang_updated_at()};
+    }
+
+    public static function field_total_kotor()
+    {
+        return 'detail_total_kotor';
+    }
+
+    public function getFieldTotalKotorAttribute()
+    {
+        return $this->{$this->field_total_kotor()};
+    }
+
+    public static function field_total_retur()
+    {
+        return 'detail_total_retur';
+    }
+
+    public function getFieldTotalReturAttribute()
+    {
+        return $this->{$this->field_total_retur()};
+    }
+
+    public static function field_total_rewash()
+    {
+        return 'detail_total_rewash';
+    }
+
+    public function getFieldTotalRewashAttribute()
+    {
+        return $this->{$this->field_total_rewash()};
+    }
+
+    public static function field_total_bersih_kotor()
+    {
+        return 'detail_total_bersih_kotor';
+    }
+
+    public function getFieldTotalBersihKotorAttribute()
+    {
+        return $this->{$this->field_total_bersih_kotor()};
+    }
+
+    public static function field_total_bersih_rewash()
+    {
+        return 'detail_total_bersih_rewash';
+    }
+
+    public function getFieldTotalBersihRewashAttribute()
+    {
+        return $this->{$this->field_total_bersih_rewash()};
+    }
+
+    public static function field_total_bersih_retur()
+    {
+        return 'detail_total_bersih_retur';
+    }
+
+    public function getFieldTotalBersihReturAttribute()
+    {
+        return $this->{$this->field_total_bersih_retur()};
+    }
+
+    public static function field_total_cuci()
+    {
+        return 'detail_total_cuci';
+    }
+
+    public function getFieldTotalCuciAttribute()
+    {
+        return $this->{$this->field_total_cuci()};
     }
 }

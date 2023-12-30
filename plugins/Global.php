@@ -208,6 +208,10 @@ function formatDate($value, $datetime = false){
         $format = $datetime;
     }
 
+    if(empty($value)){
+        return null;
+    }
+
     if($value instanceof Carbon){
         $value = $value->format($format);
     } else if(is_string($value)){

@@ -41,7 +41,7 @@
                         <td>{{ $view->field_name ?? '' }}</td>
                         <td>{{ $view->field_ruangan_name ?? '' }}</td>
                         <td>{{ $view->field_status_cuci_name ?? '' }}</td>
-                        <td>{{ $view->field_pemakaian ?? '0' }}</td>
+                        <td>{{ $view->has_cuci->view_transaksi_cuci_total ?? '0' }}</td>
                         <td>{{ $view ? formatDate($view->field_tanggal_update) : '' }} </td>
                         <td>{{ $view->field_status_process_name ?? 'Belum Register' }} </td>
                         <td>{{ $table->field_ketemu == 1 ? 'Sudah Opname' : '-' }}</td>

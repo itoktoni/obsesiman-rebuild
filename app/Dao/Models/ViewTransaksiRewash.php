@@ -13,7 +13,7 @@ class ViewTransaksiRewash extends Model
     protected $primaryKey = 'view_transaksi_rewash_id';
 
     protected $casts = [
-        'view_transaksi_rewash_id' => 'integer',
+        'view_transaksi_rewash_id' => 'string',
         'view_transaksi_rewash_total' => 'integer',
     ];
 }
