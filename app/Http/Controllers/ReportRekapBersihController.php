@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Dao\Enums\TransactionType;
 use App\Dao\Models\Rs;
 use App\Dao\Models\Transaksi;
 use App\Dao\Models\User;
@@ -30,7 +31,7 @@ class ReportRekapBersihController extends MinimalController
     }
 
     private function getQueryBersih($request){
-        $query = self::$repository->getDetailAllBersih();
+        $query = self::$repository->getDetailAllBersih([TransactionType::BersihKotor]);
 
         if ($start_date = $request->start_rekap) {
             $query = $query->whereDate(Transaksi::field_report(), '>=', $start_date);
@@ -44,7 +45,7 @@ class ReportRekapBersihController extends MinimalController
     }
 
     private function getQueryKotor($request){
-        $query = self::$repository->getDetailAllKotor();
+        $query = self::$repository->getDetailAllKotor([TransactionType::Kotor]);
 
         if ($start_date = $request->start_rekap) {
             $bersih_from = Carbon::createFromFormat('Y-m-d', $start_date) ?? false;
