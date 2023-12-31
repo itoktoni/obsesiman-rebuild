@@ -533,7 +533,12 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
             $update = ViewDetailLinen::with([HAS_CUCI])->findOrFail($rfid);
             $collection = new DetailResource($update);
 
-            return $service->save($status_baru, ProcessType::Grouping, $data_transaksi, $linen, $log, $collection);
+            $status_grouping = ProcessType::Grouping;
+            if(in_array($data->field_status_process, [ProcessType::Barcode, ProcessType::Delivery])){
+                $status_grouping = $data->field_status_process;
+            }
+
+            return $service->save($status_baru, $status_grouping, $data_transaksi, $linen, $log, $collection);
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $th) {
             return Notes::error($rfid, 'RFID ' . $rfid . ' tidak ditemukan');
         } catch (\Throwable $th) {
