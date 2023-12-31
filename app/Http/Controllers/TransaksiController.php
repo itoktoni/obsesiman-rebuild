@@ -215,7 +215,7 @@ class TransaksiController extends MasterController
 
             $query_transaksi = Transaksi::select(Transaksi::field_rfid())
                 ->whereIn(Transaksi::field_rfid(), $rfid)
-                ->whereNull(Transaksi::field_barcode())
+                ->whereNull(Transaksi::field_delivery())
                 // ->whereDate(Transaksi::field_created_at(), date('Y-m-d'))
                 ->get()->pluck(Transaksi::field_rfid(), Transaksi::field_rfid())
                 ->toArray();
