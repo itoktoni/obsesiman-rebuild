@@ -5,6 +5,7 @@ namespace Plugins;
 use App\Dao\Models\Filters;
 use App\Dao\Models\Inventaris;
 use App\Dao\Models\Location;
+use App\Dao\Models\Opname;
 use App\Dao\Models\SystemGroup;
 use App\Dao\Models\SystemLink;
 use App\Dao\Models\SystemMenu;
@@ -185,5 +186,23 @@ class Query
             $data = $user->pluck(User::field_name(), User::field_primary());
         }
         return $data;
+    }
+
+    public static function getOpnameList(){
+
+        $opname = Opname::with(['has_rs'])
+            ->where(Opname::field_start(), '>=', now()->addMonth(-6))
+            ->get()->mapWithKeys(function($item){
+                $rs = $item->has_rs->field_name ?? 'RS';
+                return [
+                    $item->opname_id =>
+                    $item->opname_id.' | '.
+                    $rs.' = '.
+                    $item->field_start.'-'.
+                    $item->field_end
+                ];
+            });
+
+        return $opname;
     }
 }

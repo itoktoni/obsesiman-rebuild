@@ -11,6 +11,7 @@ use App\Dao\Models\OpnameDetail;
 use App\Dao\Models\User;
 use App\Dao\Repositories\OpnameRepository;
 use Illuminate\Http\Request;
+use Plugins\Query;
 
 class ReportOpnameDetailController extends MinimalController
 {
@@ -23,23 +24,10 @@ class ReportOpnameDetailController extends MinimalController
 
     protected function beforeForm(){
 
-        $rs = Opname::with(['has_rs'])
-            ->where(Opname::field_start(), '>=', now()->addMonth(-6))
-            ->get()->mapWithKeys(function($item){
-                $rs = $item->has_rs->field_name ?? 'RS';
-                return [
-                    $item->opname_id =>
-                    $item->opname_id.' | '.
-                    $rs.' = '.
-                    $item->field_start.'-'.
-                    $item->field_end
-                ];
-            });
-
         $filter = FilterType::getOptions();
 
         self::$share = [
-            'rs' => $rs,
+            'rs' => Query::getOpnameList(),
             'filter' => $filter,
         ];
     }

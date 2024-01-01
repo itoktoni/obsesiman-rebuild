@@ -39,8 +39,8 @@ class CreateOpnameService
                         $data[OpnameDetail::field_created_at()] = $tgl;
                         $data[OpnameDetail::field_created_at()] = $tgl;
                         $data[OpnameDetail::field_updated_at()] = $item->detail_updated_at;
-                        $data['opname_detail_created_by'] = $id;
-                        $data['opname_detail_updated_by'] = $id;
+                        $data[OpnameDetail::field_created_at()] = $id;
+                        $data[OpnameDetail::field_updated_at()] = $id;
                         $data[OpnameDetail::field_waktu()] = $tgl;
                         $data[OpnameDetail::field_ketemu()] = in_array($item->detail_status_transaksi, BERSIH) ? BooleanType::No : BooleanType::Yes;
                         $data[OpnameDetail::field_opname()] = $opname_id;

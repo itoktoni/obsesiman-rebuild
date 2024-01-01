@@ -113,6 +113,11 @@ trait OpnameDetailEntity
         return 'opname_detail_created_at';
     }
 
+    public static function field_created_by()
+    {
+        return 'opname_detail_created_by';
+    }
+
     public static function field_updated_at()
     {
         return 'opname_detail_updated_at';
