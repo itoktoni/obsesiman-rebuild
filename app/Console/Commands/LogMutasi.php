@@ -2,8 +2,9 @@
 
 namespace App\Console\Commands;
 
+use App\Dao\Models\Mutasi;
+use App\Dao\Models\ViewMutasi;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\DB;
 
 class LogMutasi extends Command
 {
@@ -39,6 +40,49 @@ class LogMutasi extends Command
      */
     public function handle()
     {
+        if (Mutasi::where(Mutasi::field_tanggal(), date('Y-m-d'))->count() == 0) {
+
+            $data_mutasi = ViewMutasi::get()->map(function ($item) {
+
+                $register = $item->total_stock;
+                $mutasi = $item->total_bersih + $item->total_kotor;
+
+                $saldo_akhir = $register - $mutasi;
+                $saldo_awal = $item->mutasi_saldo_awal;
+
+                $selisih_plus = $selisih_minus = null;
+                if ($saldo_akhir < 0) {
+                    $selisih_minus = $saldo_akhir;
+                } else {
+                    $selisih_plus = $saldo_akhir;
+                }
+
+                $check = Mutasi::count();
+                if ($check > 0) {
+                    $saldo_awal = $item->mutasi_saldo_akhir;
+                    $saldo_akhir = $saldo_awal - $mutasi;
+                }
+
+                return [
+                    'mutasi_nama' => $item->rs_nama . ' ' . $item->jenis_nama . ' ' . date('Y-m-d'),
+                    'mutasi_tanggal' => date('Y-m-d'),
+                    'mutasi_rs_id' => $item->rs_id,
+                    'mutasi_rs_nama' => $item->rs_nama,
+                    'mutasi_linen_id' => $item->jenis_id,
+                    'mutasi_linen_nama' => $item->jenis_nama,
+                    'mutasi_register' => $item->total_stock,
+                    'mutasi_kotor' => $item->total_kotor,
+                    'mutasi_bersih' => $item->total_bersih,
+                    'mutasi_minus' => $selisih_minus,
+                    'mutasi_plus' => $selisih_plus,
+                    'mutasi_saldo_awal' => $saldo_awal,
+                    'mutasi_saldo_akhir' => $saldo_akhir,
+                ];
+            });
+
+            Mutasi::insert($data_mutasi->toArray());
+
+        }
 
         $this->info('The system has been check successfully!');
     }

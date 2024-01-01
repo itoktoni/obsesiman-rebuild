@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Alkhachatryan\LaravelWebConsole\LaravelWebConsole;
+use App\Dao\Models\Mutasi;
 use App\Dao\Models\ViewMutasi;
 use Illuminate\Support\Facades\DB;
 

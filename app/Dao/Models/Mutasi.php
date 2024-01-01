@@ -27,15 +27,17 @@ class Mutasi extends Model
         'mutasi_id',
         'mutasi_nama',
         'mutasi_tanggal',
-        'mutasi_id_rs',
-        'mutasi_id_linen',
-        'mutasi_register_real',
-        'mutasi_register_calc',
+        'mutasi_rs_id',
+        'mutasi_rs_nama',
+        'mutasi_linen_id',
+        'mutasi_linen_nama',
+        'mutasi_register',
         'mutasi_kotor',
         'mutasi_bersih',
-        'mutasi_selisih_minus',
-        'mutasi_selisih_plus',
-        'mutasi_saldo',
+        'mutasi_minus',
+        'mutasi_plus',
+        'mutasi_saldo_awal',
+        'mutasi_saldo_akhir',
     ];
 
     public $sortable = [
@@ -49,6 +51,8 @@ class Mutasi extends Model
 
     protected $filters = [
         'filter',
+        'mutasi_rs_id',
+        'mutasi_linen_id',
     ];
 
     public $timestamps = false;
