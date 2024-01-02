@@ -14,8 +14,8 @@ class RsRequest extends FormRequest
     {
         return [
             Rs::field_name() => 'required',
-            Rs::field_harga_cuci() => 'required|numeric',
-            Rs::field_harga_sewa() => 'required|numeric',
+            // Rs::field_harga_cuci() => 'required|numeric',
+            // Rs::field_harga_sewa() => 'required|numeric',
             'ruangan' => 'required',
         ];
     }
