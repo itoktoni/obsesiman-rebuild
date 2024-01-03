@@ -584,6 +584,16 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
         return Notes::data(['total' => $data]);
     });
 
+    Route::get('total/delivery/{rsid}/{transaksi}', function ($rsid, $transaksi) {
+        $data = Transaksi::whereNull(Transaksi::field_delivery())
+            ->whereNotNull(Transaksi::field_barcode())
+            ->where(Transaksi::field_status_transaction(), $transaksi)
+            ->where(Transaksi::field_rs_ori(), $rsid)
+            ->count();
+
+        return Notes::data(['total' => $data]);
+    });
+
     Route::get('opname', function (Request $request) {
         try {
             $today = today()->format('Y-m-d');
