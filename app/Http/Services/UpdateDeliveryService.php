@@ -30,6 +30,7 @@ class UpdateDeliveryService
             $check = Transaksi::query()
                 ->whereNull(Transaksi::field_delivery())
                 ->where(Transaksi::field_rs_id(), request()->get('rs_id'))
+                ->where(Transaksi::field_status_transaction(), request()->get('status_transaksi'))
                 ->whereNotNull(Transaksi::field_barcode())
                 ->update([
                     Transaksi::field_delivery() => $code,

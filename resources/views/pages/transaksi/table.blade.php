@@ -8,6 +8,8 @@
 
         <x-form method="POST" action="{{ moduleRoute('getTable') }}">
 
+            <x-action/>
+
             <div class="container">
                 <div class="table-responsive" id="table_data">
                     <table class="table table-bordered table-striped overflow">
