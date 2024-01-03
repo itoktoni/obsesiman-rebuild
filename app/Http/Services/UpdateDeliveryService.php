@@ -3,6 +3,7 @@
 namespace App\Http\Services;
 
 use App\Dao\Enums\ProcessType;
+use App\Dao\Enums\TransactionType;
 use App\Dao\Models\Detail;
 use App\Dao\Models\Transaksi;
 use Illuminate\Support\Carbon;
@@ -27,10 +28,21 @@ class UpdateDeliveryService
                 $report_date = Carbon::now()->addDay(1);
             }
 
+            $transaksi = $status_transaksi;
+            if ($transaksi == TransactionType::BersihKotor) {
+                $transaksi = TransactionType::Kotor;
+            } else if ($transaksi == TransactionType::BersihRetur){
+                $transaksi = TransactionType::Retur;
+            } else if ($transaksi == TransactionType::BersihRewash){
+                $transaksi = TransactionType::Rewash;
+            } else if ($transaksi == TransactionType::Unknown){
+                $transaksi = TransactionType::Register;
+            }
+
             $check = Transaksi::query()
                 ->whereNull(Transaksi::field_delivery())
                 ->where(Transaksi::field_rs_id(), request()->get('rs_id'))
-                ->where(Transaksi::field_status_transaction(), request()->get('status_transaksi'))
+                ->where(Transaksi::field_status_transaction(), $transaksi)
                 ->whereNotNull(Transaksi::field_barcode())
                 ->update([
                     Transaksi::field_delivery() => $code,
