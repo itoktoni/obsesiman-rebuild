@@ -585,6 +585,17 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
     });
 
     Route::get('total/delivery/{rsid}/{transaksi}', function ($rsid, $transaksi) {
+
+        if ($transaksi == TransactionType::BersihKotor) {
+            $transaksi = TransactionType::Kotor;
+        } else if ($transaksi == TransactionType::BersihRetur){
+            $transaksi = TransactionType::Retur;
+        } else if ($transaksi == TransactionType::BersihRewash){
+            $transaksi = TransactionType::Rewash;
+        } else if ($transaksi == TransactionType::Unknown){
+            $transaksi = TransactionType::Register;
+        }
+
         $data = Transaksi::whereNull(Transaksi::field_delivery())
             ->whereNotNull(Transaksi::field_barcode())
             ->where(Transaksi::field_status_transaction(), $transaksi)
