@@ -3,7 +3,11 @@
 		<td></td>
 		<td colspan="6">
 			<h3>
-				<b>REPORT OPNAME DETAIL : {{ $opname->field_primary ?? '' }} </b>
+				<b>REPORT OPNAME DETAIL
+				@if($filter = request()->get('status'))
+				 {{ Str::upper(FilterType::getDescription(intval($filter))) }}
+				@endif
+				: {{ $opname->field_primary ?? '' }} </b>
 			</h3>
 		</td>
 		<td rowspan="3">
@@ -26,16 +30,6 @@
 			</h3>
 		</td>
 	</tr>
-	@if($filter = request()->get('status'))
-	<tr>
-		<td></td>
-		<td colspan="10">
-			<h5>
-				FILTER : {{ FilterType::getDescription(intval($filter)) }}
-			</h5>
-		</td>
-	</tr>
-	@endif
 </table>
 
 <div class="table-responsive" id="table_data">
@@ -53,6 +47,11 @@
 				<th>STATUS LINEN</th>
 				<th>CUCI/RENTAL</th>
 				<th>JUMLAH PEMAKAIAN LINEN</th>
+				@if($filter == FilterType::Retur)
+				<th>JUMLAH RETUR</th>
+				@elseif($filter == FilterType::Rewash)
+				<th>JUMLAH REWASH</th>
+				@endif
 				<th>TANGGAL REGISTER</th>
 				<th>OPERATOR</th>
 			</tr>
@@ -70,6 +69,11 @@
 				<td>{{ $table->opname_detail_proses ? ProcessType::getDescription($table->opname_detail_proses) : 'Belum Register' }}</td>
 				<td>{{ empty($table->view_status_cuci) ? '' : CuciType::getDescription($table->view_status_cuci) }}</td>
 				<td>{{ $table->view_transaksi_cuci_total ?? 0 }}</td>
+				@if($filter == FilterType::Retur)
+				<td>{{ $table->view_transaksi_retur_total ?? 0 }}</td>
+				@elseif($filter == FilterType::Rewash)
+				<td>{{ $table->view_transaksi_rewash_total ?? 0 }}</td>
+				@endif
 				<td>{{ formatDate($table->view_tanggal_create) }}</td>
 				<td>{{ $table->name }}</td>
 			</tr>

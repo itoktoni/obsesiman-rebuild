@@ -22,7 +22,13 @@
 		<td></td>
 		<td colspan="10">
 			<h3>
-				Periode : {{ formatDate(request()->get('start_rekap')) }} - {{ formatDate(request()->get('end_rekap')) }}
+                @php
+                $start_tanggal_bersih = \Carbon\Carbon::parse(request()->get('start_rekap'))->addDay(+1);
+                $end_tanggal_bersih = \Carbon\Carbon::parse(request()->get('end_rekap'))->addDay(+1);
+                @endphp
+				Tanggal Kotor : {{ formatDate(request()->get('start_rekap')) }} - {{ formatDate(request()->get('end_rekap')) }}
+				<br>
+                Tanggal Bersih : {{ formatDate($start_tanggal_bersih) }} - {{ formatDate($end_tanggal_bersih) }}
 			</h3>
 		</td>
 	</tr>

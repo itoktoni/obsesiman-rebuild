@@ -19,7 +19,7 @@ class Dropdown extends Component
 
     public function mount()
     {
-        $this->data_rs = Rs::getOptions();
+        $this->data_rs = Rs::getOptions()->toArray();
         $this->data_ruangan = Ruangan::getOptions();
         $this->data_jenis = Jenis::getOptions();
     }
@@ -27,14 +27,30 @@ class Dropdown extends Component
     public function render()
     {
         if($this->id_rs){
-            $data_rs = Rs::with(['has_ruangan', 'has_jenis'])->find($this->id_rs);
+            $rs_parse = Rs::with(['has_ruangan', 'has_jenis'])->find($this->id_rs);
 
-            $this->data_ruangan = $data_rs->has_ruangan->pluck(Ruangan::field_name(), Ruangan::field_primary()) ?? [];
-            $this->data_jenis = $data_rs->has_jenis->pluck(Jenis::field_name(), Jenis::field_primary()) ?? [];
+            $this->data_ruangan = $rs_parse->has_ruangan->pluck(Ruangan::field_name(), Ruangan::field_primary()) ?? [];
+            $this->data_jenis = $rs_parse->has_jenis->pluck(Jenis::field_name(), Jenis::field_primary()) ?? [];
         }
 
-        $this->id_jenis = $this->id_ruangan = null;
+        if($rs_id = request()->get('view_rs_id')){
+            $this->id_rs = $rs_id;
+        }
 
-        return view('livewire.dropdown');
+        if($ruangan_id = request()->get('view_ruangan_id')){
+            $this->id_ruangan = $ruangan_id;
+        }
+
+        if($jenis_id = request()->get('view_linen_id')){
+            $this->id_jenis = $jenis_id;
+        }
+
+        // $this->id_jenis = $this->id_ruangan = null;
+
+        return view('livewire.dropdown')->with([
+            'id_ruangan' => $this->id_ruangan,
+            'id_jenis' => $this->id_jenis,
+            'rs_id' => $this->id_rs,
+        ]);
     }
 }

@@ -21,4 +21,13 @@ class TransactionType extends Enum implements LocalizedEnum
     const BersihRewash = 6;
     const Register = 7;
     const Exist = 10;
+
+    public static function getDescription($value): string
+    {
+        if ($value === self::NotSet) {
+            return '';
+        }
+
+        return parent::getDescription($value);
+    }
 }

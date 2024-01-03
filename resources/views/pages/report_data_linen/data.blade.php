@@ -33,6 +33,7 @@
 				<th>RUMAH SAKIT</th>
 				<th>RUANGAN</th>
 				<th>CUCI/RENTAL</th>
+				<th>JUMLAH PEMAKAIAN LINEN</th>
 				<th>JUMLAH BERSIH</th>
 				<th>JUMLAH RETUR</th>
 				<th>JUMLAH REWASH</th>
@@ -59,6 +60,7 @@
 				<td>{{ $table->field_rs_name }}</td>
 				<td>{{ $table->field_ruangan_name }}</td>
 				<td>{{ $table->field_status_cuci_name }}</td>
+				<td>{{ $table->view_transaksi_cuci_total ?? 0 }}</td>
 				<td>{{ $table->field_bersih ?? 0 }}</td>
 				<td>{{ $table->field_retur ?? 0 }}</td>
 				<td>{{ $table->field_rewash ?? 0 }}</td>

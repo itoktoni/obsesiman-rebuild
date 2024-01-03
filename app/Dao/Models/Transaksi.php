@@ -60,12 +60,20 @@ class Transaksi extends Model
 
     protected $filters = [
         'filter',
+        'transaksi_rfid',
         'transaksi_id_rs',
         'transaksi_status',
+        'transaksi_key',
+        'transaksi_barcode',
+        'transaksi_delivery',
+        'transaksi_bersih',
         'transaksi_created_by',
         'start_date',
         'end_date',
         'rs_id',
+        'view_rs_id',
+        'view_ruangan_id',
+        'view_linen_id',
         'transaksi_rs_ori'
     ];
 

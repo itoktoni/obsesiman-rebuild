@@ -9,6 +9,7 @@ use App\Dao\Models\ViewBarcode;
 use App\Dao\Models\ViewDelivery;
 use App\Dao\Models\ViewTotalJenis;
 use App\Dao\Models\ViewTransaksi;
+use Doctrine\DBAL\Query\QueryException;
 use Plugins\Notes;
 
 class TransaksiRepository extends MasterRepository implements CrudInterface
@@ -72,6 +73,7 @@ class TransaksiRepository extends MasterRepository implements CrudInterface
 
     public function getDetailAllBersih($filter = BERSIH){
         return $this->getQueryReportTransaksi()
+        ->leftJoinRelationship(HAS_CUCI)
         ->leftJoinRelationship(HAS_RS_DELIVERY)
         ->whereIn(Transaksi::field_status_bersih(), $filter);
     }
@@ -95,5 +97,15 @@ class TransaksiRepository extends MasterRepository implements CrudInterface
         ->leftJoinRelationship(HAS_DETAIL)
         ->leftJoinRelationship(HAS_USER)
         ->filter();
+    }
+
+    public function deleteRepository($request)
+    {
+        try {
+            is_array($request) ? Transaksi::destroy(array_values($request)) : Transaksi::destroy($request);
+            return Notes::delete($request);
+        } catch (QueryException $ex) {
+            return Notes::error($ex->getMessage());
+        }
     }
 }

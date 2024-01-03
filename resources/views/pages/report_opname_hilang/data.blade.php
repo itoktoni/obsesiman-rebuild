@@ -42,6 +42,7 @@
 				<th>TANGGAL TERAKHIR</th>
 				<th>LAMA HILANG (hari)</th>
 				<th>JUMLAH PEMAKAIAN LINEN</th>
+				<th>OPERATOR</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -56,6 +57,7 @@
 				<td>{{ formatDate($table->view_tanggal_update) }}</td>
 				<td>{{ $table->view_tanggal_update ? \Carbon\Carbon::createFromFormat('Y-m-d H:s:i', $table->view_tanggal_update)->diff(now())->format('%a') : '0' }} Hari</td>
 				<td>{{ $table->view_transaksi_cuci_total ?? 0 }}</td>
+				<td>{{ $table->name }}</td>
 			</tr>
 			@empty
 			@endforelse

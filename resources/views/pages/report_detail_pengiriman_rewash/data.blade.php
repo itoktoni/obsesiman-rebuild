@@ -40,6 +40,7 @@
 				<th>LINEN </th>
 				<th>RUMAH SAKIT</th>
 				<th>RUANGAN</th>
+				<th>JUMLAH PEMAKAIAN LINEN</th>
 				<th>JUMLAH REWASH</th>
 				<th>TANGGAL PENGIRIMAN BERSIH</th>
 				<th>TANGGAL REGISTER</th>
@@ -56,6 +57,7 @@
 				<td>{{ $table->view_linen_nama }}</td>
 				<td>{{ $table->view_rs_nama }}</td>
 				<td>{{ $table->view_ruangan_nama }}</td>
+				<td>{{ $table->view_transaksi_cuci_total ?? 0 }}</td>
 				<td>{{ $table->view_transaksi_rewash_total ?? 0 }}</td>
 				<td>{{ formatDate($table->transaksi_delivery_at) }}</td>
 				<td>{{ formatDate($table->view_tanggal_create) }}</td>
