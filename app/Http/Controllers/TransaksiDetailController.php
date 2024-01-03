@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Dao\Builder\DataBuilder;
 use App\Dao\Enums\DetailType;
 use App\Dao\Enums\FilterType;
+use App\Dao\Enums\TransactionType;
 use App\Dao\Models\Jenis;
 use App\Dao\Models\Rs;
 use App\Dao\Models\Ruangan;
@@ -29,11 +30,31 @@ class TransaksiDetailController extends MasterController
     {
         $query = self::$repository->getQueryReportTransaksi()
                  ->leftJoinRelationship(HAS_RS)
+                 ->orderBy('transaksi_created_at', 'DESC')
                 //  ->showSql()
-                ->orderBy('transaksi_created_at', 'DESC')
-                 ->paginate(100);
+                ;
 
-        return $query;
+        if($status = request()->get('status')){
+            if($status == DetailType::Register){
+                $query = $query->where(Transaksi::field_status_transaction(), TransactionType::Register);
+            } else if($status == DetailType::LinenBaru){
+                $query = $query->where(Transaksi::field_status_bersih(), TransactionType::Register);
+            } else if($status == DetailType::Kotor){
+                $query = $query->where(Transaksi::field_status_transaction(), TransactionType::Kotor);
+            } else if($status == DetailType::Retur){
+                $query = $query->where(Transaksi::field_status_transaction(), TransactionType::Retur);
+            } else if($status == DetailType::Rewash){
+                $query = $query->where(Transaksi::field_status_transaction(), TransactionType::Rewash);
+            } else if($status == DetailType::BersihKotor){
+                $query = $query->where(Transaksi::field_status_bersih(), TransactionType::BersihKotor);
+            } else if($status == DetailType::BersihRetur){
+                $query = $query->where(Transaksi::field_status_bersih(), TransactionType::BersihRetur);
+            } else if($status == DetailType::BersihRewash){
+                $query = $query->where(Transaksi::field_status_bersih(), TransactionType::BersihRewash);
+            }
+        }
+
+        return $query->paginate(100);
     }
 
     public function getTable()
