@@ -4,6 +4,8 @@ namespace App\Console\Commands;
 
 use App\Dao\Enums\ProcessType;
 use App\Dao\Models\Detail;
+use App\Dao\Models\Transaksi;
+use App\Dao\Models\ViewDetailLinen;
 use Illuminate\Console\Command;
 use Illuminate\Support\Carbon;
 use Plugins\History as PluginsHistory;
@@ -43,10 +45,18 @@ class CheckPending extends Command
     public function handle()
     {
 
-        $outstanding = Detail::whereDate(Detail::UPDATED_AT, '>=', Carbon::now()->subMinutes(1440)->toDateString())
-            ->whereDate(Detail::UPDATED_AT, '<', Carbon::now()->toDateString())
-            ->whereNotIn(Detail::field_status_transaction(), BERSIH)
-            ->where(Detail::field_status_process(), '!=', ProcessType::Pending)
+        // $outstanding = Detail::whereDate(Detail::UPDATED_AT, '>=', Carbon::now()->subMinutes(1440)->toDateString())
+        //     ->whereDate(Detail::UPDATED_AT, '<', Carbon::now()->toDateString())
+        //     ->whereNotIn(Detail::field_status_transaction(), BERSIH)
+        //     ->where(Detail::field_status_process(), '!=', ProcessType::Pending)
+        //     ->get();
+
+            $outstanding = Transaksi::query()
+            ->leftJoinRelationship(HAS_DETAIL)
+            ->whereDate(Transaksi::field_updated_at(), '>=', Carbon::now()->subMinutes(1440)->toDateString())
+            ->whereDate(Transaksi::field_updated_at(), '<', Carbon::now()->toDateString())
+            ->whereNull(Transaksi::field_status_bersih())
+            ->where(ViewDetailLinen::field_status_process(), '!=', ProcessType::Pending)
             ->get();
 
         if ($outstanding) {

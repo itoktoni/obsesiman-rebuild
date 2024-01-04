@@ -74,6 +74,7 @@ class Transaksi extends Model
         'view_rs_id',
         'view_ruangan_id',
         'view_linen_id',
+        'view_status_process',
         'transaksi_rs_ori'
     ];
 
@@ -95,8 +96,20 @@ class Transaksi extends Model
     public function fieldDatatable(): array
     {
         return [
-            DataBuilder::build($this->field_primary())->name('Nomer Transaksi')->sort(),
-            DataBuilder::build(Rs::field_name())->name('Rumah Sakit')->show()->sort(),
+            DataBuilder::build(Transaksi::field_key())->name('NO. TRANSAKSI')->sort()->sort(),
+            DataBuilder::build(Transaksi::field_created_at())->name('TANGGAL KOTOR')->sort(),
+            DataBuilder::build(Transaksi::field_rfid())->name('NO. RFID')->sort(),
+            DataBuilder::build(ViewDetailLinen::field_name())->name('LINEN ')->sort(),
+            DataBuilder::build(ViewDetailLinen::field_rs_name())->name('RUMAH SAKIT')->sort(),
+            DataBuilder::build(ViewDetailLinen::field_ruangan_name())->name('RUANGAN')->sort(),
+            DataBuilder::build(Rs::field_name())->name('LOKASI SCAN RUMAH SAKIT')->sort(),
+            DataBuilder::build(Transaksi::field_status_transaction())->name('STATUS KOTOR')->sort(),
+            DataBuilder::build(ViewDetailLinen::field_pending_create())->name('PENDING')->sort(),
+            DataBuilder::build(ViewDetailLinen::field_hilang_create())->name('HILANG')->sort(),
+            DataBuilder::build(User::field_name())->name('OPERATOR')->sort(),
+            DataBuilder::build(Transaksi::field_barcode())->name('No. BARCODE')->sort(),
+            DataBuilder::build(Transaksi::field_delivery())->name('No. DELIVERY')->sort(),
+            DataBuilder::build(Transaksi::field_status_bersih())->name('STATUS BERSIH')->sort(),
         ];
     }
 

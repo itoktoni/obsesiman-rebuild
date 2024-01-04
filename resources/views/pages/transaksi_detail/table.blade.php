@@ -45,6 +45,8 @@
                                 <th>RUANGAN</th>
                                 <th>LOKASI SCAN RUMAH SAKIT</th>
                                 <th>STATUS KOTOR</th>
+                                <th>PENDING</th>
+                                <th>HILANG</th>
                                 <th>OPERATOR</th>
                                 <th>No. BARCODE</th>
                                 <th>No. DELIVERY</th>
@@ -52,6 +54,9 @@
                             </tr>
                         </thead>
                         <tbody>
+                            @php
+                            $i = ($data->currentpage()-1) * $data->perpage() + 1;
+                            @endphp
                             @forelse($data as $key => $table)
                                 <tr>
                                     <td>
@@ -66,7 +71,7 @@
                                         @else
                                         @endif
                                     </td>
-                                    <td>{{ $loop->iteration }}</td>
+                                    <td>{{ ($data->currentPage() - 1) * $data->perPage() + $loop->iteration }}</td>
                                     <td>{{ $table->field_key }}</td>
                                     <td>{{ formatDate($table->transaksi_created_at) }}</td>
                                     <td>{{ $table->field_rfid }}</td>
@@ -75,6 +80,8 @@
                                     <td>{{ $table->view_ruangan_nama }}</td>
                                     <td>{{ $table->rs_nama }}</td>
                                     <td>{{ TransactionType::getDescription($table->transaksi_status) }}</td>
+                                    <td>{{ formatDate($table->view_pending_create) }}</td>
+                                    <td>{{ formatDate($table->view_hilang_create) }}</td>
                                     <td>{{ $table->name }}</td>
                                     <td>{{ $table->transaksi_barcode }}</td>
                                     <td>{{ $table->transaksi_delivery }}</td>

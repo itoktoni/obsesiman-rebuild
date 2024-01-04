@@ -18,4 +18,6 @@ class DetailType extends Enum implements LocalizedEnum
     const BersihRewash = 6;
     const Register = 7;
     const LinenBaru = 100;
+    const Pending = 70;
+    const Hilang = 80;
 }

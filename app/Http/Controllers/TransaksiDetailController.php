@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Dao\Builder\DataBuilder;
 use App\Dao\Enums\DetailType;
 use App\Dao\Enums\FilterType;
+use App\Dao\Enums\ProcessType;
 use App\Dao\Enums\TransactionType;
 use App\Dao\Models\Jenis;
 use App\Dao\Models\Rs;
@@ -16,6 +17,7 @@ use App\Dao\Repositories\TransaksiRepository;
 use App\Http\Requests\DeleteRequest;
 use App\Http\Services\DeleteService;
 use App\Http\Services\SingleService;
+use Illuminate\Support\Facades\DB;
 use Plugins\Response;
 
 class TransaksiDetailController extends MasterController
@@ -51,10 +53,14 @@ class TransaksiDetailController extends MasterController
                 $query = $query->where(Transaksi::field_status_bersih(), TransactionType::BersihRetur);
             } else if($status == DetailType::BersihRewash){
                 $query = $query->where(Transaksi::field_status_bersih(), TransactionType::BersihRewash);
+            } else if($status == DetailType::Pending){
+                $query = $query->where(ViewDetailLinen::field_status_process(), ProcessType::Pending);
+            } else if($status == DetailType::Hilang){
+                $query = $query->where(ViewDetailLinen::field_status_process(), ProcessType::Hilang);
             }
         }
 
-        return $query->paginate(100);
+        return $query->paginate(200);
     }
 
     public function getTable()
