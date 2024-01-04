@@ -103,6 +103,7 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
     });
 
     Route::get('download/{rsid}', function ($rsid, Request $request) {
+        set_time_limit(0);
         $data = ViewDetailLinen::where(ViewDetailLinen::field_rs_id(), $rsid)->get();
         if (count($data) == 0) {
             return Notes::error('Data Tidak Ditemukan !');
