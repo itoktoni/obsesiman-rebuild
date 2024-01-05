@@ -51,15 +51,16 @@ class CheckHilang extends Command
         //     ->get();
 
             $outstanding = Transaksi::query()
-            ->leftJoinRelationship(HAS_DETAIL)
-            ->whereDate(Transaksi::field_updated_at(), '<=', Carbon::now()->subMinutes(4320)->toDateString())
-            ->whereNull(Transaksi::field_status_bersih())
-            ->where(ViewDetailLinen::field_status_process(), '!=', ProcessType::Hilang)
-            ->get();
+                ->select(Transaksi::field_rfid())
+                ->joinRelationship(HAS_DETAIL)
+                ->whereDate(ViewDetailLinen::field_tanggal_update(), '<=', Carbon::now()->subMinutes(4320)->toDateString())
+                ->whereNull(Transaksi::field_status_bersih())
+                ->where(ViewDetailLinen::field_status_process(), '!=', ProcessType::Hilang)
+                ->get();
 
         if ($outstanding) {
 
-            $rfid = $outstanding->pluck(Detail::field_primary());
+            $rfid = $outstanding->pluck(Transaksi::field_rfid());
 
             History::bulk($rfid, ProcessType::Pending, 'RFID Hilang');
             Detail::whereIn(Detail::field_primary(), $rfid)->update([

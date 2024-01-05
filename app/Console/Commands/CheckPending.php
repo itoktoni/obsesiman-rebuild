@@ -52,16 +52,17 @@ class CheckPending extends Command
         //     ->get();
 
             $outstanding = Transaksi::query()
-            ->leftJoinRelationship(HAS_DETAIL)
-            ->whereDate(Transaksi::field_updated_at(), '>=', Carbon::now()->subMinutes(1440)->toDateString())
-            ->whereDate(Transaksi::field_updated_at(), '<', Carbon::now()->toDateString())
-            ->whereNull(Transaksi::field_status_bersih())
-            ->where(ViewDetailLinen::field_status_process(), '!=', ProcessType::Pending)
-            ->get();
+                ->select(Transaksi::field_rfid())
+                ->joinRelationship(HAS_DETAIL)
+                ->whereDate(ViewDetailLinen::field_tanggal_update(), '>=', Carbon::now()->subMinutes(1440)->toDateString())
+                ->whereDate(ViewDetailLinen::field_tanggal_update(), '<', Carbon::now()->toDateString())
+                ->whereNull(Transaksi::field_status_bersih())
+                ->where(ViewDetailLinen::field_status_process(), '!=', ProcessType::Pending)
+                ->get();
 
         if ($outstanding) {
 
-            $rfid = $outstanding->pluck(Detail::field_primary());
+            $rfid = $outstanding->pluck(Transaksi::field_rfid());
 
             PluginsHistory::bulk($rfid, ProcessType::Pending, 'RFID Pending');
             Detail::whereIn(Detail::field_primary(), $rfid)->update([
