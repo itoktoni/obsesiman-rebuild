@@ -54,9 +54,13 @@ class TransaksiDetailController extends MasterController
             } else if($status == DetailType::BersihRewash){
                 $query = $query->where(Transaksi::field_status_bersih(), TransactionType::BersihRewash);
             } else if($status == DetailType::Pending){
-                $query = $query->where(ViewDetailLinen::field_status_process(), ProcessType::Pending);
+                $query = $query->where(ViewDetailLinen::field_status_process(), ProcessType::Pending)
+                                ->whereNULL(Transaksi::field_status_bersih())
+                                ->groupBy(ViewDetailLinen::field_primary());
             } else if($status == DetailType::Hilang){
-                $query = $query->where(ViewDetailLinen::field_status_process(), ProcessType::Hilang);
+                $query = $query->where(ViewDetailLinen::field_status_process(), ProcessType::Hilang)
+                                ->whereNULL(Transaksi::field_status_bersih())
+                                ->groupBy(ViewDetailLinen::field_primary());
             }
         }
 
