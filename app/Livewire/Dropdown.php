@@ -17,6 +17,8 @@ class Dropdown extends Component
     public $data_ruangan;
     public $data_jenis;
 
+    public $hide;
+
     public function mount()
     {
         $this->data_rs = Rs::getOptions()->toArray();

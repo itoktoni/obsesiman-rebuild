@@ -14,7 +14,7 @@ class MutasiReportRequest extends FormRequest
         return [
             'start_date' => 'required',
             'end_date' => 'required',
-            'mutasi_rs_id' => 'required',
+            'view_rs_id' => 'required',
         ];
     }
 

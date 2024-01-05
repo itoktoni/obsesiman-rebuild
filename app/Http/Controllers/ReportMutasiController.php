@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Dao\Models\Jenis;
 use App\Dao\Models\Mutasi;
 use App\Dao\Models\Rs;
+use App\Dao\Models\ViewDetailLinen;
 use App\Dao\Repositories\MutasiRepository;
 use App\Http\Requests\MutasiReportRequest;
 
@@ -37,6 +38,14 @@ class ReportMutasiController extends MinimalController
 
         if($akhir = request()->get('end_date')){
             $query = $query->where(Mutasi::field_tanggal(), '<=', $akhir);
+        }
+
+        if ($rs_id = request()->get(ViewDetailLinen::field_rs_id())) {
+            $query = $query->where(Mutasi::field_rs_id(), $rs_id);
+        }
+
+        if ($linen_id = request()->get(ViewDetailLinen::field_id())) {
+            $query = $query->where(Mutasi::field_linen_id(), $linen_id);
         }
 
         return $query->get();

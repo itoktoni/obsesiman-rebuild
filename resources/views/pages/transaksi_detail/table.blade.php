@@ -6,18 +6,20 @@
 
                 @livewire('dropdown', ['label' => false])
 
-                <div class="row col-md-12">
-                    <x-form-select prepend="Scan RS" col="4" class="search" :label=false name="rs_id" :options="$rs" />
-                    <x-form-select prepend="Status" col="4" class="search" :label=false name="status" :options="$status" />
-                    <x-form-select prepend="Operator" col="4" class="search" :label=false name="transaksi_created_by" :options="$user" />
+                <div class="container">
+                    <div class="row">
+                        <x-form-select prepend="Scan RS" col="4" class="search" :label=false name="rs_id" :options="$rs" />
+                        <x-form-select prepend="Status" col="4" class="search" :label=false name="status" :options="$status" />
+                        <x-form-select prepend="Operator" col="4" class="search" :label=false name="transaksi_created_by" :options="$user" />
 
-                    <x-form-input prepend="No. Transaksi" :label=false col="4" name="transaksi_key" />
-                    <x-form-input prepend="No. DO" :label=false col="4" name="transaksi_delivery" />
-                    <x-form-input prepend="No. Barcode" :label=false col="4" name="transaksi_barcode" />
+                        <x-form-input prepend="No. Transaksi" :label=false col="4" name="transaksi_key" />
+                        <x-form-input prepend="No. DO" :label=false col="4" name="transaksi_delivery" />
+                        <x-form-input prepend="No. Barcode" :label=false col="4" name="transaksi_barcode" />
 
-                    <x-form-input prepend="No. RFID" :label=false col="4" name="transaksi_rfid" />
-                    <x-form-input type="date" prepend="Tanggal Awal" :label=false col="4" name="start_date" />
-                    <x-form-input type="date" prepend="Tanggal Akhir" :label=false col="4" name="end_date" />
+                        <x-form-input prepend="No. RFID" :label=false col="4" name="transaksi_rfid" />
+                        <x-form-input type="date" prepend="Tanggal Awal" :label=false col="4" name="start_date" />
+                        <x-form-input type="date" prepend="Tanggal Akhir" :label=false col="4" name="end_date" />
+                    </div>
                 </div>
 
                 <x-filter toggle="Filter" hide="false" :fields="$fields" />
