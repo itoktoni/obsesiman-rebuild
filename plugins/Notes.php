@@ -37,7 +37,7 @@ class Notes
         $log['message'] = 'Data di dapat';
         $log['data'] = $data;
         if(self::checkDebug()){
-            Log::info(self::single, $data);
+            Log::info(self::single, $log);
         }
         return self::sentJson($log);
     }
@@ -50,7 +50,7 @@ class Notes
         $log['message'] = 'Data berhasil di buat';
         $log['data'] = $data;
         if(self::checkDebug()){
-            Log::info(self::create, request()->all());
+            Log::info(self::create, $log);
         }
         return self::sentJson($log);
     }
@@ -63,7 +63,7 @@ class Notes
         $log['message'] = 'Data token '.self::token;
         $log['data'] = $data;
         if(self::checkDebug()){
-            Log::info(self::token, $data);
+            Log::info(self::token, $log);
         }
         return self::sentJson($log);
     }
@@ -76,7 +76,7 @@ class Notes
         $log['message'] = 'Data berhasil di ubah';
         $log['data'] = $data;
         if(self::checkDebug()){
-            Log::info(self::update, $data);
+            Log::info(self::update, $log);
         }
         return self::sentJson($log);
     }
