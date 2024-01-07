@@ -15,6 +15,10 @@ class Notes
     const single = 'Data';
     const token = 'Token';
 
+    public static function checkDebug(){
+        return env('APP_DEBUG') ? env('APP_DEBUG') : false;
+    }
+
     public static function data($data = null, $additional = [])
     {
         $log['status'] = true;
@@ -22,7 +26,6 @@ class Notes
         $log['name'] = self::data;
         $log['message'] = 'Data berhasil diambil';
         $log['data'] = $data;
-        Log::info(self::data, $data);
         return self::sentJson($log, 200, $additional);
     }
 
@@ -33,7 +36,9 @@ class Notes
         $log['name'] = self::single;
         $log['message'] = 'Data di dapat';
         $log['data'] = $data;
-        Log::info(self::single, $data);
+        if(self::checkDebug()){
+            Log::info(self::single, $data);
+        }
         return self::sentJson($log);
     }
 
@@ -44,7 +49,9 @@ class Notes
         $log['name'] = self::create;
         $log['message'] = 'Data berhasil di buat';
         $log['data'] = $data;
-        Log::info(self::create, request()->all());
+        if(self::checkDebug()){
+            Log::info(self::create, request()->all());
+        }
         return self::sentJson($log);
     }
 
@@ -55,7 +62,9 @@ class Notes
         $log['name'] = self::token;
         $log['message'] = 'Data token '.self::token;
         $log['data'] = $data;
-        Log::info(self::token, $data);
+        if(self::checkDebug()){
+            Log::info(self::token, $data);
+        }
         return self::sentJson($log);
     }
 
@@ -66,7 +75,9 @@ class Notes
         $log['name'] = self::update;
         $log['message'] = 'Data berhasil di ubah';
         $log['data'] = $data;
-        Log::info(self::update, $data);
+        if(self::checkDebug()){
+            Log::info(self::update, $data);
+        }
         return self::sentJson($log);
     }
 
@@ -77,7 +88,9 @@ class Notes
         $log['name'] = self::delete;
         $log['message'] = 'Data berhasil di hapus';
         $log['data'] = $data;
-        Log::warning(self::delete, $log);
+        if(self::checkDebug()){
+            Log::warning(self::delete, $log);
+        }
         return self::sentJson($log, 204);
     }
 
@@ -88,7 +101,9 @@ class Notes
         $log['name'] = self::error;
         $log['message'] = $message ?? $data;
         $log['data'] = [$data];
-        Log::error(self::error, $log);
+        if(self::checkDebug()){
+            Log::error(self::error, $log);
+        }
         return self::sentJson($log, 400);
     }
 
@@ -99,7 +114,9 @@ class Notes
         $log['name'] = self::validation;
         $log['message'] = $message;
         $log['data'] = 'Validation Error';
-        Log::warning(self::validation, $log);
+        if(self::checkDebug()){
+            Log::warning(self::validation, $log);
+        }
         return self::sentJson($log, 422);
     }
 
@@ -110,7 +127,9 @@ class Notes
         $log['name'] = self::error;
         $log['message'] = 'Url tidak ditemukan';
         $log['data'] = $data;
-        Log::warning(self::error, $log);
+        if(self::checkDebug()){
+            Log::warning(self::error, $log);
+        }
         return self::sentJson($log, 404);
     }
 

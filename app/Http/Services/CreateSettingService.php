@@ -25,6 +25,10 @@ class CreateSettingService
             EnvEditor::editKey('CODE_REWASH', $data->code_rewash);
 
             EnvEditor::editKey('TELESCOPE_ENABLED', $data->telescope_enable);
+            if($data->telescope_enable){
+                EnvEditor::editKey('APP_DEBUG', $data->telescope_enable);
+            }
+
             if ($data->has('logo')) {
                 $file_logo = $data->file('logo');
                 $extension = $file_logo->extension();
