@@ -26,6 +26,14 @@
 			@auth
 			@if(auth()->user()->level == UserLevel::Developer)
 			<li>
+				<a class="icon" href="{{ url('log-viewer') }}">
+					<i class="bi bi-clock-history"></i>
+					<h5 class="text-center text-white">
+						Audit Log
+					</h5>
+				</a>
+			</li>
+			<li>
 				<a class="icon" href="{{ url('env-editor') }}">
 					<i class="bi bi-toggles"></i>
 					<h5 class="text-center text-white">
