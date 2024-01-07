@@ -64,7 +64,7 @@ class TransaksiDetailController extends MasterController
             }
         }
 
-        return $query->paginate(200);
+        return $query->fastPaginate(200);
     }
 
     public function getTable()
