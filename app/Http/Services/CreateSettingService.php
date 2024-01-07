@@ -27,6 +27,8 @@ class CreateSettingService
             EnvEditor::editKey('TELESCOPE_ENABLED', $data->telescope_enable);
             if($data->telescope_enable){
                 EnvEditor::editKey('APP_DEBUG', $data->telescope_enable);
+            } else  {
+                EnvEditor::editKey('APP_DEBUG', 0);
             }
 
             if ($data->has('logo')) {
