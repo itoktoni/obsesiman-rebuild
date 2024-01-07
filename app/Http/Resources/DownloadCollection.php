@@ -9,6 +9,8 @@ use App\Dao\Models\Opname;
 use App\Dao\Models\OpnameDetail;
 use App\Dao\Models\Rs;
 use App\Dao\Models\Ruangan;
+use App\Dao\Models\Transaksi;
+use App\Dao\Models\ViewDetailLinen;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use Illuminate\Support\Facades\DB;
 
@@ -59,12 +61,31 @@ class DownloadCollection extends ResourceCollection
             ];
         }
 
+        $check = Transaksi::addSelect(Transaksi::field_rfid())
+            ->joinRelationship(HAS_DETAIL)
+            ->whereNull(Transaksi::field_delivery())
+            ->where(ViewDetailLinen::field_rs_id(), $request->rsid)
+            ->whereDate(ViewDetailLinen::field_tanggal_update(), '<', date('Y-m-d'))
+            ->get()->pluck(Transaksi::field_rfid(), Transaksi::field_rfid())
+            ->toArray() ?? [];
+
+        $data = $this->collection->map(function($item) use ($check){
+            return [
+                'id' => $item->field_primary,
+                'rs' => $item->field_rs_id,
+                'loc' => $item->field_ruangan_id,
+                'jns' => $item->field_id,
+                'sts' => $item->field_status_process,
+                'tgl' => in_array($item->field_primary, $check) ? date('Y-m-d H:i:s') : $item->field_tanggal_update->format('Y-m-d H:i:s'),
+            ];
+        });
+
         return [
             'status' => true,
             'code' => 200,
             'name' => 'List',
             'message' => 'Data berhasil diambil',
-            'data' => DownloadLinenResource::collection($this->collection),
+            'data' => $data,
             'rs' => $rs,
             'ruangan' => $ruangan,
             'jenis_linen' => $jenis,
