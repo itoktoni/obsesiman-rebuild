@@ -21,6 +21,7 @@
             <table class="table table-bordered table-striped">
                 <thead>
                     <tr>
+                        <th style="width: 10px;">No.</th>
                         <th style="width: 100px;">No. RFID</th>
                         <th>Jenis Linen</th>
                         <th>Ruangan</th>
@@ -37,6 +38,7 @@
                     $view = $table->has_view ?? false;
                     @endphp
                     <tr>
+                        <td>{{ $loop->iteration }}</td>
                         <td>{{ $table->field_rfid }}</td>
                         <td>{{ $view->field_name ?? '' }}</td>
                         <td>{{ $view->field_ruangan_name ?? '' }}</td>
