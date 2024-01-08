@@ -40,7 +40,7 @@ class DownloadCollection extends ResourceCollection
             ->get();
 
         $opname = Opname::with(['has_detail' => function($query){
-            $query->whereNotNull(OpnameDetail::field_waktu());
+            $query->where(OpnameDetail::field_ketemu(), 0);
         }])
             ->where(Opname::field_rs_id(), $rsid)
             ->where(Opname::field_status(), OpnameType::Proses)
