@@ -3,7 +3,7 @@
 		<td></td>
 		<td colspan="6">
 			<h3>
-				<b>REPORT OPNAME HILANG : {{ $opname->field_primary ?? '' }} </b>
+				<b>REPORT OPNAME HILANG RS : {{ $opname->field_primary ?? '' }} </b>
 			</h3>
 		</td>
 		<td rowspan="3">
