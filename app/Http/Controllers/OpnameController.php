@@ -56,7 +56,7 @@ class OpnameController extends MasterController
             'has_view',
             'has_view.has_cuci',
         ])->where(OpnameDetail::field_opname(), $code)
-        ->get();
+        ->fastPaginate(200);
 
         return moduleView(modulePathForm(), $this->share([
             'model' => $model,

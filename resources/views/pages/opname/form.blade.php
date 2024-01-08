@@ -53,6 +53,7 @@
                 </tbody>
             </table>
         </div>
+        <x-pagination :data="$detail" />
     </x-card>
 
 </x-layout>
