@@ -46,7 +46,7 @@
 			</tr>
 		</thead>
 		<tbody>
-			@forelse($data as $table)
+			@forelse($data->sortBy('view_linen_nama') as $table)
 			<tr>
 				<td>{{ $loop->iteration }}</td>
 				<td>{{ $table->view_linen_nama ?? '' }}</td>
