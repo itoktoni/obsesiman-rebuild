@@ -75,7 +75,8 @@
 
 			$hilang_rs = $table->where('opname_detail_ketemu', BooleanType::No)->count();
 
-			$scan_rs = $table->where('opname_detail_scan_rs', BooleanType::Yes)
+			$scan_rs = $table->whereIn('opname_detail_transaksi', BERSIH)
+                        ->where('opname_detail_ketemu', BooleanType::Yes)
                         ->count();
 
 			$pending = $table->where('opname_detail_proses', ProcessType::Pending)
@@ -155,7 +156,7 @@
 				<td>{{ $sub_retur }}</td>
 				<td>{{ $sub_rewash }}</td>
 				<td>{{ $sub_not_register }}</td>
-				<td>{{ $sub_total }}</td>
+				<td>{{ $grand_total }}</td>
 				<td>{{ $register - $grand_total }}</td>
 			</tr>
 

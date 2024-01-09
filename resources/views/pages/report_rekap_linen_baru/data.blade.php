@@ -79,7 +79,7 @@
 
                     $sum_lawan = $sum_lawan + $total_lawan;
 
-                    $total_kg = $bersih[0]->view_linen_berat * $total_per_linen;
+                    $total_kg = isset($bersih[0]) ? $bersih[0]->view_linen_berat * $total_per_linen : 0;
                     $sum_kg = $sum_kg + $total_kg;
 
                     $selisih = $total_per_linen - $total_lawan;
