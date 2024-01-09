@@ -174,7 +174,6 @@ class TransaksiController extends MasterController
                     OpnameDetail::field_waktu() => $waktu,
                     OpnameDetail::field_transaksi() => $status_transaksi,
                     OpnameDetail::field_proses() => $status_proses,
-                    OpnameDetail::field_scan_rs() => BooleanType::Yes,
                 ]);
 
             PluginsHistory::bulk($rfid, $status_proses, 'Ketemu di kotor');

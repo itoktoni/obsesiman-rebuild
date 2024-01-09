@@ -36,6 +36,7 @@ class SaveOpnameService
                             OpnameDetail::field_updated_by() => auth()->user()->id,
                             OpnameDetail::field_transaksi() => TransactionType::Unknown,
                             OpnameDetail::field_proses() => ProcessType::Unknown,
+                            OpnameDetail::field_scan_rs() => BooleanType::Yes,
                         ];
 
                         if (isset($data_rfid[$rfid])) {
