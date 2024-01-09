@@ -42,6 +42,7 @@
 				<th>LINEN </th>
 				<th>RUMAH SAKIT</th>
 				<th>RUANGAN</th>
+				<th>TANGGAL BUAT OPNAME</th>
 				<th>SUDAH DI OPNAME</th>
 				<th>STATUS TRANSAKSI</th>
 				<th>STATUS LINEN</th>
@@ -64,6 +65,7 @@
 				<td>{{ $table->view_linen_nama ?? '' }}</td>
 				<td>{{ $table->view_rs_nama ?? '' }}</td>
 				<td>{{ $table->view_ruangan_nama ?? '' }}</td>
+				<td>{{ $table->opname_detail_created_at }}</td>
 				<td>{{ $table->opname_detail_ketemu == 1 ? $table->opname_detail_waktu : '' }}</td>
 				<td>{{ $table->opname_detail_transaksi ? TransactionType::getDescription($table->opname_detail_transaksi) : 'Belum Register' }}</td>
 				<td>{{ $table->opname_detail_proses ? ProcessType::getDescription($table->opname_detail_proses) : 'Belum Register' }}</td>
