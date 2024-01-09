@@ -64,7 +64,7 @@
 				<td>{{ $table->view_linen_nama ?? '' }}</td>
 				<td>{{ $table->view_rs_nama ?? '' }}</td>
 				<td>{{ $table->view_ruangan_nama ?? '' }}</td>
-				<td>{{ formatDate($table->opname_detail_waktu) }}</td>
+				<td>{{ $table->opname_detail_ketemu == 1 ? formatDate($table->opname_detail_waktu) : '' }}</td>
 				<td>{{ $table->opname_detail_transaksi ? TransactionType::getDescription($table->opname_detail_transaksi) : 'Belum Register' }}</td>
 				<td>{{ $table->opname_detail_proses ? ProcessType::getDescription($table->opname_detail_proses) : 'Belum Register' }}</td>
 				<td>{{ empty($table->view_status_cuci) ? '' : CuciType::getDescription($table->view_status_cuci) }}</td>
