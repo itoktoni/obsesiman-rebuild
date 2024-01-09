@@ -168,7 +168,7 @@ class TransaksiController extends MasterController
                 ->where(Opname::field_start(), '<=', $today)
                 ->where(Opname::field_end(), '>=', $today)
                 ->whereIn(OpnameDetail::field_rfid(), $rfid)
-                ->whereNull(OpnameDetail::field_ketemu())
+                ->where(OpnameDetail::field_ketemu(), BooleanType::No)
                 ->update([
                     OpnameDetail::field_ketemu() => BooleanType::Yes,
                     OpnameDetail::field_waktu() => $waktu,
