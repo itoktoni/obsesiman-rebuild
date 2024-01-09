@@ -55,7 +55,7 @@ class BarcodeRequest extends FormRequest
 
         $validator->after(function ($validator) use ($compare) {
             if ($compare) {
-                $validator->errors()->add('rfid', 'RFID tidak valid !');
+                $validator->errors()->add('rfid', 'RFID tidak sesuai dengan proses !');
             }
         });
 
@@ -97,8 +97,8 @@ class BarcodeRequest extends FormRequest
                 $code = env('CODE_REWASH', 'WSH');
                 break;
             case TransactionType::Register:
-                    $code = env('CODE_REGISTER', 'BRU');
-                    break;
+                $code = env('CODE_REGISTER', 'BRU');
+                break;
             default:
                 $code = env('CODE_BERSIH', 'BSH');
                 break;

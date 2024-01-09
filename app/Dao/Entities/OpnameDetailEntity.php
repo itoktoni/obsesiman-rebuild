@@ -172,4 +172,14 @@ trait OpnameDetailEntity
     {
         return $this->{$this->field_hilang()};
     }
+
+    public static function field_scan_rs()
+    {
+        return 'opname_detail_scan_rs';
+    }
+
+    public function getFieldScanRsAttribute()
+    {
+        return $this->{$this->field_scan_rs()};
+    }
 }

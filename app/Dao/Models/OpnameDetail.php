@@ -45,6 +45,7 @@ class OpnameDetail extends Model
         'opname_detail_created_by',
         'opname_detail_updated_by',
         'opname_detail_hilang_at',
+        'opname_detail_scan_rs',
     ];
 
     protected $casts = [

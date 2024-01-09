@@ -16,6 +16,7 @@
         </x-form>
     </x-card>
 
+    @if (!empty($detail))
     <x-card label="Data Opname">
         <div class="table-responsive" id="table_data">
             <table class="table table-bordered table-striped">
@@ -55,5 +56,7 @@
         </div>
         <x-pagination :data="$detail" />
     </x-card>
+    @endif
+
 
 </x-layout>

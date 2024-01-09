@@ -259,7 +259,10 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
 
                     Transaksi::where(Transaksi::field_rfid(), $item)
                         ->whereNull(Transaksi::field_rs_ori())
-                        ->update([Transaksi::field_rs_ori() => $request->rs_id]);
+                        ->update([
+                            Transaksi::field_status_transaction() => TransactionType::Register,
+                            Transaksi::field_rs_ori() => $request->rs_id
+                        ]);
 
                     $check_transaksi = Transaksi::where(Transaksi::field_rfid(), $item)
                         ->whereNull(Transaksi::field_delivery())
@@ -327,7 +330,10 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
 
                 Transaksi::where(Transaksi::field_rfid(), $request->rfid)
                         ->whereNull(Transaksi::field_rs_ori())
-                        ->update([Transaksi::field_rs_ori() => $request->rs_id]);
+                        ->update([
+                            Transaksi::field_status_transaction() => TransactionType::Register,
+                            Transaksi::field_rs_ori() => $request->rs_id
+                        ]);
 
                 $check_transaksi = Transaksi::where(Transaksi::field_rfid(), $request->rfid)
                     ->whereNull(Transaksi::field_delivery())

@@ -3,11 +3,19 @@
         <td></td>
         <td colspan="6">
             <h3>
-                <b>REPORT OPNAME SUMMARY : {{ $opname->field_primary ?? '' }} </b>
+                <b>REPORT OPNAME SUMMARY </b>
             </h3>
         </td>
         <td rowspan="3">
             <x-logo />
+        </td>
+    </tr>
+    <tr>
+        <td></td>
+        <td colspan="10">
+            <h3>
+                OPNAME ID : {{ $opname->field_primary ?? '' }}
+            </h3>
         </td>
     </tr>
     <tr>
@@ -44,7 +52,8 @@
                 <th>RETUR</th>
                 <th>REWASH</th>
                 <th>BELUM REGISTER</th>
-                <th>TOTAL</th>
+                <th>TOTAL OPNAME</th>
+                <th>SELISIH</th>
             </tr>
         </thead>
         <tbody>
@@ -56,7 +65,7 @@
 				})->sortDesc();
 			}
 
-            $grand_total
+            $grand_total = 0;
 			@endphp
             @forelse($map as $key => $table)
 			@php
@@ -66,8 +75,7 @@
 
 			$hilang_rs = $table->where('opname_detail_ketemu', BooleanType::No)->count();
 
-			$scan_rs = $table->whereIn('opname_detail_transaksi', BERSIH)
-                        ->where('opname_detail_ketemu', BooleanType::Yes)
+			$scan_rs = $table->where('opname_detail_scan_rs', BooleanType::Yes)
                         ->count();
 
 			$pending = $table->where('opname_detail_proses', ProcessType::Pending)
@@ -86,6 +94,7 @@
 
 			$not_register = $table->where('opname_detail_transaksi', BooleanType::No)->count();
 			$total = $kotor + $scan_rs + $pending + $hilang + $retur + $rewash;
+            $grand_total = $grand_total + $total;
 			@endphp
             <tr>
                 <td>{{ $loop->iteration }}</td>
@@ -100,6 +109,7 @@
                 <td>{{ $rewash }}</td>
                 <td>{{ $not_register }}</td>
                 <td>{{ $total }}</td>
+                <td></td>
             </tr>
 
             @empty
@@ -146,6 +156,7 @@
 				<td>{{ $sub_rewash }}</td>
 				<td>{{ $sub_not_register }}</td>
 				<td>{{ $sub_total }}</td>
+				<td>{{ $register - $grand_total }}</td>
 			</tr>
 
         </tbody>
