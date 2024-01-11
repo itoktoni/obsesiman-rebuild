@@ -22,9 +22,9 @@ class UpdateDeliveryService
             $startDate = Carbon::createFromFormat('Y-m-d H:i', date('Y-m-d') . ' 13:00');
             $endDate = Carbon::createFromFormat('Y-m-d H:i', date('Y-m-d') . ' 23:59');
 
-            $check = Carbon::now()->between($startDate, $endDate);
+            $check_date = Carbon::now()->between($startDate, $endDate);
             $report_date = Carbon::now();
-            if ($check) {
+            if ($check_date) {
                 $report_date = Carbon::now()->addDay(1);
             }
 
@@ -58,8 +58,6 @@ class UpdateDeliveryService
             if ($rfid && $check) {
 
                 $data_rfid = $rfid->pluck(Transaksi::field_rfid());
-
-                History::bulk($data_rfid, ProcessType::Delivery);
 
                 Detail::whereIn(Detail::field_primary(), $data_rfid)
                     ->update([

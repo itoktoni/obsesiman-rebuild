@@ -35,7 +35,8 @@ class DeliveryRequest extends FormRequest
             $transaksi = TransactionType::Register;
         }
 
-        $empty = Detail::where(Detail::field_rs_id(), $this->rs_id)
+        $empty = Detail::select(Detail::field_primary())
+            ->where(Detail::field_rs_id(), $this->rs_id)
             ->where(Detail::field_status_transaction(), $transaksi)
             ->where(Detail::field_status_process(), ProcessType::Barcode)
             ->count();
