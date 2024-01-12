@@ -77,6 +77,7 @@ class LogMutasi extends Command
                     'mutasi_plus' => $selisih_plus,
                     'mutasi_saldo_awal' => $saldo_awal,
                     'mutasi_saldo_akhir' => $saldo_akhir,
+                    'mutasi_date' => date('Y-m-d h:i:s'),
                 ];
             });
 

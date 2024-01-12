@@ -38,6 +38,7 @@ class Mutasi extends Model
         'mutasi_plus',
         'mutasi_saldo_awal',
         'mutasi_saldo_akhir',
+        'mutasi_date',
     ];
 
     public $sortable = [
