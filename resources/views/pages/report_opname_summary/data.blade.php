@@ -44,13 +44,11 @@
                 <th width="1">No. </th>
                 <th>TANGGAL </th>
                 <th>REGISTER</th>
-                <th>HILANG RS</th>
-                <th>SCAN RS</th>
-                <th>KOTOR</th>
-                <th>PENDING</th>
-                <th>HILANG</th>
+                <th>TEMBAK SO</th>
                 <th>RETUR</th>
                 <th>REWASH</th>
+                <th>PENDING</th>
+                <th>HILANG</th>
                 <th>BELUM REGISTER</th>
                 <th>TOTAL OPNAME</th>
                 <th>SELISIH</th>
@@ -69,17 +67,10 @@
 			@endphp
             @forelse($map as $key => $table)
 			@php
-			$kotor = $table->where('opname_detail_transaksi', TransactionType::Kotor)
-                        ->whereNotIn('opname_detail_proses', [ProcessType::Pending, ProcessType::Hilang])
+			$tembak_so = $table->where('opname_detail_scan_rs', BooleanType::Yes)
                         ->count();
 
-			$hilang_rs = $table->where('opname_detail_ketemu', BooleanType::No)->count();
-
-			$scan_rs = $table->whereIn('opname_detail_transaksi', BERSIH)
-                        ->where('opname_detail_ketemu', BooleanType::Yes)
-                        ->count();
-
-			$pending = $table->where('opname_detail_proses', ProcessType::Pending)
+            $pending = $table->where('opname_detail_proses', ProcessType::Pending)
                         ->count();
 
 			$hilang = $table->where('opname_detail_proses', ProcessType::Hilang)
@@ -94,20 +85,18 @@
                         ->count();
 
 			$not_register = $table->where('opname_detail_transaksi', BooleanType::No)->count();
-			$total = $kotor + $scan_rs + $pending + $hilang + $retur + $rewash;
+			$total = $tembak_so + $pending + $hilang + $retur + $rewash;
             $grand_total = $grand_total + $total;
 			@endphp
             <tr>
                 <td>{{ $loop->iteration }}</td>
                 <td>{{ $key ?? '' }}</td>
                 <td>{{ $register }}</td>
-                <td>{{ $hilang_rs }}</td>
-                <td>{{ $scan_rs }}</td>
-                <td>{{ $kotor }}</td>
-                <td>{{ $pending }}</td>
-                <td>{{ $hilang }}</td>
+                <td>{{ $tembak_so }}</td>
                 <td>{{ $retur }}</td>
                 <td>{{ $rewash }}</td>
+                <td>{{ $pending }}</td>
+                <td>{{ $hilang }}</td>
                 <td>{{ $not_register }}</td>
                 <td>{{ $total }}</td>
                 <td></td>
@@ -119,15 +108,7 @@
 			<tr>
 				<td colspan="2">Total</td>
 				@php
-				$sub_kotor = $data->where('opname_detail_transaksi', TransactionType::Kotor)
-                ->whereNotIn('opname_detail_proses', [ProcessType::Pending, ProcessType::Hilang])
-                ->count();
-
-				$sub_hilang_rs = $data->where('opname_detail_ketemu', BooleanType::No)
-                    ->count();
-
-				$sub_scan_rs = $data->whereIn('opname_detail_transaksi', BERSIH)
-                    ->where('opname_detail_ketemu', BooleanType::Yes)
+				$sub_tembak_so = $data->where('opname_detail_scan_rs', BooleanType::Yes)
                     ->count();
 
 				$sub_pending = $data->where('opname_detail_proses', ProcessType::Pending)
@@ -148,13 +129,11 @@
 				$sub_total = $data->count();
 				@endphp
 				<td>{{ $register }}</td>
-				<td>{{ $sub_hilang_rs }}</td>
-				<td>{{ $sub_scan_rs }}</td>
-				<td>{{ $sub_kotor }}</td>
+				<td>{{ $sub_tembak_so }}</td>
+                <td>{{ $sub_retur }}</td>
+				<td>{{ $sub_rewash }}</td>
 				<td>{{ $sub_pending }}</td>
 				<td>{{ $sub_hilang }}</td>
-				<td>{{ $sub_retur }}</td>
-				<td>{{ $sub_rewash }}</td>
 				<td>{{ $sub_not_register }}</td>
 				<td>{{ $grand_total }}</td>
 				<td>{{ $register - $grand_total }}</td>

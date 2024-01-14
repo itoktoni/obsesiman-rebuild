@@ -1,0 +1,80 @@
+<?php
+
+namespace App\Http\Services;
+
+use App\Dao\Enums\BooleanType;
+use App\Dao\Enums\OpnameType;
+use App\Dao\Enums\ProcessType;
+use App\Dao\Enums\SyncType;
+use App\Dao\Enums\TransactionType;
+use App\Dao\Models\OpnameDetail;
+use Illuminate\Support\Facades\DB;
+use Plugins\History as PluginsHistory;
+use Plugins\Notes;
+
+class SaveOpnameService
+{
+    public function save($opname_id, $data)
+    {
+        $check = false;
+        $waktu = date('Y-m-d H:i:s');
+
+        try {
+
+            DB::beginTransaction();
+            $sent = [];
+            $scan_rfid = $data['rfid'];
+            $code = $data['code'];
+
+            $scan_rs = false;
+            if ($data['opname']) {
+
+                $data_rfid = $data['opname']
+                    ->pluck(OpnameDetail::field_rfid());
+
+                $not_register = collect($scan_rfid)
+                    ->diff($data_rfid)
+                    ->map(function($item) use ($opname_id, $code){
+                        return [
+                            OpnameDetail::field_rfid() => $item,
+                            OpnameDetail::field_opname() => $opname_id,
+                            OpnameDetail::field_code() => $code,
+                            OpnameDetail::field_register() => BooleanType::No,
+                            OpnameDetail::field_updated_at() => date('Y-m-d H:i:s'),
+                            OpnameDetail::field_updated_by() => auth()->user()->id,
+                            OpnameDetail::field_transaksi() => TransactionType::Unknown,
+                            OpnameDetail::field_proses() => ProcessType::Unknown,
+                            OpnameDetail::field_scan_rs() => BooleanType::Yes,
+                            OpnameDetail::field_ketemu() => BooleanType::Yes,
+                        ];
+                    })
+                    ->all();
+
+                OpnameDetail::insert($not_register);
+
+                $scan_rs = $data['opname']
+                    ->where(OpnameDetail::field_scan_rs(), BooleanType::No)
+                    ->pluck(OpnameDetail::field_rfid())
+                    ->toArray();
+
+                OpnameDetail::whereIn(OpnameDetail::field_rfid(), $scan_rs)
+                    ->update([
+                        OpnameDetail::field_ketemu() => BooleanType::Yes,
+                        OpnameDetail::field_scan_rs() => BooleanType::Yes,
+                        OpnameDetail::field_waktu() => $waktu,
+                    ]);
+            }
+
+            PluginsHistory::bulk($scan_rfid->keys(), ProcessType::Opname, 'Ketemu ketika Opname');
+
+            DB::commit();
+           return Notes::create($sent);
+
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return Notes::error($th->getMessage());
+        }
+
+        return Notes::error('Unknown');
+    }
+}

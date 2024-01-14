@@ -224,7 +224,11 @@ class TransaksiController extends MasterController
             $status_process = $request->{STATUS_PROCESS};
             $status_sync = SyncType::No;
 
+            /*
+            disable for a while, change to another approach
+
             $this->checkOpname($status_transaksi, $status_process, $rfid);
+            */
 
             $return = $transaksi = $linen = $log = [];
 

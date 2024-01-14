@@ -9,9 +9,11 @@ use App\Dao\Models\OpnameDetail;
 use App\Dao\Models\Rs;
 use App\Dao\Repositories\OpnameRepository;
 use App\Http\Requests\OpnameRequest;
+use App\Http\Services\CaptureOpnameService;
 use App\Http\Services\CreateOpnameService;
 use App\Http\Services\SingleService;
 use App\Http\Services\UpdateService;
+use Plugins\Alert;
 use Plugins\Response;
 
 class OpnameController extends MasterController
@@ -43,6 +45,18 @@ class OpnameController extends MasterController
     public function postCreate(OpnameRequest $request, CreateOpnameService $service)
     {
         $data = $service->save(self::$repository, $request);
+        return Response::redirectBack($data);
+    }
+
+    public function getCapture($code, CaptureOpnameService $service)
+    {
+        $model = $this->get($code);
+        if (!empty($model->opname_capture)) {
+            Alert::error('Opname sudah di capture !');
+            return Response::redirectBack();
+        }
+
+        $data = $service->save($model);
         return Response::redirectBack($data);
     }
 

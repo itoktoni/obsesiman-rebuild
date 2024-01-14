@@ -35,9 +35,9 @@
     @endphp
 
     <{{ $href ? 'a' : 'button' }} {{ $attributes }}>
-        @if($icon)
-            <i class="bi bi-{{ $icon }}"></i>
-        @elseif($label)
+        @if($label)
             {{ $label ? __($label) : $slot }}
+        @else
+            <i class="bi bi-{{ $icon }}"></i>
         @endif
     </{{ $href ? 'a' : 'button' }}>

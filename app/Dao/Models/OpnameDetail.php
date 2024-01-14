@@ -44,6 +44,7 @@ class OpnameDetail extends Model
         'opname_detail_updated_at',
         'opname_detail_created_by',
         'opname_detail_updated_by',
+        'opname_detail_pending_at',
         'opname_detail_hilang_at',
         'opname_detail_scan_rs',
     ];
@@ -55,7 +56,8 @@ class OpnameDetail extends Model
         'opname_detail_proses' => 'int',
         'opname_detail_ketemu' => 'int',
         'opname_detail_blm_register' => 'int',
-        'opname_detail_hilang' => 'date',
+        'opname_detail_hilang_at' => 'date',
+        'opname_detail_pending_at' => 'date',
     ];
 
     protected $filters = [

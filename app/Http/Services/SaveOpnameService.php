@@ -21,73 +21,68 @@ class SaveOpnameService
 
             DB::beginTransaction();
             $sent = [];
-            $original = $data['rfid'];
-            $data_rfid = $data['data'];
+            $scan_rfid = $data['rfid'];
+            $data_opname = $data['opname'];
+            $code = $data['code'];
+            $waktu = date('Y-m-d H:i:s');
+            $insert_register = $scan_rs = false;
 
-            if(!empty($original)){
-                foreach(array_chunk($original, env('TRANSACTION_CHUNK', 500)) as $chunk){
-                    foreach($chunk as $rfid){
-                        $add = [
-                            OpnameDetail::field_rfid() => $rfid,
-                            OpnameDetail::field_opname() => $opname_id,
-                            OpnameDetail::field_code() => $opname_id,
-                            OpnameDetail::field_register() => BooleanType::No,
-                            OpnameDetail::field_updated_at() => date('Y-m-d H:i:s'),
-                            OpnameDetail::field_updated_by() => auth()->user()->id,
-                            OpnameDetail::field_transaksi() => TransactionType::Unknown,
-                            OpnameDetail::field_proses() => ProcessType::Unknown,
-                            OpnameDetail::field_scan_rs() => BooleanType::Yes,
-                        ];
+            foreach($scan_rfid as $rfid){
+                $detail = isset($data_opname[$rfid]) ? $data_opname[$rfid] : false;
+                $item = [
+                    OpnameDetail::field_rfid() => $rfid,
+                    OpnameDetail::field_opname() => $opname_id,
+                    OpnameDetail::field_code() => $code,
+                    OpnameDetail::field_register() => BooleanType::No,
+                    OpnameDetail::field_updated_at() => date('Y-m-d H:i:s'),
+                    OpnameDetail::field_updated_by() => auth()->user()->id,
+                    OpnameDetail::field_transaksi() => TransactionType::Unknown,
+                    OpnameDetail::field_proses() => ProcessType::Unknown,
+                    OpnameDetail::field_scan_rs() => BooleanType::Yes,
+                    OpnameDetail::field_ketemu() => BooleanType::Yes,
+                ];
 
-                        if (isset($data_rfid[$rfid])) {
-                            $detail = $data_rfid[$rfid];
-                            $add = array_merge($add, [
-                                OpnameDetail::field_transaksi() => $detail->field_status_transaction,
-                                OpnameDetail::field_proses() => $detail->field_status_process,
-                            ]);
-                        }
+                if (!$detail) {
+                    $item = array_merge($item, [
+                        OpnameDetail::field_waktu() => $waktu,
+                    ]);
 
-                        $update = OpnameDetail::where(OpnameDetail::field_rfid(), $rfid)
-                            ->where(OpnameDetail::field_opname(), $opname_id);
+                    $insert_register[] = $item;
 
-                        $opanme_sync = ['opname_detail_sync' => SyncType::No];
+                } else if($detail->opname_detail_ketemu == BooleanType::Yes){
+                    $item = array_merge($item, [
+                        OpnameDetail::field_register() => BooleanType::Yes,
+                        OpnameDetail::field_transaksi() => $detail->opname_detail_transaksi,
+                        OpnameDetail::field_proses() => $detail->opname_detail_proses,
+                        OpnameDetail::field_scan_rs() => BooleanType::No,
+                        OpnameDetail::field_ketemu() => BooleanType::No,
+                        OpnameDetail::field_waktu() => $detail->opname_detail_waktu,
+                    ]);
+                } else if($detail->opname_detail_ketemu == BooleanType::No){
+                    $item = array_merge($item, [
+                        OpnameDetail::field_waktu() => $waktu,
+                    ]);
 
-                        if($update->count() > 0) {
-                            $single = clone $update->first();
-                            if($single->field_ketemu == SyncType::Yes){
-                                $opanme_sync = [
-                                    'opname_detail_sync' => SyncType::No,
-                                    OpnameDetail::field_waktu() => $single->field_waktu,
-                                    OpnameDetail::field_ketemu() => $single->field_ketemu
-                                ];
-                            }
-                            else{
-                                $add = array_merge($add, [
-                                    OpnameDetail::field_ketemu() => SyncType::Yes,
-                                    OpnameDetail::field_waktu() => date('Y-m-d H:i:s'),
-                                ]);
-
-                                $opanme_sync = [
-                                    'opname_detail_sync' => SyncType::Yes,
-                                ];
-                            }
-                            $update->update($add);
-                        } else {
-                            $add = array_merge($add, [
-                                OpnameDetail::field_ketemu() => BooleanType::Yes,
-                                OpnameDetail::field_waktu() => date('Y-m-d H:i:s'),
-                            ]);
-                            OpnameDetail::create($add);
-                            $opanme_sync = ['opname_detail_sync' => SyncType::Yes];
-                        }
-
-                        $sent[] = array_merge($add, $opanme_sync);
-                    }
-
+                    $scan_rs[] = $rfid;
                 }
+
+                $sent[] = $item;
             }
 
-            PluginsHistory::bulk($data_rfid->keys(), ProcessType::Opname, 'Ketemu ketika Opname');
+            if($insert_register){
+                OpnameDetail::insert($insert_register);
+            }
+
+            if($scan_rs){
+                OpnameDetail::whereIn(OpnameDetail::field_rfid(), $scan_rs)
+                ->update([
+                    OpnameDetail::field_ketemu() => BooleanType::Yes,
+                    OpnameDetail::field_scan_rs() => BooleanType::Yes,
+                    OpnameDetail::field_waktu() => $waktu,
+                ]);
+
+                PluginsHistory::bulk($scan_rs, ProcessType::Opname, 'Ketemu ketika Opname');
+            }
 
             DB::commit();
            return Notes::create($sent);
