@@ -70,13 +70,21 @@ class DownloadCollection extends ResourceCollection
             ->toArray() ?? [];
 
         $data = $this->collection->map(function($item) use ($check){
+            $tanggal = $item->field_tanggal_update->format('Y-m-d H:i:s');
+            $status = $item->field_status_process;
+
+            if (in_array($item->field_primary, $check)) {
+                $tanggal = date('Y-m-d H:i:s');
+                $status = ProcessType::Kotor;
+            }
+
             return [
                 'id' => $item->field_primary,
                 'rs' => $item->field_rs_id,
                 'loc' => $item->field_ruangan_id,
                 'jns' => $item->field_id,
-                'sts' => $item->field_status_process,
-                'tgl' => in_array($item->field_primary, $check) ? date('Y-m-d H:i:s') : $item->field_tanggal_update->format('Y-m-d H:i:s'),
+                'sts' => $status,
+                'tgl' => $tanggal,
             ];
         });
 
