@@ -174,7 +174,7 @@ class BarcodeController extends MasterController
                     Cetak::field_name() => $code,
                     Cetak::field_type() => CetakType::Barcode,
                     Cetak::field_user() => auth()->user()->name ?? 'Admin',
-                    Cetak::field_rs_id() => $total[0]->field_rs_id ?? null,
+                    Cetak::field_rs_id() => $total[0]->transaksi_rs_ori ?? null,
                     Cetak::field_ruangan_id() => $total[0]->view_ruangan_id ?? null,
                 ]);
             }
