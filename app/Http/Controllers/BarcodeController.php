@@ -152,7 +152,7 @@ class BarcodeController extends MasterController
 
     public function barcode(BarcodeRequest $request, UpdateBarcodeService $service)
     {
-        $check = $service->update($request->rfid, $request->code, $request->status_transaksi, $request->ruangan_id);
+        $check = $service->update($request->rfid, $request->code, $request->status_transaksi, $request->ruangan_id, $request->rs_id);
         return $check;
     }
 

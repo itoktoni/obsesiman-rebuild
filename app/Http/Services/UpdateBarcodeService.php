@@ -11,15 +11,17 @@ use Plugins\Notes;
 
 class UpdateBarcodeService
 {
-    public function update($data, $code, $status, $ruangan)
+    public function update($data, $code, $status, $ruangan, $rs)
     {
         DB::beginTransaction();
 
         try {
             Transaksi::whereIn(Transaksi::field_rfid(), $data)
             ->whereNull(Transaksi::field_barcode())
+            ->where(Transaksi::field_rs_ori(), $rs)
             ->update([
                 Transaksi::field_barcode() => $code,
+                Transaksi::field_rs_ori() => $rs,
                 Transaksi::field_status_bersih() => $status,
                 Transaksi::field_barcode_by() => auth()->user()->id,
                 Transaksi::field_barcode_at() => date('Y-m-d H:i:s'),
@@ -27,6 +29,7 @@ class UpdateBarcodeService
             ]);
 
             Detail::whereIn(Detail::field_primary(), $data)
+            ->where(Detail::field_rs_id(), $rs)
             ->update([
                 Detail::field_status_process() => ProcessType::Barcode,
                 Detail::field_updated_at() => date('Y-m-d H:i:s'),
