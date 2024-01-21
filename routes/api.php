@@ -463,7 +463,8 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
     Route::get('grouping/{rfid}', function ($rfid, SaveTransaksiService $service) {
         try {
             $data = Detail::with(['has_rs'])->findOrFail($rfid);
-            $save = Transaksi::where(Transaksi::field_rfid(), $rfid);
+            $save = Transaksi::where(Transaksi::field_rfid(), $rfid)
+                ->whereNull(Transaksi::field_barcode());
 
             $data_transaksi = [];
             $linen[] = $rfid;
