@@ -472,7 +472,6 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
             $code_rs = $data->has_rs->rs_code ?? 'XXX';
 
             $status_baru = TransactionType::Kotor;
-
             if (in_array($data->field_status_transaction, [TransactionType::BersihKotor, TransactionType::BersihRetur, TransactionType::BersihRewash])) {
                 $status_baru = TransactionType::Kotor;
             } elseif ($data->field_status_transaction == TransactionType::Kotor) {
@@ -486,6 +485,9 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
                 if ($data->field_status_register == RegisterType::GantiChip) {
                     $status_baru = TransactionType::Kotor;
                 }
+
+                $data->transaksi_status = $status_baru;
+                $data->save();
             }
 
             $check_transaksi = Transaksi::where(Transaksi::field_rfid(), $rfid)
