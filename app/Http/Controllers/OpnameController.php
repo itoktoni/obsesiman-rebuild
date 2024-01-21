@@ -11,6 +11,7 @@ use App\Dao\Repositories\OpnameRepository;
 use App\Http\Requests\OpnameRequest;
 use App\Http\Services\CaptureOpnameService;
 use App\Http\Services\CreateOpnameService;
+use App\Http\Services\CreateService;
 use App\Http\Services\SingleService;
 use App\Http\Services\UpdateService;
 use Plugins\Alert;
@@ -42,7 +43,7 @@ class OpnameController extends MasterController
         return $query;
     }
 
-    public function postCreate(OpnameRequest $request, CreateOpnameService $service)
+    public function postCreate(OpnameRequest $request, CreateService $service)
     {
         $data = $service->save(self::$repository, $request);
         return Response::redirectBack($data);
