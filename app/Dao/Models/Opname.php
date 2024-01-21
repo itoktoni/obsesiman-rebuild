@@ -37,6 +37,7 @@ class Opname extends Model
         'opname_created_by',
         'opname_updated_at',
         'opname_updated_by',
+        'opname_capture',
     ];
 
     public $sortable = [
@@ -75,10 +76,11 @@ class Opname extends Model
         $data = [
             DataBuilder::build($this->field_primary())->name('ID Opname')->width('100px')->sort(),
             DataBuilder::build(Rs::field_name())->name('Nama RS')->width(20),
-            DataBuilder::build($this->field_name())->name('Keterangan Opname')->width('250px')->show(),
+            DataBuilder::build($this->field_name())->name('Keterangan Opname')->width('250px')->show(false),
             DataBuilder::build($this->field_created_at())->name('Tgl Buat')->show()->sort(),
             DataBuilder::build($this->field_start())->name('Tgl Mulai')->show()->sort(),
             DataBuilder::build($this->field_end())->name('Tgl Selesai')->show()->sort(),
+            DataBuilder::build($this->field_capture())->name('Waktu Capture')->show()->sort(),
             DataBuilder::build($this->field_status())->name('Status')->show()->sort(),
         ];
 

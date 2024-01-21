@@ -67,6 +67,16 @@ trait OpnameEntity
         return $this->{$this->field_updated_at()};
     }
 
+    public static function field_capture()
+    {
+        return 'opname_capture';
+    }
+
+    public function getFieldCaptureAttribute()
+    {
+        return $this->{$this->field_capture()};
+    }
+
     public static function field_rs_id()
     {
         return 'opname_id_rs';

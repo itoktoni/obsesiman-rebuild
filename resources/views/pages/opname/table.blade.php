@@ -24,9 +24,9 @@
                                     <th {{ Template::extractColumn($value) }}>
                                         @if($value->sort)
                                             @sortablelink($value->code, __($value->name))
-                                            @else
-                                                {{ __($value->name) }}
-                                            @endif
+                                        @else
+                                            {{ __($value->name) }}
+                                        @endif
                                     </th>
                                 @endforeach
                             </tr>
@@ -39,15 +39,17 @@
                                             value="{{ $table->field_primary }}">
                                     </td>
                                     <td class="col-md-2 text-center column-action">
-                                        <x-crud :model="$table" />
+                                        <x-crud :model="$table">
+                                            <x-button module="getCapture" label="Capture" class="badge badge-success mt-1" color="success" key="{{ $table->field_primary }}" />
+                                        </x-crud>
                                     </td>
                                     <td>{{ iteration($data, $key) }}</td>
                                     <td>{{ $table->field_primary }}</td>
                                     <td>{{ $table->rs_nama ?? '' }}</td>
-                                    <td>{!! nl2br($table->field_name) !!}</td>
                                     <td>{{ formatDate($table->field_created_at) }}</td>
                                     <td>{{ formatDate($table->field_start) }}</td>
                                     <td>{{ formatDate($table->field_end) }}</td>
+                                    <td>{{ $table->field_capture }}</td>
                                     <td>{{ $table->field_status_name }}</td>
                                 </tr>
                             @empty

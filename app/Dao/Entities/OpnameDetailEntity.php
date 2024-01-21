@@ -163,6 +163,16 @@ trait OpnameDetailEntity
         return $this->{$this->field_register()};
     }
 
+    public static function field_pending()
+    {
+        return 'opname_detail_pending_at';
+    }
+
+    public function getFieldPendingAttribute()
+    {
+        return $this->{$this->field_pending()};
+    }
+
     public static function field_hilang()
     {
         return 'opname_detail_hilang_at';

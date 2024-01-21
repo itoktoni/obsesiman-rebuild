@@ -27,20 +27,16 @@ class OpnameDetailRequest extends FormRequest
     public function prepareForValidation()
     {
         $send = [];
-        $data = Detail::whereIn(Detail::field_primary(), $this->rfid)
-            ->get();
+        $data = OpnameDetail::whereIn(OpnameDetail::field_rfid(), $this->rfid)
+            ->where(OpnameDetail::field_opname(), $this->opname_id)
+            ->get()
+            ->mapWithKeys(function($item){
+                return [$item->opname_detail_rfid => $item];
+            });
 
-            if(!empty($data)){
-                $rfid = $data
-                ->mapWithKeys(function($item){
-                    return [$item->field_primary => $item];
-                });
-            } else{
-                $rfid = [];
-            }
-
-        $send['data'] = $rfid;
+        $send['opname'] = $data;
         $send['rfid'] = $this->rfid;
+        $send['code'] = $this->code;
 
         $this->merge([
             'data' => $send
