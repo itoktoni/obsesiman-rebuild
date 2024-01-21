@@ -57,6 +57,7 @@ class CheckPending extends Command
                 ->whereDate(ViewDetailLinen::field_tanggal_update(), '>=', Carbon::now()->subMinutes(1440)->toDateString())
                 ->whereDate(ViewDetailLinen::field_tanggal_update(), '<', Carbon::now()->toDateString())
                 ->whereNull(Transaksi::field_status_bersih())
+                ->whereNotIn(ViewDetailLinen::field_status_trasaction(), BERSIH)
                 ->where(ViewDetailLinen::field_status_process(), '!=', ProcessType::Pending)
                 ->get();
 
