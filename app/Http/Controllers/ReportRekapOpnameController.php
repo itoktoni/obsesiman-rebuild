@@ -38,7 +38,8 @@ class ReportRekapOpnameController extends MinimalController
             'has_rs',
         ])->find($request->opname_id);
 
-        $opname = ViewOpname::where(Opname::field_primary(), $request->opname_id);
+        $opname = ViewOpname::where(Opname::field_primary(), $request->opname_id)
+            ->where('rs_id', $this->data->opname_id_rs);
         if($jenis_id = $request->jenis_id){
             $opname->where('jenis_id', $jenis_id);
         }
