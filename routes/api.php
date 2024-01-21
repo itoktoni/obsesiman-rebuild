@@ -463,6 +463,7 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
     Route::get('grouping/{rfid}', function ($rfid, SaveTransaksiService $service) {
         try {
             $data = Detail::with(['has_rs'])->findOrFail($rfid);
+            $save = Transaksi::findOrFail($rfid);
 
             $data_transaksi = [];
             $linen[] = $rfid;
@@ -486,7 +487,9 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
                     $status_baru = TransactionType::Kotor;
                 }
 
-                $data->transaksi_status = $status_baru;
+                $save->update([
+                    Transaksi::field_rfid() => $status_baru
+                ]);
             }
 
             $check_transaksi = Transaksi::where(Transaksi::field_rfid(), $rfid)
@@ -533,7 +536,6 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
             }
 
             $data->update([
-                Detail::field_status_transaction() => $status_baru,
                 Detail::field_updated_at() => date('Y-m-d H:i:s'),
                 Detail::field_updated_by() => auth()->user()->id,
                 Detail::field_pending_created_at() => null,
