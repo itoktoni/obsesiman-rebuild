@@ -53,7 +53,7 @@
 				<td class="text-right">{{ $table->view_transaksi_cuci_total ?? 0 }}</td>
 				<td>{{ formatDate($table->field_tanggal_create) }}</td>
 				<td>{{ $table->view_hilang_create ? \Carbon\Carbon::createFromFormat('Y-m-d H:s:i', $table->view_hilang_create)->diff(now())->format('%a') : '0' }} Hari</td>
-				<td>{{ formatDate($table->view_hilang_create, true) }}</td>
+				<td>{{ formatDate($table->field_tanggal_update, true) }}</td>
 				<td>{{ TransactionType::getDescription($table->view_status_transaksi) }}</td>
 				<td>{{ ProcessType::getDescription($table->view_log_status) }}</td>
 			</tr>
