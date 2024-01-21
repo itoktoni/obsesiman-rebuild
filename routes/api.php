@@ -487,7 +487,6 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
                 }
 
                 $data->transaksi_status = $status_baru;
-                $data->save();
             }
 
             $check_transaksi = Transaksi::where(Transaksi::field_rfid(), $rfid)
@@ -534,6 +533,7 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
             }
 
             $data->update([
+                Detail::field_status_transaction() => $status_baru,
                 Detail::field_updated_at() => date('Y-m-d H:i:s'),
                 Detail::field_updated_by() => auth()->user()->id,
                 Detail::field_pending_created_at() => null,
