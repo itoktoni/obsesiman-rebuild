@@ -244,7 +244,7 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
                         Detail::field_jenis_id() => $request->jenis_id,
                         Detail::field_status_cuci() => $request->status_cuci,
                         Detail::field_status_transaction() => TransactionType::Register,
-                        Detail::field_status_register() => RegisterType::Register,
+                        Detail::field_status_register() => $request->status_register ? $request->status_register : RegisterType::Register,
                         Detail::field_status_process() => ProcessType::Register,
                         Detail::field_created_at() => date('Y-m-d H:i:s'),
                         Detail::field_updated_at() => date('Y-m-d H:i:s'),
@@ -319,7 +319,7 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
                     Detail::field_ruangan_id() => $request->ruangan_id,
                     Detail::field_jenis_id() => $request->jenis_id,
                     Detail::field_status_cuci() => $request->status_cuci,
-                    Detail::field_status_register() => RegisterType::Register,
+                    Detail::field_status_register() => $request->status_register ? $request->status_register : RegisterType::Register,
                     Detail::field_status_transaction() => TransactionType::Register,
                     Detail::field_status_process() => ProcessType::Register,
                     Detail::field_created_at() => date('Y-m-d H:i:s'),
@@ -489,7 +489,9 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
                 }
 
                 $save->update([
-                    Transaksi::field_rfid() => $status_baru
+                    Transaksi::field_status_transaction() => $status_baru,
+                    Transaksi::field_rs_id() => $data->field_rs_id,
+                    Transaksi::field_rs_ori() => $data->field_rs_id,
                 ]);
             }
 
