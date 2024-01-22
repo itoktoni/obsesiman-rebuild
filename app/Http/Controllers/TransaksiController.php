@@ -152,7 +152,7 @@ class TransaksiController extends MasterController
             return true;
         }
 
-        if (($form_transaksi == TransactionType::Kotor) && now()->diffInDays($date) >= env('TRANSACTION_DAY_ALLOWED', 1)) {
+        if (($form_transaksi == TransactionType::Kotor) && now()->diffInHours($date) >= env('TRANSACTION_DAY_ALLOWED', 15)) {
             return true;
         }
 
@@ -239,7 +239,6 @@ class TransaksiController extends MasterController
                 if (isset($data[$item])) {
                     $detail = $data[$item];
                     if (!in_array($item, $query_transaksi) and $this->checkValidation($status_transaksi, $detail->field_status_transaction, $detail->field_updated_at)) {
-
                         $status_sync = SyncType::Yes;
 
                         $beda_rs = $request->rs_id == $detail->field_rs_id ? BooleanType::No : BooleanType::Yes;
@@ -318,29 +317,31 @@ class TransaksiController extends MasterController
                 }
             }
 
+            dd($transaksi);
+
             /*
             cleansing duplicate rfid
             ketika transaksi dikirim 2x rfid
             */
             $transaksi = collect($transaksi)->unique('transaksi_rfid')->values()->all();
 
-            if (!empty($transaksi)) {
-                foreach (array_chunk($transaksi, env('TRANSACTION_CHUNK')) as $save_transaksi) {
-                    Transaksi::insert($save_transaksi);
-                }
-            }
+            // if (!empty($transaksi)) {
+            //     foreach (array_chunk($transaksi, env('TRANSACTION_CHUNK')) as $save_transaksi) {
+            //         Transaksi::insert($save_transaksi);
+            //     }
+            // }
 
-            if (!empty($linen)) {
-                foreach (array_chunk($linen, env('TRANSACTION_CHUNK')) as $save_detail) {
-                    Detail::whereIn(Detail::field_primary(), $save_detail)
-                        ->update([
-                            Detail::field_status_transaction() => $status_transaksi,
-                            Detail::field_status_process() => $status_process,
-                            Detail::field_updated_at() => date('Y-m-d H:i:s'),
-                            Detail::field_updated_by() => auth()->user()->id,
-                        ]);
-                }
-            }
+            // if (!empty($linen)) {
+            //     foreach (array_chunk($linen, env('TRANSACTION_CHUNK')) as $save_detail) {
+            //         Detail::whereIn(Detail::field_primary(), $save_detail)
+            //             ->update([
+            //                 Detail::field_status_transaction() => $status_transaksi,
+            //                 Detail::field_status_process() => $status_process,
+            //                 Detail::field_updated_at() => date('Y-m-d H:i:s'),
+            //                 Detail::field_updated_by() => auth()->user()->id,
+            //             ]);
+            //     }
+            // }
 
             if (!empty($log)) {
                 foreach (array_chunk($log, env('TRANSACTION_CHUNK')) as $save_log) {
