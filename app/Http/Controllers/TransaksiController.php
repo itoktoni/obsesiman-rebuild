@@ -317,8 +317,6 @@ class TransaksiController extends MasterController
                 }
             }
 
-            dd($transaksi);
-
             /*
             cleansing duplicate rfid
             ketika transaksi dikirim 2x rfid
