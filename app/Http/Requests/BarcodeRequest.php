@@ -47,7 +47,8 @@ class BarcodeRequest extends FormRequest
 
         $rfid = Detail::whereIn(Detail::field_primary(), $this->rfid)
                 ->where(Detail::field_status_transaction(), $where)
-                ->where(Detail::field_rs_id(), $this->rs_id);
+                ->where(Detail::field_rs_id(), $this->rs_id)
+                ->where(Detail::field_ruangan_id(), $this->ruangan_id);
 
         $total_rfid_original = $rfid->count();
 
