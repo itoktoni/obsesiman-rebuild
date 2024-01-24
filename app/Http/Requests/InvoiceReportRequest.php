@@ -16,7 +16,6 @@ class InvoiceReportRequest extends FormRequest
             'start_rekap' => 'required',
             'end_rekap' => 'required',
             'rs_id' => 'required',
-            'view_status' => 'required',
         ];
     }
 
