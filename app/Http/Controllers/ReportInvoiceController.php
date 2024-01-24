@@ -67,9 +67,11 @@ class ReportInvoiceController extends MinimalController
             $tanggal = $this->data->mapWithKeys(function ($item) {
                 return [$item->view_tanggal => $item];
             })->sort();
+        }
 
-            $linen = $this->data->mapWithKeys(function ($item) {
-                return [$item->view_linen_id => strtoupper($item->view_linen_nama)];
+        if($linen){
+            $linen = $linen->mapWithKeys(function ($item) {
+                return [$item->jenis_id => strtoupper($item->jenis_nama)];
             })->sort();
         }
 

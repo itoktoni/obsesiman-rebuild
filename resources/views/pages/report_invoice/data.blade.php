@@ -58,16 +58,20 @@
                         ->where('view_linen_id', $linen_id);
 
                     $single_linen = $data_linen->first();
+                    $berat = $single_linen->jenis_berat ?? 0;
 
                     $total_per_linen = $data_linen->sum('view_qty');
-                    $total_berat = $total_per_linen * $single_linen->view_berat;
+                    $total_berat = $total_per_linen * $berat;
                     $sum_berat = $sum_berat + $total_berat;
 
                     $total_per_linen_kanan = $total_per_linen ?? 0;
 
                     $sum_per_linen = $sum_per_linen + $total_per_linen_kanan;
 
-                    $harga = $single_linen->view_status == CuciType::Cuci ? $single_linen->view_harga_cuci : $single_linen->view_harga_sewa;
+                    $harga = 0;
+                    if ($single_linen) {
+                        $harga = $single_linen->view_status == CuciType::Cuci ? $single_linen->view_harga_cuci : $single_linen->view_harga_sewa;
+                    }
 
                     $total_harga = $total_berat * $harga;
                     $sum_harga = $sum_harga + $total_harga;
@@ -100,7 +104,7 @@
                         </td>
                         @endforeach
                         <td>{{ $total_per_linen }}</td>
-                        <td class="text-right">{{ $single_linen->view_berat }}</td>
+                        <td class="text-right">{{ $berat }}</td>
                         <td class="text-right">{{ $total_berat }}</td>
                         <td class="text-right">{{ number_format($harga) }}</td>
                         <td class="text-right">{{ number_format($total_harga) }}</td>
