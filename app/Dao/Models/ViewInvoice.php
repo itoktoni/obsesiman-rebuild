@@ -32,7 +32,6 @@ class ViewInvoice extends Model
         'view_nama_rs',
         'view_linen_nama',
         'view_tanggal',
-        'view_status',
     ];
 
     public $timestamps = false;

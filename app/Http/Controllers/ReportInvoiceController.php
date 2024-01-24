@@ -3,11 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Dao\Enums\CuciType;
+use App\Dao\Models\Jenis;
 use App\Dao\Models\Rs;
 use App\Dao\Models\User;
 use App\Dao\Models\ViewInvoice;
 use App\Dao\Repositories\ViewInvoiceRepository;
 use App\Http\Requests\InvoiceReportRequest;
+use Carbon\CarbonPeriod;
+use DateInterval;
+use DatePeriod;
+use DateTime;
 
 class ReportInvoiceController extends MinimalController
 {
@@ -58,22 +63,20 @@ class ReportInvoiceController extends MinimalController
         set_time_limit(0);
         $tanggal = $linen = $lawan = $nama = [];
 
-        $rs = Rs::with([HAS_RUANGAN, HAS_JENIS])->find(request()->get(Rs::field_primary()));
-        $linen = $rs->has_jenis;
+        $rs_id = request()->get(Rs::field_primary());
+        $linen = Jenis::select([
+            Jenis::field_primary(),
+            Jenis::field_name(),
+            Jenis::field_weight(),
+        ])
+        ->where(Jenis::field_rs_id(), $rs_id)
+        ->orderBy(Jenis::field_name(), 'ASC')->get() ?? [];
+
+        $rs = Rs::find($rs_id);
 
         $this->data = $this->getQueryBersih($request);
 
-        if ($this->data) {
-            $tanggal = $this->data->mapWithKeys(function ($item) {
-                return [$item->view_tanggal => $item];
-            })->sort();
-        }
-
-        if($linen){
-            $linen = $linen->mapWithKeys(function ($item) {
-                return [$item->jenis_id => strtoupper($item->jenis_nama)];
-            })->sort();
-        }
+        $tanggal = CarbonPeriod::create($request->start_rekap, $request->end_rekap);
 
         return moduleView(modulePathPrint(), $this->share([
             'data' => $this->data,
