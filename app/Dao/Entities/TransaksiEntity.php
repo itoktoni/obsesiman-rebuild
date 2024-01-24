@@ -276,4 +276,24 @@ trait TransaksiEntity
         return $this->{$this->field_rs_ori()};
     }
 
+    public static function field_uuid_barcode()
+    {
+        return 'transaksi_uuid_barcode';
+    }
+
+    public function getFieldUuidBarcodeAttribute()
+    {
+        return $this->{$this->field_uuid_barcode()};
+    }
+
+    public static function field_uuid_delivery()
+    {
+        return 'transaksi_uuid_delivery';
+    }
+
+    public function getFieldUuidDeliveryAttribute()
+    {
+        return $this->{$this->field_uuid_delivery()};
+    }
+
 }

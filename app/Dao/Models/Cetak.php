@@ -30,6 +30,8 @@ class Cetak extends Model
         'cetak_id_ruangan',
         'cetak_id_rs',
         'cetak_type',
+        'cetak_barcode',
+        'cetak_delivery',
     ];
 
     public $sortable = [

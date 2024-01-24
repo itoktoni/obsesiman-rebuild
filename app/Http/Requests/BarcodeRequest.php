@@ -4,9 +4,12 @@ namespace App\Http\Requests;
 
 use App\Dao\Enums\TransactionType;
 use App\Dao\Models\Detail;
+use App\Dao\Models\Rs;
+use App\Dao\Models\Ruangan;
 use App\Dao\Models\Transaksi;
 use Illuminate\Foundation\Http\FormRequest;
 use Plugins\Query;
+use Illuminate\Support\Str;
 
 class BarcodeRequest extends FormRequest
 {
@@ -105,10 +108,16 @@ class BarcodeRequest extends FormRequest
                 break;
         }
 
-        $autoNumber = Query::autoNumber(Transaksi::getTableName(), Transaksi::field_barcode(), $code . date('ymdHis'), 20);
+        $code_ruangan = Ruangan::find($this->ruangan_id)->ruangan_code;
+        $code_rs = Rs::find($this->rs_id)->rs_code;
+
+        $code = $code.$code_rs.$code_ruangan.date('ymd');
+
+        $autoNumber = Query::autoNumber(Transaksi::getTableName(), Transaksi::field_barcode(), $code , 22);
 
         $this->merge([
             'code' => $autoNumber,
+            'uuid' => Str::uuid(),
         ]);
     }
 

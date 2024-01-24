@@ -29,6 +29,7 @@ class Ruangan extends Model
         'ruangan_id',
         'ruangan_nama',
         'ruangan_deskripsi',
+        'ruangan_code',
     ];
 
     public $sortable = [

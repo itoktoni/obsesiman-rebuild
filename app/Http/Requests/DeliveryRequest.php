@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use App\Dao\Enums\ProcessType;
 use App\Dao\Enums\TransactionType;
 use App\Dao\Models\Detail;
+use App\Dao\Models\Rs;
 use App\Dao\Models\Transaksi;
 use Illuminate\Foundation\Http\FormRequest;
 use Plugins\Query;
@@ -74,7 +75,10 @@ class DeliveryRequest extends FormRequest
                 break;
         }
 
-        $autoNumber = Query::autoNumber(Transaksi::getTableName(), Transaksi::field_delivery(), $code . date('ymd'), env('AUTO_NUMBER', 15));
+        $code_rs = Rs::find($this->rs_id)->rs_code;
+        $code = $code.$code_rs.date('ymd');
+
+        $autoNumber = Query::autoNumber(Transaksi::getTableName(), Transaksi::field_delivery(), $code, env('AUTO_NUMBER', 17));
 
         $this->merge([
             'code' => $autoNumber,

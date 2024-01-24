@@ -74,4 +74,24 @@ trait CetakEntity
         return $this->{$this->field_type()};
     }
 
+    public static function field_barcode()
+    {
+        return 'cetak_barcode';
+    }
+
+    public function getFieldBarcodeAttribute()
+    {
+        return $this->{$this->field_barcode()};
+    }
+
+    public static function field_delivery()
+    {
+        return 'cetak_delivery';
+    }
+
+    public function getFieldDeliveryAttribute()
+    {
+        return $this->{$this->field_delivery()};
+    }
+
 }
