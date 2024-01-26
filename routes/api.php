@@ -518,12 +518,13 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
                 TransactionType::Register,
             ]))) {
 
-                $cut_off = Carbon::createFromFormat('Y-m-d H:i', date('Y-m-d') . ' 00:01');
-                $pembanding = Carbon::createFromFormat('Y-m-d H:i', date('Y-m-d') . ' 15:00');
-                $now = Carbon::now();
+                $startDate = Carbon::createFromFormat('Y-m-d H:i', date('Y-m-d') . ' 00:00');
+                $endDate = Carbon::createFromFormat('Y-m-d H:i', date('Y-m-d') . ' 05:59');
 
-                if ($now >= $cut_off && $now <= $pembanding) {
-                    $date = $now->addDay(-1)->format('Y-m-d H:i:s');
+                $check_date = Carbon::now()->between($startDate, $endDate);
+
+                if ($check_date) {
+                    $date = Carbon::now()->addDay(1);
                 }
 
                 $data_transaksi[] = [
