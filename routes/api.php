@@ -29,6 +29,7 @@ use App\Http\Resources\RsResource;
 use App\Http\Services\SaveOpnameService;
 use App\Http\Services\SaveTransaksiService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use Plugins\History;
@@ -516,6 +517,15 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
                 TransactionType::Rewash,
                 TransactionType::Register,
             ]))) {
+
+                $cut_off = Carbon::createFromFormat('Y-m-d H:i', date('Y-m-d') . ' 00:01');
+                $pembanding = Carbon::createFromFormat('Y-m-d H:i', date('Y-m-d') . ' 15:00');
+                $now = Carbon::now();
+
+                if ($now >= $cut_off && $now <= $pembanding) {
+                    $date = $now->addDay(-1)->format('Y-m-d H:i:s');
+                }
+
                 $data_transaksi[] = [
                     Transaksi::field_key() => Query::autoNumber((new Transaksi())->getTable(), Transaksi::field_key(), 'GROUP' . date('ymd') . $code_rs, 20),
                     Transaksi::field_rfid() => $rfid,
