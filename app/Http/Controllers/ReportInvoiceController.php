@@ -61,6 +61,7 @@ class ReportInvoiceController extends MinimalController
     public function getPrint(InvoiceReportRequest $request)
     {
         set_time_limit(0);
+        ini_set('memory_limit', '512M');
         $tanggal = $linen = $lawan = $nama = [];
 
         $rs_id = request()->get(Rs::field_primary());
