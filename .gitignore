@@ -5,6 +5,7 @@
 /postman/*
 .env
 /encrypted
+/v1/*
 firebase.json
 .env.backup
 .phpunit.result.cache
