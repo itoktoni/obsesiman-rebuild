@@ -355,7 +355,7 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
                         Transaksi::field_rs_ori() => $request->rs_id,
                         Transaksi::field_ruangan_id() => $request->ruangan_id,
                         Transaksi::field_rfid() => $request->rfid,
-                        Transaksi::field_status_transaction() => $status_transaksi,
+                        Transaksi::field_status_transaction() => $transaksi_status,
                         Transaksi::field_created_at() => date('Y-m-d H:i:s'),
                         Transaksi::field_updated_at() => date('Y-m-d H:i:s'),
                         Transaksi::field_created_by() => auth()->user()->id,
