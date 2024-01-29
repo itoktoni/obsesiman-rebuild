@@ -524,7 +524,7 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
                 $check_date = Carbon::now()->between($startDate, $endDate);
 
                 if ($check_date) {
-                    $date = Carbon::now()->addDay(1);
+                    $date = Carbon::now()->addDay(-1);
                 }
 
                 $data_transaksi[] = [
