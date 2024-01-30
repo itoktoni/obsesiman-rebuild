@@ -71,7 +71,13 @@ class Detail extends Model
     protected $filters = [
         'filter',
         'detail_status_register',
+        'detail_status_transaksi',
+        'detail_status_proses',
+        'view_rs_id',
+        'view_ruangan_id',
+        'view_linen_id',
         'detail_id_rs',
+        'detail_rfid',
         'detail_id_jenis',
         'ruangan_nama',
     ];

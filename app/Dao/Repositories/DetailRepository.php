@@ -37,8 +37,6 @@ class DetailRepository extends MasterRepository implements CrudInterface
                 return Notes::data($query->get());
             }
 
-        $query = env('PAGINATION_SIMPLE') ? $query->simplePaginate(env('PAGINATION_NUMBER')) : $query->paginate(env('PAGINATION_NUMBER'));
-
         return $query;
     }
 

@@ -3,6 +3,21 @@
     <x-card>
 
         <x-form method="GET" action="{{ moduleRoute('getTable') }}">
+
+            @livewire('dropdown', ['label' => false])
+
+            <div class="container">
+                <div class="row">
+                    <x-form-input prepend="No. RFID" :label=false col="4" name="detail_rfid" />
+                    <x-form-input type="date" prepend="Tanggal Awal" :label=false col="4" name="start_date" />
+                    <x-form-input type="date" prepend="Tanggal Akhir" :label=false col="4" name="end_date" />
+
+                    <x-form-select prepend="Status Register" col="4" class="search" :label=false name="detail_status_register" :options="$register" />
+                    <x-form-select prepend="Status Transaksi" col="4" class="search" :label=false name="detail_status_transaksi" :options="$transaction" />
+                    <x-form-select prepend="Posisi Terakhir" col="4" class="search" :label=false name="detail_status_proses" :options="$process" />
+                </div>
+            </div>
+
             <x-filter toggle="Filter" hide="true" :fields="$fields" />
         </x-form>
 

@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Dao\Enums\CuciType;
+use App\Dao\Enums\DetailType;
 use App\Dao\Enums\ProcessType;
+use App\Dao\Enums\RegisterType;
 use App\Dao\Enums\TransactionType;
 use App\Dao\Models\Detail;
 use App\Dao\Models\History;
@@ -12,6 +14,7 @@ use App\Dao\Models\OpnameDetail;
 use App\Dao\Models\Rs;
 use App\Dao\Models\Ruangan;
 use App\Dao\Models\Transaksi;
+use App\Dao\Models\ViewDetailLinen;
 use App\Dao\Repositories\DetailRepository;
 use App\Http\Requests\DeleteRequest;
 use App\Http\Requests\GeneralRequest;
@@ -40,10 +43,12 @@ class DetailController extends MasterController
         $ruangan = Ruangan::getOptions();
         $jenis = Jenis::getOptions();
         $cuci = CuciType::getOptions();
-        $transaction = TransactionType::getOptions();
+        $transaction = DetailType::getOptions();
         $process = ProcessType::getOptions();
+        $register = RegisterType::getOptions();
 
         self::$share = [
+            'register' => $register,
             'process' => $process,
             'transaction' => $transaction,
             'cuci' => $cuci,
@@ -51,6 +56,67 @@ class DetailController extends MasterController
             'ruangan' => $ruangan,
             'rs' => $rs,
         ];
+    }
+
+    public function getData()
+    {
+        $query = self::$repository->dataRepository()
+                //  ->showSql()
+                ;
+
+        if($status = request()->get('status')){
+            if($status == DetailType::Register){
+                $query = $query->where(Transaksi::field_status_transaction(), TransactionType::Register);
+            } else if($status == DetailType::LinenBaru){
+                $query = $query->where(Transaksi::field_status_bersih(), TransactionType::Register);
+            } else if($status == DetailType::Kotor){
+                $query = $query->where(Transaksi::field_status_transaction(), TransactionType::Kotor);
+            } else if($status == DetailType::Retur){
+                $query = $query->where(Transaksi::field_status_transaction(), TransactionType::Retur);
+            } else if($status == DetailType::Rewash){
+                $query = $query->where(Transaksi::field_status_transaction(), TransactionType::Rewash);
+            } else if($status == DetailType::BersihKotor){
+                $query = $query->where(Transaksi::field_status_bersih(), TransactionType::BersihKotor);
+            } else if($status == DetailType::BersihRetur){
+                $query = $query->where(Transaksi::field_status_bersih(), TransactionType::BersihRetur);
+            } else if($status == DetailType::BersihRewash){
+                $query = $query->where(Transaksi::field_status_bersih(), TransactionType::BersihRewash);
+            } else if($status == DetailType::Pending){
+                $query = $query->where(ViewDetailLinen::field_status_process(), ProcessType::Pending)
+                                ->whereNULL(Transaksi::field_status_bersih())
+                                ->groupBy(ViewDetailLinen::field_primary());
+            } else if($status == DetailType::Hilang){
+                $query = $query->where(ViewDetailLinen::field_status_process(), ProcessType::Hilang)
+                                ->whereNULL(Transaksi::field_status_bersih())
+                                ->groupBy(ViewDetailLinen::field_primary());
+            }
+        }
+
+        if ($start = request()->get('start_date')) {
+            $query = $query->whereDate(Detail::field_created_at(), '>=', $start);
+        }
+
+        if ($end = request()->get('end_date')) {
+            $query = $query->whereDate(Detail::field_created_at(), '<=', $end);
+        }
+
+        return $query->fastPaginate(100);
+    }
+
+    public function getTable()
+    {
+        $data = $this->getData();
+        $transaction = TransactionType::getOptions();
+        $process = ProcessType::getOptions();
+        $register = RegisterType::getOptions();
+
+        return moduleView(modulePathTable(), [
+            'data' => $data,
+            'register' => $register,
+            'process' => $process,
+            'transaction' => $transaction,
+            'fields' => self::$repository->model->fieldDatatable(),
+        ]);
     }
 
     public function getHistory($code)
