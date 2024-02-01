@@ -66,6 +66,7 @@ class ReportRekapLinenBaruController extends MinimalController
 
     public function getPrint(RekapReportRequest $request){
         set_time_limit(0);
+        ini_set('memory_limit', '512M');
         $location = $linen = $lawan = [];
 
         $rs = Rs::with([HAS_RUANGAN, HAS_JENIS])->find(request()->get(Rs::field_primary()));
