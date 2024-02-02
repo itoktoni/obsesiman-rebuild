@@ -228,6 +228,9 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
     });
 
     Route::post('register', function (RegisterRequest $request) {
+        set_time_limit(0);
+        ini_set('memory_limit', '512M');
+
         try {
 
             $code = env('CODE_BERSIH', 'BSH');
