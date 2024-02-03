@@ -421,25 +421,23 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
     Route::post('detail/rfid', function (DetailDataRequest $request) {
         try {
 
-            $item = Detail::with([HAS_RS, HAS_RUANGAN, HAS_JENIS, HAS_USER])->whereIn(Detail::field_primary(), $request->rfid)->get();
+            // $item = Detail::with([HAS_RS, HAS_RUANGAN, HAS_JENIS, HAS_USER])->whereIn(Detail::field_primary(), $request->rfid)->get();
+            $item = Query::getDetail()->whereIn(Detail::field_primary(), $request->rfid)->get();
+
             if($item->count() == 0){
                 return Notes::error('data RFID tidak ditemukan');
             }
 
             $collection = [];
             foreach($item as $data){
-                $rs = $data->has_rs;
-                $ruangan = $data->has_ruangan;
-                $jenis = $data->has_jenis;
-                $user = $data->has_user;
 
                 $collection[] = [
                     'linen_id' => $data->detail_id_jenis,
-                    'linen_nama' => $jenis->field_name ?? '',
+                    'linen_nama' => $data->jenis_nama ?? '',
                     'rs_id' => $data->detail_id_rs,
-                    'rs_nama' => $rs->field_name ?? '',
+                    'rs_nama' => $data->rs_nama ?? '',
                     'ruangan_id' => $data->detail_id_ruangan,
-                    'ruangan_nama' => $ruangan->field_name ?? '',
+                    'ruangan_nama' => $data->ruangan_nama ?? '',
                     'status_register' => RegisterType::getDescription($data->detail_status_register),
                     'status_cuci' => CuciType::getDescription($data->detail_status_cuci),
                     'status_transaksi' => TransactionType::getDescription($data->detail_status_transaksi),
@@ -448,7 +446,7 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
                     'tanggal_update' => $data->detail_updated_at ? $data->detail_updated_at->format('Y-m-d') : null,
                     'tanggal_delete' => $data->detail_deleted_at ? $data->detail_deleted_at->format('Y-m-d') : null,
                     'pemakaian' => $data->detail_total_cuci ?? 0,
-                    'user_nama' => $user->name ?? null,
+                    'user_nama' => $data->name ?? null,
                 ];
             }
 

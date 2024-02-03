@@ -2,6 +2,7 @@
 
 namespace Plugins;
 
+use App\Dao\Models\Detail;
 use App\Dao\Models\Filters;
 use App\Dao\Models\Inventaris;
 use App\Dao\Models\Location;
@@ -204,5 +205,15 @@ class Query
             });
 
         return $opname;
+    }
+
+    public static function getDetail($select = ['*']){
+        $query = Detail::addSelect($select)
+            ->joinRelationship(HAS_RS)
+            ->joinRelationship(HAS_RUANGAN)
+            ->joinRelationship(HAS_JENIS)
+            ->joinRelationship(HAS_USER);
+
+        return $query;
     }
 }
