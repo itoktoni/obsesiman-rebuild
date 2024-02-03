@@ -146,6 +146,11 @@ class Detail extends Model
         return $this->hasOne(Rs::class, Rs::field_primary(), self::field_rs_id());
     }
 
+    public function has_user()
+    {
+        return $this->hasOne(User::class, User::field_primary(), self::field_created_by());
+    }
+
     public function has_cuci()
     {
         return $this->hasOne(ViewTransaksiCuci::class, ViewTransaksiCuci::field_primary(), self::field_primary());

@@ -420,6 +420,31 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
 
     Route::post('detail/rfid', function (DetailDataRequest $request) {
         try {
+
+            $data = Detail::with([HAS_RS, HAS_RUANGAN, HAS_JENIS, HAS_USER])->whereIn(Detail::field_primary(), $request->rfid);
+            $rs = $data->has_rs;
+            $ruangan = $data->has_ruangan;
+            $jenis = $data->has_jenis;
+            $user = $data->has_user;
+
+            $collection = [
+                'linen_id' => $data->detail_id_jenis,
+                'linen_nama' => $jenis->field_name ?? '',
+                'rs_id' => $data->detail_id_rs,
+                'rs_nama' => $rs->field_name ?? '',
+                'ruangan_id' => $data->detail_id_ruangan,
+                'ruangan_nama' => $ruangan->field_name ?? '',
+                'status_register' => RegisterType::getDescription($data->detail_status_register),
+                'status_cuci' => CuciType::getDescription($data->detail_status_cuci),
+                'status_transaksi' => TransactionType::getDescription($data->detail_status_transaksi),
+                'status_proses' => ProcessType::getDescription($data->detail_status_proses),
+                'tanggal_create' => $data->detail_created_at ? $data->detail_created_at->format('Y-m-d') : null,
+                'tanggal_update' => $data->detail_updated_at ? $data->detail_updated_at->format('Y-m-d') : null,
+                'tanggal_delete' => $data->detail_deleted_at ? $data->detail_deleted_at->format('Y-m-d') : null,
+                'pemakaian' => $data->detail_total_cuci ?? 0,
+                'user_nama' => $user->name ?? null,
+            ];
+
             $data = ViewDetailLinen::with([HAS_CUCI])->whereIn(ViewDetailLinen::field_primary(), $request->rfid)->get();
             $collection = DetailResource::collection($data);
             return Notes::data($collection);
