@@ -4,6 +4,7 @@
 /storage/*.key
 /postman/*
 .env
+backup.env
 /encrypted
 /v1/*
 firebase.json

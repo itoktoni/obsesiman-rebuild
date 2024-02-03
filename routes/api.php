@@ -228,6 +228,9 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
     });
 
     Route::post('register', function (RegisterRequest $request) {
+        set_time_limit(0);
+        ini_set('memory_limit', '512M');
+
         try {
 
             $code = env('CODE_BERSIH', 'BSH');
@@ -483,36 +486,45 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
 
     Route::get('grouping/{rfid}', function ($rfid, SaveTransaksiService $service) {
         try {
-            $data = Detail::with(['has_rs'])->findOrFail($rfid);
+            $data = Detail::with([HAS_RS, HAS_RUANGAN, HAS_JENIS])->findOrFail($rfid);
             $save = Transaksi::where(Transaksi::field_rfid(), $rfid)
                 ->whereNull(Transaksi::field_barcode());
+
+            $jenis = $data->has_jenis;
+            $rs = $data->has_rs;
+            $ruangan = $data->has_ruangan;
 
             $data_transaksi = [];
             $linen[] = $rfid;
 
+            $rs_id = $data->detail_rs_id;
+
             $date = date('Y-m-d H:i:s');
             $user = auth()->user()->id;
-            $code_rs = $data->has_rs->rs_code ?? 'XXX';
+            $code_rs = $rs->rs_code ?? 'XXX';
+
+            $status_transaksi = $data->field_status_transaction;
+            $status_register = $data->field_status_register;
 
             $status_baru = TransactionType::Kotor;
-            if (in_array($data->field_status_transaction, [TransactionType::BersihKotor, TransactionType::BersihRetur, TransactionType::BersihRewash])) {
+            if (in_array($status_transaksi, [TransactionType::BersihKotor, TransactionType::BersihRetur, TransactionType::BersihRewash])) {
                 $status_baru = TransactionType::Kotor;
-            } elseif ($data->field_status_transaction == TransactionType::Kotor) {
+            } elseif ($status_transaksi == TransactionType::Kotor) {
                 $status_baru = TransactionType::Kotor;
-            } elseif ($data->field_status_transaction == TransactionType::Retur) {
+            } elseif ($status_transaksi == TransactionType::Retur) {
                 $status_baru = TransactionType::Retur;
-            } elseif ($data->field_status_transaction == TransactionType::Rewash) {
+            } elseif ($status_transaksi == TransactionType::Rewash) {
                 $status_baru = TransactionType::Rewash;
-            } elseif ($data->field_status_transaction == TransactionType::Register) {
+            } elseif ($status_transaksi == TransactionType::Register) {
                 $status_baru = TransactionType::Register;
-                if ($data->field_status_register == RegisterType::GantiChip) {
+                if ($status_register == RegisterType::GantiChip) {
                     $status_baru = TransactionType::Kotor;
                 }
 
                 $save->update([
                     Transaksi::field_status_transaction() => $status_baru,
-                    Transaksi::field_rs_id() => $data->field_rs_id,
-                    Transaksi::field_rs_ori() => $data->field_rs_id,
+                    Transaksi::field_rs_id() => $rs_id,
+                    Transaksi::field_rs_ori() => $rs_id,
                 ]);
             }
 
@@ -520,7 +532,7 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
                 ->whereNull(Transaksi::field_delivery())
                 ->count();
 
-            if ($check_transaksi == 0 and (in_array($data->field_status_transaction, [
+            if ($check_transaksi == 0 and (in_array($status_transaksi, [
                 TransactionType::BersihKotor,
                 TransactionType::BersihRetur,
                 TransactionType::BersihRewash,
@@ -543,8 +555,8 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
                     Transaksi::field_key() => Query::autoNumber((new Transaksi())->getTable(), Transaksi::field_key(), 'GROUP' . date('ymd') . $code_rs, 20),
                     Transaksi::field_rfid() => $rfid,
                     Transaksi::field_status_transaction() => $status_baru,
-                    Transaksi::field_rs_id() => $data->field_rs_id,
-                    Transaksi::field_rs_ori() => $data->field_rs_id,
+                    Transaksi::field_rs_id() => $rs_id,
+                    Transaksi::field_rs_ori() => $rs_id,
                     Transaksi::field_beda_rs() => BooleanType::No,
                     Transaksi::field_created_at() => $date,
                     Transaksi::field_created_by() => $user,
@@ -578,8 +590,26 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
                 Detail::field_hilang_updated_at() => null,
             ]);
 
-            $update = ViewDetailLinen::with([HAS_CUCI])->findOrFail($rfid);
-            $collection = new DetailResource($update);
+            // $update = ViewDetailLinen::with([HAS_CUCI])->findOrFail($rfid);
+            // $collection = new DetailResource($update);
+
+            $collection = [
+                'linen_id' => $data->detail_id_jenis,
+                'linen_nama' => $jenis->field_name ?? '',
+                'rs_id' => $data->detail_id_rs,
+                'rs_nama' => $rs->field_name ?? '',
+                'ruangan_id' => $data->detail_id_ruangan,
+                'ruangan_nama' => $ruangan->field_name ?? '',
+                'status_register' => RegisterType::getDescription($data->detail_status_register),
+                'status_cuci' => CuciType::getDescription($data->detail_status_cuci),
+                'status_transaksi' => TransactionType::getDescription($data->detail_status_transaksi),
+                'status_proses' => ProcessType::getDescription($data->detail_status_proses),
+                'tanggal_create' => $data->detail_created_at ? $data->detail_created_at->format('Y-m-d') : null,
+                'tanggal_update' => $data->detail_updated_at ? $data->detail_updated_at->format('Y-m-d') : null,
+                'tanggal_delete' => $data->detail_deleted_at ? $data->detail_deleted_at->format('Y-m-d') : null,
+                'pemakaian' => 0,
+                'user_nama' => auth()->user()->name ?? null,
+            ];
 
             $status_grouping = ProcessType::Grouping;
             if(in_array($data->field_status_process, [ProcessType::Barcode, ProcessType::Delivery])){
