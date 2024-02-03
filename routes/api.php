@@ -485,7 +485,7 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
             $data_transaksi = [];
             $linen[] = $rfid;
 
-            $rs_id = $data->detail_rs_id;
+            $rs_id = $data->detail_id_rs;
 
             $date = date('Y-m-d H:i:s');
             $user = auth()->user()->id;
