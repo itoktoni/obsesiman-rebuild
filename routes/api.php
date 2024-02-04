@@ -432,7 +432,7 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
             foreach($item as $data){
 
                 $collection[] = [
-                    'linen_id' => $data->detail_id_jenis,
+                    'linen_id' => $data->detail_rfid,
                     'linen_nama' => $data->jenis_nama ?? '',
                     'rs_id' => $data->detail_id_rs,
                     'rs_nama' => $data->rs_nama ?? '',
