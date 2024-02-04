@@ -53,6 +53,7 @@ class Detail extends Model
         'detail_total_retur',
         'detail_total_rewash',
         'detail_total_cuci',
+        'detail_tanggal_cek',
     ];
 
     public $sortable = [

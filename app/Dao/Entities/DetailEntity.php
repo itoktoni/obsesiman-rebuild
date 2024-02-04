@@ -283,4 +283,14 @@ trait DetailEntity
     {
         return $this->{$this->field_total_cuci()};
     }
+
+    public static function field_cek()
+    {
+        return 'detail_tanggal_cek';
+    }
+
+    public function getFieldCekAttribute()
+    {
+        return $this->{$this->field_cek()};
+    }
 }
