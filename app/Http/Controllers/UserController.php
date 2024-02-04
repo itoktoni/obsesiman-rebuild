@@ -69,7 +69,9 @@ class UserController extends MasterController
             ],'Login Gagal');
         }
 
-        $user->tokens()->delete();
+        if($user->tokens()){
+            $user->tokens()->delete();
+        }
 
         $token = $user->createToken($user->name);
         $string_token = $token->plainTextToken;
