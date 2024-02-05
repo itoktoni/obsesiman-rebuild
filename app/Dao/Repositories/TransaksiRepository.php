@@ -11,6 +11,7 @@ use App\Dao\Models\ViewTotalJenis;
 use App\Dao\Models\ViewTransaksi;
 use Doctrine\DBAL\Query\QueryException;
 use Plugins\Notes;
+use Plugins\Query;
 
 class TransaksiRepository extends MasterRepository implements CrudInterface
 {
@@ -107,5 +108,9 @@ class TransaksiRepository extends MasterRepository implements CrudInterface
         } catch (QueryException $ex) {
             return Notes::error($ex->getMessage());
         }
+    }
+
+    public function getRekapKotor(){
+        return Query::getTransaction();
     }
 }

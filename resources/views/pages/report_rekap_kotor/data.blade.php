@@ -21,7 +21,7 @@
 	<tr>
 		<td></td>
 		<td colspan="10">
-			<h3>
+            <h3>
                 @php
                 $start_tanggal_bersih = \Carbon\Carbon::parse(request()->get('start_rekap'))->addDay(+1);
                 $end_tanggal_bersih = \Carbon\Carbon::parse(request()->get('end_rekap'))->addDay(+1);
@@ -41,18 +41,13 @@
             <tr>
                 <th style="width: 10px" width="1">No. </th>
                 <th style="width: 200px" width="20">Nama Linen</th>
-                @foreach($location as $loc_id => $loc_name)
-                    @if(!empty($loc_name))
-                    <th>{{ $loc_name }}</th>
-                    @endif
+                @foreach($location as $loc)
+                    <th>{{ $loc->field_name }}</th>
                 @endforeach
                 <th>Belum teregister</th>
-                <th>Beda RS</th>
                 <th>Total Kotor (Pcs)</th>
                 <th>(Kg) Kotor</th>
                 <th>Total Bersih (Pcs)</th>
-                <th>-</th>
-                <th>+</th>
             </tr>
         </thead>
 		<tbody>
@@ -60,151 +55,71 @@
                 $sum_kurang = $sum_lebih = $sum_per_linen = $sum_kotor = $sum_beda_rs = $sum_kg = $sum_lawan = 0;
                 $total_number = $selisih = 0;
                 $total_lawan = 0;
-                $total_beda_rs = $kotor->where(Transaksi::field_beda_rs(), BedaRsType::Beda)
-                    ->whereIn(Transaksi::field_status_transaction(), TransactionType::Kotor)
-                    ->count();
-                $total_belum_register = $kotor->where(Transaksi::field_beda_rs(), BedaRsType::BelumRegister)
-                    ->whereIn(Transaksi::field_status_transaction(), TransactionType::Kotor)
-                    ->count();
             @endphp
-            @forelse($linen as $linen_id => $name)
-                @if(!empty($name))
+            @forelse($linen as $jenis)
                 @php
-                    $total_number++;
-                    $total_per_linen = $kotor
-                        ->where(Transaksi::field_beda_rs(), 0)
-                        ->whereIn(Transaksi::field_status_transaction(), TransactionType::Kotor)
-                        ->where('view_linen_id', $linen_id)
-                        ->count();
-
-                    $sum_per_linen = $sum_per_linen + $total_per_linen;
-
-                    $total_lawan = $bersih
-                        ->whereIn(Transaksi::field_status_bersih(), TransactionType::BersihKotor)
-                        ->where('view_linen_id', $linen_id)
-                        ->count();
-
-                    $sum_lawan = $sum_lawan + $total_lawan;
-                    $berat = $kotor
-                        ->whereIn(Transaksi::field_status_transaction(), TransactionType::Kotor)
-                        ->where('view_linen_id', $linen_id)
-                        ->first()->view_linen_berat ?? 0;
-
-                    $total_kg = $berat * $total_per_linen;
-                    $sum_kg = $sum_kg + $total_kg;
-
-                    $selisih = $total_lawan - $total_per_linen;
-					$selisih_kurang = $selisih < 0 ? $selisih : 0;
-                    $selisih_lebih=$selisih> 0 ? $selisih : 0;
-					$sum_kurang = $sum_kurang + $selisih_kurang;
-					$sum_lebih = $sum_lebih + $selisih_lebih;
+                $name = $jenis->jenis_nama;
+                $total_number = $total_number + $loop->iteration;
                 @endphp
                 <tr>
                     <td>{{ $total_number }}</td>
-                    <td>{{ $name ?? 'Belum teregister' }}</td>
-                    @foreach($location as $loc_id => $loc_name)
-                    @if(!empty($loc_name))
+                    <td>{{ $name }}</td>
+                    @foreach($location as $loc)
                         <td>
                             @php
-                                $total_lokasi = $kotor->where(Transaksi::field_beda_rs(), 0)
-                                    ->where('view_ruangan_id', $loc_id)
-                                    ->where('view_linen_id', $linen_id)
-                                    ->count();
+                            $total_ruangan = $kotor
+                            ->where('view_ruangan_id', $loc->ruangan_id)
+                            ->where('view_linen_id', $jenis->jenis_id)
+                            ->sum('view_qty');
                             @endphp
-                            {{ $total_lokasi > 0 ? $total_lokasi : '' }}
+                            {{ $total_ruangan > 0 ? $total_ruangan : '0' }}
                         </td>
-                    @endif
                     @endforeach
                     <td><!-- tempat belum register --></td>
-                    <td><!-- tempat beda rs --></td>
-                    <td>{{ $total_per_linen }}</td>
-                    <td>{{ $total_kg }}</td>
                     <td>
-                        {{ $total_lawan }}
+                        @php
+                        $total_kotor = $kotor
+                        ->where('view_linen_id', $jenis->jenis_id)
+                        ->sum('view_qty');
+                        @endphp
+                        {{ $total_kotor > 0 ? $total_kotor : '0' }}
                     </td>
-                    <td>{{ $selisih < 0 ? $selisih : '' }}</td>
-                    <td>{{ $selisih > 0 ? $selisih : '' }}</td>
+                    <td>
+                        @php
+                        $total_kg = $kotor
+                        ->where('view_linen_id', $jenis->jenis_id)
+                        ->sum('view_kg');
+                        @endphp
+                        {{ $total_kg > 0 ? $total_kg : '0' }}
+                    </td>
+                    <td>
+                        @php
+                        $total_bersih = $bersih
+                        ->where('view_linen_id', $jenis->jenis_id)
+                        ->sum('view_qty');
+                        @endphp
+                        {{ $total_bersih > 0 ? $total_bersih : '0' }}
+                    </td>
                 </tr>
-                @endif
 			@empty
 			@endforelse
             <tr>
-                <td>{{ $total_number + 1 }}</td>
-                <td>Belum teregister</td>
+                <td>{{ $total_number++ }}</td>
+                <td>Belum Register</td>
                 @foreach($location as $loc)
-                @if(!empty($loc))
                 <td></td>
-                @endif
                 @endforeach
-                <td>{{ $total_belum_register }}</td>
+                <td>
+                @php
+                $total_belum_register = $kotor
+                ->where('view_linen_id', 'xxx')
+                ->sum('view_qty');
+                @endphp
+                {{ $total_belum_register > 0 ? $total_belum_register : '0' }}
+                </td>
                 <td></td>
-                <td>{{ $total_belum_register }}</td>
-                <td></td>
-                <td></td>
-                <td>-{{ $total_belum_register }}</td>
-                <td></td>
-            </tr>
-            <tr>
-                <td>{{ $total_number + 2 }}</td>
-                <td>Linen Lain</td>
-                @foreach($location as $loc)
-                @if(!empty($loc))
-                <td></td>
-                @endif
-                @endforeach
-                <td></td>
-                <td>{{ $total_beda_rs }}</td>
-                <td>{{ $total_beda_rs }}</td>
-                <td></td>
-                <td></td>
-                <td>-{{ $total_beda_rs }}</td>
                 <td></td>
             </tr>
 		</tbody>
-		<tr>
-            <td colspan="2">Total</td>
-            @foreach($location as $loc_id => $loc_name)
-                @if(!empty($loc_name))
-                @php
-                $sum_lokasi = $kotor->where(Transaksi::field_beda_rs(), 0)
-                                ->where('view_ruangan_id', $loc_id)
-                                ->count();
-                @endphp
-                <td>
-                    {{ $sum_lokasi }}
-                </td>
-                @endif
-            @endforeach
-            <td>
-                {{ $total_belum_register }}
-            </td>
-            <td>
-                {{ $total_beda_rs }}
-            </td>
-            <td>
-                {{ $sum_per_linen + $total_belum_register + $total_beda_rs }}
-            </td>
-            <td>
-                {{ $sum_kg }}
-            </td>
-            <td>
-                {{ $sum_lawan  }}
-            </td>
-            <td>
-                {{ $sum_kurang + -($total_beda_rs) + -($total_belum_register) }}
-            </td>
-            <td>
-                {{ $sum_lebih  }}
-            </td>
-        </tr>
 	</table>
 </div>
-
-<table class="footer">
-	<tr>
-		<td colspan="2" class="print-date">{{ env('APP_LOCATION') }}, {{ date('d F Y') }}</td>
-	</tr>
-	<tr>
-		<td colspan="2" class="print-person">{{ auth()->user()->name ?? '' }}</td>
-	</tr>
-</table>
