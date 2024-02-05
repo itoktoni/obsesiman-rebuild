@@ -59,7 +59,7 @@
             @forelse($linen as $jenis)
                 @php
                 $name = $jenis->jenis_nama;
-                $total_number = $total_number + $loop->iteration;
+                $total_number++;
                 @endphp
                 <tr>
                     <td>{{ $total_number }}</td>
@@ -104,7 +104,7 @@
 			@empty
 			@endforelse
             <tr>
-                <td>{{ $total_number++ }}</td>
+                <td>{{ $total_number + 1 }}</td>
                 <td>Belum Register</td>
                 @foreach($location as $loc)
                 <td></td>
