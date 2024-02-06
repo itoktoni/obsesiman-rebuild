@@ -33,7 +33,6 @@
 		</td>
 	</tr>
 </table>
-
 <div class="table-responsive" id="table_data">
 	<table id="export" border="1" style="border-collapse: collapse !important; border-spacing: 0 !important;"
 		class="table table-bordered table-striped table-responsive-stack">
@@ -56,7 +55,7 @@
                 $total_number = $selisih = 0;
                 $total_lawan = 0;
             @endphp
-            @forelse($linen as $jenis)
+            @forelse($linen->sortBy('jenis_nama') as $jenis)
                 @php
                 $name = $jenis->jenis_nama;
                 $total_number++;
