@@ -53,7 +53,8 @@ class ReportMutasiController extends MinimalController
 
     public function getPrint(MutasiReportRequest $request){
         set_time_limit(0);
-        $rs = Rs::find(request()->get(Mutasi::field_rs_id()));
+        $rs_id = intval($request->view_rs_id);
+        $rs = Rs::find($rs_id);
 
         $this->data = $this->getQuery($request);
 

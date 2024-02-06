@@ -7,7 +7,7 @@
 			</h3>
 		</td>
 		<td rowspan="3">
-			<x-logo/>
+            <x-logo/>
 		</td>
 	</tr>
 	<tr>
@@ -21,8 +21,8 @@
 	<tr>
 		<td></td>
 		<td colspan="10">
-			<h3>
-                @php
+            <h3>
+            @php
                 $start_tanggal_kotor = \Carbon\Carbon::parse(request()->get('start_rekap'))->addDay(-1);
                 $end_tanggal_kotor = \Carbon\Carbon::parse(request()->get('end_rekap'))->addDay(-1);
                 @endphp
@@ -42,14 +42,12 @@
             <tr>
                 <th style="width: 10px" width="1">No. </th>
                 <th style="width: 200px" width="20">Nama Linen</th>
-                @foreach($location as $loc_id => $loc_name)
-                    <th>{{ $loc_name }}</th>
+                @foreach($location as $loc)
+                    <th>{{ $loc->field_name }}</th>
                 @endforeach
                 <th>Total Bersih (Pcs)</th>
                 <th>(Kg) Bersih</th>
                 <th>Total Kotor (Pcs)</th>
-                <th>-</th>
-                <th>+</th>
             </tr>
         </thead>
 		<tbody>
@@ -58,97 +56,53 @@
                 $total_number = $selisih = 0;
                 $total_lawan = 0;
             @endphp
-            @forelse($linen as $linen_id => $name)
-                @if(!empty($name))
+            @forelse($linen->sortBy('jenis_nama') as $jenis)
                 @php
-                    $total_number++;
-                    $total_per_linen = $bersih
-                        ->where('view_linen_id', $linen_id)
-                        ->whereIn(Transaksi::field_status_bersih(), BERSIH)
-                        ->count();
-
-                    $total_per_linen_kanan = $total_per_linen ?? 0;
-
-                    $sum_per_linen = $sum_per_linen + $total_per_linen_kanan;
-
-                    $total_lawan = $kotor
-                        ->where(Transaksi::field_beda_rs(), 0)
-                        ->where('view_linen_id', $linen_id)
-                        ->whereIn(Transaksi::field_status_transaction(), KOTOR)
-                        ->count();
-
-                    $sum_lawan = $sum_lawan + $total_lawan;
-
-                    $total_kg = $bersih[0]->view_linen_berat * $total_per_linen;
-                    $sum_kg = $sum_kg + $total_kg;
-
-                    $selisih = $total_per_linen - $total_lawan;
-					$selisih_kurang = $selisih < 0 ? $selisih : 0;
-                    $selisih_lebih = $selisih> 0 ? $selisih : 0;
-					$sum_kurang = $sum_kurang + $selisih_kurang;
-					$sum_lebih = $sum_lebih + $selisih_lebih;
+                $name = $jenis->jenis_nama;
+                $total_number++;
                 @endphp
                 <tr>
                     <td>{{ $total_number }}</td>
-                    <td>{{ Str::ucfirst($name) }}</td>
-                    @foreach($location as $loc_id => $loc_name)
+                    <td>{{ $name }}</td>
+                    @foreach($location as $loc)
                         <td>
                             @php
-                            $total_lokasi = $bersih
-                                ->where('view_linen_id', $linen_id)
-                                ->where('view_ruangan_id', $loc_id)
-                                ->whereIn(Transaksi::field_status_bersih(), BERSIH)
-                                ->count();
+                            $total_ruangan = $bersih
+                            ->where('view_ruangan_id', $loc->ruangan_id)
+                            ->where('view_linen_id', $jenis->jenis_id)
+                            ->sum('view_qty');
                             @endphp
-                            {{ $total_lokasi > 0 ? $total_lokasi : '' }}
+                            {{ $total_ruangan > 0 ? $total_ruangan : '0' }}
                         </td>
                     @endforeach
-                    <td>{{ $total_per_linen_kanan }}</td>
-                    <td>{{ $total_kg }}</td>
                     <td>
-                        {{ $total_lawan }}
+                        @php
+                        $total_bersih = $bersih
+                        ->where('view_linen_id', $jenis->jenis_id)
+                        ->sum('view_qty');
+                        @endphp
+                        {{ $total_bersih > 0 ? $total_bersih : '0' }}
                     </td>
-                    <td>{{ $selisih < 0 ? $selisih : '' }}</td>
-                    <td>{{ $selisih > 0 ? $selisih : '' }}</td>
+                    <td>
+                        @php
+                        $total_kg = $bersih
+                        ->where('view_linen_id', $jenis->jenis_id)
+                        ->sum('view_kg');
+                        @endphp
+                        {{ $total_kg > 0 ? $total_kg : '0' }}
+                    </td>
+                    <td>
+                        @php
+                        $total_kotor = $kotor
+                        ->where('view_linen_id', $jenis->jenis_id)
+                        ->sum('view_qty');
+                        @endphp
+                        {{ $total_kotor > 0 ? $total_kotor : '0' }}
+                    </td>
                 </tr>
-                @endif
 			@empty
 			@endforelse
+
 		</tbody>
-		<tr>
-            <td colspan="2">Total</td>
-            @foreach($location as $loc_id => $loc_name)
-            @php
-            $sum_lokasi = $bersih->where('view_ruangan_id', $loc_id)->count();
-            @endphp
-                <td>
-                    {{ $sum_lokasi }}
-                </td>
-            @endforeach
-            <td>
-                {{ $sum_per_linen }}
-            </td>
-            <td>
-                {{ $sum_kg }}
-            </td>
-            <td>
-                {{ $sum_lawan  }}
-            </td>
-            <td>
-                {{ $sum_kurang }}
-            </td>
-            <td>
-                {{ $sum_lebih }}
-            </td>
-        </tr>
 	</table>
 </div>
-
-<table class="footer">
-	<tr>
-		<td colspan="2" class="print-date">{{ env('APP_LOCATION') }}, {{ date('d F Y') }}</td>
-	</tr>
-	<tr>
-		<td colspan="2" class="print-person">{{ auth()->user()->name ?? '' }}</td>
-	</tr>
-</table>

@@ -12,6 +12,7 @@ use App\Dao\Models\SystemLink;
 use App\Dao\Models\SystemMenu;
 use App\Dao\Models\SystemPermision;
 use App\Dao\Models\SystemRole;
+use App\Dao\Models\Transaksi;
 use App\Dao\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
@@ -214,6 +215,12 @@ class Query
             ->joinRelationship(HAS_JENIS)
             ->joinRelationship(HAS_USER);
 
+        return $query;
+    }
+
+    public static function getTransaction($select = ['*']){
+        $query = self::getDetail($select)
+        ->join(Transaksi::getTableName(), Transaksi::field_rfid(), Detail::field_primary());
         return $query;
     }
 }
