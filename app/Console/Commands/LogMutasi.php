@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Dao\Models\Mutasi;
 use App\Dao\Models\ViewMutasi;
 use Illuminate\Console\Command;
+use Illuminate\Support\Carbon;
 
 class LogMutasi extends Command
 {
@@ -40,9 +41,11 @@ class LogMutasi extends Command
      */
     public function handle()
     {
-        if (Mutasi::where(Mutasi::field_tanggal(), date('Y-m-d'))->count() == 0) {
+        $tanggal = now()->addDay(-2)->format('Y-m-d');
 
-            $data_mutasi = ViewMutasi::get()->map(function ($item) {
+        if (Mutasi::where(Mutasi::field_tanggal(), $tanggal)->count() == 0) {
+
+            $data_mutasi = ViewMutasi::get()->map(function ($item) use($tanggal){
 
                 $register = $item->total_stock;
                 $mutasi = $item->total_bersih + $item->total_kotor;
@@ -64,8 +67,8 @@ class LogMutasi extends Command
                 }
 
                 return [
-                    'mutasi_nama' => $item->rs_nama . ' ' . $item->jenis_nama . ' ' . date('Y-m-d'),
-                    'mutasi_tanggal' => date('Y-m-d'),
+                    'mutasi_nama' => $item->rs_nama . ' ' . $item->jenis_nama . ' ' . $tanggal,
+                    'mutasi_tanggal' => $tanggal,
                     'mutasi_rs_id' => $item->rs_id,
                     'mutasi_rs_nama' => $item->rs_nama,
                     'mutasi_linen_id' => $item->jenis_id,

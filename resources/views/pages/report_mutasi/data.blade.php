@@ -50,7 +50,7 @@
 			@php
 			$stok_awal_register = $kotor = $bersih = $plus = $minus = 0;
 			@endphp
-			@forelse($data as $table)
+			@forelse($data->sortBy('field_linen_nama') as $table)
 			@php
 			$stok_awal_register = $table->field_register;
 			$kotor = $kotor + $table->field_kotor;
