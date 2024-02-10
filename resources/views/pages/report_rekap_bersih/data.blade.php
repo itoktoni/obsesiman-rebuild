@@ -95,7 +95,7 @@
                         @php
                         $total_kotor = $kotor
                         ->where('view_linen_id', $jenis->jenis_id)
-                        ->sum('view_qty');
+                        ->sum('view_qty_total');
                         @endphp
                         {{ $total_kotor > 0 ? $total_kotor : '0' }}
                     </td>
