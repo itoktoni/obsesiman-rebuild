@@ -112,7 +112,7 @@
                 @endforeach
                 <td>
                 @php
-                $total_belum_register = $kotor->where('view_qty_belum_register','>=', 1)->count();
+                $total_belum_register = $kotor->sum('view_qty_belum_register');
                 @endphp
                 {{ $total_belum_register > 0 ? $total_belum_register : '0' }}
                 </td>
@@ -130,7 +130,7 @@
                 <td></td>
                 <td>
                 @php
-                $total_beda_rs = $kotor->where('view_qty_beda_rs','>=', 1)->count();
+                $total_beda_rs = $kotor->sum('view_qty_beda_rs');
                 @endphp
                 {{ $total_beda_rs }}
                 </td>
