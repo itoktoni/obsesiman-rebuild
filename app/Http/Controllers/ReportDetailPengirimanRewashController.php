@@ -46,7 +46,7 @@ class ReportDetailPengirimanRewashController extends MinimalController
             $query = $query->where(Transaksi::field_report(), '<=', $end_date);
         }
 
-        return $query->get();
+        return $query->orderBy('view_linen_nama', 'ASC')->get();
     }
 
     public function getPrint(DeliveryReportRequest $request){
