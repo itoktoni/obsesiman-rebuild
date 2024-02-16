@@ -48,6 +48,9 @@ class SaveOpnameService
                     ]);
 
                     $insert_register[] = $item;
+                    $item = array_merge($item, [
+                        OpnameDetail::field_sync() => BooleanType::Yes,
+                    ]);
 
                 } else if($detail->opname_detail_ketemu == BooleanType::Yes){
                     $item = array_merge($item, [
@@ -57,10 +60,12 @@ class SaveOpnameService
                         OpnameDetail::field_scan_rs() => BooleanType::No,
                         OpnameDetail::field_ketemu() => BooleanType::No,
                         OpnameDetail::field_waktu() => $detail->opname_detail_waktu,
+                        OpnameDetail::field_sync() => BooleanType::No,
                     ]);
                 } else if($detail->opname_detail_ketemu == BooleanType::No){
                     $item = array_merge($item, [
                         OpnameDetail::field_waktu() => $waktu,
+                        OpnameDetail::field_sync() => BooleanType::Yes,
                     ]);
 
                     $scan_rs[] = $rfid;

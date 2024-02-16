@@ -45,11 +45,7 @@
                 @foreach($location as $loc_id => $loc_name)
                     <th>{{ $loc_name }}</th>
                 @endforeach
-                <th>Total Bersih (Pcs)</th>
-                <th>(Kg) Bersih</th>
-                <th>Total Kotor (Pcs)</th>
-                <th>-</th>
-                <th>+</th>
+                <th>Total Linen Baru (Pcs)</th>
             </tr>
         </thead>
 		<tbody>
@@ -70,23 +66,6 @@
                     $total_per_linen_kanan = $total_per_linen ?? 0;
 
                     $sum_per_linen = $sum_per_linen + $total_per_linen_kanan;
-
-                    $total_lawan = $kotor
-                        ->where(Transaksi::field_beda_rs(), 0)
-                        ->where('view_linen_id', $linen_id)
-                        ->whereIn(Transaksi::field_status_transaction(), KOTOR)
-                        ->count();
-
-                    $sum_lawan = $sum_lawan + $total_lawan;
-
-                    $total_kg = isset($bersih[0]) ? $bersih[0]->view_linen_berat * $total_per_linen : 0;
-                    $sum_kg = $sum_kg + $total_kg;
-
-                    $selisih = $total_per_linen - $total_lawan;
-					$selisih_kurang = $selisih < 0 ? $selisih : 0;
-                    $selisih_lebih = $selisih> 0 ? $selisih : 0;
-					$sum_kurang = $sum_kurang + $selisih_kurang;
-					$sum_lebih = $sum_lebih + $selisih_lebih;
                 @endphp
                 <tr>
                     <td>{{ $total_number }}</td>
@@ -104,12 +83,6 @@
                         </td>
                     @endforeach
                     <td>{{ $total_per_linen_kanan }}</td>
-                    <td>{{ $total_kg }}</td>
-                    <td>
-                        {{ $total_lawan }}
-                    </td>
-                    <td>{{ $selisih < 0 ? $selisih : '' }}</td>
-                    <td>{{ $selisih > 0 ? $selisih : '' }}</td>
                 </tr>
                 @endif
 			@empty
@@ -127,18 +100,6 @@
             @endforeach
             <td>
                 {{ $sum_per_linen }}
-            </td>
-            <td>
-                {{ $sum_kg }}
-            </td>
-            <td>
-                {{ $sum_lawan  }}
-            </td>
-            <td>
-                {{ $sum_kurang }}
-            </td>
-            <td>
-                {{ $sum_lebih }}
             </td>
         </tr>
 	</table>

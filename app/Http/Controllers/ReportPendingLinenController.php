@@ -44,7 +44,6 @@ class ReportPendingLinenController extends MinimalController
     {
         $query = self::$repository->getPrint()
             ->addSelect([DB::raw('view_detail_linen.*'), ViewLog::field_status()])
-            ->leftJoinRelationship(HAS_PEMAKAIAN)
             ->leftJoinRelationship(HAS_LOG)
             ->where(ViewDetailLinen::field_status_process(), ProcessType::Pending);
 

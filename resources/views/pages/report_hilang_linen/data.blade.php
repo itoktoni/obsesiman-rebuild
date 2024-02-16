@@ -14,6 +14,14 @@
 		<td></td>
 		<td colspan="10">
 			<h3>
+				RUMAH SAKIT : {{ $rs->field_name ?? 'Semua Rumah Sakit' }}
+			</h3>
+		</td>
+	</tr>
+	<tr>
+		<td></td>
+		<td colspan="10">
+			<h3>
 				Periode : {{ formatDate(request()->get('start_hilang')) }} - {{ formatDate(request()->get('end_hilang')) }}
 			</h3>
 		</td>
@@ -50,7 +58,7 @@
 				<td>{{ $table->field_name }}</td>
 				<td>{{ $table->field_rs_name }}</td>
 				<td>{{ $table->field_ruangan_name }}</td>
-				<td class="text-right">{{ $table->view_transaksi_cuci_total ?? 0 }}</td>
+				<td class="text-right">{{ $table->view_pemakaian ?? 0 }}</td>
 				<td>{{ formatDate($table->field_tanggal_create) }}</td>
 				<td>{{ $table->view_hilang_create ? \Carbon\Carbon::createFromFormat('Y-m-d H:s:i', $table->view_hilang_create)->diff(now())->format('%a') : '0' }} Hari</td>
 				<td>{{ formatDate($table->field_tanggal_update, true) }}</td>

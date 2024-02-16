@@ -192,4 +192,9 @@ trait OpnameDetailEntity
     {
         return $this->{$this->field_scan_rs()};
     }
+
+    public static function field_sync()
+    {
+        return 'opname_detail_sync';
+    }
 }
