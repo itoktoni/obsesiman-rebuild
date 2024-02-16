@@ -9,6 +9,7 @@ use App\Dao\Models\ViewDetailLinen;
 use Illuminate\Console\Command;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Plugins\History;
 
 class DetailTotal extends Command
@@ -50,6 +51,8 @@ class DetailTotal extends Command
         ->orWhereNull('detail_tanggal_cek')
         ->limit(ENV('TRANSACTION_DETAIL_CEK', 50))
         ->get();
+
+        Log::info($data);
 
         if ($data) {
             foreach($data as $item){
