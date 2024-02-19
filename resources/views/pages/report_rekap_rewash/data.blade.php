@@ -43,7 +43,6 @@
                 <th>Belum teregister</th>
                 <th>Beda RS</th>
                 <th>Total Rewash (Pcs)</th>
-                <th>(Kg) Rewash</th>
                 <th>Total Bersih (Pcs)</th>
                 <th>-</th>
                 <th>+</th>
@@ -80,14 +79,6 @@
 
                     $sum_lawan = $sum_lawan + $total_lawan;
 
-                    $berat = $bersih
-                        ->whereIn(Transaksi::field_status_transaction(), TransactionType::Rewash)
-                        ->where('view_linen_id', $linen_id)
-                        ->first()->view_linen_berat ?? 0;
-
-                    $total_kg = $berat * $total_per_linen;
-                    $sum_kg = $sum_kg + $total_kg;
-
                     $selisih = $total_lawan - $total_per_linen;
 					$selisih_kurang = $selisih < 0 ? $selisih : 0;
                     $selisih_lebih=$selisih> 0 ? $selisih : 0;
@@ -113,7 +104,6 @@
                     <td><!-- tempat belum register --></td>
                     <td><!-- tempat beda rs --></td>
                     <td>{{ $total_per_linen }}</td>
-                    <td>{{ $total_kg }}</td>
                     <td>
                         {{ $total_lawan }}
                     </td>
@@ -135,7 +125,6 @@
                 <td></td>
                 <td>{{ $total_belum_register }}</td>
                 <td></td>
-                <td></td>
                 <td>-{{ $total_belum_register }}</td>
                 <td></td>
             </tr>
@@ -150,7 +139,6 @@
                 <td></td>
                 <td>{{ $total_beda_rs }}</td>
                 <td>{{ $total_beda_rs }}</td>
-                <td></td>
                 <td></td>
                 <td>-{{ $total_beda_rs }}</td>
                 <td></td>
@@ -178,9 +166,6 @@
             </td>
             <td>
                 {{ $sum_per_linen + $total_belum_register + $total_beda_rs }}
-            </td>
-            <td>
-                {{ $sum_kg }}
             </td>
             <td>
                 {{ $sum_lawan  }}
