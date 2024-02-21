@@ -73,9 +73,11 @@
                         ->count();
 
             $pending = $table->where('opname_detail_proses', ProcessType::Pending)
+                        ->where('opname_detail_scan_rs', 0)
                         ->count();
 
 			$hilang = $table->where('opname_detail_proses', ProcessType::Hilang)
+                        ->where('opname_detail_scan_rs', 0)
                         ->count();
 
 			$retur = $table->where('opname_detail_transaksi', TransactionType::Retur)
@@ -116,9 +118,11 @@
                     ->count();
 
 				$sub_pending = $data->where('opname_detail_proses', ProcessType::Pending)
+                    ->where('opname_detail_scan_rs', 0)
                     ->count();
 
 				$sub_hilang = $data->where('opname_detail_proses', ProcessType::Hilang)
+                    ->where('opname_detail_scan_rs', 0)
                     ->count();
 
 				$sub_retur = $data->where('opname_detail_transaksi', TransactionType::Retur)
