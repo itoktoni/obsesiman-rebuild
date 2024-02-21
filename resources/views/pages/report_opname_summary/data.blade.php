@@ -68,6 +68,8 @@
             @forelse($map as $key => $table)
 			@php
 			$tembak_so = $table->where('opname_detail_scan_rs', BooleanType::Yes)
+                        ->where('opname_detail_ketemu', 1)
+                        ->where('opname_detail_transaksi', '!=', 0)
                         ->count();
 
             $pending = $table->where('opname_detail_proses', ProcessType::Pending)
@@ -109,6 +111,8 @@
 				<td colspan="2">Total</td>
 				@php
 				$sub_tembak_so = $data->where('opname_detail_scan_rs', BooleanType::Yes)
+                    ->where('opname_detail_ketemu', 1)
+                    ->where('opname_detail_transaksi', '!=', 0)
                     ->count();
 
 				$sub_pending = $data->where('opname_detail_proses', ProcessType::Pending)
