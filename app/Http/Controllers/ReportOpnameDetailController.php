@@ -62,7 +62,7 @@ class ReportOpnameDetailController extends MinimalController
             }
 
             if($status == FilterType::ScanRs){
-                $query->whereIn(OpnameDetail::field_transaksi(), BERSIH);
+                $query->where(OpnameDetail::field_scan_rs(), BooleanType::Yes);
             }
 
             if($status == FilterType::BelumRegister){
