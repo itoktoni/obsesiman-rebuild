@@ -33,7 +33,7 @@ class DetailResource extends JsonResource
             'tanggal_create' => $this->field_tanggal_create ? $this->field_tanggal_create->format('Y-m-d') : null,
             'tanggal_update' => $this->field_tanggal_update ? $this->field_tanggal_update->format('Y-m-d') : null,
             'tanggal_delete' => $this->field_tanggal_delete ? $this->field_tanggal_delete->format('Y-m-d') : null,
-            'pemakaian' => $this->has_cuci->view_transaksi_cuci_total ?? 0,
+            'pemakaian' => $this->field_cuci ?? 0,
             'user_nama' => $this->field_created_name ? $this->field_created_name : null,
         ];
 

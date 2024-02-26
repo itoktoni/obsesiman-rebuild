@@ -20,6 +20,8 @@
 	</tr>
 </table>
 
+<br>
+
 <div class="table-responsive" id="table_data">
 	<table id="export" border="1" style="border-collapse: collapse !important; border-spacing: 0 !important;"
 		class="table table-bordered table-striped table-responsive-stack">
@@ -60,7 +62,7 @@
 				<td>{{ $table->field_rs_name }}</td>
 				<td>{{ $table->field_ruangan_name }}</td>
 				<td>{{ $table->field_status_cuci_name }}</td>
-				<td>{{ $table->view_transaksi_cuci_total ?? 0 }}</td>
+				<td>{{ $table->field_cuci ?? 0 }}</td>
 				<td>{{ $table->field_bersih ?? 0 }}</td>
 				<td>{{ $table->field_retur ?? 0 }}</td>
 				<td>{{ $table->field_rewash ?? 0 }}</td>

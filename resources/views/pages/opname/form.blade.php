@@ -43,7 +43,7 @@
                         <td>{{ $table->field_rfid }}</td>
                         <td>{{ $view->field_name ?? '' }}</td>
                         <td>{{ $view->field_ruangan_name ?? '' }}</td>
-                        <td>{{ $view->has_cuci->view_transaksi_cuci_total ?? '0' }}</td>
+                        <td>{{ $view->field_cuci ?? '0' }}</td>
                         <td>{{ $view ? formatDate($view->field_tanggal_update) : '' }} </td>
                         <td>{{ $view->field_status_transaction_name ?? '' }}</td>
                         <td>{{ $view->field_status_process_name ?? 'Belum Register' }} </td>

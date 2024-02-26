@@ -229,31 +229,6 @@ trait ViewDetailLinenEntity
         return $this->{$this->field_category_name()};
     }
 
-    public static function field_bersih()
-    {
-        return 'view_transaksi_bersih_total';
-    }
-
-    public function getFieldBersihAttribute()
-    {
-        return $this->{$this->field_bersih()};
-    }
-
-    public static function field_retur()
-    {
-        return 'view_transaksi_retur_total';
-    }
-
-    public function getFieldReturAttribute()
-    {
-        return $this->{$this->field_retur()};
-    }
-
-    public static function field_rewash()
-    {
-        return 'view_transaksi_rewash_total';
-    }
-
     public static function field_reported_at()
     {
         return 'view_tanggal_create';
@@ -262,11 +237,6 @@ trait ViewDetailLinenEntity
     public static function field_created_at()
     {
         return 'view_tanggal_create';
-    }
-
-    public function getFieldRewashAttribute()
-    {
-        return $this->{$this->field_rewash()};
     }
 
     public static function field_pending_create()
@@ -307,5 +277,45 @@ trait ViewDetailLinenEntity
     public function getFieldHilangUpdateAtAttribute()
     {
         return $this->{$this->field_hilang_update()};
+    }
+
+    public static function field_cuci()
+    {
+        return 'view_transaksi_cuci_total';
+    }
+
+    public function getFieldCuciAttribute()
+    {
+        return $this->{$this->field_cuci()};
+    }
+
+    public static function field_bersih()
+    {
+        return 'view_transaksi_bersih_total';
+    }
+
+    public function getFieldBersihAttribute()
+    {
+        return $this->{$this->field_bersih()};
+    }
+
+    public static function field_retur()
+    {
+        return 'view_transaksi_retur_total';
+    }
+
+    public function getFieldReturAttribute()
+    {
+        return $this->{$this->field_retur()};
+    }
+
+    public static function field_rewash()
+    {
+        return 'view_transaksi_rewash_total';
+    }
+
+    public function getFieldRewashAttribute()
+    {
+        return $this->{$this->field_rewash()};
     }
 }

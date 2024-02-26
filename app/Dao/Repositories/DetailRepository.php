@@ -47,14 +47,7 @@ class DetailRepository extends MasterRepository implements CrudInterface
 
     public function getPrintDataMaster(){
         $sql = ViewDetailLinen::query()
-        ->addSelect([DB::raw('view_detail_linen.*'),
-            ViewDetailLinen::field_bersih(),
-            ViewDetailLinen::field_retur(),
-            ViewDetailLinen::field_rewash(),
-        ])
-        ->leftJoinRelationship('has_bersih')
-        ->leftJoinRelationship('has_retur')
-        ->leftJoinRelationship('has_rewash')
+        ->addSelect([DB::raw('view_detail_linen.*')])
         ->leftJoinRelationship('has_category')
         ->filter();
 

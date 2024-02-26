@@ -40,7 +40,7 @@ class ReportDataLinenController extends MinimalController
     }
 
     private function exportExcel($request) {
-        $writer = SimpleExcelWriter::streamDownload('your-export.xlsx');
+        $writer = SimpleExcelWriter::streamDownload('data_linen.xlsx');
         self::$repository->getPrintDataMaster()->chunk(1000, function($item) use ($writer){
             foreach($item as $key => $table){
                 $writer->addRow([
@@ -52,6 +52,7 @@ class ReportDataLinenController extends MinimalController
                     'RUMAH SAKIT' => $table->field_rs_name,
                     'RUANGAN' => $table->field_ruangan_name,
                     'CUCI/RENTAL' => $table->field_status_cuci_name,
+                    'JUMLAH PEMAKAIAN LINEN' => $table->field_cuci,
                     'JUMLAH BERSIH' => $table->field_bersih,
                     'JUMLAH RETUR' => $table->field_retur,
                     'JUMLAH REWASH' => $table->field_rewash,
