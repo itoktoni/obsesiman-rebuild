@@ -78,9 +78,6 @@ class ReportDataLinenController extends MinimalController
         $rs = Rs::find(request()->get(ViewDetailLinen::field_rs_id()));
 
         $this->data = [];
-        if($request->action == 'export' || $this->getQuery($request)->count() > env('APP_CHUNK', 10000)){
-            return $this->exportExcel($request);
-        }
 
         $this->data = $this->getQuery($request);
         return moduleView(modulePathPrint(), $this->share([
