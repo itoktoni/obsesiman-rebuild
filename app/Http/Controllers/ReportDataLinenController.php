@@ -14,6 +14,7 @@ use Spatie\SimpleExcel\SimpleExcelWriter;
 class ReportDataLinenController extends MinimalController
 {
     public $data;
+    private $no = 0;
 
     public function __construct(DetailRepository $repository)
     {
@@ -43,8 +44,9 @@ class ReportDataLinenController extends MinimalController
         $writer = SimpleExcelWriter::streamDownload('data_linen.xlsx');
         self::$repository->getPrintDataMaster()->chunk(1000, function($item) use ($writer){
             foreach($item as $key => $table){
+                $this->no = $this->no + 1;
                 $writer->addRow([
-                    'No.' => $key+1,
+                    'No.' => $this->no,
                     'NO. RFID' => $table->field_primary,
                     'KATEGORI LINEN' => $table->view_kategori_nama,
                     'LINEN' => $table->field_name,
@@ -66,6 +68,7 @@ class ReportDataLinenController extends MinimalController
 
                 if ($key % 1000 === 0) {
                     flush(); // Flush the buffer every 1000 rows
+                    $this->no = $this->no;
                 }
             }
         });

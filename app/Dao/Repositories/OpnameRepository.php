@@ -51,9 +51,6 @@ class OpnameRepository extends MasterRepository implements CrudInterface
             ->addSelect(DB::raw('*'))
             ->leftJoinRelationship('has_view')
             ->leftJoinRelationship('has_user')
-            ->leftJoinRelationship('has_view.has_cuci')
-            ->leftJoinRelationship('has_view.has_retur')
-            ->leftJoinRelationship('has_view.has_rewash')
             ->filter();
 
         return $query;
