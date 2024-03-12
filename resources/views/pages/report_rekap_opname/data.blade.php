@@ -107,6 +107,20 @@
 			@empty
 			@endforelse
             <tr>
+                <td>{{ $total_number+1 }}</td>
+                <td>Belum Register</td>
+            @foreach($location as $loc_id => $loc_name)
+                <td></td>
+                <td></td>
+            @endforeach
+                <td></td>
+                <td>
+                    {{ $belum_register }}
+                </td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
                 <td colspan="2">Total</td>
                 @foreach($location as $loc_id => $loc_name)
                 @php
@@ -126,9 +140,9 @@
                 @endphp
 
                 <td>{{ $grand_register }}</td>
-                <td>{{ $grand_opname }}</td>
+                <td>{{ $grand_opname + $belum_register }}</td>
 
-                <td>{{ $total_minus }}</td>
+                <td>{{ $total_minus + $belum_register }}</td>
                 <td>{{ $total_plus }}</td>
             </tr>
 		</tbody>
