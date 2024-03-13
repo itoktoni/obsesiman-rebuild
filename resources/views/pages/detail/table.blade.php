@@ -18,6 +18,12 @@
                 </div>
             </div>
 
+            <div class="container">
+                <div class="row">
+                    <x-form-input prepend="Bulk RFID" placeholder="untuk pencarian rfid sekaligus, masukan RFID dengan pemisal (,) misalnya = 123, 456, 789" :label=false col="12" name="bulk_rfid" />
+                </div>
+            </div>
+
             <x-filter toggle="Filter" hide="true" :fields="$fields" />
         </x-form>
 

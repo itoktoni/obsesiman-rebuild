@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Dao\Models\Jenis;
 use App\Dao\Models\Opname;
+use App\Dao\Models\OpnameDetail;
 use App\Dao\Models\ViewOpname;
 use App\Dao\Repositories\OpnameRepository;
+use App\Http\Requests\OpnameDetailRequest;
 use App\Http\Requests\OpnameReportRequest;
 use Plugins\Query;
 
@@ -40,6 +42,11 @@ class ReportRekapOpnameController extends MinimalController
 
         $opname = ViewOpname::where(Opname::field_primary(), $request->opname_id)
             ->where('rs_id', $this->data->opname_id_rs);
+
+        $belum_register = OpnameDetail::where(OpnameDetail::field_opname(), $request->opname_id)
+            ->whereNull(OpnameDetail::field_created_at())
+            ->count();
+
         if($jenis_id = $request->jenis_id){
             $opname->where('jenis_id', $jenis_id);
         }
@@ -57,6 +64,7 @@ class ReportRekapOpnameController extends MinimalController
             'data' => $this->data,
             'rs' => $rs,
             'opname' => $opname,
+            'belum_register' => $belum_register,
             'location' => $location,
             'linen' => $linen,
         ]));

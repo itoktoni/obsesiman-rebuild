@@ -60,7 +60,7 @@
 			if(!empty($data)){
 				$map = $data->mapToGroups(function($item){
 					return [formatDate($item->opname_detail_waktu) => $item];
-				})->sortDesc();
+				})->sortKeys();
 			}
 
             $grand_total = 0;
@@ -89,7 +89,7 @@
                         ->count();
 
 			$not_register = $table->where('opname_detail_transaksi', BooleanType::No)->count();
-			$total = $tembak_so + $pending + $hilang + $retur + $rewash;
+			$total = $tembak_so + $pending + $hilang + $retur + $rewash + $not_register;
             $grand_total = $grand_total + $total;
 			@endphp
             <tr>

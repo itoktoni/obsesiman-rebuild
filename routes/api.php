@@ -3,6 +3,7 @@
 use App\Dao\Enums\BooleanType;
 use App\Dao\Enums\CetakType;
 use App\Dao\Enums\CuciType;
+use App\Dao\Enums\OpnameType;
 use App\Dao\Enums\ProcessType;
 use App\Dao\Enums\RegisterType;
 use App\Dao\Enums\TransactionType;
