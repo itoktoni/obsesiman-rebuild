@@ -2,8 +2,10 @@
 
 namespace App\Dao\Repositories;
 
+use App\Dao\Enums\ProcessType;
 use App\Dao\Enums\TransactionType;
 use App\Dao\Interfaces\CrudInterface;
+use App\Dao\Models\Detail;
 use App\Dao\Models\Transaksi;
 use App\Dao\Models\ViewBarcode;
 use App\Dao\Models\ViewDelivery;
@@ -103,7 +105,25 @@ class TransaksiRepository extends MasterRepository implements CrudInterface
     public function deleteRepository($request)
     {
         try {
-            is_array($request) ? Transaksi::destroy(array_values($request)) : Transaksi::destroy($request);
+            if(is_array($request)){
+                $rfid = array_values($request);
+                Transaksi::destroy(array_values($rfid));
+                Detail::whereIn(Detail::field_primary(), array_values($rfid))
+                ->update([
+                    Detail::field_status_transaction() => TransactionType::BersihKotor,
+                    Detail::field_status_process() => ProcessType::Bersih
+                ]);
+
+            } else {
+                Transaksi::destroy($request);
+
+                Detail::where(Detail::field_primary(), array_values($request))
+                ->update([
+                    Detail::field_status_transaction() => TransactionType::BersihKotor,
+                    Detail::field_status_process() => ProcessType::Bersih
+                ]);
+            }
+
             return Notes::delete($request);
         } catch (QueryException $ex) {
             return Notes::error($ex->getMessage());
