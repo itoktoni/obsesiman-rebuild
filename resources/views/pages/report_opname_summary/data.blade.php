@@ -60,7 +60,7 @@
 			if(!empty($data)){
 				$map = $data->mapToGroups(function($item){
 					return [formatDate($item->opname_detail_waktu) => $item];
-				})->sortDesc();
+				})->sortKeys();
 			}
 
             $grand_total = 0;
