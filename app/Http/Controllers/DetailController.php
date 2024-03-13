@@ -100,6 +100,12 @@ class DetailController extends MasterController
             $query = $query->whereDate(Detail::field_created_at(), '<=', $end);
         }
 
+        if ($bulk = request()->get('bulk_rfid')) {
+            $explode = array_map('trim', explode(',', $bulk));
+            $collect = collect($explode)->unique();
+            $query = $query->whereIn(Detail::field_primary(), $collect);
+        }
+
         return $query->fastPaginate(100);
     }
 
