@@ -116,8 +116,7 @@ class TransaksiRepository extends MasterRepository implements CrudInterface
 
             } else {
                 Transaksi::destroy($request);
-
-                Detail::where(Detail::field_primary(), array_values($request))
+                Detail::where(Detail::field_primary(), $request)
                 ->update([
                     Detail::field_status_transaction() => TransactionType::BersihKotor,
                     Detail::field_status_process() => ProcessType::Bersih
