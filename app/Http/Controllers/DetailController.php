@@ -174,8 +174,14 @@ class DetailController extends MasterController
     }
 
     private function deleteAll($code) {
-        History::whereIn(History::field_name(), $code)->delete();
-        OpnameDetail::whereIn(OpnameDetail::field_rfid(), $code)->delete();
-        Transaksi::whereIn(Transaksi::field_rfid(), $code)->delete();
+        if(is_array($code)){
+            History::whereIn(History::field_name(), $code)->delete();
+            OpnameDetail::whereIn(OpnameDetail::field_rfid(), $code)->delete();
+            Transaksi::whereIn(Transaksi::field_rfid(), $code)->delete();
+        } else {
+            History::where(History::field_name(), $code)->delete();
+            OpnameDetail::where(OpnameDetail::field_rfid(), $code)->delete();
+            Transaksi::where(Transaksi::field_rfid(), $code)->delete();
+        }
     }
 }
