@@ -48,6 +48,8 @@
                 <th>Total Bersih (Pcs)</th>
                 <th>(Kg) Bersih</th>
                 <th>Total Kotor (Pcs)</th>
+                <th>-</th>
+                <th>+</th>
             </tr>
         </thead>
 		<tbody>
@@ -99,6 +101,11 @@
                         @endphp
                         {{ $total_kotor > 0 ? $total_kotor : '0' }}
                     </td>
+                    @php
+                    $selisih = $total_bersih - $total_kotor;
+                    @endphp
+                     <td>{{ $selisih < 0 ? $selisih : '' }}</td>
+                     <td>{{ $selisih > 0 ? $selisih : '' }}</td>
                 </tr>
 			@empty
 			@endforelse

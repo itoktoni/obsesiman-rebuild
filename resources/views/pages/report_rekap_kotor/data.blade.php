@@ -48,6 +48,8 @@
                 <th>Total Kotor (Pcs)</th>
                 <th>(Kg) Kotor</th>
                 <th>Total Bersih (Pcs)</th>
+                <th>-</th>
+                <th>+</th>
             </tr>
         </thead>
 		<tbody>
@@ -101,6 +103,11 @@
                         @endphp
                         {{ $total_bersih > 0 ? $total_bersih : '0' }}
                     </td>
+                    @php
+                    $selisih = $total_bersih - $total_kotor;
+                    @endphp
+                     <td>{{ $selisih < 0 ? $selisih : '' }}</td>
+                     <td>{{ $selisih > 0 ? $selisih : '' }}</td>
                 </tr>
 			@empty
 			@endforelse
@@ -120,6 +127,8 @@
                 <td>{{ $total_belum_register }}</td>
                 <td></td>
                 <td></td>
+                <td></td>
+                <td></td>
             </tr>
             <tr>
                 <td>{{ $total_number + 2 }}</td>
@@ -135,6 +144,8 @@
                 {{ $total_beda_rs }}
                 </td>
                 <td>{{ $total_beda_rs }}</td>
+                <td></td>
+                <td></td>
                 <td></td>
                 <td></td>
             </tr>
