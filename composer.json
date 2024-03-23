@@ -31,6 +31,7 @@
         "mehradsadeghi/laravel-filter-querystring": "^1.1",
         "milon/barcode": "^9.0",
         "opcodesio/log-viewer": "^3.1",
+        "pusher/pusher-php-server": "^7.2",
         "sabre/dav": "^4.6",
         "spatie/laravel-backup": "^8.2",
         "spatie/simple-excel": "^3.2",
