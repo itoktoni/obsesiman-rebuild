@@ -60,9 +60,7 @@ class DetailController extends MasterController
 
     public function getData()
     {
-        $query = self::$repository->dataRepository()
-                //  ->showSql()
-                ;
+        $query = self::$repository->dataRepository();
 
         if($status = request()->get('status')){
             if($status == DetailType::Register){
@@ -175,11 +173,9 @@ class DetailController extends MasterController
 
     private function deleteAll($code) {
         if(is_array($code)){
-            History::whereIn(History::field_name(), $code)->delete();
             OpnameDetail::whereIn(OpnameDetail::field_rfid(), $code)->delete();
             Transaksi::whereIn(Transaksi::field_rfid(), $code)->delete();
         } else {
-            History::where(History::field_name(), $code)->delete();
             OpnameDetail::where(OpnameDetail::field_rfid(), $code)->delete();
             Transaksi::where(Transaksi::field_rfid(), $code)->delete();
         }
