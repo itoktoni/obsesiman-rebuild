@@ -594,7 +594,7 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
 
                 $log[] = [
                     ModelsHistory::field_name() => $rfid,
-                    ModelsHistory::field_status() => $status_baru,
+                    ModelsHistory::field_status() => ProcessType::Grouping,
                     ModelsHistory::field_created_by() => auth()->user()->name,
                     ModelsHistory::field_created_at() => $date,
                     ModelsHistory::field_description() => json_encode($data_transaksi),
