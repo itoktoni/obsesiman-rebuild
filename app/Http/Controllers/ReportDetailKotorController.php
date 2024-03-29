@@ -28,7 +28,7 @@ class ReportDetailKotorController extends MinimalController
     }
 
     private function getQuery($request){
-        return self::$repository->getDetailKotor()->get();
+        return self::$repository->getDetailKotor();
     }
 
     public function getPrint(TransactionReportRequest $request){
