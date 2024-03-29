@@ -62,7 +62,7 @@ class Query
             if (Cache::has('menu')) {
                 $cache = Cache::get('menu');
                 if ($action && !empty($cache)) {
-                    $cache = $cache->where('menu_action', $action)->first();
+                    $cache = $cache->where('menu_code', $action)->first();
                 }
                 return $cache;
             }
