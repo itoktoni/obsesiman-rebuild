@@ -53,7 +53,7 @@
 
 			@php
 			$counter = 0;
-			$data->chunk(1000, function ($item) use($counter) {
+			$data->chunk(1000, function ($item) use(&$counter) {
 			@endphp
 
 
