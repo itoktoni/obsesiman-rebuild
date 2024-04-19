@@ -51,7 +51,7 @@
             $total_berat = 0;
             @endphp
 
-            @forelse($linen as $item)
+            @forelse($linen->sortBy('jenis_nama') as $item)
             @php
             $total_number = $total_number + $loop->iteration;
 

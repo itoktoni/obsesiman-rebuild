@@ -22,8 +22,12 @@ class Dropdown extends Component
     public function mount()
     {
         $this->data_rs = Rs::getOptions()->toArray();
-        $this->data_ruangan = Ruangan::getOptions();
-        $this->data_jenis = Jenis::getOptions();
+        $this->data_ruangan = Ruangan::getOptions(true)
+            ->sortBy(Ruangan::field_name())
+            ->pluck(Ruangan::field_name(), Jenis::field_primary());;
+        $this->data_jenis = Jenis::getOptions(true)
+            ->sortBy(Jenis::field_name())
+            ->pluck(Jenis::field_name(), Jenis::field_primary());
     }
 
     public function render()
@@ -31,8 +35,8 @@ class Dropdown extends Component
         if($this->id_rs){
             $rs_parse = Rs::with(['has_ruangan', 'has_jenis'])->find($this->id_rs);
 
-            $this->data_ruangan = $rs_parse->has_ruangan->pluck(Ruangan::field_name(), Ruangan::field_primary()) ?? [];
-            $this->data_jenis = $rs_parse->has_jenis->pluck(Jenis::field_name(), Jenis::field_primary()) ?? [];
+            $this->data_ruangan = $rs_parse->has_ruangan->sortBy(Ruangan::field_name())->pluck(Ruangan::field_name(), Ruangan::field_primary()) ?? [];
+            $this->data_jenis = $rs_parse->has_jenis->sortBy(Jenis::field_name())->pluck(Jenis::field_name(), Jenis::field_primary()) ?? [];
         }
 
         if($rs_id = request()->get('view_rs_id')){
