@@ -25,6 +25,7 @@ class ReportOpnameDetailController extends MinimalController
     protected function beforeForm(){
 
         $filter = FilterType::getOptions();
+        unset($filter[FilterType::Kotor]);
 
         self::$share = [
             'rs' => Query::getOpnameList(),
