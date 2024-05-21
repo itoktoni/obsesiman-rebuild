@@ -56,8 +56,6 @@ class StopOpname extends Command
                 ->whereIn(OpnameDetail::field_opname(), $pluck)
                 ->get()
                 ->pluck(OpnameDetail::field_rfid(), OpnameDetail::field_rfid());
-
-            History::bulk($rfid, ProcessType::OpnameSelesai, 'Opname selesai');
         }
 
         $this->info('The system has been check successfully!');
