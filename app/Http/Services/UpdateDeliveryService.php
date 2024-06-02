@@ -71,7 +71,7 @@ class UpdateDeliveryService
                         Detail::field_hilang_updated_at() => null,
                     ]);
 
-                History::bulk($data_rfid, ProcessType::Bersih);
+                // History::bulk($data_rfid, ProcessType::Bersih);
             } else {
                 DB::rollBack();
                 return Notes::error('RFID tidak ditemukan!');

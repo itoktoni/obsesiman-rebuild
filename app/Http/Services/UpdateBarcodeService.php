@@ -40,7 +40,7 @@ class UpdateBarcodeService
                 Detail::field_hilang_updated_at() => null,
             ]);
 
-            History::bulk($data, ProcessType::Barcode);
+            //History::bulk($data, ProcessType::Barcode);
             DB::commit();
 
             $return['code'] = $code;
