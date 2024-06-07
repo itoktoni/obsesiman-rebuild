@@ -107,16 +107,19 @@ class TransaksiRepository extends MasterRepository implements CrudInterface
         try {
             if(is_array($request)){
                 $rfid = array_values($request);
+                $data_rfid = Transaksi::whereIn(Transaksi::field_primary(), $rfid)->get()->pluck(Transaksi::field_rfid());
                 Transaksi::destroy(array_values($rfid));
-                Detail::whereIn(Detail::field_primary(), array_values($rfid))
+                Detail::whereIn(Detail::field_primary(), $data_rfid)
                 ->update([
                     Detail::field_status_transaction() => TransactionType::BersihKotor,
                     Detail::field_status_process() => ProcessType::Bersih
                 ]);
 
             } else {
+
+                $data_rfid = Transaksi::where(Transaksi::field_primary(), $request)->first()->field_rfid ?? null;
                 Transaksi::destroy($request);
-                Detail::where(Detail::field_primary(), $request)
+                Detail::where(Detail::field_primary(), $data_rfid)
                 ->update([
                     Detail::field_status_transaction() => TransactionType::BersihKotor,
                     Detail::field_status_process() => ProcessType::Bersih
