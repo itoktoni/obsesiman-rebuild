@@ -2,7 +2,9 @@
 
 namespace App\Http\Services;
 
+use App\Dao\Enums\CetakType;
 use App\Dao\Enums\ProcessType;
+use App\Dao\Models\Cetak;
 use App\Dao\Models\Detail;
 use App\Dao\Models\Transaksi;
 use Illuminate\Support\Facades\DB;
@@ -39,6 +41,18 @@ class UpdateBarcodeService
                 Detail::field_hilang_created_at() => null,
                 Detail::field_hilang_updated_at() => null,
             ]);
+
+            $cetak = Cetak::where(Cetak::field_name(), $code)->first();
+            if(!$cetak){
+                $cetak = Cetak::create([
+                    Cetak::field_date() => date('Y-m-d'),
+                    Cetak::field_name() => $code,
+                    Cetak::field_type() => CetakType::Barcode,
+                    Cetak::field_user() => auth()->user()->name ?? 'Admin',
+                    Cetak::field_rs_id() => $rs ?? null,
+                    Cetak::field_ruangan_id() => $ruangan ?? null,
+                ]);
+            }
 
             //History::bulk($data, ProcessType::Barcode);
             DB::commit();

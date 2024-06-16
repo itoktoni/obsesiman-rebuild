@@ -2,8 +2,10 @@
 
 namespace App\Http\Services;
 
+use App\Dao\Enums\CetakType;
 use App\Dao\Enums\ProcessType;
 use App\Dao\Enums\TransactionType;
+use App\Dao\Models\Cetak;
 use App\Dao\Models\Detail;
 use App\Dao\Models\Transaksi;
 use Illuminate\Support\Carbon;
@@ -75,6 +77,17 @@ class UpdateDeliveryService
             } else {
                 DB::rollBack();
                 return Notes::error('RFID tidak ditemukan!');
+            }
+
+            $cetak = Cetak::where(Cetak::field_name(), $code)->first();
+            if(!$cetak){
+                $cetak = Cetak::create([
+                    Cetak::field_date() => date('Y-m-d'),
+                    Cetak::field_name() => $code,
+                    Cetak::field_type() => CetakType::Delivery,
+                    Cetak::field_user() => auth()->user()->name ?? null,
+                    Cetak::field_rs_id() => request()->get('rs_id') ?? null,
+                ]);
             }
 
             DB::commit();
