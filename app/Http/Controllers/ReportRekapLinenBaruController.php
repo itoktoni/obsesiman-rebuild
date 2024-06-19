@@ -80,7 +80,7 @@ class ReportRekapLinenBaruController extends MinimalController
 
         if ($this->data) {
             $location = $this->data->mapWithKeys(function ($item) {
-                return [$item->view_ruangan_id => strtoupper($item->view_ruangan_nama)];
+                return [$item->view_ruangan_id => $item->view_ruangan_nama];
             })->sort();
 
             $linen = $this->data->mapWithKeys(function ($item) {

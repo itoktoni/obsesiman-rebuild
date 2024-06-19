@@ -86,18 +86,6 @@ class ReportRekapKotorController extends MinimalController
         $kotor = $this->getQueryKotor($request);
         $bersih = $this->getQueryBersih($request);
 
-        // $this->data = $kotor->merge($bersih);
-
-        // if ($this->data) {
-        //     $location = $this->data->mapWithKeys(function ($item) {
-        //         return [$item->view_ruangan_id => strtoupper($item->view_ruangan_nama)];
-        //     })->sort();
-
-        //     $linen = $this->data->mapWithKeys(function ($item) {
-        //         return [$item->view_linen_id => strtoupper($item->view_linen_nama)];
-        //     })->sort();
-        // }
-
         return moduleView(modulePathPrint(), $this->share([
             'data' => $this->data,
             'rs' => $rs,
