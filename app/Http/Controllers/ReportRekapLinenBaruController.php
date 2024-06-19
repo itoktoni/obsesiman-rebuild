@@ -84,7 +84,7 @@ class ReportRekapLinenBaruController extends MinimalController
             })->sort();
 
             $linen = $this->data->mapWithKeys(function ($item) {
-                return [$item->view_linen_id => strtoupper($item->view_linen_nama)];
+                return [$item->view_linen_id => $item->view_linen_nama];
             })->sort();
         }
 
