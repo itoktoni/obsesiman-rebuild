@@ -43,6 +43,10 @@ class ProcessType extends Enum implements LocalizedEnum
             return 'Delivery';
         }
 
+        if ($value === null) {
+            return '';
+        }
+
         return parent::getDescription($value);
     }
 }
