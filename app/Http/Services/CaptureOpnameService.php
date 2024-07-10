@@ -19,6 +19,7 @@ class CaptureOpnameService
 {
     public function save($model)
     {
+        ini_set('max_execution_time', '0');
         $check = false;
         try {
 
@@ -54,22 +55,22 @@ class CaptureOpnameService
                             OpnameDetail::field_hilang() => !empty($item->detail_hilang_at) ? $item->detail_hilang_created_at->format('Y-m-d H:i:s') : null,
                         ];
 
-                        $log[] = [
-                            ModelsHistory::field_name() => $item,
-                            ModelsHistory::field_status() => ProcessType::OpnameCapture,
-                            ModelsHistory::field_created_by() => auth()->user()->name ?? 'System',
-                            ModelsHistory::field_created_at() => $tgl,
-                            ModelsHistory::field_description() => ProcessType::getDescription(ProcessType::OpnameCapture),
-                        ];
+                        // $log[] = [
+                        //     ModelsHistory::field_name() => $item,
+                        //     ModelsHistory::field_status() => ProcessType::OpnameCapture,
+                        //     ModelsHistory::field_created_by() => auth()->user()->name ?? 'System',
+                        //     ModelsHistory::field_created_at() => $tgl,
+                        //     ModelsHistory::field_description() => ProcessType::getDescription(ProcessType::OpnameCapture),
+                        // ];
                     }
 
                     foreach(array_chunk($data, env('TRANSACTION_CHUNK')) as $save_transaksi){
                         OpnameDetail::insert($save_transaksi);
                     }
 
-                    foreach(array_chunk($log, env('TRANSACTION_CHUNK')) as $log_transaksi){
-                        ModelsHistory::insert($log_transaksi);
-                    }
+                    // foreach(array_chunk($log, env('TRANSACTION_CHUNK')) as $log_transaksi){
+                    //     ModelsHistory::insert($log_transaksi);
+                    // }
                 }
 
                 Alert::create();
