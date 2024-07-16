@@ -19,6 +19,7 @@ class CaptureOpnameService
 {
     public function save($model)
     {
+        ini_set('max_execution_time', '0');
         $check = false;
         try {
 
