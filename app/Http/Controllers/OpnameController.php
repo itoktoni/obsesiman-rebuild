@@ -51,6 +51,7 @@ class OpnameController extends MasterController
 
     public function getCapture($code, CaptureOpnameService $service)
     {
+        ini_set('max_execution_time', '0');
         $model = $this->get($code);
         if (!empty($model->opname_capture)) {
             Alert::error('Opname sudah di capture !');

@@ -35,4 +35,8 @@ class MutasiRepository extends MasterRepository implements CrudInterface
 
         return $query;
     }
+
+    private function getBersih(){
+
+    }
 }
