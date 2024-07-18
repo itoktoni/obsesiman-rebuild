@@ -99,7 +99,7 @@
                 @php
                 $kurang = $lebih = null;
 
-                $sisa = $total_tanggal_kotor - $total_tanggal_bersih;
+                $sisa = $total_tanggal_bersih - $total_tanggal_kotor;
 
                 if($sisa < 0){
                     $kurang = $sisa;
