@@ -32,7 +32,6 @@ class ReportRekapBersihController extends MinimalController
     }
 
     private function getQueryBersih($request){
-        // $query = self::$repository->getDetailAllBersih([TransactionType::BersihKotor]);
 
         $query = DB::table('view_rekap_bersih')->where('view_rs_id', $request->rs_id);
 
@@ -48,7 +47,6 @@ class ReportRekapBersihController extends MinimalController
     }
 
     private function getQueryKotor($request){
-        // $query = self::$repository->getDetailAllKotor([TransactionType::Kotor]);
 
         $query = DB::table('view_rekap_kotor')->where('view_rs_id', $request->rs_id);
 

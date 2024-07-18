@@ -22,8 +22,8 @@
         <td></td>
         <td colspan="10">
             <h3>
-                Periode : {{ formatDate(request()->get('start_rekap')) }} -
-                {{ formatDate(request()->get('end_rekap')) }}
+                Periode : {{ formatDate(request()->get('start_date')) }} -
+                {{ formatDate(request()->get('end_date')) }}
             </h3>
         </td>
     </tr>
@@ -34,14 +34,19 @@
         class="table table-bordered table-striped table-responsive-stack">
         <thead>
             <tr>
-                <th style="width: 10px" width="1">No. </th>
-                <th style="width: 250px" width="20">Nama Linen</th>
+                <th rowspan="2" style="width: 10px" width="1">No. </th>
+                <th rowspan="2" style="width: 250px" width="20">Nama Linen</th>
                 @foreach($tanggal as $tgl)
-                <th>{{ formatDate($tgl, 'd') }}</th>
+                <th colspan="4">{{ formatDate($tgl, 'D, d M Y') }}</th>
                 @endforeach
-                <th>QTY</th>
-                <th>Berat (KG)</th>
-                <th>Total (Kg)</th>
+            </tr>
+            <tr>
+                @foreach($tanggal as $tgl)
+                <th>Kotor</th>
+                <th>Bersih</th>
+                <th>-</th>
+                <th>+</th>
+                @endforeach
             </tr>
         </thead>
         <tbody>
@@ -59,7 +64,7 @@
             $nama = $item->jenis_nama;
             $berat = $item->jenis_berat;
 
-            $data_linen = $data->where('view_linen_id', $linen_id);
+            $data_linen = $bersih->where('view_linen_id', $linen_id);
 
             $qty = $data_linen->sum('view_qty');
             $total = $data_linen->sum('view_total');
@@ -69,21 +74,43 @@
                 <td>{{ $loop->iteration }}</td>
                 <td>{{ strtoupper($nama) }}</td>
                 @foreach($tanggal as $tgl)
+
                 <td>
                     @php
-                    $total_tanggal = $data
+                    $total_tanggal_kotor = $kotor
                     ->where('view_tanggal', formatDate($tgl, 'Y-m-d'))
                     ->where('view_linen_id', $linen_id)
                     ->sum('view_qty');
                     @endphp
-                    {{ $total_tanggal > 0 ? $total_tanggal : '0' }}
+                    {{ $total_tanggal_kotor > 0 ? $total_tanggal_kotor : '0' }}
                 </td>
+
+                <td>
+                    @php
+                    $total_tanggal_bersih = $bersih
+                    ->where('view_tanggal', formatDate($tgl, 'Y-m-d'))
+                    ->where('view_linen_id', $linen_id)
+                    ->sum('view_qty');
+                    @endphp
+                    {{ $total_tanggal_bersih > 0 ? $total_tanggal_bersih : '0' }}
+                </td>
+
+                @php
+                $kurang = $lebih = null;
+
+                $sisa = $total_tanggal_kotor - $total_tanggal_bersih;
+
+                if($sisa < 0){
+                    $kurang = $sisa;
+                } else{
+                    $lebih = $sisa;
+                }
+
+                @endphp
+
+                <td>{{ $kurang }}</td>
+                <td>{{ $lebih }}</td>
                 @endforeach
-                <td class="text-right">
-                    {{ $qty ?? 0 }}
-                </td>
-                <td class="text-right">{{ $berat }}</td>
-                <td class="text-right">{{ $total }}</td>
             </tr>
             @empty
             @endforelse
