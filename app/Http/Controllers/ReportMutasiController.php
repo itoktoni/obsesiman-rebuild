@@ -38,11 +38,17 @@ class ReportMutasiController extends MinimalController
         $query = DB::table('view_rekap_bersih')->where('view_rs_id', $request->view_rs_id);
 
         if ($start_date = $request->start_date) {
-            $query = $query->whereDate('view_tanggal', '>=', $start_date);
+            $bersih_from = Carbon::createFromFormat('Y-m-d', $start_date) ?? false;
+            if($bersih_from){
+                $query = $query->where('view_tanggal', '>=', $bersih_from->addDay(1)->format('Y-m-d'));
+            }
         }
 
         if ($end_date = $request->end_date) {
-            $query = $query->whereDate('view_tanggal', '<=', $end_date);
+            $bersih_to = Carbon::createFromFormat('Y-m-d', $end_date) ?? false;
+            if($bersih_to){
+                $query = $query->where('view_tanggal', '<=', $bersih_to->addDay(1)->format('Y-m-d'));
+            }
         }
 
         if ($view_linen_id = $request->view_linen_id) {
@@ -59,14 +65,14 @@ class ReportMutasiController extends MinimalController
         if ($start_date = $request->start_date) {
             $bersih_from = Carbon::createFromFormat('Y-m-d', $start_date) ?? false;
             if($bersih_from){
-                $query = $query->where('view_tanggal', '>=', $bersih_from->addDay(-1)->format('Y-m-d'));
+                $query = $query->where('view_tanggal', '>=', $bersih_from->format('Y-m-d'));
             }
         }
 
         if ($end_date = $request->end_date) {
             $bersih_to = Carbon::createFromFormat('Y-m-d', $end_date) ?? false;
             if($bersih_to){
-                $query = $query->where('view_tanggal', '<=', $bersih_to->addDay(-1)->format('Y-m-d'));
+                $query = $query->where('view_tanggal', '<=', $bersih_to->format('Y-m-d'));
             }
         }
 
