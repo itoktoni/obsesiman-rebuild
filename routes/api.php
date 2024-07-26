@@ -660,6 +660,7 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
             ->where(Cetak::field_rs_id(), $rsid)
             ->where(Cetak::field_type(), CetakType::Barcode)
             ->where(Cetak::field_date(), '>=', now()->addDay(-30))
+            ->orderBy(Cetak::field_date(), 'DESC')
             ->get();
 
         return Notes::data(['total' => $data]);
@@ -672,7 +673,8 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
         $data = Cetak::select([Cetak::field_name()])
             ->where(Cetak::field_rs_id(), $rsid)
             ->where(Cetak::field_type(), CetakType::Delivery)
-            ->where(Cetak::field_date(), '>=', now()->addDay(-30));
+            ->where(Cetak::field_date(), '>=', now()->addDay(-30))
+            ->orderBy(Cetak::field_date(), 'DESC');
 
         if (request()->get('tgl')) {
             $data->where(Cetak::field_date(), '=', request()->get('tgl'));
