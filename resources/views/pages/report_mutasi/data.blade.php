@@ -79,7 +79,7 @@
                     @php
                     $date = clone($tgl);
                     $total_tanggal_kotor = $kotor
-                    ->where('view_tanggal', $date->addDay(-1)->format('Y-m-d'))
+                    ->where('view_tanggal', $date->format('Y-m-d'))
                     ->where('view_linen_id', $linen_id)
                     ->sum('view_qty');
                     @endphp
