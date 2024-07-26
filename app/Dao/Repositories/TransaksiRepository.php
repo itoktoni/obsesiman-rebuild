@@ -99,7 +99,7 @@ class TransaksiRepository extends MasterRepository implements CrudInterface
         ->addSelect(['*'])
         ->leftJoinRelationship(HAS_DETAIL)
         ->leftJoinRelationship(HAS_USER)
-        ->orderBy('view_linen_nama', 'ASC')
+        // ->orderBy('view_linen_nama', 'ASC')
         ->filter();
     }
 

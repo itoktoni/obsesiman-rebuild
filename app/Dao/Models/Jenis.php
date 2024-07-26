@@ -80,6 +80,16 @@ class Jenis extends Model
         return GeneralResource::class;
     }
 
+    // public function jenis_nama($query, $value)
+    // {
+    //     return $query->where($this->field_name(), 'like', '%'.$value.'%');
+    // }
+
+    // public function rs_nama($query, $value)
+    // {
+    //     return $query->where(Rs::field_name(), 'like', '%'.$value.'%');
+    // }
+
     public function has_category()
     {
         return $this->hasOne(Kategori::class, Kategori::field_primary(), self::field_category_id());
