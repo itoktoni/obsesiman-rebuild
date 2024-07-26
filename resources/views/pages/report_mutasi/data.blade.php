@@ -72,7 +72,7 @@
             @endphp
             <tr>
                 <td>{{ $loop->iteration }}</td>
-                <td>{{ strtoupper($nama) }}</td>
+                <td>{{ $nama }}</td>
                 @foreach($tanggal as $tgl)
 
                 <td>
