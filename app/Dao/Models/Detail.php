@@ -67,6 +67,8 @@ class Detail extends Model
         'detail_status_cuci' => 'integer',
         'detail_status_register' => 'integer',
         'detail_status_transaksi' => 'integer',
+        'detail_pending_created_at' => 'date',
+        'detail_hilang_created_at' => 'date',
     ];
 
     protected $filters = [

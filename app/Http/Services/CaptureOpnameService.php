@@ -32,7 +32,15 @@ class CaptureOpnameService
                 $opname = $model;
                 $opname_id = $opname->opname_id;
 
-                $data_rfid = Detail::where(Detail::field_rs_id(), $opname->opname_id_rs)->get();
+                $data_rfid = Detail::select([
+                    'detail_rfid',
+                    'detail_status_transaksi',
+                    'detail_status_proses',
+                    'detail_updated_at',
+                    'detail_pending_created_at',
+                    'detail_hilang_created_at',
+
+                ])->where(Detail::field_rs_id(), $opname->opname_id_rs)->get();
                 $log = [];
                 if($data_rfid){
                     $id = auth()->user()->id;
@@ -51,8 +59,8 @@ class CaptureOpnameService
                             OpnameDetail::field_waktu() => $tgl,
                             OpnameDetail::field_ketemu() => $ketemu,
                             OpnameDetail::field_opname() => $opname_id,
-                            OpnameDetail::field_pending() => !empty($item->detail_pending_at) ? $item->detail_pending_created_at->format('Y-m-d H:i:s') : null,
-                            OpnameDetail::field_hilang() => !empty($item->detail_hilang_at) ? $item->detail_hilang_created_at->format('Y-m-d H:i:s') : null,
+                            OpnameDetail::field_pending() => !empty($item->detail_pending_created_at) ? $item->detail_pending_created_at->format('Y-m-d H:i:s') : null,
+                            OpnameDetail::field_hilang() => !empty($item->detail_hilang_created_at) ? $item->detail_hilang_created_at->format('Y-m-d H:i:s') : null,
                         ];
 
                         // $log[] = [
@@ -64,7 +72,7 @@ class CaptureOpnameService
                         // ];
                     }
 
-                    foreach(array_chunk($data, env('TRANSACTION_CHUNK')) as $save_transaksi){
+                    foreach(array_chunk($data, 100) as $save_transaksi){
                         OpnameDetail::insert($save_transaksi);
                     }
 
