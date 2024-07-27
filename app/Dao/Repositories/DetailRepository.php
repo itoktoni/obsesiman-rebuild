@@ -42,7 +42,7 @@ class DetailRepository extends MasterRepository implements CrudInterface
 
     public function getPrint(){
         $sql = ViewDetailLinen::query()
-            // ->orderBy('view_linen_nama', 'ASC')
+            ->orderBy('view_linen_nama', 'ASC')
             ->filter();
         return $sql;
     }
@@ -51,7 +51,7 @@ class DetailRepository extends MasterRepository implements CrudInterface
         $sql = ViewDetailLinen::query()
         ->addSelect([DB::raw('view_detail_linen.*')])
         ->leftJoinRelationship('has_category')
-        // ->orderBy('view_linen_nama', 'ASC')
+        ->orderBy('view_linen_nama', 'ASC')
         ->filter();
 
         return $sql;
