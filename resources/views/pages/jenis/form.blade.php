@@ -12,8 +12,6 @@
             <x-form-input type="number" col="6" name="jenis_parstok" />
             <x-form-textarea col="6" rows="4" name="jenis_deskripsi" />
 
-            <x-form-upload col="3" name="upload" />
-
             @endbind
 
         </x-form>
