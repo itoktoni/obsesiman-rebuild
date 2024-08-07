@@ -22,7 +22,7 @@ class WebhookController extends Controller
 
         }
         else{
-            Log::error('Kunci deploy tidak sama');
+            Log::error('Kunci deploy tidak sama dengan yang ada di github');
         }
     }
 }
