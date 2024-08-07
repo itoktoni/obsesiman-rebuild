@@ -18,6 +18,7 @@ use App\Http\Controllers\BarcodeController;
 use App\Http\Controllers\DeliveryController;
 use App\Http\Controllers\TransaksiController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\WebhookController;
 use App\Http\Requests\DetailDataRequest;
 use App\Http\Requests\DetailUpdateRequest;
 use App\Http\Requests\OpnameDetailRequest;
@@ -745,5 +746,7 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
         $data = $service->save($request->{Opname::field_primary()}, $request->data);
         return $data;
     });
+
+    Route::post('deploy', [WebhookController::class, 'deploy']);
 
 });
