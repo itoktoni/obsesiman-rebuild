@@ -17,11 +17,11 @@ class Deploy extends Command
     protected $signature = 'app:deploy';
 
     /**
-     * The console command description.
+     * The console deploy with github.
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'deploy with github';
 
     /**
      * Execute the console command.
