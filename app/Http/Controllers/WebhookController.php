@@ -18,8 +18,10 @@ class WebhookController extends Controller
 
         if (hash_equals($githubHash, $localHash)) {
 
-            Artisan::call('app:deploy');
-            Log::info('Deploy Trigger');
+            $branch = env('GITHUB_WEBHOOK_BRANCH');
+            $root_path = base_path();
+            $process = shell_exec("cd {$root_path} && git checkout {$branch} && git pull");
+            Log::info($process);
         }
         else
         {
