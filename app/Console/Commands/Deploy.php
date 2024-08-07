@@ -28,9 +28,16 @@ class Deploy extends Command
      */
     public function handle()
     {
-        $branch = env('GITHUB_WEBHOOK_BRANCH');
-        $root_path = base_path();
-        $process = shell_exec("cd {$root_path} && git checkout {$branch} && git pull");
-        $this->info($process);
+        try {
+
+            $branch = env('GITHUB_WEBHOOK_BRANCH');
+            $root_path = base_path();
+            $process = shell_exec("cd {$root_path} && git checkout {$branch} && git pull");
+            $this->info($process);
+
+        } catch (\Throwable $th) {
+
+            Log::error($th->getMessage());
+        }
     }
 }
