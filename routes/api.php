@@ -52,6 +52,8 @@ use Symfony\Component\Process\Process;
 
 Route::post('login', [UserController::class, 'postLoginApi'])->name('postLoginApi');
 
+Route::post('deploy', [WebhookController::class, 'deploy']);
+
 Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
 
     Route::get('status_register', function () {
@@ -746,7 +748,4 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
         $data = $service->save($request->{Opname::field_primary()}, $request->data);
         return $data;
     });
-
-    Route::post('deploy', [WebhookController::class, 'deploy']);
-
 });
