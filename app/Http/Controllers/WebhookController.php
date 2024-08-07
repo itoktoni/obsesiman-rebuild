@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Log;
 
 class WebhookController extends Controller
 {
@@ -17,6 +18,7 @@ class WebhookController extends Controller
         if (hash_equals($githubHash, $localHash)) {
 
             Artisan::call('app:deploy');
+            Log::info('Deploy Success');
 
         }
     }
