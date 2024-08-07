@@ -35,6 +35,8 @@ class Deploy extends Command
             $process = shell_exec("cd {$root_path} && git checkout {$branch} && git pull");
             $this->info($process);
 
+            Log::info('Deploy Success');
+
         } catch (\Throwable $th) {
 
             Log::error($th->getMessage());

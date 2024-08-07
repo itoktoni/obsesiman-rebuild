@@ -19,7 +19,7 @@ class WebhookController extends Controller
         if (hash_equals($githubHash, $localHash)) {
 
             Artisan::call('app:deploy');
-            Log::info('Deploy Success');
+            Log::info('Deploy Trigger');
         }
         else
         {
