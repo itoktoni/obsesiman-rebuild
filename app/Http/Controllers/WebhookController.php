@@ -15,13 +15,14 @@ class WebhookController extends Controller
         $githubHash = $request->header('X-Hub-Signature');
         $localToken = env('GITHUB_WEBHOOK_SECRET');
         $localHash = 'sha1=' . hash_hmac('sha1', $githubPayload, $localToken, false);
+
         if (hash_equals($githubHash, $localHash)) {
 
             Artisan::call('app:deploy');
             Log::info('Deploy Success');
-
         }
-        else{
+        else
+        {
             Log::error('Kunci deploy tidak sama dengan yang ada di github');
         }
     }
