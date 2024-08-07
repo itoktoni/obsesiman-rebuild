@@ -55,7 +55,7 @@ class ReportHilangLinenController extends MinimalController
             $query = $query->whereDate(ViewDetailLinen::field_hilang_create(), '<=', $end_date);
         }
 
-        return $query->get();
+        return $query->showSql()->get();
     }
 
     public function getPrint(Request $request)

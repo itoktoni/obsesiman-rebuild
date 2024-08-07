@@ -60,7 +60,8 @@ class TransaksiDetailController extends MasterController
             } else if($status == DetailType::Hilang){
                 $query = $query->where(ViewDetailLinen::field_status_process(), ProcessType::Hilang)
                                 ->whereNULL(Transaksi::field_status_bersih())
-                                ->groupBy(ViewDetailLinen::field_primary());
+                                ->groupBy(ViewDetailLinen::field_primary())
+                                ->showSql();
             }
         }
 
