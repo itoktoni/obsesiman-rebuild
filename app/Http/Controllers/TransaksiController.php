@@ -259,13 +259,13 @@ class TransaksiController extends MasterController
                         $transaksi[] = $data_transaksi;
                         $linen[] = (string) $item;
 
-                        $log[] = [
-                            History::field_name() => $item,
-                            History::field_status() => ProcessType::Kotor,
-                            History::field_created_by() => auth()->user()->name,
-                            History::field_created_at() => $date,
-                            History::field_description() => json_encode($data_transaksi),
-                        ];
+                        // $log[] = [
+                        //     History::field_name() => $item,
+                        //     History::field_status() => ProcessType::Kotor,
+                        //     History::field_created_by() => auth()->user()->name,
+                        //     History::field_created_at() => $date,
+                        //     History::field_description() => json_encode($data_transaksi),
+                        // ];
 
                         $return[] = [
                             KEY => $request->key,

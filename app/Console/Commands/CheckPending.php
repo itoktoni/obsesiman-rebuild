@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Dao\Enums\ProcessType;
+use App\Dao\Enums\TransactionType;
 use App\Dao\Models\Detail;
 use App\Dao\Models\Transaksi;
 use App\Dao\Models\ViewDetailLinen;
@@ -57,6 +58,7 @@ class CheckPending extends Command
                 ->whereDate(ViewDetailLinen::field_tanggal_update(), '>=', Carbon::now()->subMinutes(1440)->toDateString())
                 ->whereDate(ViewDetailLinen::field_tanggal_update(), '<', Carbon::now()->toDateString())
                 ->whereNull(Transaksi::field_status_bersih())
+                ->whereNot(ViewDetailLinen::field_status_trasaction(), TransactionType::Register)
                 ->whereNotIn(ViewDetailLinen::field_status_trasaction(), BERSIH)
                 ->where(ViewDetailLinen::field_status_process(), '!=', ProcessType::Pending)
                 ->get();

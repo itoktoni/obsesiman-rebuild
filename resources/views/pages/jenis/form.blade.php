@@ -12,14 +12,6 @@
             <x-form-input type="number" col="6" name="jenis_parstok" />
             <x-form-textarea col="6" rows="4" name="jenis_deskripsi" />
 
-            <x-form-upload col="3" name="upload" />
-
-            @if($model)
-            <div class="col-md-3">
-                <img class="img-fluid" src="{{ $model->field_image_url }}" alt="{{ $model->field_name }}">
-            </div>
-            @endif
-
             @endbind
 
         </x-form>

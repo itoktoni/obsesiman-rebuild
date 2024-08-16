@@ -34,6 +34,7 @@
         "sabre/dav": "^4.6",
         "spatie/laravel-backup": "^8.2",
         "spatie/simple-excel": "^3.2",
+        "symfony/process": "*",
         "touhidurabir/laravel-model-sanitize": "^1.1",
         "wildside/userstamps": "^2.2",
         "wnx/laravel-backup-restore": "^1.0"

@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Dao\Enums\ProcessType;
+use App\Dao\Enums\TransactionType;
 use App\Dao\Models\Detail;
 use App\Dao\Models\Transaksi;
 use App\Dao\Models\ViewDetailLinen;
@@ -55,6 +56,7 @@ class CheckHilang extends Command
                 ->joinRelationship(HAS_DETAIL)
                 ->whereDate(ViewDetailLinen::field_tanggal_update(), '<=', Carbon::now()->subMinutes(4320)->toDateString())
                 ->whereNull(Transaksi::field_status_bersih())
+                ->whereNot(ViewDetailLinen::field_status_trasaction(), TransactionType::Register)
                 ->whereNotIn(ViewDetailLinen::field_status_trasaction(), BERSIH)
                 ->where(ViewDetailLinen::field_status_process(), '!=', ProcessType::Hilang)
                 ->get();
