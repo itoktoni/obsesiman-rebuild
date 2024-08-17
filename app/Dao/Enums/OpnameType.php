@@ -10,7 +10,8 @@ class OpnameType extends Enum implements LocalizedEnum
 {
     use StatusTrait;
 
-    const Proses              =  1;
-    const Selesai              =  2;
+    const Proses                =  1;
+    const Capture               =  3;
+    const Selesai               =  2;
 
 }

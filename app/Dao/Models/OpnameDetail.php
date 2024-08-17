@@ -53,9 +53,12 @@ class OpnameDetail extends Model
         'opname_detail_rfid' => 'string',
         'opname_detail_status' => 'int',
         'opname_detail_transaksi' => 'int',
+        // 'opname_detail_id_opname' => 'int',
         'opname_detail_proses' => 'int',
         'opname_detail_ketemu' => 'int',
         'opname_detail_blm_register' => 'int',
+        // 'opname_detail_created_at' => 'date',
+        // 'opname_detail_updated_at' => 'date',
         'opname_detail_hilang_at' => 'date',
         'opname_detail_pending_at' => 'date',
     ];

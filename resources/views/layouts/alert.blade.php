@@ -9,6 +9,14 @@
             y: 'top',
         },
     });
+
+    var info = new Notyf({
+        dismissible: true,
+        position: {
+            x: 'right',
+            y: 'top',
+        },
+    });
 </script>
 @if ($errors->any())
 <script type="text/javascript">
@@ -31,6 +39,15 @@
 </script>
 @php
 session()->forget('success');
+@endphp
+@endif
+
+@if(session()->has('info') && !request()->ajax())
+<script type="text/javascript">
+    info.success("{{ session()->get('info') }}");
+</script>
+@php
+session()->forget('info');
 @endphp
 @endif
 

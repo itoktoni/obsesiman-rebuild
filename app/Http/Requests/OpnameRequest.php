@@ -38,6 +38,7 @@ class OpnameRequest extends FormRequest
         }
 
         $this->merge([
+            Opname::field_primary() => 1000,
             Opname::field_name() => $nama,
             Opname::field_status() => $status
         ]);
@@ -46,7 +47,7 @@ class OpnameRequest extends FormRequest
     public function withValidator($validator)
     {
         $duplicate = Opname::where(Opname::field_rs_id(), $this->opname_id_rs)
-            ->where(Opname::field_status(), OpnameType::Proses)
+            ->where(Opname::field_status(), OpnameType::Capture)
             ->count();
 
         $status = $this->opname_status != OpnameType::Selesai ? true : false;

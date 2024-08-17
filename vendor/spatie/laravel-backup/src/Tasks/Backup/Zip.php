@@ -17,7 +17,7 @@ class Zip
     public static function createForManifest(Manifest $manifest, string $pathToZip): self
     {
         $relativePath = config('backup.backup.source.files.relative_path') ?
-            rtrim(config('backup.backup.source.files.relative_path'), DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR : false;
+            rtrim(config('backup.backup.source.files.relative_path'), DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR : false;
 
         $zip = new static($pathToZip);
 
@@ -34,16 +34,16 @@ class Zip
 
     protected static function determineNameOfFileInZip(string $pathToFile, string $pathToZip, string $relativePath)
     {
-        $fileDirectory = pathinfo($pathToFile, PATHINFO_DIRNAME) . DIRECTORY_SEPARATOR;
+        $fileDirectory = pathinfo($pathToFile, PATHINFO_DIRNAME).DIRECTORY_SEPARATOR;
 
-        $zipDirectory = pathinfo($pathToZip, PATHINFO_DIRNAME) . DIRECTORY_SEPARATOR;
+        $zipDirectory = pathinfo($pathToZip, PATHINFO_DIRNAME).DIRECTORY_SEPARATOR;
 
         if (Str::startsWith($fileDirectory, $zipDirectory)) {
-            return str_replace($zipDirectory, '', $pathToFile);
+            return substr($pathToFile, strlen($zipDirectory));
         }
 
         if ($relativePath && $relativePath != DIRECTORY_SEPARATOR && Str::startsWith($fileDirectory, $relativePath)) {
-            return str_replace($relativePath, '', $pathToFile);
+            return substr($pathToFile, strlen($relativePath));
         }
 
         return $pathToFile;
@@ -51,7 +51,7 @@ class Zip
 
     public function __construct(string $pathToZip)
     {
-        $this->zipFile = new ZipArchive();
+        $this->zipFile = new ZipArchive;
 
         $this->pathToZip = $pathToZip;
 
@@ -87,7 +87,7 @@ class Zip
         $this->zipFile->close();
     }
 
-    public function add(string | iterable $files, string $nameInZip = null): self
+    public function add(string|iterable $files, ?string $nameInZip = null): self
     {
         if (is_array($files)) {
             $nameInZip = null;
@@ -97,13 +97,24 @@ class Zip
             $files = [$files];
         }
 
+        $compressionMethod = config('backup.backup.destination.compression_method', null);
+        $compressionLevel = config('backup.backup.destination.compression_level', 9);
+
         foreach ($files as $file) {
             if (is_dir($file)) {
                 $this->zipFile->addEmptyDir(ltrim($nameInZip ?: $file, DIRECTORY_SEPARATOR));
             }
 
             if (is_file($file)) {
-                $this->zipFile->addFile($file, ltrim($nameInZip, DIRECTORY_SEPARATOR)).PHP_EOL;
+                $this->zipFile->addFile($file, ltrim($nameInZip, DIRECTORY_SEPARATOR));
+
+                if (is_int($compressionMethod)) {
+                    $this->zipFile->setCompressionName(
+                        ltrim($nameInZip ?: $file, DIRECTORY_SEPARATOR),
+                        $compressionMethod,
+                        $compressionLevel
+                    );
+                }
             }
             $this->fileCount++;
         }

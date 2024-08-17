@@ -12,6 +12,7 @@ class Alert
     const failed = 'gagal';
     const error = 'error';
     const success = 'success';
+    const info = 'info';
     const warning = 'warning';
     const danger = 'danger';
     const primary = 'primary';
@@ -34,5 +35,10 @@ class Alert
     public static function error($data = null)
     {
         session()->put(self::error, env('APP_ENV', 'local') == 'production' ? 'Data Error !' : $data . ' !');
+    }
+
+    public static function info($data = null)
+    {
+        session()->put(self::info, $data ?? 'Data berhasil di ' . self::create . ' !');
     }
 }

@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use App\Dao\Models\SystemPermision;
 use Closure;
+use Coderello\SharedData\Facades\SharedData;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Route;
@@ -115,7 +116,7 @@ class AccessMiddleware
                 'timer' => env('APP_TIMER_ALERT', 5000),
             ]);
 
-            share($data);
+            SharedData::put($data);
         } catch (\Throwable$th) {
             //throw $th;
         }

@@ -12,6 +12,10 @@ return [
 
     'enabled' => env('LOG_VIEWER_ENABLED', true),
 
+    'api_only' => env('LOG_VIEWER_API_ONLY', false),
+
+    'require_auth_in_production' => true,
+
     /*
     |--------------------------------------------------------------------------
     | Log Viewer Domain
@@ -85,6 +89,8 @@ return [
         \Opcodes\LogViewer\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
         \Opcodes\LogViewer\Http\Middleware\AuthorizeLogViewer::class,
     ],
+
+    'api_stateful_domains' => env('LOG_VIEWER_API_STATEFUL_DOMAINS') ? explode(',', env('LOG_VIEWER_API_STATEFUL_DOMAINS')) : null,
 
     /*
     |--------------------------------------------------------------------------
@@ -197,6 +203,19 @@ return [
     */
 
     'cache_driver' => env('LOG_VIEWER_CACHE_DRIVER', null),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Cache key prefix
+    |--------------------------------------------------------------------------
+    | Log Viewer prefixes all the cache keys created with this value. If for
+    | some reason you would like to change this prefix, you can do so here.
+    | The format of Log Viewer cache keys is:
+    | {prefix}:{version}:{rest-of-the-key}
+    |
+    */
+
+    'cache_key_prefix' => 'lv',
 
     /*
     |--------------------------------------------------------------------------
