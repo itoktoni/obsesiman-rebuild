@@ -10,6 +10,8 @@
             <x-form-input col="3" type="date" label="Tanggal Selesai" name="opname_selesai" />
             <x-form-select col="6" class="search" name="opname_status" label="Status" :options="$status" />
             <x-form-textarea col="6" rows="4" label="Keterangan" name="opname_nama" />
+            <input type="hidden" name="queue" value="batch">
+            <livewire:notification />
 
             @endbind
 

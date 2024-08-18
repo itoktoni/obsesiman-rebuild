@@ -39,6 +39,7 @@ return array(
     '4a1f389d6ce373bda9e57857d3b61c84' => $vendorDir . '/barryvdh/laravel-debugbar/src/helpers.php',
     'b8290dd5211a4e535eaa28173e922bbd' => $vendorDir . '/coderello/laravel-shared-data/src/helpers.php',
     '37a3dc5111fe8f707ab4c132ef1dbc62' => $vendorDir . '/guzzlehttp/guzzle/src/functions_include.php',
+    '82522015f6ffc3f5bd2241553bd84d8d' => $vendorDir . '/laravie/serialize-queries/src/helpers.php',
     '40275907c8566c390185147049ef6e5d' => $vendorDir . '/livewire/livewire/src/helpers.php',
     'a4039827aeb3e25109d3583c2ec72c98' => $vendorDir . '/mehradsadeghi/laravel-filter-querystring/helpers/helpers.php',
     'c72349b1fe8d0deeedd3a52e8aa814d8' => $vendorDir . '/mockery/mockery/library/helpers.php',

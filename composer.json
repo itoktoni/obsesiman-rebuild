@@ -26,6 +26,7 @@
         "laravel/telescope": "^4.10",
         "laravel/tinker": "^2.0",
         "laravel/ui": "^3.4",
+        "laravie/serialize-queries": "^2.2",
         "league/flysystem-webdav": "^3.21",
         "livewire/livewire": "^3.0",
         "mehradsadeghi/laravel-filter-querystring": "^1.1",

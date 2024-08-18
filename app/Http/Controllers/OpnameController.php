@@ -2,20 +2,27 @@
 
 namespace App\Http\Controllers;
 
-use App\Dao\Enums\FilterType;
+use App\Dao\Enums\BooleanType;
 use App\Dao\Enums\OpnameType;
+use App\Dao\Enums\ProcessType;
 use App\Dao\Enums\TransactionType;
+use App\Dao\Models\Detail;
 use App\Dao\Models\OpnameDetail;
 use App\Dao\Models\Rs;
 use App\Dao\Repositories\OpnameRepository;
 use App\Http\Requests\OpnameRequest;
 use App\Http\Services\CaptureOpnameService;
-use App\Http\Services\CreateOpnameService;
 use App\Http\Services\CreateService;
 use App\Http\Services\SingleService;
 use App\Http\Services\UpdateService;
+use App\Jobs\StartOpname;
+use Illuminate\Bus\Batch;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Bus;
+use Laravie\SerializesQuery\Eloquent;
 use Plugins\Alert;
 use Plugins\Response;
+use Throwable;
 
 class OpnameController extends MasterController
 {
@@ -25,7 +32,8 @@ class OpnameController extends MasterController
         self::$service = self::$service ?? $service;
     }
 
-    protected function beforeForm(){
+    protected function beforeForm()
+    {
         $rs = Rs::getOptions();
         $status = OpnameType::getOptions();
         $detail = [];
@@ -47,6 +55,18 @@ class OpnameController extends MasterController
     {
         $data = $service->save(self::$repository, $request);
         return Response::redirectBack($data);
+    }
+
+    public function getSelesai($code)
+    {
+        ini_set('max_execution_time', '0');
+        $model = $this->get($code);
+        $model->opname_status = OpnameType::Selesai;
+        $model->save();
+
+        Alert::create('Sukses', 'Opname selesai');
+
+        return Response::redirectBack();
     }
 
     public function getCapture($code, CaptureOpnameService $service)
@@ -76,13 +96,52 @@ class OpnameController extends MasterController
 
         return moduleView(modulePathForm(), $this->share([
             'model' => $model,
-            'detail' => $detail
+            'detail' => $detail,
         ]));
     }
 
-    public function postUpdate($code, OpnameRequest $request, UpdateService $service)
+    public function postUpdate($code, Request $request, UpdateService $service)
     {
         $data = $service->update(self::$repository, $request, $code);
+
+        $opnameId = $data['data']->field_primary;
+        $userId = auth()->user()->id;
+        $mod = $data['data'];
+
+        if ($request->opname_status == OpnameType::Capture && empty($mod->opname_capture))
+        {
+            $mod->opname_capture = date('Y-m-d H:i:s');
+            $mod->save();
+
+            $query = Detail::where(Detail::field_rs_id(), $request->opname_id_rs);
+            $total = $query->count();
+            $chunkSize = 100;
+            $numberOfChunks = ceil($total / $chunkSize);
+
+            $serialize = Eloquent::serialize($query);
+
+            for ($i = 1; $i <= $numberOfChunks; $i++) {
+                $batches[] = new StartOpname($opnameId, $userId, $serialize, $i, $chunkSize);
+            }
+
+            $batch = Bus::batch($batches)->then(function (Batch $batch) {
+
+                Alert::create('Opname Berhasil');
+
+            })
+            ->catch(function (Batch $batch, Throwable $e) {
+
+                Alert::error($e->getMessage());
+
+            })
+            ->dispatch();
+
+            if ($request->queue == 'batch') {
+                $url = moduleRoute('getUpdate', array_merge(['code' => $mod->field_primary, 'batch' => $batch->id]));
+                return redirect()->to($url);
+            }
+        }
+
         return Response::redirectBack($data);
     }
 
@@ -96,7 +155,7 @@ class OpnameController extends MasterController
 
     public function postTable()
     {
-        if(request()->exists('delete') and !empty(request()->get('code'))){
+        if (request()->exists('delete') and !empty(request()->get('code'))) {
             $code = array_unique(request()->get('code'));
             OpnameDetail::whereIn(OpnameDetail::field_opname(), $code)->delete();
             $data = self::$service->delete(self::$repository, $code);

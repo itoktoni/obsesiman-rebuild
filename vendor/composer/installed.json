@@ -3616,6 +3616,73 @@
             "install-path": "../laravel/ui"
         },
         {
+            "name": "laravie/serialize-queries",
+            "version": "v2.2.0",
+            "version_normalized": "2.2.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/laravie/serialize-queries.git",
+                "reference": "caaf7a6a9f9c2d7773088c3e19e3fd9e8cf698b1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/laravie/serialize-queries/zipball/caaf7a6a9f9c2d7773088c3e19e3fd9e8cf698b1",
+                "reference": "caaf7a6a9f9c2d7773088c3e19e3fd9e8cf698b1",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/database": "^8.67 || ^9.44 || ^10.0",
+                "illuminate/queue": "^8.67 || ^9.44 || ^10.0",
+                "php": "^7.3 || ^8.0"
+            },
+            "require-dev": {
+                "orchestra/testbench": "^6.22 || ^7.16 || ^8.0",
+                "phpstan/phpstan": "^1.8"
+            },
+            "time": "2023-01-17T06:54:42+00:00",
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.x-dev"
+                }
+            },
+            "installation-source": "dist",
+            "autoload": {
+                "files": [
+                    "src/helpers.php"
+                ],
+                "psr-4": {
+                    "Laravie\\SerializesQuery\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Mior Muhammad Zaki",
+                    "email": "crynobone@gmail.com"
+                }
+            ],
+            "description": "Serializable Laravel Query Builder",
+            "support": {
+                "issues": "https://github.com/laravie/serialize-queries/issues",
+                "source": "https://github.com/laravie/serialize-queries/tree/v2.2.0"
+            },
+            "funding": [
+                {
+                    "url": "https://paypal.me/crynobone",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://liberapay.com/crynobone",
+                    "type": "liberapay"
+                }
+            ],
+            "install-path": "../laravie/serialize-queries"
+        },
+        {
             "name": "league/commonmark",
             "version": "2.4.1",
             "version_normalized": "2.4.1.0",
