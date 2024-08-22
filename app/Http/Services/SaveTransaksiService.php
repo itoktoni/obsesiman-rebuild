@@ -42,7 +42,7 @@ class SaveTransaksiService
 
             if(!empty($log)){
                 foreach(array_chunk($log, env('TRANSACTION_CHUNK')) as $save_log){
-                    History::insert($save_log);
+                    History::upsert($save_log, [History::field_name()]);
                 }
             }
 

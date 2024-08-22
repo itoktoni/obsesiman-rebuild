@@ -55,7 +55,7 @@ use Sabre\Xml\Reader;
  * Attributes will be removed from the top-level elements. If elements with
  * the same name appear twice in the list, only the last one will be kept.
  */
-function keyValue(Reader $reader, string $namespace = null): array
+function keyValue(Reader $reader, ?string $namespace = null): array
 {
     // If there's no children, we don't do anything.
     if ($reader->isEmptyElement) {
@@ -144,7 +144,7 @@ function keyValue(Reader $reader, string $namespace = null): array
  *
  * @return string[]
  */
-function enum(Reader $reader, string $namespace = null): array
+function enum(Reader $reader, ?string $namespace = null): array
 {
     // If there's no children, we don't do anything.
     if ($reader->isEmptyElement) {
@@ -215,6 +215,9 @@ function valueObject(Reader $reader, string $className, string $namespace)
                 // Ignore property
                 $reader->next();
             }
+        } elseif (Reader::ELEMENT === $reader->nodeType) {
+            // Skipping element from different namespace
+            $reader->next();
         } else {
             if (Reader::END_ELEMENT !== $reader->nodeType && !$reader->read()) {
                 break;

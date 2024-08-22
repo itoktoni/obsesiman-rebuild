@@ -43,8 +43,6 @@ class ReportPendingLinenController extends MinimalController
     private function getQuery($request)
     {
         $query = self::$repository->getPrint()
-            ->addSelect([DB::raw('view_detail_linen.*'), ViewLog::field_status()])
-            ->leftJoinRelationship(HAS_LOG)
             ->where(ViewDetailLinen::field_status_process(), ProcessType::Pending);
 
         if ($start_date = $request->start_pending) {

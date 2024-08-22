@@ -4,6 +4,7 @@ namespace App\Dao\Entities;
 
 use App\Dao\Enums\CuciType;
 use App\Dao\Enums\LinenType;
+use App\Dao\Enums\LogType;
 use App\Dao\Enums\ProcessType;
 use App\Dao\Enums\RegisterType;
 use App\Dao\Enums\TransactionType;
@@ -292,5 +293,20 @@ trait DetailEntity
     public function getFieldCekAttribute()
     {
         return $this->{$this->field_cek()};
+    }
+
+    public static function field_status_history()
+    {
+        return 'detail_status_terakhir';
+    }
+
+    public function getFieldStatusHistoryAttribute()
+    {
+        return $this->{$this->field_status_history()};
+    }
+
+    public function getFieldStatusHistoryNameAttribute()
+    {
+        return LogType::getDescription($this->getFieldStatusHistoryAttribute());
     }
 }

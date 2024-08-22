@@ -93,7 +93,7 @@ class DeliveryController extends MasterController
                 Detail::field_status_process() => ProcessType::Barcode,
             ]);
 
-            PluginsHistory::log($transaksi->field_rfid, ProcessType::DeleteDelivery, 'Data di delete dari barcode ' . $transaksi->field_primary);
+            //PluginsHistory::log($transaksi->field_rfid, ProcessType::DeleteDelivery, 'Data di delete dari barcode ' . $transaksi->field_primary);
             Notes::delete($transaksi->get()->toArray());
             Alert::delete();
 
@@ -128,7 +128,7 @@ class DeliveryController extends MasterController
             ]);
 
             $bulk = $data_rfid->toArray();
-            PluginsHistory::bulk($rfid, ProcessType::DeleteDelivery, $bulk);
+            //PluginsHistory::bulk($rfid, ProcessType::DeleteDelivery, $bulk);
             Notes::delete($bulk);
             Alert::delete();
         }

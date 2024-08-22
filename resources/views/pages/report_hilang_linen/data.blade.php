@@ -63,7 +63,7 @@
 				<td>{{ $table->view_hilang_create ? \Carbon\Carbon::createFromFormat('Y-m-d H:s:i', $table->view_hilang_create)->diff(now())->format('%a') : '0' }} Hari</td>
 				<td>{{ formatDate($table->field_tanggal_update, true) }}</td>
 				<td>{{ TransactionType::getDescription($table->view_status_transaksi) }}</td>
-				<td>{{ $table->view_log_status == null ? 'Scan' : ProcessType::getDescription($table->view_log_status) }}</td>
+				<td>{{ LogType::getDescription($table->view_status_terakhir) }}</td>
 			</tr>
 			@empty
 			@endforelse

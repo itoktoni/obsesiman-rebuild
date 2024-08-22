@@ -10,7 +10,7 @@ trait HistoryEntity
 {
     public static function field_primary()
     {
-        return 'history_id';
+        return 'history_rfid';
     }
 
     public function getFieldPrimaryAttribute()
@@ -45,7 +45,7 @@ trait HistoryEntity
 
     public function getFieldStatusAttribute()
     {
-        return ProcessType::getDescription($this->{$this->field_status()});
+        return $this->{$this->field_status()};
     }
 
     public static function field_created_at()

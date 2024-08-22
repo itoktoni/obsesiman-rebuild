@@ -3,6 +3,7 @@
 namespace App\Http\Services;
 
 use App\Dao\Enums\CetakType;
+use App\Dao\Enums\LogType;
 use App\Dao\Enums\ProcessType;
 use App\Dao\Enums\TransactionType;
 use App\Dao\Models\Cetak;
@@ -65,6 +66,7 @@ class UpdateDeliveryService
                     ->update([
                         Detail::field_status_transaction() => $status_transaksi,
                         Detail::field_status_process() => ProcessType::Bersih,
+                        Detail::field_status_history() => LogType::Bersih,
                         Detail::field_updated_at() => date('Y-m-d H:i:s'),
                         Detail::field_updated_by() => auth()->user()->id,
                         Detail::field_pending_created_at() => null,
@@ -73,7 +75,8 @@ class UpdateDeliveryService
                         Detail::field_hilang_updated_at() => null,
                     ]);
 
-                // History::bulk($data_rfid, ProcessType::Bersih);
+                History::bulk($data_rfid, LogType::Bersih);
+
             } else {
                 DB::rollBack();
                 return Notes::error('RFID tidak ditemukan!');

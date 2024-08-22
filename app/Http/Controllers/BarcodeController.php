@@ -7,6 +7,7 @@ use App\Dao\Enums\ProcessType;
 use App\Dao\Enums\RegisterType;
 use App\Dao\Models\Cetak;
 use App\Dao\Models\Detail;
+use App\Dao\Models\History;
 use App\Dao\Models\Transaksi;
 use App\Dao\Models\ViewBarcode;
 use App\Dao\Models\ViewDetailLinen;
@@ -96,7 +97,7 @@ class BarcodeController extends MasterController
                 Detail::field_status_process() => ProcessType::Grouping,
             ]);
 
-            PluginsHistory::log($transaksi->field_rfid, ProcessType::DeleteBarcode, 'Data di delete dari barcode ' . $transaksi->field_primary);
+            //PluginsHistory::log($transaksi->field_rfid, ProcessType::DeleteBarcode, 'Data di delete dari barcode ' . $transaksi->field_primary);
             Notes::delete($transaksi->get()->toArray());
             Alert::delete();
 

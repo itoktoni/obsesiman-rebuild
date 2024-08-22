@@ -70,7 +70,7 @@
 				<td>{{ $table->opname_detail_transaksi ? TransactionType::getDescription($table->opname_detail_transaksi) : 'Belum Register' }}</td>
 				<td>{{ $table->opname_detail_proses ? ProcessType::getDescription($table->opname_detail_proses) : 'Belum Register' }}</td>
 				<td>{{ empty($table->view_status_cuci) ? '' : CuciType::getDescription($table->view_status_cuci) }}</td>
-				<td>{{ $table->view_transaksi_cuci_total ?? 0 }}</td>
+				<td>{{ $table->view_transaksi_bersih_total ?? 0 }}</td>
 				@if($filter == FilterType::Retur)
 				<td>{{ $table->view_transaksi_retur_total ?? 0 }}</td>
 				@elseif($filter == FilterType::Rewash)

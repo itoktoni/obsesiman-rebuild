@@ -3,6 +3,7 @@
 namespace Opcodes\LogViewer\Logs;
 
 use Opcodes\LogViewer\Exceptions\SkipLineException;
+use Opcodes\LogViewer\Facades\LogViewer;
 use Opcodes\LogViewer\LogLevels\HorizonStatusLevel;
 
 class HorizonLog extends Log
@@ -19,9 +20,9 @@ class HorizonLog extends Log
 
     protected function fillMatches(array $matches = []): void
     {
-        $this->datetime = $this->parseDatetime($matches['datetime'])?->tz(
-            config('log-viewer.timezone', config('app.timezone', 'UTC'))
-        );
+        $datetime = $this->parseDateTime($matches['datetime'] ?? null);
+        $this->datetime = $datetime?->setTimezone(LogViewer::timezone());
+
         $this->level = $matches['level'];
         $this->message = $matches['message'];
         $this->context = array_filter([

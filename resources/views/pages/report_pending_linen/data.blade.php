@@ -61,7 +61,7 @@
 				<td>{{ formatDate($table->field_tanggal_create) }}</td>
 				<td>{{ formatDate($table->view_tanggal_update, true) }}</td>
 				<td>{{ TransactionType::getDescription($table->view_status_transaksi) }}</td>
-				<td>{{ $table->view_log_status == null ? 'Scan' : ProcessType::getDescription($table->view_log_status) }}</td>
+				<td>{{ LogType::getDescription($table->view_status_terakhir) }}</td>
 			</tr>
 			@empty
 			@endforelse

@@ -3,6 +3,7 @@
 use App\Dao\Enums\BooleanType;
 use App\Dao\Enums\CetakType;
 use App\Dao\Enums\CuciType;
+use App\Dao\Enums\LogType;
 use App\Dao\Enums\OpnameType;
 use App\Dao\Enums\ProcessType;
 use App\Dao\Enums\RegisterType;
@@ -263,6 +264,7 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
                         Detail::field_status_transaction() => $transaksi_status,
                         Detail::field_status_register() => $request->status_register ? $request->status_register : RegisterType::Register,
                         Detail::field_status_process() => $proses_status,
+                        Detail::field_status_history() => $transaksi_status,
                         Detail::field_created_at() => date('Y-m-d H:i:s'),
                         Detail::field_updated_at() => date('Y-m-d H:i:s'),
                         Detail::field_created_by() => auth()->user()->id,
@@ -307,18 +309,18 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
                     Transaksi::insert($linen_transaksi);
                 }
 
-                $history = collect($request->rfid)->map(function ($item) use ($request) {
+                $history = collect($request->rfid)->map(function ($item) use ($transaksi_status) {
 
                     return [
                         ModelsHistory::field_name() => $item,
-                        ModelsHistory::field_status() => ProcessType::Register,
+                        ModelsHistory::field_status() => $transaksi_status,
                         ModelsHistory::field_created_by() => auth()->user()->name,
                         ModelsHistory::field_created_at() => date('Y-m-d H:i:s'),
-                        ModelsHistory::field_description() => json_encode([ModelsHistory::field_name() => $item]),
+                        ModelsHistory::field_description() => LogType::getDescription($transaksi_status),
                     ];
                 });
 
-                ModelsHistory::insert($history->toArray());
+                ModelsHistory::upsert($history->toArray(), [ModelsHistory::field_name()]);
                 DB::commit();
 
                 $return = ViewDetailLinen::whereIn(ViewDetailLinen::field_primary(), $request->rfid)
@@ -337,6 +339,7 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
                     Detail::field_status_register() => $request->status_register ? $request->status_register : RegisterType::Register,
                     Detail::field_status_transaction() => $transaksi_status,
                     Detail::field_status_process() => $proses_status,
+                    Detail::field_status_history() => $transaksi_status,
                     Detail::field_created_at() => date('Y-m-d H:i:s'),
                     Detail::field_updated_at() => date('Y-m-d H:i:s'),
                     Detail::field_created_by() => auth()->user()->id,
@@ -369,7 +372,7 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
                     ]);
                 }
 
-                History::log($request->rfid, ProcessType::Register, $request->rfid);
+                History::log($request->rfid, LogType::Register, $request->rfid);
 
                 $view = ViewDetailLinen::findOrFail($request->rfid);
                 $collection = new DetailResource($view);
@@ -476,7 +479,7 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
     Route::post('detail/{rfid}', function ($rfid, DetailUpdateRequest $request) {
         try {
 
-            $data = Detail::with(HAS_VIEW)->findOrFail($rfid);
+            $data = Detail::with([HAS_VIEW])->findOrFail($rfid);
 
             if ($data) {
 
@@ -487,6 +490,7 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
 
                 $data->{Detail::field_updated_at()} = date('Y-m-d H:i:s');
                 $data->{Detail::field_updated_by()} = auth()->user()->id;
+                $data->{Detail::field_status_history()} = $data->field_status_terakhir ?? 0;
 
                 if ($request->status_cuci) {
                     $data->{Detail::field_status_cuci()} = $request->status_cuci;
@@ -497,10 +501,7 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
 
                 $data->save();
 
-                History::log($rfid, ProcessType::UpdateChip, [
-                    'lama' => $lama->toArray(),
-                    'baru' => $data->toArray(),
-                ]);
+                History::log($rfid, LogType::UpdateChip);
             }
 
             $view = ViewDetailLinen::findOrFail($rfid);
@@ -600,7 +601,7 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
                     ModelsHistory::field_status() => ProcessType::Grouping,
                     ModelsHistory::field_created_by() => auth()->user()->name,
                     ModelsHistory::field_created_at() => $date,
-                    ModelsHistory::field_description() => json_encode($data_transaksi),
+                    ModelsHistory::field_description() => ProcessType::getDescription(ProcessType::Grouping),
                 ];
             } else {
                 $log[] = [
@@ -608,7 +609,7 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
                     ModelsHistory::field_status() => ProcessType::Grouping,
                     ModelsHistory::field_created_by() => auth()->user()->name,
                     ModelsHistory::field_created_at() => $date,
-                    ModelsHistory::field_description() => json_encode($linen),
+                    ModelsHistory::field_description() => ProcessType::getDescription(ProcessType::Grouping),
                 ];
             }
 
@@ -619,10 +620,8 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
                 Detail::field_pending_updated_at() => null,
                 Detail::field_hilang_created_at() => null,
                 Detail::field_hilang_updated_at() => null,
+                Detail::field_status_history() => ProcessType::Grouping,
             ]);
-
-            // $update = ViewDetailLinen::with([HAS_CUCI])->findOrFail($rfid);
-            // $collection = new DetailResource($update);
 
             $collection = [
                 'linen_id' => $data->detail_id_jenis,

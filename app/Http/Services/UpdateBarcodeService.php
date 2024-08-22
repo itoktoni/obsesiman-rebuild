@@ -3,6 +3,7 @@
 namespace App\Http\Services;
 
 use App\Dao\Enums\CetakType;
+use App\Dao\Enums\LogType;
 use App\Dao\Enums\ProcessType;
 use App\Dao\Models\Cetak;
 use App\Dao\Models\Detail;
@@ -34,6 +35,7 @@ class UpdateBarcodeService
             ->where(Detail::field_rs_id(), $rs)
             ->update([
                 Detail::field_status_process() => ProcessType::Barcode,
+                Detail::field_status_history() => ProcessType::Barcode,
                 Detail::field_updated_at() => date('Y-m-d H:i:s'),
                 Detail::field_updated_by() => auth()->user()->id,
                 Detail::field_pending_created_at() => null,
@@ -54,7 +56,7 @@ class UpdateBarcodeService
                 ]);
             }
 
-            //History::bulk($data, ProcessType::Barcode);
+            History::bulk($data, LogType::Barcode);
             DB::commit();
 
             $return['code'] = $code;

@@ -4,6 +4,7 @@ namespace App\Dao\Models;
 
 use App\Dao\Builder\DataBuilder;
 use App\Dao\Entities\DetailEntity;
+use App\Dao\Enums\LogType;
 use App\Dao\Enums\ProcessType;
 use App\Dao\Enums\RegisterType;
 use App\Dao\Traits\ActiveTrait;
@@ -35,6 +36,7 @@ class Detail extends Model
         'detail_status_transaksi',
         'detail_status_proses',
         'detail_status_register',
+        'detail_status_terakhir',
         'detail_deskripsi',
         'detail_created_at',
         'detail_updated_at',
@@ -67,6 +69,7 @@ class Detail extends Model
         'detail_status_cuci' => 'integer',
         'detail_status_register' => 'integer',
         'detail_status_transaksi' => 'integer',
+        'detail_status_terakhir' => 'integer',
         'detail_pending_created_at' => 'date',
         'detail_hilang_created_at' => 'date',
     ];
@@ -126,6 +129,7 @@ class Detail extends Model
             DataBuilder::build($this->field_status_cuci())->name('Cuci')->show()->sort(),
             DataBuilder::build($this->field_status_transaction())->name('Transaksi')->show()->sort(),
             DataBuilder::build($this->field_status_process())->name('Posisi Terakhir')->show()->sort(),
+            DataBuilder::build($this->field_status_history())->name('History')->show(false)->sort(),
         ];
     }
 
@@ -176,6 +180,15 @@ class Detail extends Model
 
     public function has_history()
     {
-        return $this->hasMany(HistoryModel::class, HistoryModel::field_name(), self::field_primary());
+        return $this->hasOne(HistoryModel::class, HistoryModel::field_name(), self::field_primary());
+    }
+
+    protected static function booted()
+    {
+        parent::boot();
+
+        self::creating(function($model){
+            $model->detail_status_terakhir = LogType::Register;
+        });
     }
 }

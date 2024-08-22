@@ -5,6 +5,7 @@ namespace BenSampo\Enum\Rector;
 use BenSampo\Enum\Enum;
 use BenSampo\Enum\Tests\Enums\UserType;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Enumerable;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
@@ -16,6 +17,7 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\AssignOp;
 use PhpParser\Node\Expr\AssignRef;
 use PhpParser\Node\Expr\BinaryOp;
+use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
 use PhpParser\Node\Expr\BinaryOp\Coalesce;
 use PhpParser\Node\Expr\BinaryOp\Equal;
 use PhpParser\Node\Expr\BinaryOp\Identical;
@@ -26,6 +28,7 @@ use PhpParser\Node\Expr\CallLike;
 use PhpParser\Node\Expr\Cast;
 use PhpParser\Node\Expr\Cast\String_;
 use PhpParser\Node\Expr\ClassConstFetch;
+use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Match_;
 use PhpParser\Node\Expr\MethodCall;
@@ -183,6 +186,10 @@ CODE_SAMPLE,
                     return $this->refactorGetRandomInstance($node);
                 }
 
+                if ($this->isName($node->name, 'hasValue')) {
+                    return $this->refactorHasValue($node);
+                }
+
                 return $this->refactorMaybeMagicStaticCall($node);
             }
 
@@ -274,7 +281,7 @@ CODE_SAMPLE,
 
                 $enumInstanceMatchesKey = new ArrowFunction([
                     'params' => [new Param($paramVariable, null, $class)],
-                    'returnType' => 'bool',
+                    'returnType' => new Identifier('bool'),
                     'expr' => new Identical(
                         new PropertyFetch($paramVariable, 'name'),
                         $key,
@@ -303,7 +310,7 @@ CODE_SAMPLE,
 
                 return new ArrowFunction([
                     'static' => true,
-                    'params' => [new Param($keyVariable, null, 'string')],
+                    'params' => [new Param($keyVariable, null, new Identifier('string'))],
                     'returnType' => $class,
                     'expr' => $makeFromKey($keyVariable),
                 ]);
@@ -321,9 +328,9 @@ CODE_SAMPLE,
     }
 
     /** @see Enum::getInstances() */
-    protected function refactorGetInstances(StaticCall $node): ?StaticCall
+    protected function refactorGetInstances(StaticCall $call): ?StaticCall
     {
-        $class = $node->class;
+        $class = $call->class;
         if ($class instanceof Name) {
             return new StaticCall($class, 'cases');
         }
@@ -332,11 +339,11 @@ CODE_SAMPLE,
     }
 
     /** @see Enum::getKeys() */
-    protected function refactorGetKeys(StaticCall $node): ?Node
+    protected function refactorGetKeys(StaticCall $call): ?Node
     {
-        $class = $node->class;
+        $class = $call->class;
         if ($class instanceof Name) {
-            $args = $node->args;
+            $args = $call->args;
             if ($args === []) {
                 $paramName = lcfirst($class->getLast());
                 $paramVariable = new Variable($paramName);
@@ -348,7 +355,7 @@ CODE_SAMPLE,
                             new ArrowFunction([
                                 'static' => true,
                                 'params' => [new Param($paramVariable, null, $class)],
-                                'returnType' => 'string',
+                                'returnType' => new Identifier('string'),
                                 'expr' => new PropertyFetch($paramVariable, 'name'),
                             ])
                         ),
@@ -364,11 +371,11 @@ CODE_SAMPLE,
     }
 
     /** @see Enum::getValues() */
-    protected function refactorGetValues(StaticCall $node): ?Node
+    protected function refactorGetValues(StaticCall $call): ?Node
     {
-        $class = $node->class;
+        $class = $call->class;
         if ($class instanceof Name) {
-            $args = $node->args;
+            $args = $call->args;
             if ($args === []) {
                 $paramName = lcfirst($class->getLast());
                 $paramVariable = new Variable($paramName);
@@ -395,27 +402,145 @@ CODE_SAMPLE,
     }
 
     /** @see Enum::getRandomInstance() */
-    protected function refactorGetRandomInstance(StaticCall $staticCall): ?Node
+    protected function refactorGetRandomInstance(StaticCall $call): ?Node
     {
         return new MethodCall(
             new FuncCall(new Name('fake')),
             'randomElement',
-            [new Arg(new StaticCall($staticCall->class, 'cases'))]
+            [new Arg(new StaticCall($call->class, 'cases'))]
         );
+    }
+
+    /** @see Enum::hasValue() */
+    protected function refactorHasValue(StaticCall $call): ?Node
+    {
+        $class = $call->class;
+        if ($class instanceof Name) {
+            $makeTryFromNotNull = function (Arg $arg) use ($class): NotIdentical {
+                $tryFrom = new StaticCall(
+                    $class,
+                    'tryFrom',
+                    [$arg]
+                );
+                $null = new ConstFetch(new Name('null'));
+
+                return new NotIdentical($tryFrom, $null);
+            };
+
+            if ($call->isFirstClassCallable()) {
+                $valueVariable = new Variable('value');
+                $valueVariableArg = new Arg($valueVariable);
+
+                $tryFromNotNull = $makeTryFromNotNull($valueVariableArg);
+
+                $enumScalarType = $this->enumScalarTypeFromClassName($class);
+                if ($enumScalarType === 'int') {
+                    $expr = new BooleanAnd(
+                        new FuncCall(new Name('is_int'), [$valueVariableArg]),
+                        $tryFromNotNull
+                    );
+                } elseif ($enumScalarType === 'string') {
+                    $expr = new BooleanAnd(
+                        new FuncCall(new Name('is_string'), [$valueVariableArg]),
+                        $tryFromNotNull
+                    );
+                } else {
+                    $expr = $tryFromNotNull;
+                }
+
+                return new ArrowFunction([
+                    'static' => true,
+                    'params' => [new Param($valueVariable, null, new Identifier('mixed'))],
+                    'returnType' => new Identifier('bool'),
+                    'expr' => $expr,
+                ]);
+            }
+
+            $args = $call->args;
+            $firstArg = $args[0] ?? null;
+            if ($firstArg instanceof Arg) {
+                $firstArgValue = $firstArg->value;
+
+                if (
+                    $firstArgValue instanceof ClassConstFetch
+                    && $firstArgValue->class->toString() === $class->toString()
+                ) {
+                    return new ConstFetch(new Name('true'));
+                }
+
+                $firstArgType = $this->getType($firstArgValue);
+
+                $enumScalarType = $this->enumScalarTypeFromClassName($class);
+                if ($enumScalarType === 'int') {
+                    $firstArgTypeIsInt = $firstArgType->isInteger();
+                    if ($firstArgTypeIsInt->yes()) {
+                        return $makeTryFromNotNull($firstArg);
+                    }
+
+                    if ($firstArgTypeIsInt->no()) {
+                        return new ConstFetch(new Name('false'));
+                    }
+
+                    return new BooleanAnd(
+                        new FuncCall(new Name('is_int'), [$firstArg]),
+                        $makeTryFromNotNull($firstArg)
+                    );
+                }
+                if ($enumScalarType === 'string') {
+                    $firstArgTypeIsString = $firstArgType->isString();
+                    if ($firstArgTypeIsString->yes()) {
+                        return $makeTryFromNotNull($firstArg);
+                    }
+
+                    if ($firstArgTypeIsString->no()) {
+                        return new ConstFetch(new Name('false'));
+                    }
+
+                    return new BooleanAnd(
+                        new FuncCall(new Name('is_string'), [$firstArg]),
+                        $makeTryFromNotNull($firstArg)
+                    );
+                }
+
+                return $makeTryFromNotNull($firstArg);
+            }
+        }
+
+        return null;
+    }
+
+    protected function enumScalarTypeFromClassName(Name $class): ?string
+    {
+        $type = $this->getType($class);
+        if (! $type instanceof FullyQualifiedObjectType) {
+            return null;
+        }
+
+        $classReflection = $type->getClassReflection();
+        if (! $classReflection) {
+            return null;
+        }
+
+        $nativeReflection = $classReflection->getNativeReflection();
+        if (! $nativeReflection instanceof \ReflectionClass) {
+            return null;
+        }
+
+        return $this->enumScalarType($nativeReflection->getConstants());
     }
 
     /**
      * @see Enum::__callStatic()
      * @see Enum::__call()
      */
-    protected function refactorMaybeMagicStaticCall(StaticCall $node): ?Node
+    protected function refactorMaybeMagicStaticCall(StaticCall $call): ?Node
     {
-        $name = $node->name;
+        $name = $call->name;
         if ($name instanceof Expr) {
             return null;
         }
 
-        $class = $node->class;
+        $class = $call->class;
         if ($class instanceof Name) {
             if ($class->isSpecialClassName()) {
                 $type = $this->getType($class);
@@ -441,14 +566,16 @@ CODE_SAMPLE,
      */
     protected function refactorIsOrIsNot(MethodCall|NullsafeMethodCall $call, bool $is): ?Node
     {
-        $comparison = $is ? Identical::class : NotIdentical::class;
+        $comparison = $is
+            ? Identical::class
+            : NotIdentical::class;
 
         if ($call->isFirstClassCallable()) {
             $param = new Variable('value');
 
             return new ArrowFunction([
-                'params' => [new Param($param, null, 'mixed')],
-                'returnType' => 'bool',
+                'params' => [new Param($param, null, new Identifier('mixed'))],
+                'returnType' => new Identifier('bool'),
                 'expr' => new $comparison($call->var, $param, [self::COMPARED_AGAINST_ENUM_INSTANCE => true]),
             ]);
         }
@@ -473,23 +600,42 @@ CODE_SAMPLE,
      * @see Enum::in()
      * @see Enum::notIn()
      */
-    protected function refactorInOrNotIn(MethodCall|NullsafeMethodCall $node, bool $in): ?Node
+    protected function refactorInOrNotIn(MethodCall|NullsafeMethodCall $call, bool $in): ?Node
     {
-        $args = $node->args;
+        $args = $call->args;
         if (isset($args[0]) && $args[0] instanceof Arg) {
-            $needle = new Arg($node->var);
-            $haystack = $args[0];
+            $enumArg = new Arg($call->var);
+            $valuesArg = $args[0];
 
-            $haystackValue = $haystack->value;
-            if ($haystackValue instanceof Array_) {
-                foreach ($haystackValue->items as $item) {
-                    $item?->setAttribute(self::COMPARED_AGAINST_ENUM_INSTANCE, true);
+            $valuesValue = $valuesArg->value;
+            if ($valuesValue instanceof Array_) {
+                foreach ($valuesValue->items as $item) {
+                    $item->setAttribute(self::COMPARED_AGAINST_ENUM_INSTANCE, true);
                 }
             }
 
+            if ($this->isObjectType($valuesValue, new ObjectType(Enumerable::class))) {
+                return new MethodCall(
+                    $valuesValue,
+                    new Identifier($in
+                        ? 'contains'
+                        : 'doesntContain'),
+                    [$enumArg],
+                );
+            }
+
+            $haystackArg = $this->getType($valuesValue)->isArray()->yes()
+                ? $valuesArg
+                : new Arg(
+                    new FuncCall(
+                        new Name('iterator_to_array'),
+                        [$valuesArg],
+                    ),
+                );
+
             $inArray = new FuncCall(
                 new Name('in_array'),
-                [$needle, $haystack],
+                [$enumArg, $haystackArg],
                 [self::COMPARED_AGAINST_ENUM_INSTANCE => true],
             );
 
@@ -502,17 +648,17 @@ CODE_SAMPLE,
     }
 
     /** @see Enum::__toString() */
-    protected function refactorMagicToString(MethodCall|NullsafeMethodCall $node): Cast
+    protected function refactorMagicToString(MethodCall|NullsafeMethodCall $call): Cast
     {
         return new String_(
-            $this->createValueFetch($node->var, $node instanceof NullsafeMethodCall)
+            $this->createValueFetch($call->var, $call instanceof NullsafeMethodCall)
         );
     }
 
     /** @see Enum::$key */
-    protected function refactorKey(PropertyFetch $node): ?Node
+    protected function refactorKey(PropertyFetch $fetch): ?Node
     {
-        return new PropertyFetch($node->var, 'name');
+        return new PropertyFetch($fetch->var, 'name');
     }
 
     protected function refactorMatch(Match_ $match): ?Node
@@ -611,13 +757,13 @@ CODE_SAMPLE,
         return new Switch_($cond, $cases, $switch->getAttributes());
     }
 
-    protected function refactorArrayItem(ArrayItem $node): ?Node
+    protected function refactorArrayItem(ArrayItem $arrayItem): ?Node
     {
-        $key = $node->key;
+        $key = $arrayItem->key;
         $convertedKey = $this->convertConstToValueFetch($key);
 
-        $value = $node->value;
-        $hasAttribute = $node->hasAttribute(self::COMPARED_AGAINST_ENUM_INSTANCE);
+        $value = $arrayItem->value;
+        $hasAttribute = $arrayItem->hasAttribute(self::COMPARED_AGAINST_ENUM_INSTANCE);
         $convertedValue = $hasAttribute
             ? null
             : $this->convertConstToValueFetch($value);
@@ -626,9 +772,9 @@ CODE_SAMPLE,
             return new ArrayItem(
                 $convertedValue ?? $value,
                 $convertedKey ?? $key,
-                $node->byRef,
-                $node->getAttributes(),
-                $node->unpack,
+                $arrayItem->byRef,
+                $arrayItem->getAttributes(),
+                $arrayItem->unpack,
             );
         }
 

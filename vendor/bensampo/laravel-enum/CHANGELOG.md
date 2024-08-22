@@ -7,6 +7,36 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## 6.11.1
+
+### Fixed
+
+- Fix conversion of `in()` and `notIn()` to native enums when called with non-arrays
+
+## 6.11.0
+
+### Added
+
+- Support Laravel 11
+
+## 6.10.0
+
+### Added
+
+- Allow Allow installation alongside PHPUnit 11
+
+## 6.9.1
+
+### Fixed
+
+- Check if value is `int` or `string` in conversion of `Enum::hasValue()` to native enum
+
+## 6.9.0
+
+### Added
+
+- Add conversion of `Enum::hasValue()` to native enum
+
 ## 6.8.0
 
 ### Changed

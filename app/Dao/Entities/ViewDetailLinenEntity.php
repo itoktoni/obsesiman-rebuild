@@ -3,6 +3,7 @@
 namespace App\Dao\Entities;
 
 use App\Dao\Enums\CuciType;
+use App\Dao\Enums\LogType;
 use App\Dao\Enums\ProcessType;
 use App\Dao\Enums\RegisterType;
 use App\Dao\Enums\TransactionType;
@@ -121,7 +122,7 @@ trait ViewDetailLinenEntity
 
     public function getFieldStatusTransactionNameAttribute()
     {
-        return TransactionType::getDescription($this->getFieldStatusTransactionAttribute());
+        return TransactionType::getDescription($this->{$this->field_status_trasaction()});
     }
 
     public static function field_status_process()
@@ -136,7 +137,7 @@ trait ViewDetailLinenEntity
 
     public function getFieldStatusProcessNameAttribute()
     {
-        return ProcessType::getDescription($this->getFieldStatusProcessAttribute());
+        return ProcessType::getDescription($this->{$this->field_status_process()});
     }
 
     public static function field_tanggal_update()
@@ -318,4 +319,30 @@ trait ViewDetailLinenEntity
     {
         return $this->{$this->field_rewash()};
     }
+
+    public static function field_status_terakhir()
+    {
+        return 'view_status_terakhir';
+    }
+
+    public function getFieldStatusTerakhirAttribute()
+    {
+        return $this->{$this->field_status_terakhir()};
+    }
+
+    public function getFieldStatusTerakhirNameAttribute()
+    {
+        return LogType::getDescription($this->{$this->field_status_terakhir()});
+    }
+
+    public static function field_tanggal_terakhir()
+    {
+        return 'view_tanggal_terakhir';
+    }
+
+    public function getFieldTanggalTerakhirAttribute()
+    {
+        return $this->{$this->field_tanggal_terakhir()};
+    }
+
 }

@@ -19,10 +19,22 @@ class LogViewerService
     public static string $logFileClass = LogFile::class;
     public static string $logReaderClass = IndexedLogReader::class;
     protected ?Collection $_cachedFiles = null;
+    protected string $_cachedTimezone;
     protected mixed $authCallback;
     protected int $maxLogSizeToDisplay = self::DEFAULT_MAX_LOG_SIZE_TO_DISPLAY;
     protected mixed $hostsResolver;
     protected string $layout = 'log-viewer::index';
+
+    public function timezone(): string
+    {
+        if (! isset($this->_cachedTimezone)) {
+            $this->_cachedTimezone = config('log-viewer.timezone')
+                ?? config('app.timezone')
+                ?? 'UTC';
+        }
+
+        return $this->_cachedTimezone;
+    }
 
     protected function getLaravelLogFilePaths(): array
     {
@@ -217,6 +229,11 @@ class LogViewerService
         } elseif (! is_null($callback) && is_callable($callback)) {
             $this->authCallback = $callback;
         }
+    }
+
+    public function hasAuthCallback(): bool
+    {
+        return isset($this->authCallback);
     }
 
     public function lazyScanChunkSize(): int

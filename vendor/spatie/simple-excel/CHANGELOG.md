@@ -2,6 +2,42 @@
 
 All notable changes to `simple-excel` will be documented in this file
 
+## 3.5.0 - 2024-04-03
+
+### What's Changed
+
+* Add useEncoding to SimpleExcelReader by @aminevg in https://github.com/spatie/simple-excel/pull/167
+
+### New Contributors
+
+* @aminevg made their first contribution in https://github.com/spatie/simple-excel/pull/167
+
+**Full Changelog**: https://github.com/spatie/simple-excel/compare/3.4.0...3.5.0
+
+## 3.4.0 - 2024-03-04
+
+### What's Changed
+
+* Laravel 11.x Compatibility by @laravel-shift in https://github.com/spatie/simple-excel/pull/164
+
+### New Contributors
+
+* @laravel-shift made their first contribution in https://github.com/spatie/simple-excel/pull/164
+
+**Full Changelog**: https://github.com/spatie/simple-excel/compare/3.3.0...3.4.0
+
+## 3.3.0 - 2023-12-05
+
+### What's Changed
+
+* Add the option to check if a sheet exists by name by @pascallieverse in https://github.com/spatie/simple-excel/pull/158
+
+### New Contributors
+
+* @pascallieverse made their first contribution in https://github.com/spatie/simple-excel/pull/158
+
+**Full Changelog**: https://github.com/spatie/simple-excel/compare/3.2.1...3.3.0
+
 ## 3.2.1 - 2023-11-09
 
 ### What's Changed

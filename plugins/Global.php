@@ -32,6 +32,7 @@ define('HAS_REWASH', 'has_rewash');
 define('HAS_USER', 'has_user');
 define('HAS_VIEW', 'has_view');
 define('HAS_LOG', 'has_log');
+define('HAS_HISTORY', 'has_history');
 
 define('UPLOAD', 'upload');
 define('KEY', 'key');

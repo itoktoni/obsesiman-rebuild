@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Dao\Enums\ProcessType;
 use App\Dao\Enums\TransactionType;
 use App\Dao\Models\Detail;
+use App\Dao\Models\History as ModelsHistory;
 use App\Dao\Models\Transaksi;
 use App\Dao\Models\ViewDetailLinen;
 use Illuminate\Console\Command;
@@ -52,7 +53,7 @@ class CheckHilang extends Command
         //     ->get();
 
             $outstanding = Transaksi::query()
-                ->select(Transaksi::field_rfid())
+                ->select(Transaksi::field_rfid(), ViewDetailLinen::field_status_register())
                 ->joinRelationship(HAS_DETAIL)
                 ->whereDate(ViewDetailLinen::field_tanggal_update(), '<=', Carbon::now()->subMinutes(4320)->toDateString())
                 ->whereNull(Transaksi::field_status_bersih())
@@ -63,16 +64,16 @@ class CheckHilang extends Command
 
         if ($outstanding) {
 
-            $rfid = $outstanding->pluck(Transaksi::field_rfid());
-
-            History::bulk($rfid, ProcessType::Pending, 'RFID Hilang');
-            Detail::whereIn(Detail::field_primary(), $rfid)->update([
-                Detail::field_pending_created_at() => null,
-                Detail::field_pending_updated_at() => null,
-                Detail::field_status_process() => ProcessType::Hilang,
-                Detail::field_hilang_updated_at() => date('Y-m-d H:i:s'),
-                Detail::field_hilang_created_at() => date('Y-m-d H:i:s'),
-            ]);
+            foreach($outstanding as $detail){
+                Detail::where(Detail::field_primary(), $detail->transaksi_rfid)->update([
+                    Detail::field_pending_created_at() => null,
+                    Detail::field_pending_updated_at() => null,
+                    Detail::field_status_history() => $detail->view_status_terakhir,
+                    Detail::field_status_process() => ProcessType::Hilang,
+                    Detail::field_hilang_updated_at() => date('Y-m-d H:i:s'),
+                    Detail::field_hilang_created_at() => date('Y-m-d H:i:s'),
+                ]);
+            }
         }
 
         $this->info('The system has been check successfully!');

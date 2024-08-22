@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Dao\Enums\ProcessType;
 use App\Dao\Enums\TransactionType;
 use App\Dao\Models\Detail;
+use App\Dao\Models\History;
 use App\Dao\Models\Transaksi;
 use App\Dao\Models\ViewDetailLinen;
 use Illuminate\Console\Command;
@@ -53,7 +54,7 @@ class CheckPending extends Command
         //     ->get();
 
             $outstanding = Transaksi::query()
-                ->select(Transaksi::field_rfid())
+                ->select(Transaksi::field_rfid(), ViewDetailLinen::field_status_terakhir())
                 ->joinRelationship(HAS_DETAIL)
                 ->whereDate(ViewDetailLinen::field_tanggal_update(), '>=', Carbon::now()->subMinutes(1440)->toDateString())
                 ->whereDate(ViewDetailLinen::field_tanggal_update(), '<', Carbon::now()->toDateString())
@@ -65,15 +66,14 @@ class CheckPending extends Command
 
         if ($outstanding) {
 
-            $rfid = $outstanding->pluck(Transaksi::field_rfid());
-
-            PluginsHistory::bulk($rfid, ProcessType::Pending, 'RFID Pending');
-            Detail::whereIn(Detail::field_primary(), $rfid)->update([
-                Detail::field_status_process() => ProcessType::Pending,
-                // Detail::field_updated_at() => date('Y-m-d H:i:s'),
-                Detail::field_pending_created_at() => date('Y-m-d H:i:s'),
-                Detail::field_pending_updated_at() => date('Y-m-d H:i:s'),
-            ]);
+            foreach($outstanding as $detail){
+                Detail::where(Detail::field_primary(), $detail->transaksi_rfid)->update([
+                    Detail::field_status_process() => ProcessType::Pending,
+                    Detail::field_status_history() => $detail->view_status_terakhir,
+                    Detail::field_pending_created_at() => date('Y-m-d H:i:s'),
+                    Detail::field_pending_updated_at() => date('Y-m-d H:i:s'),
+                ]);
+            }
         }
 
         $this->info('The system has been check successfully!');

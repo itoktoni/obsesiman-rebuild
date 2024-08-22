@@ -66,8 +66,8 @@
 				<td>{{ $table->field_bersih ?? 0 }}</td>
 				<td>{{ $table->field_retur ?? 0 }}</td>
 				<td>{{ $table->field_rewash ?? 0 }}</td>
-				<td>{{ $table->field_status_process_name }}</td>
-				<td>{{ formatDate($table->field_tanggal_update) }}</td>
+				<td>{{ $table->field_status_terakhir_name }}</td>
+				<td>{{ formatDate($table->field_tanggal_terakhir) }}</td>
 				<td>{{ $table->field_updated_name }}</td>
 				<td>{{ $table->field_status_register_name }}</td>
 				<td>{{ formatDate($table->field_tanggal_create) }}</td>

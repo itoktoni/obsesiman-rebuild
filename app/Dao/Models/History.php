@@ -20,10 +20,9 @@ class History extends Model
     use Sortable, FilterQueryString, Sanitizable, DataTableTrait, HistoryEntity, ActiveTrait, OptionTrait, PowerJoins, ApiTrait;
 
     protected $table = 'history';
-    protected $primaryKey = 'history_id';
+    protected $primaryKey = 'history_rfid';
 
     protected $fillable = [
-        'history_id',
         'history_rfid',
         'history_waktu',
         'history_user',
@@ -44,10 +43,13 @@ class History extends Model
         'history_status',
     ];
 
-    public $timestamps = false;
-    public $incrementing = true;
+    protected $keyType = 'string';
 
-    public function fieldSearching(){
+    public $timestamps = false;
+    public $incrementing = false;
+
+    public function fieldSearching()
+    {
         return $this->field_name();
     }
 

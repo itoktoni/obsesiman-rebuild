@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Dao\Enums\BedaRsType;
 use App\Dao\Enums\BooleanType;
+use App\Dao\Enums\LogType;
 use App\Dao\Enums\ProcessType;
 use App\Dao\Enums\SyncType;
 use App\Dao\Enums\TransactionType;
@@ -21,6 +22,7 @@ use App\Http\Services\CreateService;
 use App\Http\Services\SaveTransaksiService;
 use App\Http\Services\SingleService;
 use App\Http\Services\UpdateService;
+use App\Jobs\JobLogAndUpdateDetail;
 use Illuminate\Support\Facades\DB;
 use Plugins\Alert;
 use Plugins\History as PluginsHistory;
@@ -235,6 +237,7 @@ class TransaksiController extends MasterController
             foreach ($rfid as $item) {
                 $date = date('Y-m-d H:i:s');
                 $user = auth()->user()->id;
+                $name = auth()->user()->name;
 
                 if (isset($data[$item])) {
                     $detail = $data[$item];
@@ -258,14 +261,6 @@ class TransaksiController extends MasterController
 
                         $transaksi[] = $data_transaksi;
                         $linen[] = (string) $item;
-
-                        // $log[] = [
-                        //     History::field_name() => $item,
-                        //     History::field_status() => ProcessType::Kotor,
-                        //     History::field_created_by() => auth()->user()->name,
-                        //     History::field_created_at() => $date,
-                        //     History::field_description() => json_encode($data_transaksi),
-                        // ];
 
                         $return[] = [
                             KEY => $request->key,
@@ -334,16 +329,23 @@ class TransaksiController extends MasterController
                     Detail::whereIn(Detail::field_primary(), $save_detail)
                         ->update([
                             Detail::field_status_transaction() => $status_transaksi,
+                            Detail::field_status_history() => $status_transaksi,
                             Detail::field_status_process() => $status_process,
                             Detail::field_updated_at() => date('Y-m-d H:i:s'),
-                            Detail::field_updated_by() => auth()->user()->id,
+                            Detail::field_updated_by() => $user,
                         ]);
                 }
             }
 
-            if (!empty($log)) {
-                foreach (array_chunk($log, env('TRANSACTION_CHUNK')) as $save_log) {
-                    History::insert($save_log);
+            if (!empty($linen)) {
+                foreach (array_chunk($linen, env('TRANSACTION_CHUNK')) as $save_linen) {
+                    History::whereIn(History::field_primary(), $save_linen)
+                        ->update([
+                            History::field_status() => $status_transaksi,
+                            History::field_description() => LogType::getDescription($status_transaksi),
+                            History::field_created_at() => date('Y-m-d H:i:s'),
+                            History::field_created_by() => $name,
+                        ]);
                 }
             }
 
@@ -360,6 +362,8 @@ class TransaksiController extends MasterController
         cleansing duplicate rfid
         ketika rfid dibalikin
         */
+
+        // dispatch(new JobLogAndUpdateDetail($request->key, $status_transaksi, $status_process));
 
         $preventif = collect($return);
         if($preventif->where('status_sync', '!=', 0)->count() == 0){

@@ -11,6 +11,7 @@ use App\Dao\Enums\StatusType;
 use App\Dao\Enums\StockType;
 use App\Dao\Enums\TransactionType;
 use App\Dao\Enums\FilterType;
+use App\Dao\Enums\LogType;
 use App\Dao\Enums\UserLevel;
 use App\Dao\Models\Transaksi;
 use App\Providers\CacheableAuthUserServiceProvider;
@@ -266,6 +267,7 @@ return [
         'BedaRsType' => BedaRsType::class,
         'CuciType' => CuciType::class,
         'MenuType' => MenuType::class,
+        'LogType' => LogType::class,
         'UserLevel' => UserLevel::class,
         'SharedData' => SharedData::class,
         'Query' => Query::class,
