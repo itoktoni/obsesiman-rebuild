@@ -53,7 +53,7 @@ class CheckHilang extends Command
         //     ->get();
 
             $outstanding = Transaksi::query()
-                ->select(Transaksi::field_rfid(), ViewDetailLinen::field_status_register())
+                ->select(Transaksi::field_rfid(), ViewDetailLinen::field_status_terakhir())
                 ->joinRelationship(HAS_DETAIL)
                 ->whereDate(ViewDetailLinen::field_tanggal_update(), '<=', Carbon::now()->subMinutes(4320)->toDateString())
                 ->whereNull(Transaksi::field_status_bersih())
