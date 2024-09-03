@@ -159,7 +159,13 @@ class BarcodeController extends MasterController
 
     public function print($code){
 
-        $total = Transaksi::where(Transaksi::field_barcode(), $code)
+        $total = Transaksi::select([
+            'transaksi_rs_ori',
+            'view_ruangan_id',
+            'view_linen_id',
+            'view_linen_nama',
+        ])
+        ->where(Transaksi::field_barcode(), $code)
         ->join((new ViewDetailLinen())->getTable(), ViewDetailLinen::field_primary(), Transaksi::field_rfid())
         ->get();
 

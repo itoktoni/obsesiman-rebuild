@@ -10,6 +10,7 @@ use Plugins\Query;
 use ProtoneMedia\LaravelFormComponents\Components\Form;
 use ProtoneMedia\LaravelFormComponents\Components\FormInput;
 use ProtoneMedia\LaravelFormComponents\Components\FormSelect;
+use Laravel\Sanctum\Sanctum;
 
 class AppServiceProvider extends ServiceProvider
 {
