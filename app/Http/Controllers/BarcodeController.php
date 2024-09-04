@@ -19,6 +19,7 @@ use App\Http\Services\CreateService;
 use App\Http\Services\SingleService;
 use App\Http\Services\UpdateBarcodeService;
 use App\Http\Services\UpdateService;
+use Carbon\Carbon;
 use Faker\Provider\Barcode;
 use Plugins\Alert;
 use Plugins\History as PluginsHistory;
@@ -49,7 +50,14 @@ class BarcodeController extends MasterController
     public function getData()
     {
         $query = self::$repository->dataBarcode();
-        return $query;
+
+        if($tanggal = request()->get('transaksi_barcode_at')){
+            $tgl = Carbon::createFromFormat('d/m/Y', $tanggal)->format('Y-m-d');
+            $query = $query->whereDate('transaksi_barcode_at', $tgl);
+        }
+
+        $return = env('PAGINATION_SIMPLE') ? $query->simplePaginate(env('PAGINATION_NUMBER')) : $query->paginate(env('PAGINATION_NUMBER'));
+        return $return;
     }
 
     public function getTable()

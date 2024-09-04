@@ -36,6 +36,8 @@ class TransaksiRepository extends MasterRepository implements CrudInterface
             return Notes::data($query->get());
         }
 
+        return $query;
+
         $query = env('PAGINATION_SIMPLE') ? $query->simplePaginate(env('PAGINATION_NUMBER')) : $query->paginate(env('PAGINATION_NUMBER'));
         return $query;
     }

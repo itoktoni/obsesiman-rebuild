@@ -9,6 +9,13 @@ class ViewBarcode extends ViewTransaksi
     protected $table = 'view_barcode';
     protected $primaryKey = 'transaksi_id';
 
+    protected $filters = [
+        'filter',
+        'rs_nama',
+        'transaksi_id',
+        'transaksi_delivery',
+    ];
+
     public function fieldDatatable(): array
     {
         return [
