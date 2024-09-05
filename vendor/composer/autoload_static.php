@@ -201,6 +201,7 @@ class ComposerStaticInit06129aac40bd6363e25876bda7254c44
         ),
         'E' => 
         array (
+            'ElipZis\\Cacheable\\' => 18,
             'Egulias\\EmailValidator\\' => 23,
         ),
         'D' => 
@@ -477,8 +478,8 @@ class ComposerStaticInit06129aac40bd6363e25876bda7254c44
         ),
         'Psr\\Http\\Message\\' => 
         array (
-            0 => __DIR__ . '/..' . '/psr/http-message/src',
-            1 => __DIR__ . '/..' . '/psr/http-factory/src',
+            0 => __DIR__ . '/..' . '/psr/http-factory/src',
+            1 => __DIR__ . '/..' . '/psr/http-message/src',
         ),
         'Psr\\Http\\Client\\' => 
         array (
@@ -682,6 +683,10 @@ class ComposerStaticInit06129aac40bd6363e25876bda7254c44
         'Faker\\' => 
         array (
             0 => __DIR__ . '/..' . '/fzaninotto/faker/src/Faker',
+        ),
+        'ElipZis\\Cacheable\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/elipzis/laravel-cacheable-model/src',
         ),
         'Egulias\\EmailValidator\\' => 
         array (
@@ -1109,6 +1114,7 @@ class ComposerStaticInit06129aac40bd6363e25876bda7254c44
         'App\\Http\\Services\\UpdateRsService' => __DIR__ . '/../..' . '/app/Http/Services/UpdateRsService.php',
         'App\\Http\\Services\\UpdateService' => __DIR__ . '/../..' . '/app/Http/Services/UpdateService.php',
         'App\\Jobs\\JobExportExcel' => __DIR__ . '/../..' . '/app/Jobs/JobExportExcel.php',
+        'App\\Jobs\\JobLogAndUpdateDetail' => __DIR__ . '/../..' . '/app/Jobs/JobLogAndUpdateDetail.php',
         'App\\Jobs\\StartOpname' => __DIR__ . '/../..' . '/app/Jobs/StartOpname.php',
         'App\\Listeners\\CountingCuci' => __DIR__ . '/../..' . '/app/Listeners/CountingCuci.php',
         'App\\Listeners\\CreateMovementListener' => __DIR__ . '/../..' . '/app/Listeners/CreateMovementListener.php',
@@ -1122,6 +1128,7 @@ class ComposerStaticInit06129aac40bd6363e25876bda7254c44
         'App\\Mail\\CreateSpkEmail' => __DIR__ . '/../..' . '/app/Mail/CreateSpkEmail.php',
         'App\\Mail\\CreateTicketEmail' => __DIR__ . '/../..' . '/app/Mail/CreateTicketEmail.php',
         'App\\Mail\\CreateWorkSheetEmail' => __DIR__ . '/../..' . '/app/Mail/CreateWorkSheetEmail.php',
+        'App\\PersonalAccessToken' => __DIR__ . '/../..' . '/app/PersonalAccessToken.php',
         'App\\Providers\\AppServiceProvider' => __DIR__ . '/../..' . '/app/Providers/AppServiceProvider.php',
         'App\\Providers\\AuthServiceProvider' => __DIR__ . '/../..' . '/app/Providers/AuthServiceProvider.php',
         'App\\Providers\\BroadcastServiceProvider' => __DIR__ . '/../..' . '/app/Providers/BroadcastServiceProvider.php',
@@ -2096,6 +2103,9 @@ class ComposerStaticInit06129aac40bd6363e25876bda7254c44
         'Egulias\\EmailValidator\\Warning\\QuotedString' => __DIR__ . '/..' . '/egulias/email-validator/src/Warning/QuotedString.php',
         'Egulias\\EmailValidator\\Warning\\TLD' => __DIR__ . '/..' . '/egulias/email-validator/src/Warning/TLD.php',
         'Egulias\\EmailValidator\\Warning\\Warning' => __DIR__ . '/..' . '/egulias/email-validator/src/Warning/Warning.php',
+        'ElipZis\\Cacheable\\CacheableServiceProvider' => __DIR__ . '/..' . '/elipzis/laravel-cacheable-model/src/CacheableServiceProvider.php',
+        'ElipZis\\Cacheable\\Database\\Query\\CacheableQueryBuilder' => __DIR__ . '/..' . '/elipzis/laravel-cacheable-model/src/Database/Query/CacheableQueryBuilder.php',
+        'ElipZis\\Cacheable\\Models\\Traits\\Cacheable' => __DIR__ . '/..' . '/elipzis/laravel-cacheable-model/src/Models/Traits/Cacheable.php',
         'Faker\\Calculator\\Ean' => __DIR__ . '/..' . '/fzaninotto/faker/src/Faker/Calculator/Ean.php',
         'Faker\\Calculator\\Iban' => __DIR__ . '/..' . '/fzaninotto/faker/src/Faker/Calculator/Iban.php',
         'Faker\\Calculator\\Inn' => __DIR__ . '/..' . '/fzaninotto/faker/src/Faker/Calculator/Inn.php',
@@ -5473,6 +5483,7 @@ class ComposerStaticInit06129aac40bd6363e25876bda7254c44
         'PHPStan\\PhpDocParser\\Ast\\PhpDoc\\VarTagValueNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/PhpDoc/VarTagValueNode.php',
         'PHPStan\\PhpDocParser\\Ast\\Type\\ArrayShapeItemNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/Type/ArrayShapeItemNode.php',
         'PHPStan\\PhpDocParser\\Ast\\Type\\ArrayShapeNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/Type/ArrayShapeNode.php',
+        'PHPStan\\PhpDocParser\\Ast\\Type\\ArrayShapeUnsealedTypeNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/Type/ArrayShapeUnsealedTypeNode.php',
         'PHPStan\\PhpDocParser\\Ast\\Type\\ArrayTypeNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/Type/ArrayTypeNode.php',
         'PHPStan\\PhpDocParser\\Ast\\Type\\CallableTypeNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/Type/CallableTypeNode.php',
         'PHPStan\\PhpDocParser\\Ast\\Type\\CallableTypeParameterNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/Type/CallableTypeParameterNode.php',

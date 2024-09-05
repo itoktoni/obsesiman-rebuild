@@ -7,6 +7,7 @@ use App\Dao\Entities\UserEntity;
 use App\Dao\Traits\ActiveTrait;
 use App\Dao\Traits\DataTableTrait;
 use App\Dao\Traits\OptionTrait;
+use ElipZis\Cacheable\Models\Traits\Cacheable;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -17,7 +18,7 @@ use Touhidurabir\ModelSanitize\Sanitizable as Sanitizable;
 
 class User extends Authenticatable
 {
-    use Notifiable, HasApiTokens, Sortable, FilterQueryString, Sanitizable, DataTableTrait, UserEntity, ActiveTrait, PowerJoins, OptionTrait;
+    use Cacheable ,Notifiable, HasApiTokens, Sortable, FilterQueryString, Sanitizable, DataTableTrait, UserEntity, ActiveTrait, PowerJoins, OptionTrait;
 
     protected $table = 'users';
     protected $primaryKey = 'id';

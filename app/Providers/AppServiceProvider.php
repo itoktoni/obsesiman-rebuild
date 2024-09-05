@@ -2,14 +2,11 @@
 
 namespace App\Providers;
 
-use App\Dao\Enums\RoleLevel;
+use App\PersonalAccessToken;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Blade;
 use Plugins\Query;
-use ProtoneMedia\LaravelFormComponents\Components\Form;
-use ProtoneMedia\LaravelFormComponents\Components\FormInput;
-use ProtoneMedia\LaravelFormComponents\Components\FormSelect;
 use Laravel\Sanctum\Sanctum;
 
 class AppServiceProvider extends ServiceProvider
@@ -46,5 +43,9 @@ class AppServiceProvider extends ServiceProvider
         Blade::if('level', function ($value) {
             return auth()->check() && auth()->user()->level >= $value;
         });
+
+        Sanctum::usePersonalAccessTokenModel(
+            PersonalAccessToken::class
+        );
     }
 }
