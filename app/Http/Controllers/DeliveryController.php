@@ -4,11 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Dao\Enums\CetakType;
 use App\Dao\Enums\ProcessType;
+use App\Dao\Enums\TransactionType;
 use App\Dao\Models\Cetak;
 use App\Dao\Models\Detail;
 use App\Dao\Models\Transaksi;
 use App\Dao\Models\ViewDelivery;
 use App\Dao\Models\ViewDetailLinen;
+use App\Dao\Models\ViewTransaksi;
 use App\Dao\Repositories\TransaksiRepository;
 use App\Http\Requests\DeliveryRequest;
 use App\Http\Requests\GeneralRequest;
@@ -16,11 +18,13 @@ use App\Http\Services\CreateService;
 use App\Http\Services\SingleService;
 use App\Http\Services\UpdateDeliveryService;
 use App\Http\Services\UpdateService;
+use Carbon\Carbon;
 use Plugins\Alert;
 use Plugins\History as PluginsHistory;
 use Plugins\Notes;
 use Plugins\Query;
 use Plugins\Response;
+use Illuminate\Support\Str;
 
 class DeliveryController extends MasterController
 {
@@ -45,7 +49,18 @@ class DeliveryController extends MasterController
     public function getData()
     {
         $query = self::$repository->dataDelivery();
-        return $query;
+
+        if($tanggal = request()->get('transaksi_delivery_at')){
+            $tgl = Carbon::createFromFormat('d/m/Y', $tanggal)->format('Y-m-d');
+            $query = $query->whereDate('transaksi_delivery_at', $tgl);
+        }
+
+        if($status = request()->get('transaksi_bersih')){
+            $query = $query->where(ViewTransaksi::field_status_bersih(), TransactionType::getValue(Str::of($status)->camel()->ucfirst()->value()));
+        }
+
+        $return = env('PAGINATION_SIMPLE') ? $query->simplePaginate(env('PAGINATION_NUMBER')) : $query->paginate(env('PAGINATION_NUMBER'));
+        return $return;
     }
 
     public function getTable()

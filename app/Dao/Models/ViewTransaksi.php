@@ -50,6 +50,8 @@ class ViewTransaksi extends Model
 
     protected $filters = [
         'filter',
+        'rs_nama',
+        'transaksi_key',
     ];
 
     public $timestamps = false;

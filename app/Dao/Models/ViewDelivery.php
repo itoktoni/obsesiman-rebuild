@@ -9,6 +9,13 @@ class ViewDelivery extends ViewTransaksi
     protected $table = 'view_delivery';
     protected $primaryKey = 'transaksi_id';
 
+    protected $filters = [
+        'filter',
+        'rs_nama',
+        'transaksi_id',
+        'transaksi_status',
+    ];
+
     public function fieldDatatable(): array
     {
         return [

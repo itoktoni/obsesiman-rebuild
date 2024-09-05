@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Dao\Enums\CetakType;
 use App\Dao\Enums\ProcessType;
 use App\Dao\Enums\RegisterType;
+use App\Dao\Enums\TransactionType;
 use App\Dao\Models\Cetak;
 use App\Dao\Models\Detail;
 use App\Dao\Models\History;
@@ -26,6 +27,7 @@ use Plugins\History as PluginsHistory;
 use Plugins\Notes;
 use Plugins\Query;
 use Plugins\Response;
+use Illuminate\Support\Str;
 
 class BarcodeController extends MasterController
 {
@@ -54,6 +56,10 @@ class BarcodeController extends MasterController
         if($tanggal = request()->get('transaksi_barcode_at')){
             $tgl = Carbon::createFromFormat('d/m/Y', $tanggal)->format('Y-m-d');
             $query = $query->whereDate('transaksi_barcode_at', $tgl);
+        }
+
+        if($status = request()->get('transaksi_bersih')){
+            $query = $query->where(ViewTransaksi::field_status_bersih(), TransactionType::getValue(Str::of($status)->camel()->ucfirst()->value()));
         }
 
         $return = env('PAGINATION_SIMPLE') ? $query->simplePaginate(env('PAGINATION_NUMBER')) : $query->paginate(env('PAGINATION_NUMBER'));

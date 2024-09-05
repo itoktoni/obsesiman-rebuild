@@ -23,11 +23,13 @@ use App\Http\Services\SaveTransaksiService;
 use App\Http\Services\SingleService;
 use App\Http\Services\UpdateService;
 use App\Jobs\JobLogAndUpdateDetail;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Plugins\Alert;
 use Plugins\History as PluginsHistory;
 use Plugins\Notes;
 use Plugins\Response;
+use Illuminate\Support\Str;
 
 class TransaksiController extends MasterController
 {
@@ -47,6 +49,27 @@ class TransaksiController extends MasterController
     {
         $data = $service->update(self::$repository, $request, $code);
         return Response::redirectBack($data);
+    }
+
+    public function getTable()
+    {
+        $data = $this->getData();
+
+        if($tanggal = request()->get('transaksi_created_at')){
+            $tgl = Carbon::createFromFormat('d/m/Y', $tanggal)->format('Y-m-d');
+            $data = $data->whereDate('transaksi_created_at', $tgl);
+        }
+
+        if($status = request()->get('transaksi_status')){
+            $data = $data->where(ViewTransaksi::field_status_transaction(), TransactionType::getValue(Str::of($status)->camel()->ucfirst()->value()));
+        }
+
+        $data = env('PAGINATION_SIMPLE') ? $data->simplePaginate(env('PAGINATION_NUMBER')) : $data->paginate(env('PAGINATION_NUMBER'));
+
+        return moduleView(modulePathTable(), [
+            'data' => $data,
+            'fields' => self::$repository->model->getShowField(),
+        ]);
     }
 
     private function getTransaksi($code)
