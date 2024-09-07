@@ -86,7 +86,7 @@ class SaveOpnameService
                     OpnameDetail::field_waktu() => $waktu,
                 ]);
 
-                PluginsHistory::bulk($scan_rs, ProcessType::Opname, 'Ketemu ketika Opname');
+                // PluginsHistory::bulk($scan_rs, ProcessType::Opname, 'Ketemu ketika Opname');
             }
 
             DB::commit();
