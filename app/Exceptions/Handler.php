@@ -12,6 +12,8 @@ use Plugins\Notes;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
 use GuzzleHttp\Client;
+use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Auth\AuthenticationException;
 
 class Handler extends ExceptionHandler
 {
@@ -122,6 +124,10 @@ class Handler extends ExceptionHandler
         }
 
         if(request()->hasHeader('authorization')){
+
+            if($e instanceof AuthenticationException){
+                return Notes::validation($e->getMessage());
+            }
 
             if($e instanceof ValidationException){
                 return Notes::validation($e->getMessage());
