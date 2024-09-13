@@ -23,7 +23,7 @@ class UpdateDeliveryService
         try {
 
             $startDate = Carbon::createFromFormat('Y-m-d H:i', date('Y-m-d') . ' 13:00');
-            $endDate = Carbon::createFromFormat('Y-m-d H:i', date('Y-m-d') . ' 23:59');
+            $endDate = Carbon::createFromFormat('Y-m-d H:i', date('Y-m-d') . ' 23:59:59');
 
             $check_date = Carbon::now()->between($startDate, $endDate);
             $report_date = Carbon::now();

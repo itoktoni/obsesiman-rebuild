@@ -28,7 +28,7 @@
                             @forelse($data as $table)
                                 <tr>
                                     <td>{{ $table->field_name }}</td>
-                                    <td>{{ $table->field_status }}</td>
+                                    <td>{{ $table->history_data }}</td>
                                     <td>{{ $table->field_created_at }}</td>
                                     <td>{{ $table->field_created_by }}</td>
                                 </tr>
