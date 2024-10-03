@@ -15,7 +15,7 @@ class DeliveryReportRequest extends FormRequest
         return [
             'start_delivery' => 'required',
             'end_delivery' => 'required',
-            'rs_id' => 'required',
+            // 'rs_id' => 'required',
         ];
     }
 
