@@ -626,7 +626,7 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
                 ];
             }
 
-            $data->update([
+            Detail::find($rfid)->update([
                 Detail::field_updated_at() => date('Y-m-d H:i:s'),
                 Detail::field_updated_by() => auth()->user()->id,
                 Detail::field_pending_created_at() => null,
