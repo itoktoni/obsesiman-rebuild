@@ -15,6 +15,7 @@ class ViewBarcode extends ViewTransaksi
         'transaksi_id',
         'transaksi_delivery',
         'username',
+        'transaksi_total',
     ];
 
     public function fieldDatatable(): array

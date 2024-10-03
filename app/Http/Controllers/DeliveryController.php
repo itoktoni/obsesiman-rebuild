@@ -59,6 +59,8 @@ class DeliveryController extends MasterController
             $query = $query->where(ViewTransaksi::field_status_bersih(), TransactionType::getValue(Str::of($status)->camel()->ucfirst()->value()));
         }
 
+        $query = $query->orderBy('transaksi_delivery_at', 'DESC');
+
         $return = env('PAGINATION_SIMPLE') ? $query->simplePaginate(env('PAGINATION_NUMBER')) : $query->paginate(env('PAGINATION_NUMBER'));
         return $return;
     }
