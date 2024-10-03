@@ -15,7 +15,7 @@ class TransactionReportRequest extends FormRequest
         return [
             'start_date' => 'required',
             'end_date' => 'required',
-            'rs_id' => 'required',
+            // 'rs_id' => 'required',
         ];
     }
 
