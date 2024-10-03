@@ -14,6 +14,7 @@ class ViewDelivery extends ViewTransaksi
         'rs_nama',
         'transaksi_id',
         'transaksi_status',
+        'username',
     ];
 
     public function fieldDatatable(): array
