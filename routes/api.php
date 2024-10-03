@@ -531,6 +531,7 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
                 'detail_updated_at',
                 'detail_deleted_at',
             ])->findOrFail($rfid);
+
             $save = Transaksi::where(Transaksi::field_rfid(), $rfid)
                 ->whereNull(Transaksi::field_barcode());
 
@@ -632,7 +633,7 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
                 Detail::field_pending_updated_at() => null,
                 Detail::field_hilang_created_at() => null,
                 Detail::field_hilang_updated_at() => null,
-                Detail::field_status_history() => ProcessType::Grouping,
+                Detail::field_status_history() => LogType::Grouping,
             ]);
 
             $collection = [
