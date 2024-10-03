@@ -111,9 +111,12 @@ class BarcodeRequest extends FormRequest
         $code_ruangan = Ruangan::find($this->ruangan_id)->ruangan_code;
         $code_rs = Rs::find($this->rs_id)->rs_code;
 
-        $code = $code.$code_rs.$code_ruangan.date('ymd');
+        $user = auth()->user()->id;
 
-        $autoNumber = Query::autoNumber(Transaksi::getTableName(), Transaksi::field_barcode(), $code , 22);
+        $code = $code.'-'.$code_rs.'-'.$code_ruangan.'-'.$user.date('ymd');
+        //BBBB-SSSS-RRRR-111-240101
+
+        $autoNumber = Query::autoNumber(Transaksi::getTableName(), Transaksi::field_barcode(), $code , 30);
 
         $this->merge([
             'code' => $autoNumber,

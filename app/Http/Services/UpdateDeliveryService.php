@@ -62,6 +62,11 @@ class UpdateDeliveryService
 
                 $data_rfid = $rfid->pluck(Transaksi::field_rfid());
 
+                if($status_transaksi == TransactionType::Register)
+                {
+                    $status_transaksi = TransactionType::BersihKotor;
+                }
+
                 Detail::whereIn(Detail::field_primary(), $data_rfid)
                     ->update([
                         Detail::field_status_transaction() => $status_transaksi,

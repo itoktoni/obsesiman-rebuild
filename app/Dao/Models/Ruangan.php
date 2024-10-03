@@ -66,8 +66,12 @@ class Ruangan extends Model
         return GeneralResource::class;
     }
 
-    public function has_instansi()
+    public static function boot()
     {
-        return $this->belongsToMany(Instansi::class, 'instansi_Ruangan', 'ruangan_id', 'instansi_id');
+        parent::saving(function ($model) {
+            $autoNumber = Query::autoNumber(Ruangan::getTableName(), 'ruangan_code', 'R' , 5);
+            $model->ruangan_code = $autoNumber;
+        });
+        parent::boot();
     }
 }
