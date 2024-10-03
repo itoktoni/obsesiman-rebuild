@@ -128,7 +128,7 @@ class ComponentTagCompiler
                             )
                             |
                             (?:
-                                [\w\-:.@]+
+                                [\w\-:.@%]+
                                 (
                                     =
                                     (?:
@@ -193,7 +193,7 @@ class ComponentTagCompiler
                             )
                             |
                             (?:
-                                [\w\-:.@]+
+                                [\w\-:.@%]+
                                 (
                                     =
                                     (?:
@@ -259,8 +259,8 @@ class ComponentTagCompiler
         }
 
         return "##BEGIN-COMPONENT-CLASS##@component('{$class}', '{$component}', [".$this->attributesToString($parameters, $escapeBound = false).'])
-<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag && $constructor = (new ReflectionClass('.$class.'::class))->getConstructor()): ?>
-<?php $attributes = $attributes->except(collect($constructor->getParameters())->map->getName()->all()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\\'.$class.'::ignoredParameterNames()); ?>
 <?php endif; ?>
 <?php $component->withAttributes(['.$this->attributesToString($attributes->all(), $escapeAttributes = $class !== DynamicComponent::class).']); ?>';
     }
@@ -342,7 +342,7 @@ class ComponentTagCompiler
                 })) {
                     return $guess;
                 }
-            } catch (InvalidArgumentException $e) {
+            } catch (InvalidArgumentException) {
                 //
             }
         }
@@ -505,7 +505,8 @@ class ComponentTagCompiler
                 \s*
                 x[\-\:]slot
                 (?:\:(?<inlineName>\w+(?:-\w+)*))?
-                (?:\s+(:?)name=(?<name>(\"[^\"]+\"|\\\'[^\\\']+\\\'|[^\s>]+)))?
+                (?:\s+name=(?<name>(\"[^\"]+\"|\\\'[^\\\']+\\\'|[^\s>]+)))?
+                (?:\s+\:name=(?<boundName>(\"[^\"]+\"|\\\'[^\\\']+\\\'|[^\s>]+)))?
                 (?<attributes>
                     (?:
                         \s+
@@ -544,19 +545,27 @@ class ComponentTagCompiler
         /x";
 
         $value = preg_replace_callback($pattern, function ($matches) {
-            $name = $this->stripQuotes($matches['inlineName'] ?: $matches['name']);
+            $name = $this->stripQuotes($matches['inlineName'] ?: $matches['name'] ?: $matches['boundName']);
 
             if (Str::contains($name, '-') && ! empty($matches['inlineName'])) {
                 $name = Str::camel($name);
             }
 
-            if ($matches[2] !== ':') {
+            // If the name was given as a simple string, we will wrap it in quotes as if it was bound for convenience...
+            if (! empty($matches['inlineName']) || ! empty($matches['name'])) {
                 $name = "'{$name}'";
             }
 
             $this->boundAttributes = [];
 
             $attributes = $this->getAttributesFromAttributeString($matches['attributes']);
+
+            // If an inline name was provided and a name or bound name was *also* provided, we will assume the name should be an attribute...
+            if (! empty($matches['inlineName']) && (! empty($matches['name']) || ! empty($matches['boundName']))) {
+                $attributes = ! empty($matches['name'])
+                    ? array_merge($attributes, $this->getAttributesFromAttributeString('name='.$matches['name']))
+                    : array_merge($attributes, $this->getAttributesFromAttributeString(':name='.$matches['boundName']));
+            }
 
             return " @slot({$name}, null, [".$this->attributesToString($attributes).']) ';
         }, $value);
@@ -579,7 +588,7 @@ class ComponentTagCompiler
         $attributeString = $this->parseBindAttributes($attributeString);
 
         $pattern = '/
-            (?<attribute>[\w\-:.@]+)
+            (?<attribute>[\w\-:.@%]+)
             (
                 =
                 (?<value>

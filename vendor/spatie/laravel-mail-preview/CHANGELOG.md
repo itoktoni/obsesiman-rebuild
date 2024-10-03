@@ -2,6 +2,44 @@
 
 All notable changes to `laravel-mail-preview` will be documented in this file.
 
+## v4.0.1 - 2024-04-08
+
+### What's Changed
+
+* Convert symfony Addresses to jsonable email adresses for the .html preview by @rudiedirkx in https://github.com/spatie/laravel-mail-preview/pull/104
+
+### New Contributors
+
+* @rudiedirkx made their first contribution in https://github.com/spatie/laravel-mail-preview/pull/104
+
+**Full Changelog**: https://github.com/spatie/laravel-mail-preview/compare/6.1.0...v4.0.1
+
+## 6.1.0 - 2024-03-08
+
+### What's Changed
+
+* Laravel 11.x Compatibility by @laravel-shift in https://github.com/spatie/laravel-mail-preview/pull/103
+* Allow to change default filename date format by @ekateiva in https://github.com/spatie/laravel-mail-preview/pull/102
+
+### New Contributors
+
+* @laravel-shift made their first contribution in https://github.com/spatie/laravel-mail-preview/pull/103
+* @ekateiva made their first contribution in https://github.com/spatie/laravel-mail-preview/pull/102
+
+**Full Changelog**: https://github.com/spatie/laravel-mail-preview/compare/6.0.6...6.1.0
+
+## 6.0.6 - 2023-09-14
+
+### What's Changed
+
+- Add default by @dododedodonl in https://github.com/spatie/laravel-mail-preview/pull/100
+
+### New Contributors
+
+- @dododedodonl made their first contribution in https://github.com/spatie/laravel-mail-preview/pull/100
+
+**Full Changelog**: https://github.com/spatie/laravel-mail-preview/compare/6.0.5...6.0.6
+
 ## 6.0.5 - 2023-01-25
 
 - support L10

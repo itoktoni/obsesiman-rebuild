@@ -35,12 +35,14 @@
 			<tr>
 				<th width="1">No. </th>
 				<th>NO. DO</th>
+				<th>TANGGAL. DO</th>
 				<th>NO. BARCODE</th>
+				<th>TANGGAL. BARCODE</th>
 				<th>NO. RFID</th>
 				<th>LINEN </th>
 				<th>RUMAH SAKIT</th>
 				<th>RUANGAN</th>
-				<th>TANGGAL PENGIRIMAN BERSIH</th>
+				<th>TANGGAL REPORT</th>
 				<th>TANGGAL REGISTER</th>
 				<th>OPERATOR</th>
 			</tr>
@@ -50,12 +52,14 @@
 			<tr>
 				<td>{{ $loop->iteration }}</td>
 				<td>{{ $table->field_delivery }}</td>
+				<td>{{ $table->transaksi_delivery_at }}</td>
 				<td>{{ $table->field_barcode }}</td>
+				<td>{{ $table->transaksi_barcode_at }}</td>
 				<td>{{ $table->field_rfid }}</td>
 				<td>{{ $table->view_linen_nama }}</td>
 				<td>{{ $table->view_rs_nama }}</td>
 				<td>{{ $table->view_ruangan_nama }}</td>
-				<td>{{ formatDate($table->transaksi_delivery_at) }}</td>
+				<td>{{ formatDate($table->transaksi_report) }}</td>
 				<td>{{ formatDate($table->view_tanggal_create) }}</td>
 				<td>{{ $table->user_delivery ?? '' }}</td>
 			</tr>

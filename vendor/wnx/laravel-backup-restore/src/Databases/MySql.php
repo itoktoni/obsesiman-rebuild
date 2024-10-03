@@ -4,62 +4,86 @@ declare(strict_types=1);
 
 namespace Wnx\LaravelBackupRestore\Databases;
 
+use Illuminate\Support\Facades\File;
+use Spatie\Backup\Exceptions\CannotCreateDbDumper;
 use Spatie\Backup\Tasks\Backup\DbDumperFactory;
-use Spatie\TemporaryDirectory\TemporaryDirectory;
+use Wnx\LaravelBackupRestore\Exceptions\ImportFailed;
 
 class MySql extends DbImporter
 {
-    private TemporaryDirectory $temporaryDirectory;
-
-    public function getImportCommand(string $dumpFile): string
+    /**
+     * @throws CannotCreateDbDumper|ImportFailed
+     */
+    public function getImportCommand(string $dumpFile, string $connection): string
     {
-        $temporaryDirectoryPath = config('backup.backup.temporary_directory') ?? storage_path('app/backup-temp');
+        if (config("database.connections.{$connection}.dump.dump_binary_path")) {
+            $this->setDumpBinaryPath(config("database.connections.{$connection}.dump.dump_binary_path"));
+        }
 
-        $this->temporaryDirectory = (new TemporaryDirectory($temporaryDirectoryPath))
-            ->name('temp')
-            ->force()
-            ->create()
-            ->empty();
-
-        $dumper = DbDumperFactory::createFromConnection('mysql');
+        $dumper = DbDumperFactory::createFromConnection($connection);
         $importToDatabase = $dumper->getDbName();
 
-        // @todo: Use $pendingRestore->connection
-        // $importToDatabase = $pendingRestore->database;
+        $credentialsArray = [
+            'host' => config("database.connections.{$connection}.host"),
+            'port' => config("database.connections.{$connection}.port"),
+            'user' => config("database.connections.{$connection}.username"),
+            'password' => config("database.connections.{$connection}.password"),
+        ];
 
-        file_put_contents($this->temporaryDirectory->path('credentials.dat'), $dumper->getContentsOfCredentialsFile());
-
-        $temporaryCredentialsFile = $this->temporaryDirectory->path('credentials.dat');
-
-        // Build Shell Command to import a gzipped SQL file to a MySQL database
-        if (str($dumpFile)->endsWith('gz')) {
-            $command = $this->getMySqlImportCommandForCompressedDump($dumpFile, $temporaryCredentialsFile, $importToDatabase);
+        if (str($dumpFile)->endsWith('sql')) {
+            $command = $this->getMySqlImportCommandForUncompressedDump($importToDatabase, $dumpFile, $credentialsArray);
         } else {
-            $command = $this->getMySqlImportCommandForUncompressedDump($temporaryCredentialsFile, $importToDatabase, $dumpFile);
+            $command = $this->getMySqlImportCommandForCompressedDump($dumpFile, $importToDatabase, $credentialsArray);
         }
 
         return $command;
     }
 
-    private function getMySqlImportCommandForCompressedDump(string $storagePathToDatabaseFile, mixed $temporaryCredentialsFile, string $importToDatabase): string
+    public function getCliName(): string
     {
-        return collect([
-            "gunzip < {$storagePathToDatabaseFile}",
-            '|',
-            'mysql',
-            "--defaults-extra-file=\"{$temporaryCredentialsFile}\"",
-            $importToDatabase,
-        ])->implode(' ');
+        return 'mysql';
     }
 
-    private function getMySqlImportCommandForUncompressedDump(mixed $temporaryCredentialsFile, string $importToDatabase, string $storagePathToDatabaseFile): string
+    /**
+     * @throws ImportFailed
+     */
+    private function getMySqlImportCommandForCompressedDump(string $storagePathToDatabaseFile, string $importToDatabase, array $credentials): string
     {
+        $quote = $this->determineQuote();
+        $password = $credentials['password'];
+
+        $decompressCommand = match (File::extension($storagePathToDatabaseFile)) {
+            'gz' => "gunzip < {$storagePathToDatabaseFile}",
+            'bz2' => "bunzip2 -c {$storagePathToDatabaseFile}",
+            default => throw ImportFailed::decompressionFailed($storagePathToDatabaseFile, 'Unknown compression format'),
+        };
+
         return collect([
-            'mysql',
-            "--defaults-extra-file=\"{$temporaryCredentialsFile}\"",
+            $decompressCommand,
+            '|',
+            "{$quote}{$this->dumpBinaryPath}mysql{$quote}",
+            '-u', $credentials['user'],
+            ! empty($password) ? "{$quote}-p'{$password}'{$quote}" : '',
+            '-P', $credentials['port'],
+            isset($credentials['host']) ? '-h '.$credentials['host'] : '',
+            $importToDatabase,
+        ])->filter()->implode(' ');
+    }
+
+    private function getMySqlImportCommandForUncompressedDump(string $importToDatabase, string $storagePathToDatabaseFile, array $credentials): string
+    {
+        $quote = $this->determineQuote();
+        $password = $credentials['password'];
+
+        return collect([
+            "{$quote}{$this->dumpBinaryPath}mysql{$quote}",
+            '-u', $credentials['user'],
+            ! empty($password) ? "{$quote}-p'{$password}'{$quote}" : '',
+            '-P', $credentials['port'],
+            isset($credentials['host']) ? '-h '.$credentials['host'] : '',
             $importToDatabase,
             '<',
             $storagePathToDatabaseFile,
-        ])->implode(' ');
+        ])->filter()->implode(' ');
     }
 }

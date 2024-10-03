@@ -14,7 +14,7 @@ class FastPaginate
     {
         return $this->paginate('paginate', function (array $items, $paginator) {
             return $this->paginator(
-                $items,
+                $this->model->newCollection($items),
                 $paginator->total(),
                 $paginator->perPage(),
                 $paginator->currentPage(),
@@ -27,7 +27,7 @@ class FastPaginate
     {
         return $this->paginate('simplePaginate', function (array $items, $paginator) {
             return $this->simplePaginator(
-                $items,
+                $this->model->newCollection($items),
                 $paginator->perPage(),
                 $paginator->currentPage(),
                 $paginator->getOptions()
@@ -43,16 +43,24 @@ class FastPaginate
         ) {
             /** @var \Illuminate\Database\Query\Builder $this */
             $base = $this->getQuery();
-            // Havings and groups don't work well with this paradigm, because we are
-            // counting on each row of the inner query to return a primary key
+            // Havings, groups, and unions don't work well with this paradigm, because
+            // we are counting on each row of the inner query to return a primary key
             // that we can use. When grouping, that's not always the case.
-            if (filled($base->havings) || filled($base->groups)) {
+            if (filled($base->havings) || filled($base->groups) || filled($base->unions)) {
                 return $this->{$paginationMethod}($perPage, $columns, $pageName, $page);
             }
 
             $model = $this->newModelInstance();
             $key = $model->getKeyName();
             $table = $model->getTable();
+
+            // Apparently some databases allow for offset 0 with no limit and some people
+            // use it as a hack to get all records. Since that defeats the purpose of
+            // fast pagination, we'll just return the normal paginator in that case.
+            // https://github.com/hammerstonedev/fast-paginate/issues/39
+            if ($perPage === -1) {
+                return $this->{$paginationMethod}($perPage, $columns, $pageName, $page);
+            }
 
             try {
                 $innerSelectColumns = FastPaginate::getInnerSelectColumns($this);
@@ -75,6 +83,10 @@ class FastPaginate
             // Get the key values from the records on the current page without mutating them.
             $ids = $paginator->getCollection()->map->getRawOriginal($key)->toArray();
 
+            if (count($ids) <= 0) {
+                return $paginator;
+            }
+
             if (in_array($model->getKeyType(), ['int', 'integer'])) {
                 $this->query->whereIntegerInRaw("$table.$key", $ids);
             } else {
@@ -91,7 +103,6 @@ class FastPaginate
     }
 
     /**
-     * @param $builder
      * @return array
      *
      * @throws QueryIncompatibleWithFastPagination
@@ -108,11 +119,20 @@ class FastPaginate
         // have to include certain columns in the inner query.
         $orders = collect($base->orders)
             ->pluck('column')
+            ->filter()
             ->map(function ($column) use ($base) {
-                // Use the grammar to wrap them, so that our `str_contains`
-                // (further down) doesn't return any false positives.
-                return $base->grammar->wrap($column);
-            });
+                // Not everyone quotes their custom selects, which
+                // is totally reasonable. We'll look for both
+                // quoted and unquoted, as a kindness.
+                // See https://github.com/hammerstonedev/fast-paginate/pull/57
+                $column = $column instanceof Expression ? $column->getValue($base->grammar) : $column;
+
+                return [
+                    $column,
+                    $base->grammar->wrap($column),
+                ];
+            })
+            ->flatten(1);
 
         return collect($base->columns)
             ->filter(function ($column) use ($orders, $base) {

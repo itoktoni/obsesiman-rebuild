@@ -13,6 +13,7 @@ use Plugins\Core;
 use Plugins\Helper;
 use Plugins\Query;
 use Plugins\Template;
+use Coderello\SharedData\Facades\SharedData;
 
 class AccessMiddleware
 {
@@ -115,7 +116,8 @@ class AccessMiddleware
                 'timer' => env('APP_TIMER_ALERT', 5000),
             ]);
 
-            share($data);
+            SharedData::put($data);
+
         } catch (\Throwable$th) {
             //throw $th;
         }

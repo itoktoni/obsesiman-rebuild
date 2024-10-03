@@ -8,11 +8,11 @@ use Generator;
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
 use Spatie\Backup\BackupDestination\BackupDestination;
-use Spatie\Backup\Events\BackupHasFailed;
 use Spatie\Backup\Events\BackupManifestWasCreated;
 use Spatie\Backup\Events\BackupWasSuccessful;
 use Spatie\Backup\Events\BackupZipWasCreated;
 use Spatie\Backup\Events\DumpingDatabase;
+use Spatie\Backup\Exceptions\BackupFailed;
 use Spatie\Backup\Exceptions\InvalidBackupJob;
 use Spatie\DbDumper\Compressors\GzipCompressor;
 use Spatie\DbDumper\Databases\MongoDb;
@@ -46,7 +46,7 @@ class BackupJob
             ->dontBackupDatabases()
             ->setDefaultFilename();
 
-        $this->backupDestinations = new Collection();
+        $this->backupDestinations = new Collection;
     }
 
     public function dontBackupFilesystem(): self
@@ -67,7 +67,7 @@ class BackupJob
 
     public function dontBackupDatabases(): self
     {
-        $this->dbDumpers = new Collection();
+        $this->dbDumpers = new Collection;
 
         return $this;
     }
@@ -134,6 +134,9 @@ class BackupJob
         return $this;
     }
 
+    /**
+     * @throws Exception
+     */
     public function run(): void
     {
         $temporaryDirectoryPath = config('backup.backup.temporary_directory') ?? storage_path('app/backup-temp');
@@ -167,13 +170,11 @@ class BackupJob
 
             $this->copyToBackupDestinations($zipFile);
         } catch (Exception $exception) {
-            consoleOutput()->error("Backup failed because {$exception->getMessage()}." . PHP_EOL . $exception->getTraceAsString());
-
-            $this->sendNotification(new BackupHasFailed($exception));
+            consoleOutput()->error("Backup failed because: {$exception->getMessage()}.".PHP_EOL.$exception->getTraceAsString());
 
             $this->temporaryDirectory->delete();
 
-            throw $exception;
+            throw BackupFailed::from($exception);
         }
 
         $this->temporaryDirectory->delete();
@@ -210,7 +211,7 @@ class BackupJob
         return $this->backupDestinations
             ->filter(fn (BackupDestination $backupDestination) => $backupDestination->filesystemType() === 'localfilesystemadapter')
             ->map(
-                fn (BackupDestination $backupDestination) => $backupDestination->disk()->path('') . $backupDestination->backupName()
+                fn (BackupDestination $backupDestination) => $backupDestination->disk()->path('').$backupDestination->backupName()
             )
             ->each(fn (string $backupDestinationDirectory) => $this->fileSelection->excludeFilesFrom($backupDestinationDirectory))
             ->push($this->temporaryDirectory->path())
@@ -221,7 +222,7 @@ class BackupJob
     {
         consoleOutput()->info("Zipping {$manifest->count()} files and directories...");
 
-        $pathToZip = $this->temporaryDirectory->path(config('backup.backup.destination.filename_prefix') . $this->filename);
+        $pathToZip = $this->temporaryDirectory->path(config('backup.backup.destination.filename_prefix').$this->filename);
 
         $zip = Zip::createForManifest($manifest, $pathToZip);
 
@@ -239,8 +240,6 @@ class BackupJob
     /**
      * Dumps the databases to the given directory.
      * Returns an array with paths to the dump files.
-     *
-     * @return array
      */
     protected function dumpDatabases(): array
     {
@@ -250,24 +249,32 @@ class BackupJob
 
                 $dbType = mb_strtolower(basename(str_replace('\\', '/', get_class($dbDumper))));
 
-                $dbName = $dbDumper->getDbName();
-                if ($dbDumper instanceof Sqlite) {
-                    $dbName = $key . '-database';
+                if (config('backup.backup.database_dump_filename_base') === 'connection') {
+                    $dbName = $key;
+                } elseif ($dbDumper instanceof Sqlite) {
+                    $dbName = $key.'-database';
+                } else {
+                    $dbName = $dbDumper->getDbName();
                 }
 
-                $fileName = "{$dbType}-{$dbName}.{$this->getExtension($dbDumper)}";
+                $timeStamp = '';
+                if ($timeStampFormat = config('backup.backup.database_dump_file_timestamp_format')) {
+                    $timeStamp = '-'.Carbon::now()->format($timeStampFormat);
+                }
+
+                $fileName = "{$dbType}-{$dbName}{$timeStamp}.{$this->getExtension($dbDumper)}";
 
                 if (config('backup.backup.gzip_database_dump')) {
-                    $dbDumper->useCompressor(new GzipCompressor());
-                    $fileName .= '.' . $dbDumper->getCompressorExtension();
+                    $dbDumper->useCompressor(new GzipCompressor);
+                    $fileName .= '.'.$dbDumper->getCompressorExtension();
                 }
 
                 if ($compressor = config('backup.backup.database_dump_compressor')) {
-                    $dbDumper->useCompressor(new $compressor());
-                    $fileName .= '.' . $dbDumper->getCompressorExtension();
+                    $dbDumper->useCompressor(new $compressor);
+                    $fileName .= '.'.$dbDumper->getCompressorExtension();
                 }
 
-                $temporaryFilePath = $this->temporaryDirectory->path('db-dumps' . DIRECTORY_SEPARATOR . $fileName);
+                $temporaryFilePath = $this->temporaryDirectory->path('db-dumps'.DIRECTORY_SEPARATOR.$fileName);
 
                 event(new DumpingDatabase($dbDumper));
 
@@ -278,6 +285,9 @@ class BackupJob
             ->toArray();
     }
 
+    /**
+     * @throws Exception
+     */
     protected function copyToBackupDestinations(string $path): void
     {
         $this->backupDestinations
@@ -297,9 +307,7 @@ class BackupJob
                 } catch (Exception $exception) {
                     consoleOutput()->error("Copying zip failed because: {$exception->getMessage()}.");
 
-                    $this->sendNotification(new BackupHasFailed($exception, $backupDestination));
-
-                    throw $exception;
+                    throw BackupFailed::from($exception)->destination($backupDestination);
                 }
             });
     }

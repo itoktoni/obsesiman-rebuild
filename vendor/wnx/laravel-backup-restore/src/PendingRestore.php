@@ -27,6 +27,7 @@ class PendingRestore
     {
         $restoreName = now()->format('Y-m-d-h-i-s').'-'.Str::uuid();
 
+        /** @phpstan-ignore-next-line */
         return new self(
             ...$attributes,
             restoreName: $restoreName,
@@ -43,35 +44,41 @@ class PendingRestore
     {
         $filename = "$this->restoreId.{$this->getFileExtensionOfRemoteBackup()}";
 
-        return "backup-restore-temp/$filename";
+        return 'backup-restore-temp'.DIRECTORY_SEPARATOR.$filename;
     }
 
     public function getPathToLocalDecompressedBackup(): string
     {
         $filename = $this->restoreId;
 
-        return "backup-restore-temp/$filename";
+        return 'backup-restore-temp'.DIRECTORY_SEPARATOR.$filename;
     }
 
     public function getAbsolutePathToLocalDecompressedBackup(): string
     {
         $filename = $this->restoreId;
 
-        return storage_path("app/backup-restore-temp/$filename");
+        return storage_path('app'.DIRECTORY_SEPARATOR.'backup-restore-temp'.DIRECTORY_SEPARATOR.$filename);
     }
 
+    /** @deprecated  */
     public function hasNoDbDumpsDirectory(): bool
     {
         return ! Storage::disk($this->restoreDisk)
-            ->has("{$this->getPathToLocalDecompressedBackup()}/db-dumps");
+            ->has($this->getPathToLocalDecompressedBackup().DIRECTORY_SEPARATOR.'db-dumps');
+    }
+
+    public function getAvailableFilesInDbDumpsDirectory(): Collection
+    {
+        $files = Storage::disk($this->restoreDisk)
+            ->files($this->getPathToLocalDecompressedBackup().DIRECTORY_SEPARATOR.'db-dumps');
+
+        return collect($files);
     }
 
     public function getAvailableDbDumps(): Collection
     {
-        $files = Storage::disk($this->restoreDisk)
-            ->files("{$this->getPathToLocalDecompressedBackup()}/db-dumps");
-
-        return collect($files)
-            ->filter(fn ($file) => Str::endsWith($file, ['.sql', '.sql.gz']));
+        return $this->getAvailableFilesInDbDumpsDirectory()
+            ->filter(fn ($file) => Str::endsWith($file, ['.sql', '.sql.gz', '.sql.bz2']));
     }
 }

@@ -83,6 +83,23 @@ trait MakesAssertions
         return $this;
     }
 
+    function assertDontSeeText($value, $escape = true)
+    {
+        $value = Arr::wrap($value);
+
+        $values = $escape ? array_map('e', ($value)) : $value;
+
+        $content = $this->html();
+
+        tap(strip_tags($content), function ($content) use ($values) {
+            foreach ($values as $value) {
+                PHPUnit::assertStringNotContainsString((string) $value, $content);
+            }
+        });
+
+        return $this;
+    }
+
     function assertSet($name, $value, $strict = false)
     {
         $actual = $this->get($name);
@@ -101,6 +118,20 @@ trait MakesAssertions
         $actual = $this->get($name);
 
         $strict ? PHPUnit::assertNotSame($value, $actual) : PHPUnit::assertNotEquals($value, $actual);
+
+        return $this;
+    }
+
+    function assertSetStrict($name, $value)
+    {
+        $this->assertSet($name, $value, true);
+
+        return $this;
+    }
+
+    function assertNotSetStrict($name, $value)
+    {
+        $this->assertNotSet($name, $value, true);
 
         return $this;
     }
@@ -133,6 +164,33 @@ trait MakesAssertions
             PHPUnit::assertFalse($value(data_get($data, $name)));
         } else {
             $strict ? PHPUnit::assertNotSame($value, data_get($data, $name)) : PHPUnit::assertNotEquals($value, data_get($data, $name));
+        }
+
+        return $this;
+    }
+
+    function assertSnapshotSetStrict($name, $value)
+    {
+        $this->assertSnapshotSet($name, $value, true);
+
+        return $this;
+    }
+
+    function assertSnapshotNotSetStrict($name, $value)
+    {
+        $this->assertSnapshotNotSet($name, $value, true);
+
+        return $this;
+    }
+
+    public function assertReturned($value)
+    {
+        $data = data_get($this->lastState->getEffects(), 'returns.0');
+
+        if (is_callable($value)) {
+            PHPUnit::assertTrue($value($data));
+        } else {
+            PHPUnit::assertEquals($value, $data);
         }
 
         return $this;

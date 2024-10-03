@@ -76,9 +76,10 @@ class DeliveryRequest extends FormRequest
         }
 
         $code_rs = Rs::find($this->rs_id)->rs_code;
-        $code = $code.$code_rs.date('ymd');
+        $user = auth()->user()->id;
+        $code = $code.'-'.$code_rs.'-'.$user.date('ymd');
 
-        $autoNumber = Query::autoNumber(Transaksi::getTableName(), Transaksi::field_delivery(), $code, 17);
+        $autoNumber = Query::autoNumber(Transaksi::getTableName(), Transaksi::field_delivery(), $code, 20);
 
         $this->merge([
             'code' => $autoNumber,

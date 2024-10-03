@@ -7,5 +7,4 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'Orangehill\\Iseed' => array($vendorDir . '/orangehill/iseed/src'),
-    'Milon\\Barcode' => array($vendorDir . '/milon/barcode/src'),
 );
