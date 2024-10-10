@@ -116,7 +116,7 @@ class BarcodeRequest extends FormRequest
         $code = $code.'-'.$code_rs.'-'.$code_ruangan.'-'.$user.date('ymd');
         //BBBB-SSSS-RRRR-111-240101
 
-        $autoNumber = Query::autoNumber(Transaksi::getTableName(), Transaksi::field_barcode(), $code , 30);
+        $autoNumber = Query::autoNumber(Transaksi::getTableName(), Transaksi::field_barcode(), $code , 29);
 
         $this->merge([
             'code' => $autoNumber,
