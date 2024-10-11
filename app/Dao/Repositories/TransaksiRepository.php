@@ -107,6 +107,7 @@ class TransaksiRepository extends MasterRepository implements CrudInterface
 
     public function deleteRepository($request)
     {
+        CheckDelete();
         try {
             if(is_array($request)){
                 $rfid = array_values($request);

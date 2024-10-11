@@ -102,6 +102,8 @@ class TransaksiDetailController extends MasterController
 
     public function getDelete()
     {
+        CheckDelete();
+
         $code = request()->get('code');
 
         $data = self::$service->delete(self::$repository, $code);
@@ -110,6 +112,8 @@ class TransaksiDetailController extends MasterController
 
     public function postDelete(DeleteRequest $request, DeleteService $service)
     {
+        CheckDelete();
+
         $code = $request->get('code');
         $data = $service->delete(self::$repository, $code);
         return Response::redirectBack($data);

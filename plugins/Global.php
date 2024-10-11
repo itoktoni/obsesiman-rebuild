@@ -1,6 +1,7 @@
 <?php
 
 use App\Dao\Enums\TransactionType;
+use App\Dao\Enums\UserLevel;
 use App\Dao\Models\Rs;
 use Carbon\Carbon;
 use Coderello\SharedData\Facades\SharedData;
@@ -261,4 +262,12 @@ function getLowerClass($class)
 function setString($value)
 {
     return '"'.$value.'"';
+}
+
+function CheckDelete()
+{
+    if (auth()->user()->level != UserLevel::Developer)
+    {
+        return abort(403, 'Delete Dinonaktifkan !');
+    }
 }

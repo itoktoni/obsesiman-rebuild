@@ -103,6 +103,8 @@ class DeliveryController extends MasterController
 
     public function getDeleteTransaksi($code)
     {
+        CheckDelete();
+
         $transaksi = Transaksi::with([HAS_DETAIL])->findOrFail($code);
         if ($transaksi) {
 
@@ -125,6 +127,8 @@ class DeliveryController extends MasterController
 
     public function getDelete()
     {
+        CheckDelete();
+
         $code = request()->get('code');
         $transaksi = Transaksi::where(Transaksi::field_delivery(), $code);
 
