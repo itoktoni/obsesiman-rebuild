@@ -36,13 +36,14 @@ try {
 }
 
 if($routes){
-    Route::middleware(['auth', 'access'])->group(function () use($routes) {
+    Route::middleware(['auth', 'access', 'auth.timeout'])->group(function () use($routes) {
         Route::prefix('admin')->group(function () use ($routes){
             if ($routes) {
                 foreach ($routes as $group) {
                     Route::group(['prefix' => $group->field_primary, 'middleware' => [
                         'auth',
                         'access',
+                        'auth.timeout'
                     ]], function () use ($group) {
                         // -- nested group
                         if ($menus = $group->has_menu) {
