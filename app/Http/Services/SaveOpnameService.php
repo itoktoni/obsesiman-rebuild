@@ -75,7 +75,10 @@ class SaveOpnameService
             }
 
             if($insert_register){
-                OpnameDetail::insert($insert_register);
+                OpnameDetail::upsert($insert_register, [
+                    OpnameDetail::field_rfid(),
+                    OpnameDetail::field_opname(),
+                ]);
             }
 
             if($scan_rs){
