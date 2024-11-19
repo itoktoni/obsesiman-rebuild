@@ -44,7 +44,7 @@ class OpnameDetailRequest extends FormRequest
             });
 
         $send['opname'] = $data;
-        $send['rfid'] = $this->rfid;
+        $send['rfid'] = collect($this->rfid)->unique()->toArray();
         $send['code'] = $this->code;
 
         $this->merge([
