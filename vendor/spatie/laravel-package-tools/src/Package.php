@@ -21,6 +21,10 @@ class Package
 
     public bool $hasAssets = false;
 
+    public bool $discoversMigrations = false;
+
+    public ?string $migrationsPath = null;
+
     public bool $runsMigrations = false;
 
     public array $migrationFileNames = [];
@@ -84,7 +88,7 @@ class Package
         return Str::after($this->name, 'laravel-');
     }
 
-    public function hasViews(string $namespace = null): static
+    public function hasViews(?string $namespace = null): static
     {
         $this->hasViews = true;
 
@@ -93,7 +97,7 @@ class Package
         return $this;
     }
 
-    public function hasInertiaComponents(string $namespace = null): static
+    public function hasInertiaComponents(?string $namespace = null): static
     {
         $this->hasInertiaComponents = true;
 
@@ -148,6 +152,14 @@ class Package
     public function hasAssets(): static
     {
         $this->hasAssets = true;
+
+        return $this;
+    }
+
+    public function discoversMigrations(bool $discoversMigrations = true, string $path = '/database/migrations'): static
+    {
+        $this->discoversMigrations = $discoversMigrations;
+        $this->migrationsPath = $path;
 
         return $this;
     }
@@ -218,7 +230,7 @@ class Package
         return $this;
     }
 
-    public function basePath(string $directory = null): string
+    public function basePath(?string $directory = null): string
     {
         if ($directory === null) {
             return $this->basePath;

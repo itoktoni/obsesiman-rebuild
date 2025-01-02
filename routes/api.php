@@ -488,7 +488,7 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
                 $data->{Detail::field_ruangan_id()} = $request->ruangan_id;
                 $data->{Detail::field_jenis_id()} = $request->jenis_id;
 
-                $data->{Detail::field_updated_at()} = date('Y-m-d H:i:s');
+                // $data->{Detail::field_updated_at()} = date('Y-m-d H:i:s');
                 $data->{Detail::field_updated_by()} = auth()->user()->id;
                 $data->{Detail::field_status_history()} = $data->field_status_terakhir ?? 0;
 
@@ -607,6 +607,7 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
                     Transaksi::field_created_by() => $user,
                     Transaksi::field_updated_at() => $date,
                     Transaksi::field_updated_by() => $user,
+                    Transaksi::field_grouping() => BooleanType::Yes,
                 ];
 
                 $log[] = [
@@ -627,7 +628,7 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
             }
 
             Detail::find($rfid)->update([
-                Detail::field_updated_at() => date('Y-m-d H:i:s'),
+                // Detail::field_updated_at() => date('Y-m-d H:i:s'),
                 Detail::field_updated_by() => auth()->user()->id,
                 Detail::field_pending_created_at() => null,
                 Detail::field_pending_updated_at() => null,

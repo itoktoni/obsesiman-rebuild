@@ -296,4 +296,34 @@ trait TransaksiEntity
         return $this->{$this->field_uuid_delivery()};
     }
 
+    public static function field_grouping()
+    {
+        return 'transaksi_grouping';
+    }
+
+    public function getFieldGrouping()
+    {
+        return $this->{$this->field_grouping()};
+    }
+
+    public static function field_pending_in()
+    {
+        return 'transaksi_pending_in';
+    }
+
+    public function getFieldPendingIn()
+    {
+        return $this->{$this->field_pending_in()};
+    }
+
+    public static function field_pending_out()
+    {
+        return 'transaksi_pending_out';
+    }
+
+    public function getFieldPendingOut()
+    {
+        return $this->{$this->field_pending_out()};
+    }
+
 }
