@@ -75,6 +75,18 @@ class BarcodeRequest extends FormRequest
                 $validator->errors()->add('rfid', 'RFID maksimal ' . $maksimal);
             }
         });
+
+        // CASE PREVENT DATA WHEN RFID PENDING
+
+        $transaksi = Transaksi::whereIn(Transaksi::field_rfid(), $this->rfid)
+        ->whereNotNull(Transaksi::field_pending_in(), $this->rs_id)
+        ->whereNull(Transaksi::field_pending_out())->count();
+
+        $validator->after(function ($validator) use ($transaksi) {
+            if ($transaksi > 0) {
+                $validator->errors()->add('rfid', 'ADA RFID YANG PENDING !');
+            }
+        });
     }
 
     public function prepareForValidation()
