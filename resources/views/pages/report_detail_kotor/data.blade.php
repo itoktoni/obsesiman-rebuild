@@ -63,7 +63,7 @@
 				<td>{{ empty($table->view_status_proses) ? 'Belum Register' : ProcessType::getDescription($table->view_status_proses) }}</td>
 				<td>{{ empty($table->view_status_cuci) ? '' : CuciType::getDescription($table->view_status_cuci) }}</td>
 				<td>{{ $table->view_transaksi_cuci_total ?? 0 }}</td>
-				<td>{{ formatDate($table->transaksi_created_at) }}</td>
+				<td>{{ $table->transaksi_created_at }}</td>
 				<td>{{ formatDate($table->view_tanggal_create) }}</td>
 				<td>{{ $table->name }}</td>
 			</tr>
