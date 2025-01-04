@@ -36,15 +36,30 @@ class DeliveryRequest extends FormRequest
             $transaksi = TransactionType::Register;
         }
 
-        $empty = Detail::select(Detail::field_primary())
+        $rfid = Detail::select(Detail::field_primary())
             ->where(Detail::field_rs_id(), $this->rs_id)
             ->where(Detail::field_status_transaction(), $transaksi)
             ->where(Detail::field_status_process(), ProcessType::Barcode)
-            ->count();
+            ->get();
+
+        $empty = $rfid->count();
 
         $validator->after(function ($validator) use ($empty) {
             if ($empty == 0) {
                 $validator->errors()->add('rfid', 'RFID tidak valid !');
+            }
+        });
+
+        $transaksi = Transaksi::select(Transaksi::field_rfid())
+        ->whereIn(Transaksi::field_rfid(), $rfid->pluck(Detail::field_primary())->toArray())
+        ->whereNotNull(Transaksi::field_pending_in())
+        ->whereNull(Transaksi::field_pending_out())
+        ->count();
+
+        $validator->after(function ($validator) use ($transaksi) {
+            if ($transaksi > 0)
+            {
+                $validator->errors()->add('rfid', 'ADA RFID YANG SUDAH DI BARCODE, TAPI SEDANG PENDING !');
             }
         });
 

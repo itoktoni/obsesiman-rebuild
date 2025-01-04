@@ -78,13 +78,15 @@ class BarcodeRequest extends FormRequest
 
         // CASE PREVENT DATA WHEN RFID PENDING
 
-        $transaksi = Transaksi::whereIn(Transaksi::field_rfid(), $this->rfid)
-        ->whereNotNull(Transaksi::field_pending_in(), $this->rs_id)
-        ->whereNull(Transaksi::field_pending_out())->count();
+        $transaksi = Transaksi::select(Transaksi::field_rfid())
+        ->whereIn(Transaksi::field_rfid(), $this->rfid)
+        ->whereNotNull(Transaksi::field_pending_in())
+        ->whereNull(Transaksi::field_pending_out())
+        ->count();
 
         $validator->after(function ($validator) use ($transaksi) {
             if ($transaksi > 0) {
-                $validator->errors()->add('rfid', 'ADA RFID YANG PENDING !');
+                $validator->errors()->add('rfid', 'ADA RFID YANG SEDANG PENDING !');
             }
         });
     }
