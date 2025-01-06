@@ -17,6 +17,7 @@ use App\Dao\Models\Transaksi;
 use App\Dao\Models\ViewDetailLinen;
 use App\Http\Controllers\BarcodeController;
 use App\Http\Controllers\DeliveryController;
+use App\Http\Controllers\PendingController;
 use App\Http\Controllers\TransaksiController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WebhookController;
@@ -698,6 +699,9 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
 
         return Notes::data(['total' => $data->get()]);
     });
+
+    Route::post('pending', [PendingController::class, 'pending']);
+    Route::get('pending/{code}', [PendingController::class, 'print']);
 
     Route::get('total/delivery/{rsid}', function ($rsid) {
         $data = Transaksi::whereNull(Transaksi::field_delivery())

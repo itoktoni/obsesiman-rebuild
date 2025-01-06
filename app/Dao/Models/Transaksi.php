@@ -51,6 +51,7 @@ class Transaksi extends Model
         'transaksi_uuid_delviery',
         'transaksi_pending_in',
         'transaksi_pending_out',
+        'transaksi_pending',
         'transaksi_grouping',
     ];
 

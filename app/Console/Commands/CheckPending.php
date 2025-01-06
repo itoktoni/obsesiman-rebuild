@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Dao\Enums\LogType;
 use App\Dao\Enums\ProcessType;
 use App\Dao\Enums\TransactionType;
 use App\Dao\Models\Detail;
@@ -61,7 +62,7 @@ class CheckPending extends Command
             foreach ($outstanding as $detail) {
                 Detail::where(Detail::field_primary(), $detail->transaksi_rfid)->update([
                     Detail::field_status_process() => ProcessType::Pending,
-                    Detail::field_status_history() => $detail->view_status_terakhir,
+                    Detail::field_status_history() => LogType::Pending,
                     Detail::field_pending_created_at() => date('Y-m-d H:i:s'),
                     Detail::field_pending_updated_at() => date('Y-m-d H:i:s'),
                 ]);

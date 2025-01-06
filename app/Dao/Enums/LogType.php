@@ -19,6 +19,7 @@ class LogType extends Enum implements LocalizedEnum
     const Register = 7;
 
     const UpdateChip = 8;
+    const Pending = 9;
 
     const Bersih = 20;
     const Grouping = 30;

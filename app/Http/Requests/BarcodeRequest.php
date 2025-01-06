@@ -8,8 +8,8 @@ use App\Dao\Models\Rs;
 use App\Dao\Models\Ruangan;
 use App\Dao\Models\Transaksi;
 use Illuminate\Foundation\Http\FormRequest;
-use Plugins\Query;
 use Illuminate\Support\Str;
+use Plugins\Query;
 
 class BarcodeRequest extends FormRequest
 {
@@ -33,25 +33,25 @@ class BarcodeRequest extends FormRequest
 
         /*
         notes : status transaksi berasal dari menu desktop
-        */
+         */
         if ($this->status_transaksi == TransactionType::BersihKotor) {
             $where = TransactionType::Kotor;
-        } else if($this->status_transaksi == TransactionType::BersihRetur) {
+        } else if ($this->status_transaksi == TransactionType::BersihRetur) {
             $where = TransactionType::Retur;
-        } else if($this->status_transaksi == TransactionType::BersihRewash) {
+        } else if ($this->status_transaksi == TransactionType::BersihRewash) {
             $where = TransactionType::Rewash;
         } elseif ($this->status_transaksi == TransactionType::Kotor) {
             $where = TransactionType::Kotor;
-        } else if($this->status_transaksi == TransactionType::Retur) {
+        } else if ($this->status_transaksi == TransactionType::Retur) {
             $where = TransactionType::Retur;
-        } else if($this->status_transaksi == TransactionType::Rewash) {
+        } else if ($this->status_transaksi == TransactionType::Rewash) {
             $where = TransactionType::Rewash;
         }
 
         $rfid = Detail::whereIn(Detail::field_primary(), $this->rfid)
-                ->where(Detail::field_status_transaction(), $where)
-                ->where(Detail::field_rs_id(), $this->rs_id)
-                ->where(Detail::field_ruangan_id(), $this->ruangan_id);
+            ->where(Detail::field_status_transaction(), $where)
+            ->where(Detail::field_rs_id(), $this->rs_id)
+            ->where(Detail::field_ruangan_id(), $this->ruangan_id);
 
         $total_rfid_original = $rfid->count();
 
@@ -59,7 +59,7 @@ class BarcodeRequest extends FormRequest
 
         $validator->after(function ($validator) use ($compare) {
             if ($compare) {
-                $validator->errors()->add('rfid', 'RFID tidak sesuai dengan proses !');
+                $validator->errors()->add('rfid', 'jumlah RFID tidak sesuai dengan proses !');
             }
         });
 
@@ -78,17 +78,38 @@ class BarcodeRequest extends FormRequest
 
         // CASE PREVENT DATA WHEN RFID PENDING
 
-        $transaksi = Transaksi::select(Transaksi::field_rfid())
-        ->whereIn(Transaksi::field_rfid(), $this->rfid)
-        ->whereNotNull(Transaksi::field_pending_in())
-        ->whereNull(Transaksi::field_pending_out())
-        ->count();
+        if ($this->pending == 1) {
 
-        $validator->after(function ($validator) use ($transaksi) {
-            if ($transaksi > 0) {
-                $validator->errors()->add('rfid', 'ADA RFID YANG SEDANG PENDING !');
-            }
-        });
+            $transaksi = Transaksi::select(Transaksi::field_rfid())
+            ->whereIn(Transaksi::field_rfid(), $this->rfid)
+            ->whereNotNull(Transaksi::field_pending_in())
+            ->whereNull(Transaksi::field_pending_out())
+            ->count();
+
+            $compare = $total != $transaksi;
+
+            $validator->after(function ($validator) use ($compare) {
+                if ($compare) {
+                    $validator->errors()->add('rfid', 'jumlah RFID Pending tidak sesuai dengan proses !');
+                }
+            });
+
+        }
+        else
+        {
+            $transaksi = Transaksi::select(Transaksi::field_rfid())
+            ->whereIn(Transaksi::field_rfid(), $this->rfid)
+            ->whereNotNull(Transaksi::field_pending_in())
+            ->whereNull(Transaksi::field_pending_out())
+            ->count();
+
+            $validator->after(function ($validator) use ($transaksi) {
+                if ($transaksi > 0) {
+                    $validator->errors()->add('rfid', 'ADA RFID YANG SEDANG PENDING !');
+                }
+            });
+        }
+
     }
 
     public function prepareForValidation()
@@ -127,10 +148,10 @@ class BarcodeRequest extends FormRequest
 
         $user = auth()->user()->id;
 
-        $code = $code.'-'.$code_rs.'-'.$code_ruangan.'-'.$user.date('ymd');
+        $code = $code . '-' . $code_rs . '-' . $code_ruangan . '-' . $user . date('ymd');
         //KTR-MRHP-R0227-10924101100001
 
-        $autoNumber = Query::autoNumber(Transaksi::getTableName(), Transaksi::field_barcode(), $code , 29);
+        $autoNumber = Query::autoNumber(Transaksi::getTableName(), Transaksi::field_barcode(), $code, 29);
 
         $this->merge([
             'code' => $autoNumber,

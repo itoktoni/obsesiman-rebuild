@@ -306,6 +306,16 @@ trait TransaksiEntity
         return $this->{$this->field_grouping()};
     }
 
+    public static function field_pending()
+    {
+        return 'transaksi_pending';
+    }
+
+    public function getFieldPending()
+    {
+        return $this->{$this->field_pending()};
+    }
+
     public static function field_pending_in()
     {
         return 'transaksi_pending_in';
