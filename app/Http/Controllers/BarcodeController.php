@@ -51,6 +51,7 @@ class BarcodeController extends MasterController
 
     public function getData()
     {
+        set_time_limit(0);
         $query = self::$repository->dataBarcode();
 
         if($tanggal = request()->get('transaksi_barcode_at')){

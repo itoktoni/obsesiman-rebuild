@@ -10,7 +10,7 @@
                     <div class="row">
                         <x-form-select prepend="Scan RS" col="4" class="search" :label=false name="rs_id" :options="$rs" />
                         <x-form-select prepend="Status" col="4" class="search" :label=false name="status" :options="$status" />
-                        <x-form-select prepend="Operator" col="4" class="search" :label=false name="transaksi_created_by" :options="$user" />
+                        <x-form-input prepend="No. Pending" :label=false col="4" name="pending_key" />
 
                         <x-form-input prepend="No. RFID" :label=false col="4" name="transaksi_rfid" />
                         <x-form-input type="date" prepend="Tanggal Awal" :label=false col="4" name="start_date" />
@@ -30,10 +30,13 @@
                             <tr>
                                 <th class="text-center column-checkbox">{{ __('No.') }}</th>
                                 <th>NO. TRANSAKSI</th>
+                                <th>NO. RFID</th>
                                 <th>TGL KOTOR</th>
                                 <th>PENDING IN</th>
                                 <th>PENDING OUT</th>
-                                <th>NO. RFID</th>
+                                <th>PENDING</th>
+                                <th>BARCODE</th>
+                                <th>DELIVERY</th>
                                 <th>LINEN </th>
                                 <th>RUMAH SAKIT</th>
                                 <th>RUANGAN</th>
@@ -52,10 +55,13 @@
                                 <tr>
                                     <td>{{ ($data->currentPage() - 1) * $data->perPage() + $loop->iteration }}</td>
                                     <td>{{ $table->field_key }}</td>
+                                    <td>{{ $table->field_rfid }}</td>
                                     <td>{{ formatDate($table->transaksi_created_at) }}</td>
                                     <td>{{ formatDate($table->transaksi_pending_in) }}</td>
                                     <td>{{ formatDate($table->transaksi_pending_out) }}</td>
-                                    <td>{{ $table->field_rfid }}</td>
+                                    <td>{{ formatDate($table->transaksi_pending) }}</td>
+                                    <td>{{ formatDate($table->transaksi_barcode) }}</td>
+                                    <td>{{ formatDate($table->transaksi_delivery) }}</td>
                                     <td>{{ $table->view_linen_nama }}</td>
                                     <td>{{ $table->view_rs_nama }}</td>
                                     <td>{{ $table->view_ruangan_nama }}</td>

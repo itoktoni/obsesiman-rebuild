@@ -48,6 +48,8 @@ class PendingController extends MasterController
 
     public function getData()
     {
+        set_time_limit(0);
+
         $query = self::$repository->getQueryReportTransaksi()
             ->whereNotNull(Transaksi::field_pending_in())
             ->leftJoinRelationship(HAS_RS)

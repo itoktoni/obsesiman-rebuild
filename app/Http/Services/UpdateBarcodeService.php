@@ -36,12 +36,12 @@ class UpdateBarcodeService
             ->update([
                 Detail::field_status_process() => ProcessType::Barcode,
                 Detail::field_status_history() => LogType::Barcode,
-                // Detail::field_updated_at() => date('Y-m-d H:i:s'),
                 Detail::field_updated_by() => auth()->user()->id,
-                Detail::field_pending_created_at() => null,
-                Detail::field_pending_updated_at() => null,
-                Detail::field_hilang_created_at() => null,
-                Detail::field_hilang_updated_at() => null,
+                // Detail::field_updated_at() => date('Y-m-d H:i:s'),
+                // Detail::field_pending_created_at() => null,
+                // Detail::field_pending_updated_at() => null,
+                // Detail::field_hilang_created_at() => null,
+                // Detail::field_hilang_updated_at() => null,
             ]);
 
             $cetak = Cetak::where(Cetak::field_name(), $code)->first();

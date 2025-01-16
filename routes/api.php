@@ -518,6 +518,8 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
     Route::post('rewash', [TransaksiController::class, 'rewash']);
 
     Route::get('grouping/{rfid}', function ($rfid, SaveTransaksiService $service) {
+        $flag = 'GROUPING';
+
         try {
             $data = Detail::with([HAS_RS, HAS_RUANGAN, HAS_JENIS])
             ->select([
@@ -576,9 +578,9 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
 
             $check_transaksi = Transaksi::where(Transaksi::field_rfid(), $rfid)
                 ->whereNull(Transaksi::field_delivery())
-                ->count();
+                ->first();
 
-            if ($check_transaksi == 0 and (in_array($status_transaksi, [
+            if (empty($check_transaksi) and (in_array($status_transaksi, [
                 TransactionType::BersihKotor,
                 TransactionType::BersihRetur,
                 TransactionType::BersihRewash,
@@ -587,6 +589,8 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
                 TransactionType::Rewash,
                 TransactionType::Register,
             ]))) {
+
+                $flag = 'TRANSAKSI';
 
                 $startDate = Carbon::createFromFormat('Y-m-d H:i', date('Y-m-d') . ' 00:00');
                 $endDate = Carbon::createFromFormat('Y-m-d H:i', date('Y-m-d') . ' 05:59');
@@ -619,6 +623,14 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
                     ModelsHistory::field_description() => ProcessType::getDescription(ProcessType::Grouping),
                 ];
             } else {
+
+                $flag = 'GROUPING';
+
+                if (!empty($check_transaksi->transaksi_pending_in) && empty($check_transaksi->transaksi_pending_out)) {
+
+                    $flag = 'PENDING';
+                }
+
                 $log[] = [
                     ModelsHistory::field_name() => $rfid,
                     ModelsHistory::field_status() => ProcessType::Grouping,
@@ -629,13 +641,13 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
             }
 
             Detail::find($rfid)->update([
-                // Detail::field_updated_at() => date('Y-m-d H:i:s'),
                 Detail::field_updated_by() => auth()->user()->id,
-                Detail::field_pending_created_at() => null,
-                Detail::field_pending_updated_at() => null,
-                Detail::field_hilang_created_at() => null,
-                Detail::field_hilang_updated_at() => null,
                 Detail::field_status_history() => LogType::Grouping,
+                // Detail::field_updated_at() => date('Y-m-d H:i:s'),
+                // Detail::field_pending_created_at() => null,
+                // Detail::field_pending_updated_at() => null,
+                // Detail::field_hilang_created_at() => null,
+                // Detail::field_hilang_updated_at() => null,
             ]);
 
             $collection = [
@@ -654,6 +666,7 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
                 'tanggal_delete' => $data->detail_deleted_at ? $data->detail_deleted_at->format('Y-m-d') : null,
                 'pemakaian' => 0,
                 'user_nama' => auth()->user()->name ?? null,
+                'status' => $flag ?? null,
             ];
 
             $status_grouping = ProcessType::Grouping;
