@@ -41,7 +41,6 @@
 				<th>RUANGAN</th>
 				<th>LOKASI SCAN RUMAH SAKIT</th>
 				<th>STATUS TRANSAKSI</th>
-				<th>STATUS LINEN</th>
 				<th>CUCI/RENTAL</th>
 				<th>JUMLAH PEMAKAIAN LINEN</th>
 				<th>TANGGAL PENERIMAAN KOTOR</th>
@@ -60,7 +59,6 @@
 				<td>{{ $table->view_ruangan_nama }}</td>
 				<td>{{ $table->field_rs_name }}</td>
 				<td>{{ $table->field_status_transaction_name }}</td>
-				<td>{{ empty($table->view_status_proses) ? 'Belum Register' : ProcessType::getDescription($table->view_status_proses) }}</td>
 				<td>{{ empty($table->view_status_cuci) ? '' : CuciType::getDescription($table->view_status_cuci) }}</td>
 				<td>{{ $table->view_transaksi_cuci_total ?? 0 }}</td>
 				<td>{{ formatDate($table->transaksi_created_at) }}</td>

@@ -199,7 +199,6 @@ class PendingController extends MasterController
 
     public function print($code)
     {
-
         $total = Transaksi::where(Transaksi::field_delivery(), $code)
             ->join((new ViewDetailLinen())->getTable(), ViewDetailLinen::field_primary(), Transaksi::field_rfid())
             ->get();
