@@ -128,7 +128,7 @@ return array(
     'Dietercoopman\\Showsql\\' => array($vendorDir . '/dietercoopman/laravel-showsql/src'),
     'Dflydev\\DotAccessData\\' => array($vendorDir . '/dflydev/dot-access-data/src'),
     'DeepCopy\\' => array($vendorDir . '/myclabs/deep-copy/src/DeepCopy'),
-    'DebugBar\\' => array($vendorDir . '/maximebf/debugbar/src/DebugBar'),
+    'DebugBar\\' => array($vendorDir . '/php-debugbar/php-debugbar/src/DebugBar'),
     'Database\\Seeders\\' => array($baseDir . '/database/seeders'),
     'Database\\Factories\\' => array($baseDir . '/database/factories'),
     'Cron\\' => array($vendorDir . '/dragonmantank/cron-expression/src/Cron'),

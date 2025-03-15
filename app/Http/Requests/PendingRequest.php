@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Dao\Enums\ProcessType;
 use App\Dao\Enums\TransactionType;
 use App\Dao\Models\Detail;
 use App\Dao\Models\Rs;
@@ -16,7 +17,6 @@ class PendingRequest extends FormRequest
     public function rules()
     {
         return [
-            RFID => 'required|array',
             RS_ID => 'required',
             STATUS_TRANSAKSI => 'required',
             'tanggal' => 'required|date_format:Y-m-d',
@@ -25,8 +25,6 @@ class PendingRequest extends FormRequest
 
     public function withValidator($validator)
     {
-        $total = count($this->rfid);
-
         // CASE KETIKA RFID TIDAK DITEMUKAN
 
         $where = TransactionType::Register;
@@ -48,47 +46,19 @@ class PendingRequest extends FormRequest
             $where = TransactionType::Rewash;
         }
 
-        $rfid = Detail::whereIn(Detail::field_primary(), $this->rfid)
-                    ->where(Detail::field_status_transaction(), $where)
-                    ->where(Detail::field_rs_id(), $this->rs_id);
+         // CASE TRANSAKSI TIDAK ADA YANG PENDING
 
-        $total_rfid_original = $rfid->count();
-
-        $compare = $total != $total_rfid_original;
-
-        $validator->after(function ($validator) use ($compare) {
-            if ($compare) {
-                $validator->errors()->add('rfid', 'RFID tidak sesuai dengan proses !');
-            }
-        });
-
-        if ($compare) {
-            return;
-        }
-
-        // CASE YANG DIBARCODE LEBIH DARI YANG DITENTUKAN
-
-        $validator->after(function ($validator) use ($total) {
-
-            $maksimal = env('TRANSACTION_BARCODE_MAXIMAL', 10);
-            if ($total > $maksimal) {
-                $validator->errors()->add('rfid', 'RFID maksimal ' . $maksimal);
-            }
-        });
-
-        // CASE PREVENT DATA WHEN RFID PENDING
-
-        $transaksi = Transaksi::select(Transaksi::field_rfid())
-            ->whereIn(Transaksi::field_rfid(), $this->rfid)
-            ->whereDate(Transaksi::field_pending_in(), $this->tanggal)
+        $total = Transaksi::select(Transaksi::field_rfid())
+            ->whereNotNull(Transaksi::field_barcode())
+            ->whereNotNull(Transaksi::field_pending_in())
             ->whereNull(Transaksi::field_pending_out())
+            ->where(Transaksi::field_status_transaction(), $where)
+            ->where(Transaksi::field_rs_ori(), $this->rs_id)
             ->count();
 
-        $compare = $total != $transaksi;
-
-        $validator->after(function ($validator) use ($compare) {
-            if ($compare) {
-                $validator->errors()->add('rfid', 'ADA RFID PENDING YANG TIDAK SESUAI !');
+        $validator->after(function ($validator) use ($total) {
+            if ($total == 0) {
+                $validator->errors()->add('rfid', 'tidak ada RFID yang Pending !');
             }
         });
     }

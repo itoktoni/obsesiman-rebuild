@@ -54,15 +54,14 @@ class UpdatePendingService
 
         try {
 
-            $check = Transaksi::whereIn(Transaksi::field_rfid(), $rfid)
-            ->whereDate(Transaksi::field_pending_in(), $tanggal)
+            $check = Transaksi::where(Transaksi::field_rs_ori(), $rs)
+            ->whereNotNull(Transaksi::field_pending_in())
             ->whereNull(Transaksi::field_pending_out())
             ->whereNotNull(Transaksi::field_barcode())
             ->where(Transaksi::field_status_transaction(), $transaksi)
-            ->where(Transaksi::field_rs_ori(), $rs)
             ->update([
                 Transaksi::field_pending() => $pending_code,
-                Transaksi::field_pending_out() => date('Y-m-d H:i:s'),
+                Transaksi::field_pending_out() => $tanggal.' '.date('H:i:s'),
                 Transaksi::field_delivery() => $code,
                 Transaksi::field_delivery_by() => auth()->user()->id,
                 Transaksi::field_delivery_at() => date('Y-m-d H:i:s'),
