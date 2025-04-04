@@ -35,6 +35,7 @@ class Transaksi extends Model
         'transaksi_beda_rs',
         'transaksi_id_rs',
         'transaksi_id_ruangan',
+        'transaksi_id_jenis',
         'transaksi_created_at',
         'transaksi_updated_at',
         'transaksi_created_by',

@@ -80,6 +80,16 @@ trait TransaksiEntity
         return $this->{$this->field_ruangan_id()};
     }
 
+    public static function field_jenis_id()
+    {
+        return 'transaksi_id_jenis';
+    }
+
+    public function getFieldJenisIdAttribute()
+    {
+        return $this->{$this->field_jenis_id()};
+    }
+
     public function getFieldRsNameAttribute()
     {
         return $this->{Rs::field_name()};

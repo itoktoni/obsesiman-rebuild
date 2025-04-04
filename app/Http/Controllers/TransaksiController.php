@@ -260,12 +260,10 @@ class TransaksiController extends MasterController
             */
 
             $return = $transaksi = $linen = $log = [];
-
             foreach ($rfid as $item) {
                 $date = date('Y-m-d H:i:s');
                 $user = auth()->user()->id;
                 $name = auth()->user()->name;
-
                 if (isset($data[$item])) {
                     $detail = $data[$item];
                     if (!in_array($item, $query_transaksi) and $this->checkValidation($status_transaksi, $detail->field_status_transaction, $detail->field_updated_at)) {
@@ -279,6 +277,8 @@ class TransaksiController extends MasterController
                             Transaksi::field_status_transaction() => $status_transaksi,
                             Transaksi::field_rs_ori() => $detail->field_rs_id,
                             Transaksi::field_rs_id() => $request->rs_id,
+                            Transaksi::field_ruangan_id() => $detail->field_ruangan_id,
+                            Transaksi::field_jenis_id() => $detail->field_jenis_id,
                             Transaksi::field_beda_rs() => $beda_rs,
                             Transaksi::field_created_at() => $date,
                             Transaksi::field_created_by() => $user,
