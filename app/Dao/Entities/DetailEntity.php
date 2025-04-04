@@ -30,6 +30,11 @@ trait DetailEntity
         return 'detail_id_jenis';
     }
 
+    public function getFieldJenisIdAttribute()
+    {
+        return $this->{$this->field_jenis_id()};
+    }
+
     public static function field_name()
     {
         return self::field_primary();
