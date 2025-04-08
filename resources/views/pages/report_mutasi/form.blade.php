@@ -4,6 +4,8 @@
             <x-action form="print" />
                 <input type="hidden" name="report_name" value="Laporan Mutasi">
                 @livewire('dropdown', ['hide' => 'ruangan'])
+
+                <input type="hidden" name="action" value="excel">
                 <x-form-input col="6" type="date" label="Tanggal Awal" name="start_date" />
                 <x-form-input col="6" type="date" label="Tanggal Akhir" name="end_date" />
 
