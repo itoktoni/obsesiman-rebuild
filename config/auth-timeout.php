@@ -10,7 +10,7 @@ return [
     /**
      * The minutes of idle time before the user is logged out.
      */
-    'timeout' => 5,
+    'timeout' => env('AUTH_TIMEOUT', 30),
 
     /**
      * The event that will be dispatched when a user has timed out.
