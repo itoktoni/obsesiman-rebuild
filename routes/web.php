@@ -35,7 +35,7 @@ Route::get('/reset', function(){
     $transaksi = Transaksi::whereNotNull(Transaksi::field_pending_in())->get('transaksi_rfid')->pluck('transaksi_rfid')->toArray();
 
     Transaksi::whereIn(Transaksi::field_rfid(), $transaksi)->update([
-        Transaksi::field_pending_in() => null,
+        Transaksi::field_pending_in() => now()->format('Y-m-d H:i:s'),
         Transaksi::field_pending_out() => null,
         Transaksi::field_pending() => null,
         Transaksi::field_barcode() => null,
@@ -49,7 +49,7 @@ Route::get('/reset', function(){
     Detail::whereIn(Detail::field_primary(), $transaksi)->update([
         Detail::field_updated_at() => now()->subDay(3)->format('Y-m-d H:i:s'),
         Detail::field_status_transaction() => TransactionType::Kotor,
-        Detail::field_status_process() => ProcessType::Grouping,
+        Detail::field_status_process() => ProcessType::Pending,
     ]);
 
 });
