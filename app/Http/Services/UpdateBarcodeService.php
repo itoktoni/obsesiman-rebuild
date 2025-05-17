@@ -46,14 +46,27 @@ class UpdateBarcodeService
 
             $cetak = Cetak::where(Cetak::field_name(), $code)->first();
             if(!$cetak){
-                $cetak = Cetak::create([
+
+                $parsing = [
                     Cetak::field_date() => date('Y-m-d'),
                     Cetak::field_name() => $code,
                     Cetak::field_type() => CetakType::Barcode,
                     Cetak::field_user() => auth()->user()->name ?? 'Admin',
                     Cetak::field_rs_id() => $rs ?? null,
                     Cetak::field_ruangan_id() => $ruangan ?? null,
-                ]);
+                ];
+
+                if(request()->get('pending'))
+                {
+                    $default = array_merge($parsing, [Cetak::field_type() => CetakType::BarcodePending]);
+                }
+                else
+                {
+                    $default = array_merge($parsing, [Cetak::field_type() => CetakType::Barcode]);
+                }
+
+                $cetak = Cetak::create($default);
+
             }
 
             History::bulk($data, LogType::Barcode);
