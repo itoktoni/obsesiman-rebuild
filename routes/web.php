@@ -32,7 +32,8 @@ Route::get('send-message', function(){
 });
 
 Route::get('/reset', function(){
-    $transaksi = Transaksi::whereNotNull(Transaksi::field_pending_in())->get('transaksi_rfid')->pluck('transaksi_rfid')->toArray();
+    $transaksi = Transaksi::get()->pluck(Transaksi::field_rfid())->toArray();
+    // ->get('transaksi_rfid')->pluck('transaksi_rfid')->toArray();
 
     Transaksi::whereIn(Transaksi::field_rfid(), $transaksi)->update([
         Transaksi::field_pending_in() => now()->format('Y-m-d H:i:s'),
