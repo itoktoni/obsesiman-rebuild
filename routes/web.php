@@ -1,7 +1,11 @@
 <?php
 
 use App\Dao\Enums\MenuType;
+use App\Dao\Enums\ProcessType;
+use App\Dao\Enums\TransactionType;
 use App\Dao\Facades\EnvFacades;
+use App\Dao\Models\Detail;
+use App\Dao\Models\Transaksi;
 use App\Exports\ExportRegister;
 use App\Http\Controllers\HomeController;
 use App\Jobs\downloadReport;
@@ -25,6 +29,29 @@ Route::get('/', function () {
 Route::get('send-message', function(){
     $ip = request()->ip();
     Log::info($ip);
+});
+
+Route::get('/reset', function(){
+    $transaksi = Transaksi::whereNotNull(Transaksi::field_pending_in())->get('transaksi_rfid')->pluck('transaksi_rfid')->toArray();
+
+    Transaksi::whereIn(Transaksi::field_rfid(), $transaksi)->update([
+        Transaksi::field_pending_in() => null,
+        Transaksi::field_pending_out() => null,
+        Transaksi::field_pending() => null,
+        Transaksi::field_barcode() => null,
+        Transaksi::field_delivery() => null,
+        Transaksi::field_delivery_at() => null,
+        Transaksi::field_delivery_by() => null,
+        Transaksi::field_status_bersih() => null,
+    ]);
+
+
+    Detail::whereIn(Detail::field_primary(), $transaksi)->update([
+        Detail::field_updated_at() => now()->subDay(3)->format('Y-m-d H:i:s'),
+        Detail::field_status_transaction() => TransactionType::Kotor,
+        Detail::field_status_process() => ProcessType::Grouping,
+    ]);
+
 });
 
 Route::get('/signout', 'App\Http\Controllers\Auth\LoginController@logout')->name('signout');
