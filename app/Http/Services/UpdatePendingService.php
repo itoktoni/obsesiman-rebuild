@@ -95,12 +95,15 @@ class UpdatePendingService
                 return Notes::error('RFID tidak ditemukan!');
             }
 
-            $cetak = Cetak::where(Cetak::field_name(), $code)->first();
+            $cetak = Cetak::where(Cetak::field_name(), $code)
+                ->where(Cetak::field_type(), CetakType::DeliveryPending)
+                ->first();
+
             if(!$cetak){
                 $cetak = Cetak::create([
                     Cetak::field_date() => date('Y-m-d'),
                     Cetak::field_name() => $code,
-                    Cetak::field_type() => CetakType::Delivery,
+                    Cetak::field_type() => CetakType::DeliveryPending,
                     Cetak::field_user() => auth()->user()->name ?? null,
                     Cetak::field_rs_id() => request()->get('rs_id') ?? null,
                 ]);

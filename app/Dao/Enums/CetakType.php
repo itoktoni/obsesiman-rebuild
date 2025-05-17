@@ -13,4 +13,6 @@ class CetakType extends Enum implements LocalizedEnum
     const Unknown          =  0;
     const Barcode          =  1;
     const Delivery         =  2;
+    const BarcodePending   =  3;
+    const DeliveryPending  =  4;
 }
