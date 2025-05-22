@@ -36,12 +36,12 @@ class ReportDetailPendingController extends MinimalController
 
         if($start = $request->pending_in)
         {
-            $query = $query->whereDate(Transaksi::field_pending_in(), '>=', $start);
+            $query = $query->whereDate(Transaksi::field_created_at(), '>=', $start);
         }
 
         if($end = $request->pending_out)
         {
-            $query = $query->whereDate(Transaksi::field_pending_in(), '<=', $end);
+            $query = $query->whereDate(Transaksi::field_created_at(), '<=', $end);
         }
 
         return $query->get();
