@@ -88,10 +88,10 @@ class PendingRequest extends FormRequest
         $code_rs = Rs::find($this->rs_id)->rs_code;
 
         $user = auth()->user()->id;
-        $code = $code.'-'.$code_rs.'-'.$user.date('ymd');
+        $code = 'P'.$code.'-'.$code_rs.'-'.$user.date('ymd');
 
         //BBSH-RSSC-1092411021
-        $autoNumber = Query::autoNumber(Transaksi::getTableName(), Transaksi::field_delivery(), $code, 20);
+        $autoNumber = Query::autoNumber(Transaksi::getTableName(), Transaksi::field_delivery(), $code, 21);
 
         $this->merge([
             'code' => $autoNumber,

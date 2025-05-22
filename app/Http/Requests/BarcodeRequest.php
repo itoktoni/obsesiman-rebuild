@@ -149,9 +149,18 @@ class BarcodeRequest extends FormRequest
         $user = auth()->user()->id;
 
         $code = $code . '-' . $code_rs . '-' . $code_ruangan . '-' . $user . date('ymd');
+
+        $total = 29;
+
+        if($this->pending)
+        {
+            $code = 'P'.$code;
+            $total = 30;
+        }
+
         //KTR-MRHP-R0227-10924101100001
 
-        $autoNumber = Query::autoNumber(Transaksi::getTableName(), Transaksi::field_barcode(), $code, 29);
+        $autoNumber = Query::autoNumber(Transaksi::getTableName(), Transaksi::field_barcode(), $code, $total);
 
         $this->merge([
             'code' => $autoNumber,
