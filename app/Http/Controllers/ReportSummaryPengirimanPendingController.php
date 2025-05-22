@@ -10,7 +10,7 @@ use App\Dao\Repositories\TransaksiRepository;
 use App\Http\Requests\DeliveryReportRequest;
 use Illuminate\Support\Facades\DB;
 
-class ReportDetailPengirimanPendingController extends MinimalController
+class ReportSummaryPengirimanPendingController extends MinimalController
 {
     public $data;
 
@@ -38,7 +38,14 @@ class ReportDetailPengirimanPendingController extends MinimalController
 
     private function getQuery($request){
         $query =  self::$repository->getDetailAllBersih()
-            ->addSelect(['*', DB::raw('user_delivery.name as user_delivery')])
+            ->select([
+                'transaksi_delivery',
+                'view_rs_nama',
+                'view_ruangan_nama',
+                DB::raw('count(transaksi_rfid) as total_rfid'),
+                'transaksi_delivery_at',
+                DB::raw('user_delivery.name as user_delivery'),
+            ])
             ->leftJoinRelationship('has_created_delivery', 'user_delivery')
             ->whereNotNull(Transaksi::field_pending_in());
 
@@ -50,11 +57,13 @@ class ReportDetailPengirimanPendingController extends MinimalController
             $query = $query->where(Transaksi::field_report(), '<=', $end_date);
         }
 
-        if ($status = $request->status_bersih) {
-            $query = $query->where(Transaksi::field_status_bersih(), $status);
+        $query = $query->get();
+
+        if($query->sum('total_rfid') > 0){
+            return $query;
         }
 
-        return $query->orderBy('view_linen_nama', 'ASC')->get();
+        return [];
     }
 
     public function getPrint(DeliveryReportRequest $request){

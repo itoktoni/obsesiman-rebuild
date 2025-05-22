@@ -10,7 +10,7 @@
                     <div class="row">
                         <x-form-select prepend="Scan RS" col="4" class="search" :label=false name="rs_id" :options="$rs" />
                         <x-form-select prepend="Status" col="4" class="search" :label=false name="status" :options="$status" />
-                        <x-form-input prepend="No. Pending" :label=false col="4" name="pending_key" />
+                        <x-form-input prepend="No. Pending" :label=false col="4" name="transaksi_pending" />
 
                         <x-form-input prepend="No. RFID" :label=false col="4" name="transaksi_rfid" />
                         <x-form-input type="date" prepend="Tanggal Awal" :label=false col="4" name="start_date" />

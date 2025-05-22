@@ -74,6 +74,7 @@ class Transaksi extends Model
         'transaksi_barcode',
         'transaksi_delivery',
         'transaksi_bersih',
+        'transaksi_pending',
         'transaksi_created_by',
         'start_date',
         'end_date',

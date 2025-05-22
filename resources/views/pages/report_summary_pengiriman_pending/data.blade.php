@@ -1,9 +1,16 @@
 <table border="0" class="header">
 	<tr>
+
+		@php
+		$status = intval(request()->get('status_bersih'));
+		$des = TransactionType::getDescription($status);
+		$keterangan = $des == 'Unknown' ? 'Pending' : 'Pending '.$des;
+		@endphp
+
 		<td></td>
 		<td colspan="6">
 			<h3>
-				<b>DETAIL PENGIRIMAN LINEN BERSIH </b>
+				<b>SUMMARY PENGIRIMAN LINEN {{ Str::of($keterangan)->upper()->value() }} </b>
 			</h3>
 		</td>
 		<td rowspan="3">
@@ -34,20 +41,10 @@
 		<thead>
 			<tr>
 				<th width="1">No. </th>
-				<th>STATUS</th>
 				<th>NO. DO</th>
-				<th>TANGGAL. DO</th>
-				<th>NO. BARCODE</th>
-				<th>TANGGAL. BARCODE</th>
-				<th>NO. RFID</th>
-				<th>LINEN </th>
 				<th>RUMAH SAKIT</th>
-				<th>RUANGAN</th>
-				<th>JUMLAH PEMAKAIAN LINEN</th>
-				<th>TANGGAL REPORT</th>
-				<th>TANGGAL REGISTER</th>
-				<th>TANGGAL PENDING IN</th>
-				<th>TANGGAL PENDING OUT</th>
+				<th>TOTAL</th>
+				<th>TANGGAL PENGIRIMAN BERSIH</th>
 				<th>OPERATOR</th>
 			</tr>
 		</thead>
@@ -55,20 +52,10 @@
 			@forelse($data as $table)
 			<tr>
 				<td>{{ $loop->iteration }}</td>
-				<td>{{ TransactionType::getDescription($table->field_status_bersih) }}</td>
 				<td>{{ $table->field_delivery }}</td>
-				<td>{{ $table->transaksi_delivery_at }}</td>
-				<td>{{ $table->field_barcode }}</td>
-				<td>{{ $table->transaksi_barcode_at }}</td>
-				<td>{{ $table->field_rfid }}</td>
-				<td>{{ $table->view_linen_nama }}</td>
 				<td>{{ $table->view_rs_nama }}</td>
-				<td>{{ $table->view_ruangan_nama }}</td>
-				<td>{{ $table->view_transaksi_cuci_total ?? 0 }}</td>
-				<td>{{ formatDate($table->transaksi_report) }}</td>
-				<td>{{ formatDate($table->view_tanggal_create) }}</td>
-				<td>{{ formatDate($table->transaksi_pending_in) }}</td>
-				<td>{{ formatDate($table->transaksi_pending_out) }}</td>
+				<td>{{ $table->total_rfid ?? 0 }}</td>
+				<td>{{ formatDate($table->transaksi_delivery_at) }}</td>
 				<td>{{ $table->user_delivery ?? '' }}</td>
 			</tr>
 			@empty
