@@ -96,6 +96,8 @@ class CaptureOpnameService
 
     private function checkKetemu($item){
 
+        return BooleanType::No;
+
         if(in_array($item->detail_status_proses, [ProcessType::Pending, ProcessType::Hilang])){
             return BooleanType::Yes;
         }
