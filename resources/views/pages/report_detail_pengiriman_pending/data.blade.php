@@ -3,7 +3,7 @@
 		<td></td>
 		<td colspan="6">
 			<h3>
-				<b>DETAIL PENGIRIMAN LINEN BERSIH </b>
+				<b>DETAIL PENGIRIMAN LINEN PENDING </b>
 			</h3>
 		</td>
 		<td rowspan="3">
