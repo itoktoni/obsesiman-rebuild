@@ -67,18 +67,35 @@ class UpdateDeliveryService
                     $status_transaksi = TransactionType::BersihKotor;
                 }
 
-                Detail::whereIn(Detail::field_primary(), $data_rfid)
-                    ->update([
-                        Detail::field_status_transaction() => $status_transaksi,
-                        Detail::field_status_process() => ProcessType::Bersih,
-                        Detail::field_status_history() => LogType::Bersih,
-                        Detail::field_updated_at() => date('Y-m-d H:i:s'),
-                        Detail::field_updated_by() => auth()->user()->id,
-                        Detail::field_pending_created_at() => null,
-                        Detail::field_pending_updated_at() => null,
-                        Detail::field_hilang_created_at() => null,
-                        Detail::field_hilang_updated_at() => null,
-                    ]);
+                $transaksi = $status_transaksi;
+
+                $transaksi_data = [
+                    Detail::field_status_transaction() => $status_transaksi,
+                    Detail::field_status_process() => ProcessType::Bersih,
+                    Detail::field_status_history() => LogType::Bersih,
+                    Detail::field_updated_at() => date('Y-m-d H:i:s'),
+                    Detail::field_updated_by() => auth()->user()->id,
+                    Detail::field_pending_created_at() => null,
+                    Detail::field_pending_updated_at() => null,
+                    Detail::field_hilang_created_at() => null,
+                    Detail::field_hilang_updated_at() => null,
+                ];
+
+                if ($transaksi == TransactionType::BersihKotor) {
+
+                    Detail::whereIn(Detail::field_primary(), $data_rfid)
+                    ->increment('detail_total_bersih_kotor', 1, $transaksi_data);
+
+                } else if ($transaksi == TransactionType::BersihRetur){
+
+                    Detail::whereIn(Detail::field_primary(), $data_rfid)
+                    ->increment('detail_total_bersih_retur', 1, $transaksi_data);
+
+                } else if ($transaksi == TransactionType::BersihRewash){
+
+                    Detail::whereIn(Detail::field_primary(), $data_rfid)
+                    ->increment('detail_total_bersih_rewash', 1, $transaksi_data);
+                }
 
                 History::bulk($data_rfid, LogType::Bersih);
 
