@@ -83,18 +83,21 @@ class UpdateDeliveryService
                 if ($transaksi == TransactionType::BersihKotor) {
 
                     Detail::whereIn(Detail::field_primary(), $data_rfid)
-                    ->increment('detail_total_bersih_kotor', 1, $transaksi_data);
+                    ->increment('detail_total_bersih_kotor', 1);
 
                 } else if ($transaksi == TransactionType::BersihRetur){
 
                     Detail::whereIn(Detail::field_primary(), $data_rfid)
-                    ->increment('detail_total_bersih_retur', 1, $transaksi_data);
+                    ->increment('detail_total_bersih_retur', 1);
 
                 } else if ($transaksi == TransactionType::BersihRewash){
 
                     Detail::whereIn(Detail::field_primary(), $data_rfid)
-                    ->increment('detail_total_bersih_rewash', 1, $transaksi_data);
+                    ->increment('detail_total_bersih_rewash', 1);
                 }
+
+                Detail::whereIn(Detail::field_primary(), $data_rfid)
+                    ->increment('detail_total_cuci', 1);
 
                 History::bulk($data_rfid, LogType::Bersih);
 
