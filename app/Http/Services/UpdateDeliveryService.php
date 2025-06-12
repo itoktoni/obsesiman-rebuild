@@ -97,7 +97,7 @@ class UpdateDeliveryService
                 }
 
                 Detail::whereIn(Detail::field_primary(), $data_rfid)
-                    ->increment('detail_total_cuci', 1);
+                    ->increment('detail_total_cuci', 1, $transaksi_data);
 
                 History::bulk($data_rfid, LogType::Bersih);
 
