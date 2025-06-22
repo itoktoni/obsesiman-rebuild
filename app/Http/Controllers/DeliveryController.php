@@ -192,12 +192,12 @@ class DeliveryController extends MasterController
                     'lokasi' => $item->view_ruangan_nama,
                 ];
 
-                return [$item['view_linen_id'].'#'.$item['view_ruangan_id'] => $parse];
+                return [$item['view_linen_id'].$item['view_ruangan_id'] => $parse];
             });
 
-            foreach($data as $item){
+            foreach($data as $key => $item){
                 $return[] = [
-                    'id' => $item[0]['id'],
+                    'id' => $key,
                     'nama' => $item[0]['nama'],
                     'lokasi' => $item[0]['lokasi'],
                     'total' => count($item),
