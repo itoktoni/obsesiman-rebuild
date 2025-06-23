@@ -689,7 +689,7 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
     Route::get('delivery/{code}', [DeliveryController::class, 'print']);
 
     Route::get('list/delivery/{rsid}', function ($rsid) {
-        $data = Cetak::select([Cetak::field_name()])
+        $data = Cetak::select([Cetak::field_name(), Cetak::field_date()])
             ->where(Cetak::field_rs_id(), $rsid)
             ->where(Cetak::field_type(), CetakType::Delivery)
             ->where(Cetak::field_date(), '>=', now()->addDay(-30))
