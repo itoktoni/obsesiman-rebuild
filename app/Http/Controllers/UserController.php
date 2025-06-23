@@ -80,4 +80,22 @@ class UserController extends MasterController
 
         return Notes::token($user->toArray());
     }
+
+    public function valid(LoginRequest $request)
+    {
+        $user = User::select([
+            User::field_name(),
+           'password',
+            User::field_username(),
+            User::field_email(),
+        ])->where('username', $request->username)->first();
+
+        if (!Hash::check($request->password, $user->password)) {
+            return Notes::error([
+                'password' => 'Password Tidak Di temukan',
+            ],'Login Gagal');
+        }
+
+        return Notes::token($user->toArray());
+    }
 }

@@ -53,6 +53,7 @@ use Symfony\Component\Process\Process;
  */
 
 Route::post('login', [UserController::class, 'postLoginApi'])->name('postLoginApi');
+Route::post('valid', [UserController::class, 'valid'])->name('valid');
 
 Route::post('deploy', [WebhookController::class, 'deploy']);
 
