@@ -4,6 +4,7 @@
 /storage/*.key
 /postman/*
 /vendor/*
+/vendor
 .env
 backup.env
 /encrypted
