@@ -90,12 +90,16 @@ class UserController extends MasterController
             User::field_email(),
         ])->where('username', $request->username)->first();
 
-        if (!Hash::check($request->password, $user->password)) {
+        if($user && Hash::check($request->password, $user->password))
+        {
+            return Notes::token($user->toArray());
+        }
+        else
+        {
             return Notes::error([
                 'password' => 'Password Tidak Di temukan',
             ],'Login Gagal');
         }
 
-        return Notes::token($user->toArray());
     }
 }
