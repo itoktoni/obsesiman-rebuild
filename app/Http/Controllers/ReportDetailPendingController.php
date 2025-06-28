@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Dao\Enums\TransactionType;
 use App\Dao\Models\Rs;
 use App\Dao\Models\Transaksi;
 use App\Dao\Models\User;
@@ -22,10 +23,16 @@ class ReportDetailPendingController extends MinimalController
 
         $rs = Rs::getOptions();
         $user = User::getOptions();
+        $status = TransactionType::getOptions([
+            TransactionType::BersihKotor,
+            TransactionType::BersihRetur,
+            TransactionType::BersihRewash
+        ]);
 
         self::$share = [
             'user' => $user,
             'rs' => $rs,
+            'status' => $status,
         ];
     }
 
