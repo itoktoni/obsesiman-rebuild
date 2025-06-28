@@ -605,6 +605,16 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
                     $date = Carbon::now()->addDay(-1);
                 }
 
+                Detail::find($rfid)->update([
+                    Detail::field_updated_by() => auth()->user()->id,
+                    Detail::field_status_history() => LogType::Grouping,
+                    Detail::field_updated_at() => date('Y-m-d H:i:s'),
+                    Detail::field_pending_created_at() => null,
+                    Detail::field_pending_updated_at() => null,
+                    Detail::field_hilang_created_at() => null,
+                    Detail::field_hilang_updated_at() => null,
+                ]);
+
                 $data_transaksi[] = [
                     Transaksi::field_key() => Query::autoNumber((new Transaksi())->getTable(), Transaksi::field_key(), 'GROUP' . date('ymd') . $code_rs, 20),
                     Transaksi::field_rfid() => $rfid,

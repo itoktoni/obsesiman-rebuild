@@ -50,13 +50,15 @@ class CheckPending extends Command
             ->select(Transaksi::field_rfid(), ViewDetailLinen::field_status_terakhir())
             ->joinRelationship(HAS_DETAIL)
             ->whereDate(ViewDetailLinen::field_tanggal_update(), '<=', Carbon::now()->subMinutes(1440)->toDateString())
-            // ->whereDate(ViewDetailLinen::field_tanggal_update(), '<', Carbon::now()->toDateString())
             ->whereNull(Transaksi::field_status_bersih())
             ->whereNot(ViewDetailLinen::field_status_trasaction(), TransactionType::Register)
             ->whereNotIn(ViewDetailLinen::field_status_trasaction(), BERSIH)
             ->where(ViewDetailLinen::field_status_process(), '!=', ProcessType::Pending)
-            ->limit(env('TRANSACTION_CHUNK'))
+            ->limit(1)
+            ->showSql()
             ->get();
+
+            dd($outstanding);
 
         if ($outstanding) {
 
