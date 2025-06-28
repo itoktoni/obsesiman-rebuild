@@ -40,7 +40,8 @@ class ReportDetailPengirimanPendingController extends MinimalController
         $query =  self::$repository->getDetailAllBersih()
             ->addSelect(['*', DB::raw('user_delivery.name as user_delivery')])
             ->leftJoinRelationship('has_created_delivery', 'user_delivery')
-            ->whereNotNull(Transaksi::field_pending_in());
+            ->whereNotNull(Transaksi::field_pending_in())
+            ->whereNotNull(Transaksi::field_pending_out());
 
         if ($start_date = $request->start_delivery) {
             $query = $query->where(Transaksi::field_report(), '>=', $start_date);

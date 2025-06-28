@@ -32,6 +32,7 @@ class ReportDetailPendingController extends MinimalController
     private function getQuery($request){
         $query = self::$repository->getQueryReportTransaksi()
             ->whereNotNull(Transaksi::field_pending_in())
+            ->whereNull(Transaksi::field_pending_out())
             ->leftJoinRelationship(HAS_RS);
 
         if($start = $request->pending_in)
