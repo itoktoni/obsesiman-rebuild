@@ -295,6 +295,7 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
                             Transaksi::field_rs_ori() => $request->rs_id,
                             Transaksi::field_jenis_id() => $request->jenis_id,
                             Transaksi::field_ruangan_id() => $request->ruangan_id,
+                            Transaksi::field_jenis_id() => $request->jenis_id,
                             Transaksi::field_rfid() => $item,
                             Transaksi::field_status_transaction() => $transaksi_status,
                             Transaksi::field_created_at() => date('Y-m-d H:i:s'),
@@ -712,7 +713,7 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
     Route::get('delivery/{code}', [DeliveryController::class, 'print']);
 
     Route::get('list/delivery/{rsid}', function ($rsid) {
-        $data = Cetak::select([Cetak::field_name()])
+        $data = Cetak::select([Cetak::field_name(), Cetak::field_date()])
             ->where(Cetak::field_rs_id(), $rsid)
             ->where(Cetak::field_date(), '>=', now()->addDay(-30))
             ->orderBy(Cetak::field_date(), 'DESC');

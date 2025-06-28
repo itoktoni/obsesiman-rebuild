@@ -100,6 +100,8 @@ class ReportMutasiController extends MinimalController
 
     public function getPrint(MutasiReportRequest $request){
         set_time_limit(0);
+        ini_set('memory_limit', '512M');
+
         $rs_id = intval($request->view_rs_id);
         $rs = Rs::with([HAS_RUANGAN, HAS_JENIS])->find($rs_id);
 

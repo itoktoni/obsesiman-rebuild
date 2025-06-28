@@ -284,6 +284,8 @@ class TransaksiController extends MasterController
                             Transaksi::field_created_by() => $user,
                             Transaksi::field_updated_at() => $date,
                             Transaksi::field_updated_by() => $user,
+                            Transaksi::field_ruangan_id() => $detail->field_ruangan_id,
+                            Transaksi::field_jenis_id() => $detail->field_jenis_id,
                         ];
 
                         $transaksi[] = $data_transaksi;
@@ -314,6 +316,7 @@ class TransaksiController extends MasterController
                 } else {
 
                     if (!in_array($item, $query_transaksi) and !empty($item)) {
+
                         $transaksi[] = [
                             Transaksi::field_key() => $request->key,
                             Transaksi::field_rfid() => $item,
@@ -325,6 +328,8 @@ class TransaksiController extends MasterController
                             Transaksi::field_created_by() => $user,
                             Transaksi::field_updated_at() => $date,
                             Transaksi::field_updated_by() => $user,
+                            Transaksi::field_ruangan_id() => null,
+                            Transaksi::field_jenis_id() => null,
                         ];
                     }
 

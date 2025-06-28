@@ -57,6 +57,8 @@ class Dropdown extends Component
             'id_ruangan' => $this->id_ruangan,
             'id_jenis' => $this->id_jenis,
             'rs_id' => $this->id_rs,
+            'data_ruangan' => $this->data_ruangan,
+            'data_jenis' => $this->data_jenis,
         ]);
     }
 }

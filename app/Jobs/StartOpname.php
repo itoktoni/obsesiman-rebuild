@@ -93,14 +93,13 @@ class StartOpname implements ShouldQueue
 
     private function checkKetemu($item)
     {
+        // if (in_array($item->detail_status_proses, [ProcessType::Pending, ProcessType::Hilang])) {
+        //     return BooleanType::Yes;
+        // }
 
-        if (in_array($item->detail_status_proses, [ProcessType::Pending, ProcessType::Hilang])) {
-            return BooleanType::Yes;
-        }
-
-        if (in_array($item->detail_status_transaksi, [TransactionType::Retur, TransactionType::Rewash])) {
-            return BooleanType::Yes;
-        }
+        // if (in_array($item->detail_status_transaksi, [TransactionType::Retur, TransactionType::Rewash])) {
+        //     return BooleanType::Yes;
+        // }
 
         return BooleanType::No;
     }
