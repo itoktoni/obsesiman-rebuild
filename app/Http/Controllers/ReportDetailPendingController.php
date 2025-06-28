@@ -24,9 +24,9 @@ class ReportDetailPendingController extends MinimalController
         $rs = Rs::getOptions();
         $user = User::getOptions();
         $status = TransactionType::getOptions([
-            TransactionType::BersihKotor,
-            TransactionType::BersihRetur,
-            TransactionType::BersihRewash
+            TransactionType::Kotor,
+            TransactionType::Retur,
+            TransactionType::Rewash
         ]);
 
         self::$share = [
