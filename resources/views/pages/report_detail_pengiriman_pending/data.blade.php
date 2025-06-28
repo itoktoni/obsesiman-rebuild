@@ -55,7 +55,9 @@
 			@forelse($data as $table)
 			<tr>
 				<td>{{ $loop->iteration }}</td>
-				<td>{{ TransactionType::getDescription($table->field_status_bersih) }}</td>
+				<td>
+					{{ str_replace('Bersih', 'Pending', TransactionType::getDescription($table->field_status_bersih)) }}
+				</td>
 				<td>{{ $table->field_delivery }}</td>
 				<td>{{ $table->transaksi_delivery_at }}</td>
 				<td>{{ $table->field_barcode }}</td>
