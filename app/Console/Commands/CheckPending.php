@@ -54,7 +54,6 @@ class CheckPending extends Command
             ->whereNot(ViewDetailLinen::field_status_trasaction(), TransactionType::Register)
             ->whereNotIn(ViewDetailLinen::field_status_trasaction(), BERSIH)
             ->where(ViewDetailLinen::field_status_process(), '!=', ProcessType::Pending)
-            ->limit(1)
             ->get();
 
         if ($outstanding) {
