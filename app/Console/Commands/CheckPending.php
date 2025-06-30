@@ -49,7 +49,7 @@ class CheckPending extends Command
         $outstanding = Transaksi::query()
             ->select(Transaksi::field_rfid(), ViewDetailLinen::field_status_terakhir())
             ->joinRelationship(HAS_DETAIL)
-            ->whereDate(ViewDetailLinen::field_tanggal_update(), '<=', Carbon::now()->subMinutes(1440)->toDateString())
+            ->where(ViewDetailLinen::field_tanggal_update(), '<=', Carbon::now()->subMinutes(1440)->toDateString())
             ->whereNull(Transaksi::field_status_bersih())
             ->whereNot(ViewDetailLinen::field_status_trasaction(), TransactionType::Register)
             ->whereNotIn(ViewDetailLinen::field_status_trasaction(), BERSIH)
