@@ -45,10 +45,10 @@
 				<th>CUCI/RENTAL</th>
 				<th>JUMLAH PEMAKAIAN LINEN</th>
 				<th>TANGGAL REGISTER</th>
-				<th>TANGGAL PENERIMAAN KOTOR</th>
 				<th>NO. BARCODE</th>
 				<th>NO. DELIVERY</th>
 				<th>NO. PENDING</th>
+				<th>TANGGAL PENERIMAAN KOTOR</th>
 				<th>TANGGAL MASUK PENDING</th>
 				<th>TANGGAL KELUAR PENDING</th>
 			</tr>
@@ -68,10 +68,10 @@
 				<td>{{ empty($table->view_status_cuci) ? '' : CuciType::getDescription($table->view_status_cuci) }}</td>
 				<td>{{ $table->view_transaksi_cuci_total ?? 0 }}</td>
 				<td>{{ formatDate($table->view_tanggal_create) }}</td>
-				<td>{{ $table->transaksi_created_at }}</td>
 				<td>{{ $table->transaksi_barcode }}</td>
 				<td>{{ $table->transaksi_delivery }}</td>
 				<td>{{ $table->transaksi_pending }}</td>
+				<td>{{ $table->transaksi_created_at }}</td>
 				<td>{{ $table->transaksi_pending_in }}</td>
 				<td>{{ $table->transaksi_pending_out }}</td>
 			</tr>
