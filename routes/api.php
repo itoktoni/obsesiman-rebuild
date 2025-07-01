@@ -705,8 +705,7 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
         $data = Cetak::select([Cetak::field_name()])
             ->where(Cetak::field_rs_id(), $rsid)
             ->where(Cetak::field_date(), '>=', now()->addDay(-30))
-            ->orderBy(Cetak::field_date(), 'DESC')
-            ->get();
+            ->orderBy(Cetak::field_date(), 'DESC');
 
         if(request()->get('pending'))
         {
@@ -717,7 +716,7 @@ Route::middleware(['auth:sanctum'])->group(function () use ($routes) {
             $data = $data->where(Cetak::field_type(), CetakType::Barcode);
         }
 
-        return Notes::data(['total' => $data]);
+        return Notes::data(['total' => $data->get()]);
     });
 
     Route::post('delivery', [DeliveryController::class, 'delivery']);
