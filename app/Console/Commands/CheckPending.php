@@ -51,7 +51,7 @@ class CheckPending extends Command
             ->where(Transaksi::field_created_at(), '<=', Carbon::now()->subMinutes(1440)->toDateTimeString())
             ->whereNull(Transaksi::field_status_bersih())
             ->whereNot(Transaksi::field_status_transaction(), TransactionType::Register)
-            ->where(ViewDetailLinen::field_status_process(), '!=', ProcessType::Pending)
+            ->whereNull(Transaksi::field_pending_in())
             ->limit(env('TRANSACTION_CHUNK', 200))
             ->get();
 
