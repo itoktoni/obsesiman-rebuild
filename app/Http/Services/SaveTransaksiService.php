@@ -2,6 +2,7 @@
 
 namespace App\Http\Services;
 
+use App\Dao\Enums\ProcessType;
 use App\Dao\Models\Detail;
 use App\Dao\Models\History;
 use App\Dao\Models\Transaksi;
@@ -28,6 +29,7 @@ class SaveTransaksiService
             if(!empty($linen)){
                 foreach(array_chunk($linen, env('TRANSACTION_CHUNK')) as $save_detail){
                     Detail::whereIn(Detail::field_primary(), $save_detail)
+                    ->where(Detail::field_status_process(), '!=', ProcessType::Pending)
                     ->update([
                         Detail::field_status_transaction() => $status,
                         Detail::field_status_process() => $process,
