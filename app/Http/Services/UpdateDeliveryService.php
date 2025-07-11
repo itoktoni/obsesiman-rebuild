@@ -46,6 +46,7 @@ class UpdateDeliveryService
                 ->whereNull(Transaksi::field_delivery())
                 ->where(Transaksi::field_rs_ori(), request()->get('rs_id'))
                 ->where(Transaksi::field_status_transaction(), $transaksi)
+                ->whereNull(Transaksi::field_pending_in())
                 ->whereNotNull(Transaksi::field_barcode())
                 ->update([
                     Transaksi::field_delivery() => $code,
