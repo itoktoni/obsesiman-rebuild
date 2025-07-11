@@ -28,18 +28,23 @@ class SaveTransaksiService
 
             if(!empty($linen)){
                 foreach(array_chunk($linen, env('TRANSACTION_CHUNK')) as $save_detail){
-                    Detail::whereIn(Detail::field_primary(), $save_detail)
-                    ->where(Detail::field_status_process(), '!=', ProcessType::Pending)
-                    ->update([
-                        Detail::field_status_transaction() => $status,
-                        Detail::field_status_process() => $process,
-                        Detail::field_updated_by() => auth()->user()->id,
-                        // Detail::field_updated_at() => date('Y-m-d H:i:s'),
-                        // Detail::field_pending_created_at() => null,
-                        // Detail::field_pending_updated_at() => null,
-                        // Detail::field_hilang_created_at() => null,
-                        // Detail::field_hilang_updated_at() => null,
-                    ]);
+
+                    $detail = Detail::whereIn(Detail::field_primary(), $save_detail)->first();
+                    if($detail->detail_status_proses != ProcessType::Pending)
+                    {
+                        Detail::whereIn(Detail::field_primary(), $save_detail)
+                        ->update([
+                            Detail::field_status_transaction() => $status,
+                            Detail::field_status_process() => $process,
+                            Detail::field_updated_by() => auth()->user()->id,
+                            // Detail::field_updated_at() => date('Y-m-d H:i:s'),
+                            // Detail::field_pending_created_at() => null,
+                            // Detail::field_pending_updated_at() => null,
+                            // Detail::field_hilang_created_at() => null,
+                            // Detail::field_hilang_updated_at() => null,
+                        ]);
+                    }
+
                 }
             }
 
