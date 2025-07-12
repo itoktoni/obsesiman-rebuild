@@ -50,7 +50,7 @@ class CheckPending extends Command
             ->select(Transaksi::field_rfid())
             ->where(Transaksi::field_created_at(), '<=', Carbon::now()->subMinutes(1440)->toDateTimeString())
             ->where(Transaksi::field_status_transaction(), '!=', TransactionType::Register)
-            ->whereNull(Transaksi::field_status_bersih())
+            ->whereNull(Transaksi::field_report())
             ->whereNull(Transaksi::field_pending_in())
             ->limit(env('TRANSACTION_CHUNK', 200))
             ->get();
