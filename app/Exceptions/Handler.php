@@ -2,18 +2,16 @@
 
 namespace App\Exceptions;
 
-use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
-use Illuminate\Support\Facades\Log;
-use Exception;
+use GuzzleHttp\Client;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
+use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 use Plugins\Notes;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
-use GuzzleHttp\Client;
-use Illuminate\Auth\Access\AuthorizationException;
-use Illuminate\Auth\AuthenticationException;
 
 class Handler extends ExceptionHandler
 {
@@ -23,7 +21,7 @@ class Handler extends ExceptionHandler
      * @var array
      */
     protected $dontReport = [
-        'Symfony\Component\HttpKernel\Exception\HttpException'
+        'Symfony\Component\HttpKernel\Exception\HttpException',
     ];
 
     /**
@@ -46,23 +44,8 @@ class Handler extends ExceptionHandler
         //
     }
 
-    /**
-     * Render an exception into an HTTP response.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Throwable  $exception
-     * @return \Symfony\Component\HttpFoundation\Response
-     *
-     * @throws \Throwable
-     */
-    // public function render($request, Throwable $exception)
-    // {
-    //     if(isset($exception->getStatusCode()) && in_array($exception->getStatusCode(), [402, 404])){
-    //         return response()->view('errors.custom', ['exception' => $exception]);
-    //     }
-    // }
-
-    private function checkError(Throwable $e){
+    private function checkError(Throwable $e)
+    {
         if ($e->getMessage() == 'The route vendors/bundle.css could not be found.') {
             return true;
         }
@@ -90,11 +73,12 @@ class Handler extends ExceptionHandler
         return false;
     }
 
-    private function buildMessage($message){
+    private function buildMessage($message)
+    {
         $data = ['json' => [
             "chat_id" => env("TELEGRAM_ID"), //<== ganti dengan id_message yang kita dapat tadi
-            "text" => $message
-            ]
+            "text" => $message,
+        ],
         ];
 
         return $data;
@@ -103,49 +87,48 @@ class Handler extends ExceptionHandler
     public function render($request, Throwable $e)
     {
         Log::error($e->getMessage());
-        if(!empty(env('BOT_TELEGRAM')) && !empty(env('TELEGRAM_ID'))){
+        if (!empty(env('BOT_TELEGRAM')) && !empty(env('TELEGRAM_ID'))) {
 
-            $client  = new Client();
-            $url = "https://api.telegram.org/bot".env("BOT_TELEGRAM")."/sendMessage";//<== ganti jadi token yang kita tadi
+            $client = new Client();
+            $url = "https://api.telegram.org/bot" . env("BOT_TELEGRAM") . "/sendMessage"; //<== ganti jadi token yang kita tadi
 
             $data = $this->buildMessage(
-                "File : ".$e->getFile().
-                            "\nLine : ".$e->getLine().
-                            "\nCode : ".$e->getCode().
-                            "\nMessage : ".$e->getMessage().
-                            "\nUrl : ".request()->getUri().
-                            "\nMethod : ".request()->getMethod().
-                            "\nRequest : ".json_encode(request()->all(), JSON_PRETTY_PRINT)
+                "File : " . $e->getFile() .
+                "\nLine : " . $e->getLine() .
+                "\nCode : " . $e->getCode() .
+                "\nMessage : " . $e->getMessage() .
+                "\nUrl : " . request()->getUri() .
+                "\nMethod : " . request()->getMethod() .
+                "\nRequest : " . json_encode(request()->all(), JSON_PRETTY_PRINT)
             );
 
-            if(!$this->checkError($e)){
+            if (!$this->checkError($e)) {
                 $client->request('GET', $url, $data);
             }
         }
 
-        if(request()->hasHeader('authorization')){
+        if (request()->hasHeader('authorization')) {
+            if ($e instanceof AuthenticationException) {
+                return Notes::validation("Harus Login Ulang !");
+            }
 
-            if($e instanceof AuthenticationException){
+            if ($e instanceof ValidationException) {
                 return Notes::validation($e->getMessage());
             }
 
-            if($e instanceof ValidationException){
-                return Notes::validation($e->getMessage());
-            }
-
-            if($e instanceof ModelNotFoundException){
+            if ($e instanceof ModelNotFoundException) {
                 return Notes::error($e->getMessage());
             }
 
-            if($e instanceof NotFoundHttpException){
+            if ($e instanceof NotFoundHttpException) {
                 return Notes::error($e->getMessage());
             }
 
-            if($e instanceof QueryException){
+            if ($e instanceof QueryException) {
                 return Notes::error($e->getMessage());
             }
 
-            return Notes::error($e->getMessage(), 'Error '.$e->getCode());
+            return Notes::error($e->getMessage(), 'Error ' . $e->getCode());
         }
 
         if ($this->isHttpException($e)) {
