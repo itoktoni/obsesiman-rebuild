@@ -44,11 +44,11 @@ class ReportDetailPengirimanPendingController extends MinimalController
             ->whereNotNull(Transaksi::field_pending_out());
 
         if ($start_date = $request->start_delivery) {
-            $query = $query->whereDate(Transaksi::field_pending_out(), '>=', $start_date);
+            $query = $query->whereDate(Transaksi::field_report(), '>=', $start_date);
         }
 
         if ($end_date = $request->end_delivery) {
-            $query = $query->whereDate(Transaksi::field_pending_out(), '<=', $end_date);
+            $query = $query->whereDate(Transaksi::field_report(), '<=', $end_date);
         }
 
         if ($status = $request->status_bersih) {
