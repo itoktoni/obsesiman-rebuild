@@ -197,7 +197,7 @@ class DeliveryController extends MasterController
 
             foreach($data as $key => $item){
                 $return[] = [
-                    'id' => $key,
+                    'id' => $key.uniqid(),
                     'nama' => $item[0]['nama'],
                     'lokasi' => $item[0]['lokasi'],
                     'total' => count($item),
