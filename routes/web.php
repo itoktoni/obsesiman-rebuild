@@ -71,6 +71,7 @@ try {
     $routes = [];
 }
 
+/*
 if($routes){
     Route::middleware(['auth', 'access', 'auth.timeout'])->group(function () use($routes) {
         Route::prefix('admin')->group(function () use ($routes){
@@ -122,6 +123,8 @@ if($routes){
         });
     });
 }
+
+*/
 
 Route::post('upload_config', function (Request $request) {
 
