@@ -122,10 +122,10 @@ class AccessMiddleware
             //throw $th;
         }
 
-        if($this->terminate($request))
-        {
-             abort(500, 'Data is to big Report generation failed.');
-        }
+        // if($this->terminate($request))
+        // {
+        //      abort(500, 'Data is to big Report generation failed.');
+        // }
 
         return $next($request);
     }
