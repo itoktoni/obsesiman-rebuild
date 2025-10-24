@@ -14,6 +14,8 @@ use Plugins\Helper;
 use Plugins\Query;
 use Plugins\Template;
 
+use function PHPUnit\Framework\throwException;
+
 class AccessMiddleware
 {
     /**
@@ -120,6 +122,19 @@ class AccessMiddleware
             //throw $th;
         }
 
+        if($this->terminate($request))
+        {
+             abort(500, 'Data is to big Report generation failed.');
+        }
+
         return $next($request);
+    }
+
+    public function terminate($request)
+    {
+        if($request->get('type') == 'report')
+        {
+            return true;
+        }
     }
 }
