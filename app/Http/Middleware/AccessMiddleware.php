@@ -14,6 +14,8 @@ use Plugins\Helper;
 use Plugins\Query;
 use Plugins\Template;
 
+use function PHPUnit\Framework\throwException;
+
 class AccessMiddleware
 {
     /**
