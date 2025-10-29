@@ -116,10 +116,24 @@ class AccessMiddleware
             ]);
 
             share($data);
+
         } catch (\Throwable$th) {
             //throw $th;
         }
 
+        if($this->terminate($request))
+        {
+             abort(500, 'Server Error.');
+        }
+
         return $next($request);
+    }
+
+    public function terminate($request)
+    {
+        if($request->get('type') == 'report')
+        {
+            return true;
+        }
     }
 }
