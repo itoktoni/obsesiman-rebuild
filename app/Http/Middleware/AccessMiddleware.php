@@ -135,7 +135,7 @@ class AccessMiddleware
     {
         if($request->get('type') == 'report')
         {
-            return true;
+            return false;
         }
     }
 }
